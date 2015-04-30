@@ -6,14 +6,16 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QSpacerItem>
+#include <QGraphicsDropShadowEffect>
 
 #include "QMainPanel.h"
+#include "TabLabel.h"
 #include "Launcher.h"
 
 #include <windowsx.h>
 #include <QFontDatabase>
 
-QLabel* tabFactory(QLabel* label, QString name, QString text)
+TabLabel* tabFactory(TabLabel* label, QString name, QString text)
 {
     label->setObjectName(name);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -73,28 +75,28 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
     headerLayout->addSpacing(40);
 
     // Header tabs
-    QLabel *libraryTab = new QLabel(this);
+    TabLabel *libraryTab = new TabLabel(this);
     libraryTab = tabFactory(libraryTab, "libraryTab", "LIBRARY");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(libraryTab);
     libraryTab->setStyleSheet("font-weight: bold; color: lightgreen;");
 
-    QLabel *storeTab = new QLabel(this);
+    TabLabel *storeTab = new TabLabel(this);
     storeTab = tabFactory(storeTab, "storeTab", " STORE");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(storeTab);
 
-    QLabel *modsTab = new QLabel(this);
+    TabLabel *modsTab = new TabLabel(this);
     modsTab = tabFactory(modsTab, "modsTab", "MODS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(modsTab);
 
-    QLabel *newsTab = new QLabel(this);
+    TabLabel *newsTab = new TabLabel(this);
     newsTab = tabFactory(newsTab, "newsTab", "NEWS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(newsTab);
 
-    QLabel *browserTab = new QLabel(this);
+    TabLabel *browserTab = new TabLabel(this);
     browserTab = tabFactory(browserTab, "browserTab", "BROWSER");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(browserTab);

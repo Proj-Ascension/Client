@@ -13,13 +13,15 @@ HEADERS += \
     Source/Launcher.h \
     Source/MainWindow.h \
     Source/QMainPanel.h \
-    Source/Game.h
+    Source/Game.h \
+    Source/TabLabel.h
 
 SOURCES += \
     Source/Launcher.cpp \
     Source/Main.cpp \
     Source/MainWindow.cpp \
-    Source/QMainPanel.cpp
+    Source/QMainPanel.cpp \
+    Source/TabLabel.cpp
 
 INCLUDEPATH += \
     Source\
