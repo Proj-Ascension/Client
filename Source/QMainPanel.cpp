@@ -25,7 +25,7 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     label->setFont(QFont("Sansation", 14));
     label->setText(text);
     label->setStyleSheet("color: #FFF;");
-    label->setAttribute(Qt::WA_TransparentForMouseEvents);
+    // label->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     return label;
 }
