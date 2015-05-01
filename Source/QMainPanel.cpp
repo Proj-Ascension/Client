@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QGridLayout>
+#include <QDebug>
 #include <QLabel>
 #include <QPushButton>
 #include <QScrollArea>
@@ -9,8 +10,8 @@
 #include <QGraphicsDropShadowEffect>
 
 #include "QMainPanel.h"
-#include "TabLabel.h"
-#include "Launcher.h"
+#include "Library.h"
+#include "Browser.h"
 
 #include <windowsx.h>
 #include <QFontDatabase>
@@ -25,7 +26,6 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     label->setFont(QFont("Sansation", 14));
     label->setText(text);
     label->setStyleSheet("color: #FFF;");
-    // label->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     return label;
 }
@@ -37,6 +37,15 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
 
     setObjectName("mainPanel");
 
+    // Create stacked widget for main content
+    stack = new QStackedWidget();
+
+    // Prepare UI objects for each tab
+    libraryPtr = new Library();
+    browserPtr = new Browser();
+    stack->addWidget(libraryPtr);
+    stack->addWidget(browserPtr);
+    stack->setCurrentWidget(libraryPtr);
 
     // System layout
     QHBoxLayout *systemLayout = new QHBoxLayout;
@@ -75,31 +84,33 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
     headerLayout->addSpacing(40);
 
     // Header tabs
-    TabLabel *libraryTab = new TabLabel(this);
+    libraryTab = new TabLabel(this);
     libraryTab = tabFactory(libraryTab, "libraryTab", "LIBRARY");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(libraryTab);
     libraryTab->setStyleSheet("font-weight: bold; color: lightgreen;");
 
-    TabLabel *storeTab = new TabLabel(this);
-    storeTab = tabFactory(storeTab, "storeTab", " STORE");
+    storeTab = new TabLabel(this);
+    storeTab = tabFactory(storeTab, "storeTab", "  STORE");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(storeTab);
 
-    TabLabel *modsTab = new TabLabel(this);
-    modsTab = tabFactory(modsTab, "modsTab", "MODS");
+    modsTab = new TabLabel(this);
+    modsTab = tabFactory(modsTab, "modsTab", " MODS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(modsTab);
 
-    TabLabel *newsTab = new TabLabel(this);
+    newsTab = new TabLabel(this);
     newsTab = tabFactory(newsTab, "newsTab", "NEWS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(newsTab);
 
-    TabLabel *browserTab = new TabLabel(this);
+    browserTab = new TabLabel(this);
     browserTab = tabFactory(browserTab, "browserTab", "BROWSER");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(browserTab);
+
+    activeTab = libraryTab;
 
     headerLayout->addStretch();
 
@@ -150,15 +161,11 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
     verticalLayout->setAlignment(Qt::AlignHCenter);
     verticalLayout->addLayout(topLayout, 1);
 
-    // Label example
-    // QLabel *label = new QLabel( centralWidget );
-    // label->setObjectName( "Label" );
-    // label->setText( "Hello World! This is QLabel." );
-    // label->setStyleSheet( "font-size: 48px" );
-    // verticalLayout->addWidget( label );
+    verticalLayout->addWidget(stack, 4);
 
-    Launcher *launcher = new Launcher();
-    verticalLayout->addWidget(launcher, 4);
+    // Connect signals
+    connect(libraryTab, SIGNAL(clicked()), this, SLOT(setTabLibrary()));
+    connect(browserTab, SIGNAL(clicked()), this, SLOT(setTabBrowser()));
 
     // Show
     centralWidget->setLayout(verticalLayout);
@@ -166,6 +173,29 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
     mainGridLayout->addWidget(scrollArea);
 
     show();
+}
+
+// Tab swap slots
+void QMainPanel::setTabLibrary()
+{
+    if (stack->currentWidget()->objectName() != "libraryUI")
+    {
+        activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
+        stack->setCurrentWidget(libraryPtr);
+        activeTab = libraryTab;
+        activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
+    }
+}
+
+void QMainPanel::setTabBrowser()
+{
+    if(stack->currentWidget()->objectName() != "browserUI")
+    {
+        activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
+        stack->setCurrentWidget(browserPtr);
+        activeTab = browserTab;
+        activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
+    }
 }
 
 // Button events

@@ -8,20 +8,25 @@ QT += \
     core \
     gui \
     widgets \
+    network \
+    webkit \
+    webkitwidgets
 
 HEADERS += \
-    Source/Launcher.h \
     Source/MainWindow.h \
     Source/QMainPanel.h \
     Source/Game.h \
-    Source/TabLabel.h
+    Source/TabLabel.h \
+    Source/Library.h \
+    Source/Browser.h
 
 SOURCES += \
-    Source/Launcher.cpp \
     Source/Main.cpp \
     Source/MainWindow.cpp \
     Source/QMainPanel.cpp \
-    Source/TabLabel.cpp
+    Source/TabLabel.cpp \
+    Source/Library.cpp \
+    Source/Browser.cpp
 
 INCLUDEPATH += \
     Source\
@@ -36,4 +41,5 @@ OTHER_FILES += \
     BorderlessWindow.css
 
 FORMS += \
-    Launcher.ui
+    Library.ui \
+    Browser.ui

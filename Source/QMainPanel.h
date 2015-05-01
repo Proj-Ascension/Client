@@ -2,7 +2,11 @@
 #define QMAINPANEL_H
 
 #include <QMouseEvent>
+#include <QVBoxLayout>
+#include <QStackedWidget>
+#include <QWidget>
 #include "QWinWidget.h"
+#include "TabLabel.h"
 
 class QMainPanel : public QWinWidget
 {
@@ -21,9 +25,21 @@ public slots:
     void pushButtonMinimizeClicked();
     void pushButtonMaximizeClicked();
     void pushButtonCloseClicked();
+    void setTabLibrary();
+    void setTabBrowser();
 
 private:
     HWND windowHandle;
+    QStackedWidget *stack;
+    QWidget *libraryPtr;
+    QWidget *browserPtr;
+
+    TabLabel *activeTab;
+    TabLabel *libraryTab;
+    TabLabel *storeTab;
+    TabLabel *modsTab;
+    TabLabel *newsTab;
+    TabLabel *browserTab;
 
 protected:
 

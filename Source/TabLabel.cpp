@@ -33,6 +33,13 @@ void TabLabel::leaveEvent(QEvent *event)
     QWidget::leaveEvent(event);
 }
 
+void TabLabel::mousePressEvent(QMouseEvent *event)
+{
+    Q_EMIT clicked();
+    dse->setEnabled(false);
+    QWidget::mousePressEvent(event);
+}
+
 void TabLabel::enableShadow()
 {
     if (this->styleSheet().contains("color: #FFF;"))

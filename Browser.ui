@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Launcher</class>
- <widget class="QWidget" name="Launcher">
+ <class>Browser</class>
+ <widget class="QWidget" name="Browser">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>855</width>
-    <height>485</height>
+    <width>823</width>
+    <height>392</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>776</width>
-    <height>0</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -38,24 +32,27 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="0" column="0">
+    <widget class="QWebView" name="webView">
+     <property name="url">
+      <url>
+       <string>http://www.nexusmods.com/games/?</string>
+      </url>
      </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: silver</string>
-     </property>
-     <property name="text">
-      <string/>
+     <property name="zoomFactor">
+      <double>1.000000000000000</double>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKitWidgets/QWebView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QEvent>
+#include <QMouseEvent>
 #include <QGraphicsDropShadowEffect>
 
 class TabLabel : public QLabel
@@ -14,10 +15,12 @@ public:
 
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 signals:
     void hovered();
     void unhovered();
+    void clicked();
 
 private:
     QGraphicsDropShadowEffect *dse = NULL;
