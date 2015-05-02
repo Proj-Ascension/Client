@@ -6,7 +6,6 @@ win32 {
     LIBS += gdi32.lib dwmapi.lib
 }
 
-
 QT += \
     core \
     gui \
@@ -29,27 +28,27 @@ SOURCES += \
     Source/Browser.cpp
 
 win32 {
-HEADERS += \
-    Source/WinPanel.h \
-    Source/BorderlessWindow.h
-SOURCES += \
-    Source/WinPanel.cpp \
-    Source/BorderlessWindow.cpp
+    HEADERS += \
+        Source/WinPanel.h \
+        Source/BorderlessWindow.h
+    SOURCES += \
+        Source/WinPanel.cpp \
+        Source/BorderlessWindow.cpp
 }
 
 unix {
-HEADERS += \
-    Source/UnixPanel.h
-SOURCES += \
-    Source/UnixPanel.cpp
+    HEADERS += \
+        Source/UnixPanel.h
+    SOURCES += \
+        Source/UnixPanel.cpp
 }
 
 INCLUDEPATH += \
     Source/
 
 win32 {
-    include("QtWinMigrate.pri")
-    include("Common.pri")
+    include("BorderlessWindow/QtWinMigrate.pri")
+    include("BorderlessWindow/Common.pri")
 }
 
 RESOURCES += \
