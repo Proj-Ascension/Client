@@ -1,8 +1,13 @@
 #include <QMessageBox>
 #include <QFontDatabase>
 #include <QFile>
+#include <QSize>
 
-#include "MainWindow.h"
+#ifdef Q_OS_WIN
+#include "BorderlessWindow.h"
+#else
+#include "UnixPanel.h"
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -49,6 +54,7 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifdef Q_OS_WIN
     // Background color
     // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
     HBRUSH windowBackground = CreateSolidBrush(RGB(34, 38, 47));
@@ -56,6 +62,13 @@ int main(int argc, char *argv[])
     // Create window
     BorderlessWindow window(application, windowBackground, 1152, 648);
     window.setMinimumSize(830, 550);
+#else
+    // Create a Unix panel
+    UnixPanel panel;
+    QSize *size = new QSize(1152, 648);
+    panel.resize(size);
+    panel.setMinimumSize(830, 550);
+#endif
 
     // Launch
     application->exec();

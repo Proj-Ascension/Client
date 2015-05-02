@@ -1,20 +1,14 @@
-#include <windows.h>
-
-#include <QApplication>
 #include <QGridLayout>
-#include <QDebug>
 #include <QLabel>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QSpacerItem>
 #include <QGraphicsDropShadowEffect>
+#include <QFontDatabase>
 
-#include "QMainPanel.h"
+#include "UnixPanel.h"
 #include "Library.h"
 #include "Browser.h"
-
-#include <windowsx.h>
-#include <QFontDatabase>
 
 TabLabel* tabFactory(TabLabel* label, QString name, QString text)
 {
@@ -30,15 +24,13 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     return label;
 }
 
-QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
+UnixPanel::UnixPanel()
 {
-
-    windowHandle = hWnd;
-
     setObjectName("mainPanel");
 
-    // Create stacked widget for main content
-    stack = new QStackedWidget();
+    this->setWindowFlags(Qt::FramelessWindowHint);
+
+    stack = new QStackedWidget(this);
 
     // Prepare UI objects for each tab
     libraryPtr = new Library();
@@ -121,19 +113,19 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
     QPushButton *pushButtonMinimize = new QPushButton("", this);
     pushButtonMinimize->setObjectName("pushButtonMinimize");
     systemLayout->addWidget(pushButtonMinimize);
-    QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimizeClicked()));
+    QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(showMinimized()));
 
     // Maximize
     QPushButton *pushButtonMaximize = new QPushButton("", this);
     pushButtonMaximize->setObjectName("pushButtonMaximize");
     systemLayout->addWidget(pushButtonMaximize);
-    QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximizeClicked()));
+    QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(showMaximized()));
 
     // Close
     QPushButton *pushButtonClose = new QPushButton("", this);
     pushButtonClose->setObjectName("pushButtonClose");
     systemLayout->addWidget(pushButtonClose);
-    QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonCloseClicked()));
+    QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(close()));
 
     // Main panel layout
     QGridLayout *mainGridLayout = new QGridLayout();
@@ -172,11 +164,11 @@ QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
     scrollArea->setWidget(centralWidget);
     mainGridLayout->addWidget(scrollArea);
 
-    show();
+    this->show();
 }
 
 // Tab swap slots
-void QMainPanel::setTabLibrary()
+void UnixPanel::setTabLibrary()
 {
     if (stack->currentWidget()->objectName() != "libraryUI")
     {
@@ -187,7 +179,7 @@ void QMainPanel::setTabLibrary()
     }
 }
 
-void QMainPanel::setTabBrowser()
+void UnixPanel::setTabBrowser()
 {
     if(stack->currentWidget()->objectName() != "browserUI")
     {
@@ -198,93 +190,3 @@ void QMainPanel::setTabBrowser()
     }
 }
 
-// Button events
-void QMainPanel::pushButtonMinimizeClicked()
-{
-    ShowWindow(parentWindow(), SW_MINIMIZE);
-}
-
-void QMainPanel::pushButtonMaximizeClicked()
-{
-    WINDOWPLACEMENT wp;
-    wp.length = sizeof(WINDOWPLACEMENT);
-    GetWindowPlacement(parentWindow(), &wp);
-    if (wp.showCmd == SW_MAXIMIZE)
-    {
-        ShowWindow(parentWindow(), SW_RESTORE);
-    }
-    else
-    {
-        ShowWindow(parentWindow(), SW_MAXIMIZE);
-    }
-}
-
-void QMainPanel::pushButtonCloseClicked()
-{
-    PostQuitMessage(0);
-}
-
-#if QT_VERSION >= 0x050000
-bool QMainPanel::nativeEvent(const QByteArray &, void *msg, long *)
-{
-#else
-bool QMainPanel::winEvent(MSG *message, long *)
-{
-#endif
-#if QT_VERSION >= 0x050000
-    MSG *message = (MSG *)msg;
-#endif
-    switch(message->message)
-    {
-    case WM_SYSKEYDOWN:
-    {
-        if (message->wParam == VK_SPACE)
-        {
-            RECT winrect;
-            GetWindowRect(windowHandle, &winrect);
-            TrackPopupMenu(GetSystemMenu(windowHandle, false), TPM_TOPALIGN | TPM_LEFTALIGN, winrect.left + 5, winrect.top + 5, 0, windowHandle, NULL);
-            break;
-        }
-    }
-    case WM_KEYDOWN:
-    {
-        if (message->wParam == VK_F5 ||
-                message->wParam == VK_F6 ||
-                message->wParam == VK_F7
-                )
-        {
-            SendMessage(windowHandle, WM_KEYDOWN, message->wParam, message->lParam);
-            break;
-        }
-    }
-    }
-
-    return false;
-}
-
-void QMainPanel::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        ReleaseCapture();
-        SendMessage(windowHandle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
-    }
-
-    if (event->type() == QEvent::MouseButtonDblClick)
-    {
-        if (event->button() == Qt::LeftButton)
-        {
-            WINDOWPLACEMENT wp;
-            wp.length = sizeof(WINDOWPLACEMENT);
-            GetWindowPlacement(parentWindow(), &wp);
-            if (wp.showCmd == SW_MAXIMIZE)
-            {
-                ShowWindow(parentWindow(), SW_RESTORE);
-            }
-            else
-            {
-                ShowWindow(parentWindow(), SW_MAXIMIZE);
-            }
-        }
-    }
-}

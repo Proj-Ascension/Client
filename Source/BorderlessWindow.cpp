@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "BorderlessWindow.h"
 
 #include <dwmapi.h>
 #include <windowsx.h>
@@ -10,7 +10,7 @@
 
 HWND winId = 0;
 
-QMainPanel *BorderlessWindow::mainPanel;
+WinPanel *BorderlessWindow::mainPanel;
 QApplication *BorderlessWindow::a;
 
 BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, const int width, const int height) : hWnd(0),
@@ -48,7 +48,7 @@ BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, c
     SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 
-    mainPanel = new QMainPanel(hWnd);
+    mainPanel = new WinPanel(hWnd);
     winId = (HWND)mainPanel->winId();
 
     show();

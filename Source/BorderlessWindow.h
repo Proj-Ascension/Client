@@ -1,6 +1,6 @@
 #include <windows.h>
 
-#include "QMainPanel.h"
+#include "WinPanel.h"
 #include "QWinWidget.h"
 
 #include <QApplication>
@@ -45,7 +45,7 @@ public:
 
 private:
     static QApplication *a;
-    static QMainPanel *mainPanel;
+    static WinPanel *mainPanel;
 
     bool closed;
     bool visible;

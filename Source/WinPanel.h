@@ -1,5 +1,5 @@
-#ifndef QMAINPANEL_H
-#define QMAINPANEL_H
+#ifndef WINPANEL_H
+#define WINPANEL_H
 
 #include <QMouseEvent>
 #include <QVBoxLayout>
@@ -8,12 +8,12 @@
 #include "QWinWidget.h"
 #include "TabLabel.h"
 
-class QMainPanel : public QWinWidget
+class WinPanel : public QWinWidget
 {
     Q_OBJECT
 
 public:
-    QMainPanel(HWND hWnd);
+    WinPanel(HWND hWnd);
 #if QT_VERSION >= 0x050000
     bool nativeEvent(const QByteArray &, void *msg, long *result);
 #else
@@ -45,4 +45,4 @@ protected:
 
 };
 
-#endif // QMAINPANEL_H
+#endif // WINPANEL_H
