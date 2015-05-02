@@ -28,6 +28,8 @@ private:
     TabLabel *modsTab;
     TabLabel *newsTab;
     TabLabel *browserTab;
+
+    void init();
 };
 
 #endif // UNIXPANEL

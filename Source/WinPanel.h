@@ -7,8 +7,9 @@
 #include <QWidget>
 #include "QWinWidget.h"
 #include "TabLabel.h"
+#include "UnixPanel.h"
 
-class WinPanel : public QWinWidget
+class WinPanel : public QWinWidget, public UnixPanel
 {
     Q_OBJECT
 
@@ -25,23 +26,9 @@ public slots:
     void pushButtonMinimizeClicked();
     void pushButtonMaximizeClicked();
     void pushButtonCloseClicked();
-    void setTabLibrary();
-    void setTabBrowser();
 
 private:
     HWND windowHandle;
-    QStackedWidget *stack;
-    QWidget *libraryPtr;
-    QWidget *browserPtr;
-
-    TabLabel *activeTab;
-    TabLabel *libraryTab;
-    TabLabel *storeTab;
-    TabLabel *modsTab;
-    TabLabel *newsTab;
-    TabLabel *browserTab;
-
-protected:
 
 };
 

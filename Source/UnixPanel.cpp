@@ -30,6 +30,11 @@ UnixPanel::UnixPanel()
 
     this->setWindowFlags(Qt::FramelessWindowHint);
 
+    init();
+}
+
+void UnixPanel::init()
+{
     stack = new QStackedWidget(this);
 
     // Prepare UI objects for each tab
