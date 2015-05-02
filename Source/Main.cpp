@@ -2,6 +2,7 @@
 #include <QFontDatabase>
 #include <QFile>
 #include <QSize>
+#include <QApplication>
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
     // Create a Unix panel
     UnixPanel panel;
     QSize *size = new QSize(1152, 648);
-    panel.resize(size);
+    panel.resize(*size);
     panel.setMinimumSize(830, 550);
 #endif
 
