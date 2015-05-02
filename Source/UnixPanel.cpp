@@ -119,7 +119,7 @@ UnixPanel::UnixPanel()
     QPushButton *pushButtonMaximize = new QPushButton("", this);
     pushButtonMaximize->setObjectName("pushButtonMaximize");
     systemLayout->addWidget(pushButtonMaximize);
-    QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(showMaximized()));
+    QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximize()));
 
     // Close
     QPushButton *pushButtonClose = new QPushButton("", this);
@@ -190,3 +190,11 @@ void UnixPanel::setTabBrowser()
     }
 }
 
+void UnixPanel::pushButtonMaximize()
+{
+    if (isMaximized()) {
+        showNormal();
+    } else {
+        showMaximized();
+    }
+}
