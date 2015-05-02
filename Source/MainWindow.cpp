@@ -1,18 +1,24 @@
 #include "MainWindow.h"
 
+#ifdef Q_OS_WIN
 #include <dwmapi.h>
 #include <windowsx.h>
+#endif
+
 #include <stdexcept>
 
 #include <QDesktopWidget>
 #include <QPushButton>
 #include <QFile>
 
+#ifdef Q_OS_WIN
 HWND winId = 0;
+#endif
 
 QMainPanel *BorderlessWindow::mainPanel;
 QApplication *BorderlessWindow::a;
 
+#ifdef Q_OS_WIN
 BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, const int width, const int height) : hWnd(0),
     hInstance(GetModuleHandle(NULL)),
     borderless(false),
@@ -56,12 +62,34 @@ BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, c
 
     a = app;
 }
+#else
+BorderlessWindow::BorderlessWindow(QApplication *app, const int width, const int height) : borderless(false),
+    borderlessResizeable(true),
+    closed(false),
+    visible(false)
+{
+    qWindow = new QMainWindow();
+    mainPanel = new QMainPanel(qWindow);
+    qWindow->setCentralWidget(mainPanel);
+
+    show();
+    toggleBorderless();
+
+    a = app;
+}
+#endif
 
 BorderlessWindow::~BorderlessWindow()
 {
     hide();
+#ifdef Q_OS_WIN
     DestroyWindow(hWnd);
+#else
+    // destroy qWindow
+#endif
 }
+
+#ifdef Q_OS_WIN
 
 HDC hdc;
 PAINTSTRUCT ps;
@@ -263,11 +291,13 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
+#endif
 
 void BorderlessWindow::toggleBorderless()
 {
     if (visible)
     {
+#ifdef Q_OS_WIN
         Style newStyle = (borderless) ? Style::windowed : Style::aero_borderless;
         SetWindowLongPtr(hWnd, GWL_STYLE, static_cast<LONG>(newStyle));
 
@@ -279,9 +309,17 @@ void BorderlessWindow::toggleBorderless()
         //redraw frame
         SetWindowPos(hWnd, 0, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
         show();
+#else
+        Qt::WindowFlags flags = qWindow->windowFlags();
+        if (flags & Qt::FramelessWindowHint) {
+            qWindow->setWindowFlags(flags & ~Qt::FramelessWindowHint);
+        }
+        qWindow->setWindowFlags(flags | Qt::FramelessWindowHint);
+#endif
     }
 }
 
+#ifdef Q_OS_WIN
 void BorderlessWindow::toggleShadow()
 {
     if (borderless)
@@ -292,6 +330,7 @@ void BorderlessWindow::toggleShadow()
         DwmExtendFrameIntoClientArea(hWnd, (aeroShadow) ? (&shadow_on) : (&shadow_off));
     }
 }
+#endif
 
 void BorderlessWindow::toggleResizeable()
 {
@@ -305,13 +344,21 @@ bool BorderlessWindow::isResizeable()
 
 void BorderlessWindow::show()
 {
+#ifdef Q_OS_WIN
     ShowWindow(hWnd, SW_SHOW);
+#else
+    qWindow->show();
+#endif
     visible = true;
 }
 
 void BorderlessWindow::hide()
 {
+#ifdef Q_OS_WIN
     ShowWindow(hWnd, SW_HIDE);
+#else
+    qWindow->hide();
+#endif
     visible = false;
 }
 
