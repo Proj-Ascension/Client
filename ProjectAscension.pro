@@ -65,9 +65,11 @@ win32 {
 RESOURCES += \
     Icons.qrc
 
-OTHER_FILES += \
-    BorderlessWindow.css
+OTHER_FILES +=
 
 FORMS += \
     Library.ui \
     Browser.ui
+
+DISTFILES += \
+    BorderlessWindow/BorderlessWindow.css
