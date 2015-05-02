@@ -24,6 +24,8 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *-build-*
+*.*.Debug
+*.*.Release
 
 # QtCreator
 
