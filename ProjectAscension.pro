@@ -46,6 +46,9 @@ unix {
 INCLUDEPATH += \
     Source/
 
+VPATH += \
+    BorderlessWindow/
+
 win32 {
     include("BorderlessWindow/QtWinMigrate.pri")
     include("BorderlessWindow/Common.pri")
