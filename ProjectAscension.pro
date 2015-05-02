@@ -1,11 +1,8 @@
 TEMPLATE = app
 RC_FILE = Launcher.rc
+win32:RC_ICONS += Icons/Ascension_Icon.ico
 CONFIG += app_bundle
-
-win32 {
-    win32:RC_ICONS += Icons/Ascension_Icon.ico
-    LIBS += gdi32.lib dwmapi.lib
-}
+LIBS += gdi32.lib dwmapi.lib
 
 QT += \
     core \
@@ -34,10 +31,8 @@ SOURCES += \
 INCLUDEPATH += \
     Source\
 
-win32 {
-    include("BorderlessWindow/QtWinMigrate.pri")
-    include("BorderlessWindow/Common.pri")
-}
+include("QtWinMigrate.pri")
+include("Common.pri")
 
 RESOURCES += \
     Icons.qrc

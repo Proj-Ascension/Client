@@ -1,13 +1,7 @@
-#ifdef Q_OS_WIN
 #include <windows.h>
-#endif
 
 #include "QMainPanel.h"
-#ifdef Q_OS_WIN
 #include "QWinWidget.h"
-#else
-#include <QMainWindow>
-#endif
 
 #include <QApplication>
 #include <QWidget>
@@ -15,37 +9,25 @@
 class BorderlessWindow
 {
 
-#ifdef Q_OS_WIN
     enum class Style : DWORD
     {
         windowed = (WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CLIPCHILDREN | WS_SYSMENU),
         aero_borderless = (WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CLIPCHILDREN)
     };
-#endif
 
 public:
-#ifdef Q_OS_WIN
     HWND hWnd;
     HINSTANCE hInstance;
 
     BorderlessWindow(QApplication *app, HBRUSH windowBackground, const int width, const int height);
     ~BorderlessWindow();
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-#else
-    QMainWindow* qWindow;
-
-    BorderlessWindow(QApplication *app, const int width, const int height);
-    ~BorderlessWindow();
-#endif
-
     void show();
     void hide();
     bool isVisible();
 
     void toggleBorderless();
-#ifdef Q_OS_WIN
     void toggleShadow();
-#endif
     void toggleResizeable();
     bool isResizeable();
 
@@ -69,9 +51,7 @@ private:
     bool visible;
 
     bool borderless;
-#ifdef Q_OS_WIN
     bool aeroShadow;
-#endif
     bool borderlessResizeable;
 
     struct sizeType

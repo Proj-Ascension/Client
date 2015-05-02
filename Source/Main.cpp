@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifdef Q_OS_WIN
     // Background color
     // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
     HBRUSH windowBackground = CreateSolidBrush(RGB(34, 38, 47));
@@ -57,10 +56,6 @@ int main(int argc, char *argv[])
     // Create window
     BorderlessWindow window(application, windowBackground, 1152, 648);
     window.setMinimumSize(830, 550);
-#else
-    BorderlessWindow window(application, 1152, 648);
-    window.setMinimumSize(830, 550);
-#endif
 
     // Launch
     application->exec();

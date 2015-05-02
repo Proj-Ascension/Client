@@ -1,6 +1,4 @@
-#ifdef Q_OS_WIN
 #include <windows.h>
-#endif
 
 #include <QApplication>
 #include <QGridLayout>
@@ -15,9 +13,7 @@
 #include "Library.h"
 #include "Browser.h"
 
-#ifdef Q_OS_WIN
 #include <windowsx.h>
-#endif
 #include <QFontDatabase>
 
 TabLabel* tabFactory(TabLabel* label, QString name, QString text)
@@ -34,16 +30,10 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     return label;
 }
 
-#ifdef Q_OS_WIN
 QMainPanel::QMainPanel(HWND hWnd) : QWinWidget(hWnd)
 {
 
     windowHandle = hWnd;
-#else
-QMainPanel::QMainPanel(QMainWindow *window) : QWidget(window)
-{
-    qWindow = window;
-#endif
 
     setObjectName("mainPanel");
 
@@ -211,16 +201,11 @@ void QMainPanel::setTabBrowser()
 // Button events
 void QMainPanel::pushButtonMinimizeClicked()
 {
-#ifdef Q_OS_WIN
     ShowWindow(parentWindow(), SW_MINIMIZE);
-#else
-    qWindow->showMinimized();
-#endif
 }
 
 void QMainPanel::pushButtonMaximizeClicked()
 {
-#ifdef Q_OS_WIN
     WINDOWPLACEMENT wp;
     wp.length = sizeof(WINDOWPLACEMENT);
     GetWindowPlacement(parentWindow(), &wp);
@@ -232,28 +217,13 @@ void QMainPanel::pushButtonMaximizeClicked()
     {
         ShowWindow(parentWindow(), SW_MAXIMIZE);
     }
-#else
-    if (qWindow->isMaximized())
-    {
-        qWindow->showNormal();
-    }
-    else
-    {
-        qWindow->showMaximized();
-    }
-#endif
 }
 
 void QMainPanel::pushButtonCloseClicked()
 {
-#ifdef Q_OS_WIN
     PostQuitMessage(0);
-#else
-    qWindow->close();
-#endif
 }
 
-#ifdef Q_OS_WIN
 #if QT_VERSION >= 0x050000
 bool QMainPanel::nativeEvent(const QByteArray &, void *msg, long *)
 {
@@ -318,4 +288,3 @@ void QMainPanel::mousePressEvent(QMouseEvent *event)
         }
     }
 }
-#endif
