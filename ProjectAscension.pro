@@ -43,8 +43,19 @@ unix {
         Source/UnixPanel.cpp
 }
 
+release: DESTDIR = build/release
+debug:   DESTDIR = build/debug
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.ui
+
 INCLUDEPATH += \
     Source/
+
+VPATH += \
+    BorderlessWindow/
 
 win32 {
     include("BorderlessWindow/QtWinMigrate.pri")
@@ -54,9 +65,11 @@ win32 {
 RESOURCES += \
     Icons.qrc
 
-OTHER_FILES += \
-    BorderlessWindow.css
+OTHER_FILES +=
 
 FORMS += \
     Library.ui \
     Browser.ui
+
+DISTFILES += \
+    BorderlessWindow/BorderlessWindow.css
