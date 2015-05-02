@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/SystemMenu">
-        <file>BorderlessWindow.css</file>
         <file>Icons/Close.png</file>
         <file>Icons/CloseHover.png</file>
         <file>Icons/Maximize.png</file>
@@ -12,6 +11,7 @@
         <file>Icons/Ascension.png</file>
         <file>Icons/Ascension_Small.png</file>
         <file>Icons/Ascension_Icon.ico</file>
+        <file>BorderlessWindow/BorderlessWindow.css</file>
     </qresource>
     <qresource prefix="/Typeface">
         <file>Fonts/Sansation_Bold.ttf</file>
