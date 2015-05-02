@@ -16,20 +16,6 @@
 #include <windowsx.h>
 #include <QFontDatabase>
 
-TabLabel* tabFactory(TabLabel* label, QString name, QString text)
-{
-    label->setObjectName(name);
-    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    label->setMinimumWidth(80);
-    label->setMaximumWidth(110);
-    label->setAlignment(Qt::AlignTop);
-    label->setFont(QFont("Sansation", 14));
-    label->setText(text);
-    label->setStyleSheet("color: #FFF;");
-
-    return label;
-}
-
 WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
 {
     windowHandle = hWnd;
@@ -40,12 +26,12 @@ WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
 }
 
 // Button events
-void WinPanel::pushButtonMinimizeClicked()
+void WinPanel::pushButtonMinimize()
 {
     ShowWindow(parentWindow(), SW_MINIMIZE);
 }
 
-void WinPanel::pushButtonMaximizeClicked()
+void WinPanel::pushButtonMaximize()
 {
     WINDOWPLACEMENT wp;
     wp.length = sizeof(WINDOWPLACEMENT);
@@ -60,7 +46,7 @@ void WinPanel::pushButtonMaximizeClicked()
     }
 }
 
-void WinPanel::pushButtonCloseClicked()
+void WinPanel::pushButtonClose()
 {
     PostQuitMessage(0);
 }

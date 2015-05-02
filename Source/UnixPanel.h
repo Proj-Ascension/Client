@@ -17,7 +17,7 @@ public slots:
     void setTabBrowser();
     void pushButtonMaximize();
 
-private:
+protected:
     QStackedWidget *stack;
     QWidget *libraryPtr;
     QWidget *browserPtr;

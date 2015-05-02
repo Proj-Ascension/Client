@@ -23,9 +23,9 @@ public:
     void mousePressEvent(QMouseEvent *event);
 
 public slots:
-    void pushButtonMinimizeClicked();
-    void pushButtonMaximizeClicked();
-    void pushButtonCloseClicked();
+    void pushButtonMinimize();
+    void pushButtonMaximize();
+    void pushButtonClose();
 
 private:
     HWND windowHandle;
