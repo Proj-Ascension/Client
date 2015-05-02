@@ -32,3 +32,11 @@ Makefile*
 #QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+
+#MSVS Project files
+*.opensdf
+*.vcxproj
+*.vcxproj.filters
+*.sdf
+*.vcxproj
+*.vcxproj.filters
