@@ -29,7 +29,6 @@ protected:
     QStackedWidget *stack;
     QWidget *libraryPtr;
     QWidget *browserPtr;
-    QPoint oldWindowPos;
 
     TabLabel *activeTab;
     TabLabel *libraryTab;

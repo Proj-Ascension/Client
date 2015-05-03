@@ -1,9 +1,7 @@
 #ifndef UNIXPANEL
 #define UNIXPANEL
 
-#include <QStackedWidget>
-#include <QWidget>
-#include "TabLabel.h"
+#include "MainPanel.h"
 
 class UnixPanel : public QWidget
 {
@@ -13,9 +11,11 @@ public:
     UnixPanel();
 
 private:
+    QPoint oldWindowPos;
+    MainPanel* mainPanel;
+
     void mousePressEvent(QMouseEvent* evt);
     void mouseMoveEvent(QMouseEvent* evt);
-
 };
 
 #endif // UNIXPANEL
