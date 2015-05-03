@@ -15,7 +15,9 @@ public:
 public slots:
     void setTabLibrary();
     void setTabBrowser();
+    void pushButtonMinimize();
     void pushButtonMaximize();
+    void pushButtonClose();
 
 protected:
     QStackedWidget *stack;

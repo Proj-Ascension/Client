@@ -118,7 +118,7 @@ void UnixPanel::init()
     QPushButton *pushButtonMinimize = new QPushButton("", this);
     pushButtonMinimize->setObjectName("pushButtonMinimize");
     systemLayout->addWidget(pushButtonMinimize);
-    QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(showMinimized()));
+    QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimize()));
 
     // Maximize
     QPushButton *pushButtonMaximize = new QPushButton("", this);
@@ -130,7 +130,7 @@ void UnixPanel::init()
     QPushButton *pushButtonClose = new QPushButton("", this);
     pushButtonClose->setObjectName("pushButtonClose");
     systemLayout->addWidget(pushButtonClose);
-    QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(close()));
+    QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
 
     // Main panel layout
     QGridLayout *mainGridLayout = new QGridLayout();
@@ -195,6 +195,11 @@ void UnixPanel::setTabBrowser()
     }
 }
 
+void UnixPanel::pushButtonMinimize()
+{
+    showMinimized();
+}
+
 void UnixPanel::pushButtonMaximize()
 {
     if (isMaximized()) {
@@ -202,6 +207,11 @@ void UnixPanel::pushButtonMaximize()
     } else {
         showMaximized();
     }
+}
+
+void UnixPanel::pushButtonClose()
+{
+    close();
 }
 
 void UnixPanel::mousePressEvent(QMouseEvent *evt)
