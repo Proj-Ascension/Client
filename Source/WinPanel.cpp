@@ -20,7 +20,7 @@ WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
 {
     windowHandle = hWnd;
     mainPanel = new WinMainPanel(this);
-    mainPanel->
+    mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     setObjectName("winPanel");
 
