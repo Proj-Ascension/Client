@@ -12,31 +12,9 @@ class UnixPanel : public QWidget
 public:
     UnixPanel();
 
-public slots:
-    void setTabLibrary();
-    void setTabBrowser();
-    void pushButtonMinimize();
-    void pushButtonMaximize();
-    void pushButtonClose();
-
-protected:
-    QStackedWidget *stack;
-    QWidget *libraryPtr;
-    QWidget *browserPtr;
-    QPoint oldWindowPos;
-
-    TabLabel *activeTab;
-    TabLabel *libraryTab;
-    TabLabel *storeTab;
-    TabLabel *modsTab;
-    TabLabel *newsTab;
-    TabLabel *browserTab;
-
-    void init();
-
 private:
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent* evt);
+    void mouseMoveEvent(QMouseEvent* evt);
 
 };
 

@@ -19,38 +19,11 @@
 WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
 {
     windowHandle = hWnd;
+    mainPanel = new WinMainPanel(this);
 
-    setObjectName("mainPanel");
-
-    init();
+    setObjectName("winPanel");
 
     this->show();
-}
-
-// Button events
-void WinPanel::pushButtonMinimize()
-{
-    ShowWindow(parentWindow(), SW_MINIMIZE);
-}
-
-void WinPanel::pushButtonMaximize()
-{
-    WINDOWPLACEMENT wp;
-    wp.length = sizeof(WINDOWPLACEMENT);
-    GetWindowPlacement(parentWindow(), &wp);
-    if (wp.showCmd == SW_MAXIMIZE)
-    {
-        ShowWindow(parentWindow(), SW_RESTORE);
-    }
-    else
-    {
-        ShowWindow(parentWindow(), SW_MAXIMIZE);
-    }
-}
-
-void WinPanel::pushButtonClose()
-{
-    PostQuitMessage(0);
 }
 
 #if QT_VERSION >= 0x050000
@@ -116,4 +89,29 @@ void WinPanel::mousePressEvent(QMouseEvent *event)
             }
         }
     }
+}
+
+void WinPanel::minimize()
+{
+    ShowWindow(parentWindow(), SW_MINIMIZE);
+}
+
+void WinPanel::maximize()
+{
+    WINDOWPLACEMENT wp;
+    wp.length = sizeof(WINDOWPLACEMENT);
+    GetWindowPlacement(parentWindow(), &wp);
+    if (wp.showCmd == SW_MAXIMIZE)
+    {
+        ShowWindow(parentWindow(), SW_RESTORE);
+    }
+    else
+    {
+        ShowWindow(parentWindow(), SW_MAXIMIZE);
+    }
+}
+
+void WinPanel::close()
+{
+    PostQuitMessage(0);
 }

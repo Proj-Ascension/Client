@@ -7,29 +7,27 @@
 #include <QWidget>
 #include "QWinWidget.h"
 #include "TabLabel.h"
-#include "UnixPanel.h"
+#include "WinMainPanel.h"
 
-class WinPanel : public QWinWidget, public UnixPanel
+class WinPanel : public QWinWidget
 {
     Q_OBJECT
 
 public:
     WinPanel(HWND hWnd);
 #if QT_VERSION >= 0x050000
-    bool nativeEvent(const QByteArray &, void *msg, long *result);
+    bool nativeEvent(const QByteArray&, void* msg, long* result);
 #else
     bool winEvent(MSG *message, long *result);
 #endif
     void mousePressEvent(QMouseEvent *event);
-
-public slots:
-    void pushButtonMinimize();
-    void pushButtonMaximize();
-    void pushButtonClose();
+    void minimize();
+    void maximize();
+    void close();
 
 private:
     HWND windowHandle;
-
+    WinMainPanel* mainPanel;
 };
 
 #endif // WINPANEL_H
