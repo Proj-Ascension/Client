@@ -20,6 +20,7 @@ WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
 {
     windowHandle = hWnd;
     mainPanel = new WinMainPanel(this);
+    mainPanel->
 
     setObjectName("winPanel");
 

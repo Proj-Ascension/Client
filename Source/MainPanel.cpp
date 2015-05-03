@@ -19,6 +19,7 @@ MainPanel::MainPanel(QWidget* parent) : QWidget(parent)
     setObjectName("mainPanel");
 
     init();
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     show();
 }
 
