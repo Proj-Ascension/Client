@@ -20,5 +20,5 @@ void WinMainPanel::pushButtonMaximize()
 
 void WinMainPanel::pushButtonClose()
 {
-    winPanel->close();
+    winPanel->closeWindow();
 }

@@ -1,7 +1,7 @@
 #ifndef UNIXPANEL
 #define UNIXPANEL
 
-#include "MainPanel.h"
+#include "UnixMainPanel.h"
 
 class UnixPanel : public QWidget
 {
@@ -10,9 +10,13 @@ class UnixPanel : public QWidget
 public:
     UnixPanel();
 
+    void minimize();
+    void maximize();
+    void closeWindow();
+
 private:
     QPoint oldWindowPos;
-    MainPanel* mainPanel;
+    UnixMainPanel* mainPanel;
 
     void mousePressEvent(QMouseEvent* evt);
     void mouseMoveEvent(QMouseEvent* evt);

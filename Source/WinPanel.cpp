@@ -112,7 +112,7 @@ void WinPanel::maximize()
     }
 }
 
-void WinPanel::close()
+void WinPanel::closeWindow()
 {
     PostQuitMessage(0);
 }

@@ -2,7 +2,6 @@
 #define WINMAINPANEL_H
 
 #include "MainPanel.h"
-#include "windows.h"
 
 class WinPanel;
 

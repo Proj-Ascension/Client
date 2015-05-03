@@ -45,9 +45,12 @@ win32 {
 
 unix {
     HEADERS += \
-        Source/UnixPanel.h
+        Source/UnixPanel.h \
+        Source/UnixMainPanel.h
+
     SOURCES += \
-        Source/UnixPanel.cpp
+        Source/UnixPanel.cpp \
+        Source/UnixMainPanel.cpp
 }
 
 release: DESTDIR = build/release

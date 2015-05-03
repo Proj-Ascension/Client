@@ -23,7 +23,7 @@ public:
     void mousePressEvent(QMouseEvent *event);
     void minimize();
     void maximize();
-    void close();
+    void closeWindow();
 
 private:
     HWND windowHandle;

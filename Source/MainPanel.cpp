@@ -182,22 +182,3 @@ void MainPanel::setTabBrowser()
         activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
     }
 }
-
-void MainPanel::pushButtonMinimize()
-{
-    showMinimized();
-}
-
-void MainPanel::pushButtonMaximize()
-{
-    if (isMaximized()) {
-        showNormal();
-    } else {
-        showMaximized();
-    }
-}
-
-void MainPanel::pushButtonClose()
-{
-    close();
-}
