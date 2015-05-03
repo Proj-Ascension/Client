@@ -1,3 +1,5 @@
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -31,6 +33,10 @@ UnixPanel::UnixPanel()
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     init();
+
+    this->adjustSize();
+    this->move(QApplication::desktop()->availableGeometry().center() - this->rect().center());
+    this->show();
 }
 
 void UnixPanel::init()
@@ -168,8 +174,6 @@ void UnixPanel::init()
     centralWidget->setLayout(verticalLayout);
     scrollArea->setWidget(centralWidget);
     mainGridLayout->addWidget(scrollArea);
-
-    this->show();
 }
 
 // Tab swap slots

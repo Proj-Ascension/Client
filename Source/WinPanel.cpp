@@ -23,6 +23,8 @@ WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
     setObjectName("mainPanel");
 
     init();
+
+    this->show();
 }
 
 // Button events
