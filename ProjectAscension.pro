@@ -1,9 +1,12 @@
 TEMPLATE = app
 RC_FILE = Launcher.rc
 CONFIG += app_bundle
+
+CONFIG += c++11
+
 win32 {
     RC_ICONS += Icons/Ascension_Icon.ico
-    LIBS += gdi32.lib dwmapi.lib
+    LIBS += -lgdi32 -ldwmapi
 }
 
 QT += \
