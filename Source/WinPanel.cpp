@@ -19,11 +19,19 @@
 WinPanel::WinPanel(HWND hWnd) : QWinWidget(hWnd)
 {
     windowHandle = hWnd;
-    mainPanel = new WinMainPanel(this);
-    mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     setObjectName("winPanel");
 
+    mainPanel = new WinMainPanel(this);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->setMargin(0);
+    setLayout(layout);
+    layout->addWidget(mainPanel);
+
+    mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    this->adjustSize();
     this->show();
 }
 
