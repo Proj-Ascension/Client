@@ -203,3 +203,18 @@ void UnixPanel::pushButtonMaximize()
         showMaximized();
     }
 }
+
+void UnixPanel::mousePressEvent(QMouseEvent *evt)
+{
+    oldWindowPos = evt->globalPos();
+}
+
+void UnixPanel::mouseMoveEvent(QMouseEvent *evt)
+{
+    const QPoint delta = evt->globalPos() - oldWindowPos;
+    if (evt->pos().y() < 70)
+    {
+        move(x()+delta.x(), y()+delta.y());
+        oldWindowPos = evt->globalPos();
+    }
+}

@@ -21,6 +21,7 @@ protected:
     QStackedWidget *stack;
     QWidget *libraryPtr;
     QWidget *browserPtr;
+    QPoint oldWindowPos;
 
     TabLabel *activeTab;
     TabLabel *libraryTab;
@@ -30,6 +31,11 @@ protected:
     TabLabel *browserTab;
 
     void init();
+
+private:
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+
 };
 
 #endif // UNIXPANEL
