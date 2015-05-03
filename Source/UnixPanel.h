@@ -21,6 +21,7 @@ private:
     QStackedWidget *stack;
     QWidget *libraryPtr;
     QWidget *browserPtr;
+    QPoint oldWindowPos;
 
     TabLabel *activeTab;
     TabLabel *libraryTab;
@@ -28,6 +29,10 @@ private:
     TabLabel *modsTab;
     TabLabel *newsTab;
     TabLabel *browserTab;
+
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+
 };
 
 #endif // UNIXPANEL
