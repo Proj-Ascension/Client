@@ -23,7 +23,6 @@ win32 {
 contains(QT_MAJOR_VERSION, 5): QT += widgets gui-private
 
 SOURCES += \
-    QWinHost.cpp \
     $$PWD/QWinHost.cpp \
     $$PWD/QWinWidget.cpp \
     $$PWD/QWinWidget.cpp
