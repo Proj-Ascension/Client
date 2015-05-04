@@ -1,58 +1,24 @@
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QVBoxLayout>
-#include <iostream>
-
 #include "UnixPanel.h"
 
-UnixPanel::UnixPanel()
+#include "UnixWindow.h"
+
+UnixPanel::UnixPanel(UnixWindow* panel) : MainPanel((QWidget*) panel),
+    unixPanel(panel)
 {
-    setObjectName("unixPanel");
-
-    mainPanel = new UnixMainPanel(this);
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->setMargin(0);
-    setLayout(layout);
-    layout->addWidget(mainPanel);
-
-    this->setWindowFlags(Qt::FramelessWindowHint);
-    mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
     this->adjustSize();
-    this->show();
 }
 
-void UnixPanel::minimize()
+void UnixPanel::pushButtonMinimize()
 {
-    showMinimized();
+    unixPanel->minimize();
 }
 
-void UnixPanel::maximize()
+void UnixPanel::pushButtonMaximize()
 {
-    if (isMaximized()) {
-        showNormal();
-    } else {
-        showMaximized();
-    }
+    unixPanel->maximize();
 }
 
-void UnixPanel::closeWindow()
+void UnixPanel::pushButtonClose()
 {
-    this->close();
-}
-
-void UnixPanel::mousePressEvent(QMouseEvent* evt)
-{
-    oldWindowPos = evt->globalPos();
-}
-
-void UnixPanel::mouseMoveEvent(QMouseEvent* evt)
-{
-    const QPoint delta = evt->globalPos() - oldWindowPos;
-    if (evt->pos().y() < 70)
-    {
-        move(x() + delta.x(), y() + delta.y());
-        oldWindowPos = evt->globalPos();
-    }
+    unixPanel->closeWindow();
 }

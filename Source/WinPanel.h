@@ -1,33 +1,25 @@
-#ifndef WINPANEL_H
-#define WINPANEL_H
+#ifndef WINMAINPANEL_H
+#define WINMAINPANEL_H
 
-#include <QMouseEvent>
-#include <QVBoxLayout>
-#include <QStackedWidget>
-#include <QWidget>
-#include "QWinWidget.h"
-#include "TabLabel.h"
-#include "WinMainPanel.h"
+#include "MainPanel.h"
 
-class WinPanel : public QWinWidget
+class WinWindow;
+
+class WinPanel : public MainPanel
 {
     Q_OBJECT
 
 public:
-    WinPanel(HWND hWnd);
-#if QT_VERSION >= 0x050000
-    bool nativeEvent(const QByteArray&, void* msg, long* result);
-#else
-    bool winEvent(MSG *message, long *result);
-#endif
-    void mousePressEvent(QMouseEvent *event);
-    void minimize();
-    void maximize();
-    void closeWindow();
+    WinPanel(WinWindow* panel);
+
+public slots:
+    void pushButtonMinimize();
+    void pushButtonMaximize();
+    void pushButtonClose();
 
 private:
-    HWND windowHandle;
-    WinMainPanel* mainPanel;
+    WinWindow* winPanel;
+
 };
 
-#endif // WINPANEL_H
+#endif // WINMAINPANEL_H
