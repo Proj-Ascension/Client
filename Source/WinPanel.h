@@ -7,6 +7,7 @@
 #include <QWidget>
 #include "QWinWidget.h"
 #include "TabLabel.h"
+#include "WinMainPanel.h"
 
 class WinPanel : public QWinWidget
 {
@@ -15,34 +16,18 @@ class WinPanel : public QWinWidget
 public:
     WinPanel(HWND hWnd);
 #if QT_VERSION >= 0x050000
-    bool nativeEvent(const QByteArray &, void *msg, long *result);
+    bool nativeEvent(const QByteArray&, void* msg, long* result);
 #else
     bool winEvent(MSG *message, long *result);
 #endif
     void mousePressEvent(QMouseEvent *event);
-
-public slots:
-    void pushButtonMinimizeClicked();
-    void pushButtonMaximizeClicked();
-    void pushButtonCloseClicked();
-    void setTabLibrary();
-    void setTabBrowser();
+    void minimize();
+    void maximize();
+    void closeWindow();
 
 private:
     HWND windowHandle;
-    QStackedWidget *stack;
-    QWidget *libraryPtr;
-    QWidget *browserPtr;
-
-    TabLabel *activeTab;
-    TabLabel *libraryTab;
-    TabLabel *storeTab;
-    TabLabel *modsTab;
-    TabLabel *newsTab;
-    TabLabel *browserTab;
-
-protected:
-
+    WinMainPanel* mainPanel;
 };
 
 #endif // WINPANEL_H

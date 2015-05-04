@@ -21,29 +21,36 @@ HEADERS += \
     Source/Game.h \
     Source/TabLabel.h \
     Source/Library.h \
-    Source/Browser.h
-
+    Source/Browser.h \
+    Source/MainPanel.h
 
 SOURCES += \
     Source/Main.cpp \
     Source/TabLabel.cpp \
     Source/Library.cpp \
-    Source/Browser.cpp
+    Source/Browser.cpp \
+    Source/MainPanel.cpp
 
 win32 {
     HEADERS += \
+        Source/WinMainPanel.h \
         Source/WinPanel.h \
         Source/BorderlessWindow.h
+
     SOURCES += \
+        Source/WinMainPanel.cpp \
         Source/WinPanel.cpp \
         Source/BorderlessWindow.cpp
 }
 
 unix {
     HEADERS += \
-        Source/UnixPanel.h
+        Source/UnixPanel.h \
+        Source/UnixMainPanel.h
+
     SOURCES += \
-        Source/UnixPanel.cpp
+        Source/UnixPanel.cpp \
+        Source/UnixMainPanel.cpp
 }
 
 release: DESTDIR = build/release

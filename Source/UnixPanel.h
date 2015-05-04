@@ -1,9 +1,7 @@
 #ifndef UNIXPANEL
 #define UNIXPANEL
 
-#include <QStackedWidget>
-#include <QWidget>
-#include "TabLabel.h"
+#include "UnixMainPanel.h"
 
 class UnixPanel : public QWidget
 {
@@ -12,28 +10,16 @@ class UnixPanel : public QWidget
 public:
     UnixPanel();
 
-public slots:
-    void setTabLibrary();
-    void setTabBrowser();
-    void pushButtonMaximize();
+    void minimize();
+    void maximize();
+    void closeWindow();
 
 private:
-    QStackedWidget *stack;
-    QWidget *libraryPtr;
-    QWidget *browserPtr;
+    UnixMainPanel* mainPanel;
     QPoint oldWindowPos;
 
-    TabLabel *activeTab;
-    TabLabel *libraryTab;
-    TabLabel *storeTab;
-    TabLabel *modsTab;
-    TabLabel *newsTab;
-    TabLabel *browserTab;
-
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 };
 
-#endif // UNIXPANEL
-
+#endif // UNIXPANEL_H
