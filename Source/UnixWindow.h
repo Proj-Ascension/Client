@@ -1,5 +1,5 @@
-#ifndef UNIXPANEL
-#define UNIXPANEL
+#ifndef UNIXWINDOW
+#define UNIXWINDOW
 
 #include "UnixPanel.h"
 
@@ -22,4 +22,4 @@ private:
     void mouseMoveEvent(QMouseEvent*);
 };
 
-#endif // UNIXPANEL_H
+#endif // UNIXWINDOW

@@ -7,7 +7,7 @@
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
 #else
-#include "UnixPanel.h"
+#include "UnixWindow.h"
 #endif
 
 int main(int argc, char *argv[])
@@ -64,11 +64,11 @@ int main(int argc, char *argv[])
     BorderlessWindow window(application, windowBackground, 1152, 648);
     window.setMinimumSize(830, 550);
 #else
-    // Create a Unix panel
-    UnixPanel panel;
+    // Create a Unix window
+    UnixWindow window;
     QSize *size = new QSize(1152, 648);
-    panel.resize(*size);
-    panel.setMinimumSize(830, 550);
+    window.resize(*size);
+    window.setMinimumSize(830, 550);
 #endif
 
     // Launch

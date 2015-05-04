@@ -7,7 +7,7 @@
 
 UnixWindow::UnixWindow()
 {
-    setObjectName("unixPanel");
+    setObjectName("unixWindow");
 
     mainPanel = new UnixPanel(this);
 
