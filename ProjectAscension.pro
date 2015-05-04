@@ -33,24 +33,24 @@ SOURCES += \
 
 win32 {
     HEADERS += \
-        Source/WinMainPanel.h \
-        Source/WinPanel.h \
-        Source/BorderlessWindow.h
+        Source/BorderlessWindow.h \
+        Source/WinWindow.h \
+        Source/WinPanel.h
 
     SOURCES += \
-        Source/WinMainPanel.cpp \
-        Source/WinPanel.cpp \
-        Source/BorderlessWindow.cpp
+        Source/BorderlessWindow.cpp \
+        Source/WinWindow.cpp \
+        Source/WinPanel.cpp
 }
 
 unix {
     HEADERS += \
-        Source/UnixPanel.h \
-        Source/UnixMainPanel.h
+        Source/UnixWindow.h \
+        Source/UnixPanel.h
 
     SOURCES += \
-        Source/UnixPanel.cpp \
-        Source/UnixMainPanel.cpp
+        Source/UnixWindow.cpp \
+        Source/UnixPanel.cpp
 }
 
 release: DESTDIR = build/release
