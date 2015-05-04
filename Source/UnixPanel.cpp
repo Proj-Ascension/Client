@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QDebug>
 #include <QVBoxLayout>
+#include <iostream>
 
 #include "UnixPanel.h"
 
@@ -20,7 +20,6 @@ UnixPanel::UnixPanel()
     mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     this->adjustSize();
-    this->move(QApplication::desktop()->availableGeometry().center() - this->rect().center());
     this->show();
 }
 

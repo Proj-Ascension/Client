@@ -15,12 +15,11 @@ public:
     void closeWindow();
 
 private:
-    QPoint oldWindowPos;
     UnixMainPanel* mainPanel;
+    QPoint oldWindowPos;
 
-    void mousePressEvent(QMouseEvent* evt);
-    void mouseMoveEvent(QMouseEvent* evt);
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
 };
 
-#endif // UNIXPANEL
-
+#endif // UNIXPANEL_H
