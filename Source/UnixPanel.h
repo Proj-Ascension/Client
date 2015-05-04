@@ -1,25 +1,25 @@
-#ifndef UNIXPANEL
-#define UNIXPANEL
+#ifndef UNIXWINPANEL_H
+#define UNIXWINPANEL_H
 
-#include "UnixMainPanel.h"
+#include "MainPanel.h"
 
-class UnixPanel : public QWidget
+class UnixWindow;
+
+class UnixPanel : public MainPanel
 {
     Q_OBJECT
 
 public:
-    UnixPanel();
+    UnixPanel(UnixWindow* panel);
 
-    void minimize();
-    void maximize();
-    void closeWindow();
+public slots:
+    void pushButtonMinimize();
+    void pushButtonMaximize();
+    void pushButtonClose();
 
 private:
-    UnixMainPanel* mainPanel;
-    QPoint oldWindowPos;
+    UnixWindow* unixPanel;
 
-    void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
 };
 
-#endif // UNIXPANEL_H
+#endif // UNIXMAINPANEL_H
