@@ -15,8 +15,13 @@ public:
     explicit Library(QWidget *parent = 0);
     ~Library();
 
+private slots:
+    void on_testLaunch_clicked();
+
 private:
     Ui::Library *ui;
+
+    void runProcess(QString file);
 };
 
 #endif // LIBRARY_H
