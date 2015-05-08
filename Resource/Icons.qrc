@@ -11,11 +11,5 @@
         <file>Icons/Ascension.png</file>
         <file>Icons/Ascension_Small.png</file>
         <file>Icons/Ascension_Icon.ico</file>
-        <file>BorderlessWindow/BorderlessWindow.css</file>
-    </qresource>
-    <qresource prefix="/Typeface">
-        <file>Fonts/Sansation_Bold.ttf</file>
-        <file>Fonts/Sansation_Light.ttf</file>
-        <file>Fonts/Sansation_Regular.ttf</file>
     </qresource>
 </RCC>

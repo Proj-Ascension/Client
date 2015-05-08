@@ -5,7 +5,7 @@ CONFIG += app_bundle
 CONFIG += c++11
 
 win32 {
-    RC_ICONS += Icons/Ascension_Icon.ico
+    RC_ICONS += Resource/Icons/Ascension_Icon.ico
     LIBS += -lgdi32 -ldwmapi
 }
 
@@ -73,13 +73,15 @@ win32 {
 }
 
 RESOURCES += \
-    Icons.qrc
+    Resource/Icons.qrc \
+    Resource/Fonts.qrc \
+    Resource/Styles.qrc
 
 OTHER_FILES +=
 
 FORMS += \
-    Library.ui \
-    Browser.ui
+    Resource/UI/Library.ui \
+    Resource/UI/Browser.ui
 
 DISTFILES += \
-    BorderlessWindow/BorderlessWindow.css
+    Resource/PAClient.css
