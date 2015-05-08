@@ -67,7 +67,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #2C3240</string>
+        <string notr="true"/>
        </property>
       </widget>
      </item>
@@ -80,7 +80,7 @@
         </sizepolicy>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #333D49</string>
+        <string notr="true"/>
        </property>
        <widget class="QPushButton" name="testLaunch">
         <property name="geometry">
@@ -92,12 +92,7 @@
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: #EFF6FE;
-font: 12pt &quot;Droid Sans&quot;;
-background-color: #7F8995;
-border: none;
-margin: 0px;
-padding: 0px;</string>
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>LAUNCH A GAME</string>

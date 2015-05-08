@@ -14,6 +14,16 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     return label;
 }
 
+QString getStylesheet(QString location) {
+    QFile stylesheet(location);
+    if (stylesheet.open(QFile::ReadOnly))
+    {
+        QString styleSheet = stylesheet.readAll();
+        return styleSheet;
+    }
+    return "";
+}
+
 MainPanel::MainPanel(QWidget* parent) : QWidget(parent)
 {
     setObjectName("mainPanel");
@@ -27,9 +37,12 @@ void MainPanel::init()
 {
     stack = new QStackedWidget(this);
 
+    QString style = getStylesheet(":/Styles/Content.css");
     // Prepare UI objects for each tab
     libraryPtr = new Library();
+    libraryPtr->setStyleSheet(style);
     browserPtr = new Browser();
+    browserPtr->setStyleSheet(style);
     stack->addWidget(libraryPtr);
     stack->addWidget(browserPtr);
     stack->setCurrentWidget(libraryPtr);
@@ -47,7 +60,6 @@ void MainPanel::init()
     QHBoxLayout *headerLayout = new QHBoxLayout;
     headerLayout->setSpacing(0);
     headerLayout->setMargin(0);
-
 
     // Window title
     QLabel *windowTitle = new QLabel(this);

@@ -1,0 +1,21 @@
+#leftSidebar {
+    background-color: #2C3240;
+}
+
+#content {
+    background-color: #333D49;
+}
+
+QPushButton {
+    color: #EFF6FE;
+    font: 12pt "Droid Sans";
+    background: #7F8995;
+    background-color: #7F8995;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+QPushButton:hover {
+    background-color: #9FA8B5;
+}
