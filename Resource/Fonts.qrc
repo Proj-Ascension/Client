@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/Typeface">
+        <file>Fonts/Sansation_Bold.ttf</file>
+        <file>Fonts/Sansation_Light.ttf</file>
+        <file>Fonts/Sansation_Regular.ttf</file>
+    </qresource>
+</RCC>

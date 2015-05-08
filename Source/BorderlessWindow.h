@@ -51,8 +51,8 @@ private:
     bool visible;
 
     bool borderless;
-    bool aeroShadow;
     bool borderlessResizeable;
+    bool aeroShadow;
 
     struct sizeType
     {

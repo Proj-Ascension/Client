@@ -1,0 +1,51 @@
+#mainPanel {
+    margin: 0px;
+    padding: 0px;
+}
+
+#systemPanel {
+    margin: 0px;
+    padding: 0px;
+}
+
+#centralWidget {
+    background: #22262F; /* Window background color */
+}
+
+#mainPanelScrollArea {
+    border: none;
+}
+
+/* System buttons */
+#pushButtonMaximize, #pushButtonMinimize, #pushButtonClose {
+    border: none;
+    width: 14px;
+    height: 14px;
+}
+
+#pushButtonMaximize {
+    padding: 0 8px 0 8px;
+    image: url(:/SystemMenu/Icons/Maximize.png);
+}
+
+#pushButtonMaximize:hover {
+    image: url(:/SystemMenu/Icons/MaximizeHover.png);
+}
+
+#pushButtonMinimize {
+    padding: 0 7px 0 0;
+    image: url(:/SystemMenu/Icons/Minimize.png);
+}
+
+#pushButtonMinimize:hover {
+    image: url(:/SystemMenu/Icons/MinimizeHover.png);
+}
+
+#pushButtonClose {
+    padding: 0 0 0 7px;
+    image: url(:/SystemMenu/Icons/Close.png);
+}
+
+#pushButtonClose:hover {
+    image: url(:/SystemMenu/Icons/CloseHover.png);
+}
