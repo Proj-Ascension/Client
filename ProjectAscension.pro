@@ -1,5 +1,5 @@
 TEMPLATE = app
-RC_FILE = Launcher.rc
+RC_FILE = Resource/Launcher.rc
 CONFIG += app_bundle
 
 CONFIG += c++11
