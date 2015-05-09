@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     QApplication *application = new QApplication(argc, argv);
 
     // Stylesheet
-    QFile stylesheet(":/SystemMenu/BorderlessWindow/BorderlessWindow.css");
+    QFile stylesheet(":/Styles/PAClient.css");
     if (stylesheet.open(QFile::ReadOnly))
     {
         QString styleSheet = stylesheet.readAll();
@@ -73,4 +73,6 @@ int main(int argc, char *argv[])
 
     // Launch
     application->exec();
+
+    return 0;
 }

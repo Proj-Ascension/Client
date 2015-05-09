@@ -15,11 +15,11 @@ QApplication *BorderlessWindow::a;
 
 BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, const int width, const int height) : hWnd(0),
     hInstance(GetModuleHandle(NULL)),
+    closed(false),
+    visible(false),
     borderless(false),
     borderlessResizeable(true),
-    aeroShadow(false),
-    closed(false),
-    visible(false)
+    aeroShadow(false)
 {
     WNDCLASSEX wcx = {0};
     wcx.cbSize = sizeof(WNDCLASSEX);
