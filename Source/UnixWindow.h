@@ -17,9 +17,11 @@ public:
 private:
     UnixPanel* mainPanel;
     QPoint oldWindowPos;
+    bool dragging;
 
-    void mousePressEvent(QMouseEvent*);
-    void mouseMoveEvent(QMouseEvent*);
+    void mousePressEvent(QMouseEvent *evt);
+    void mouseReleaseEvent(QMouseEvent *evt);
+    void mouseMoveEvent(QMouseEvent *evt);
 };
 
 #endif // UNIXWINDOW
