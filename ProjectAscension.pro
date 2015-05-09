@@ -84,4 +84,5 @@ FORMS += \
     Resource/UI/Browser.ui
 
 DISTFILES += \
-    Resource/PAClient.css
+    Resource/PAClient.css \
+    Resource/Content.css

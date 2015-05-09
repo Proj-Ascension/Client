@@ -50,7 +50,10 @@
       <enum>QLayout::SetDefaultConstraint</enum>
      </property>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QWidget" name="leftSidebar" native="true">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -64,15 +67,12 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #2C3240</string>
-       </property>
-       <property name="text">
-        <string/>
+        <string notr="true"/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QWidget" name="content" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>3</horstretch>
@@ -80,11 +80,24 @@
         </sizepolicy>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: #333D49</string>
+        <string notr="true"/>
        </property>
-       <property name="text">
-        <string/>
-       </property>
+       <widget class="QPushButton" name="testLaunch">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>200</y>
+          <width>171</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>LAUNCH A GAME</string>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>
