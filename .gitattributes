@@ -1,0 +1,40 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Flag sources
+*.C     text
+*.cc    text
+*.cxx   text
+*.cpp   text
+*.c++   text
+*.hpp   text
+*.h     text
+*.h++   text
+*.hh    text
+*.css   text
+
+# Flag binaries
+*.dll   binary
+*.ico   binary
+*.jpeg  binary
+*.jpg   binary
+*.pdf   binary
+*.png   binary
+*.swc   binary
+*.swf   binary
+*.swz   binary
+*.tbx   binary
+*.thmx  binary
+*.ttf   binary
+*.zip   binary
+
+# Custom for Visual Studio
+*.cs     diff=csharp
+*.sln    merge=union
+*.csproj merge=union
+*.vbproj merge=union
+*.fsproj merge=union
+*.dbproj merge=union
+
+# Custom for Qt Creator
+*.pro    merge=union
