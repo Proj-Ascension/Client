@@ -3,7 +3,7 @@ A tentative user interface for [Project Ascension](http://reddit.com/r/Project_A
 
 # Useful Links
 - [Website](http://projectascension.io)
-- [Subreddit](http://reddit.com/Project_Ascension)
+- [Subreddit](http://reddit.com/r/Project_Ascension)
 - [Twitter](https://twitter.com/Proj_Ascension)
 - [Twitch](http://twitch.tv/Project_Ascension)
 
