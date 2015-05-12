@@ -2,6 +2,7 @@
 #define LIBRARY_H
 
 #include <QWidget>
+#include <QProcess>
 
 namespace Ui {
 class Library;
@@ -17,9 +18,12 @@ public:
 
 private slots:
     void on_testLaunch_clicked();
+    void finished(int exitcode, QProcess::ExitStatus exitStatus);
 
 private:
     Ui::Library *ui;
+    QProcess *runningProcess;
+    bool processRunning;
 
     void runProcess(QString file);
 };
