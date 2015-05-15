@@ -16,7 +16,7 @@ class MainPanel : public QWidget
     Q_OBJECT
 
 public:
-    MainPanel(QWidget *parent = 0);
+    MainPanel(QWidget* parent = 0);
 
 public slots:
     void setTabLibrary();
@@ -26,16 +26,16 @@ public slots:
     virtual void pushButtonClose() = 0;
 
 protected:
-    QStackedWidget *stack;
-    QWidget *libraryPtr;
-    QWidget *browserPtr;
+    QStackedWidget* stack;
+    QWidget* libraryPtr;
+    QWidget* browserPtr;
 
-    TabLabel *activeTab;
-    TabLabel *libraryTab;
-    TabLabel *storeTab;
-    TabLabel *modsTab;
-    TabLabel *newsTab;
-    TabLabel *browserTab;
+    TabLabel* activeTab;
+    TabLabel* libraryTab;
+    TabLabel* storeTab;
+    TabLabel* modsTab;
+    TabLabel* newsTab;
+    TabLabel* browserTab;
 
     void init();
 };

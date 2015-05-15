@@ -35,14 +35,14 @@ WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 }
 
 #if QT_VERSION >= 0x050000
-bool WinWindow::nativeEvent(const QByteArray &, void *msg, long *)
+bool WinWindow::nativeEvent(const QByteArray &, void *msg, long*)
 {
 #else
-bool WinPanel::winEvent(MSG *message, long *)
+bool WinPanel::winEvent(MSG* message, long*)
 {
 #endif
 #if QT_VERSION >= 0x050000
-    MSG *message = (MSG *)msg;
+    MSG* message = (MSG*)msg;
 #endif
     switch(message->message)
     {

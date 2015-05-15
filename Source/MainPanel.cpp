@@ -14,7 +14,8 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     return label;
 }
 
-QString getStylesheet(QString location) {
+QString getStylesheet(QString location)
+{
     QFile stylesheet(location);
     if (stylesheet.open(QFile::ReadOnly))
     {
@@ -48,21 +49,21 @@ void MainPanel::init()
     stack->setCurrentWidget(libraryPtr);
 
     // System layout
-    QHBoxLayout *systemLayout = new QHBoxLayout;
+    QHBoxLayout* systemLayout = new QHBoxLayout;
     systemLayout->setSpacing(0);
     systemLayout->setMargin(8);
 
     // Header spacing
-    QVBoxLayout *topLayout = new QVBoxLayout;
+    QVBoxLayout* topLayout = new QVBoxLayout;
     topLayout->setMargin(0);
 
     // Header layout
-    QHBoxLayout *headerLayout = new QHBoxLayout;
+    QHBoxLayout* headerLayout = new QHBoxLayout;
     headerLayout->setSpacing(0);
     headerLayout->setMargin(0);
 
     // Window title
-    QLabel *windowTitle = new QLabel(this);
+    QLabel* windowTitle = new QLabel(this);
     windowTitle->setObjectName("windowTitle");
     windowTitle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     windowTitle->setMinimumWidth(175);
@@ -117,36 +118,36 @@ void MainPanel::init()
     systemLayout->addStretch();
 
     // Minimize
-    QPushButton *pushButtonMinimize = new QPushButton("", this);
+    QPushButton* pushButtonMinimize = new QPushButton("", this);
     pushButtonMinimize->setObjectName("pushButtonMinimize");
     systemLayout->addWidget(pushButtonMinimize);
     QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimize()));
 
     // Maximize
-    QPushButton *pushButtonMaximize = new QPushButton("", this);
+    QPushButton* pushButtonMaximize = new QPushButton("", this);
     pushButtonMaximize->setObjectName("pushButtonMaximize");
     systemLayout->addWidget(pushButtonMaximize);
     QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximize()));
 
     // Close
-    QPushButton *pushButtonClose = new QPushButton("", this);
+    QPushButton* pushButtonClose = new QPushButton("", this);
     pushButtonClose->setObjectName("pushButtonClose");
     systemLayout->addWidget(pushButtonClose);
     QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
 
     // Main panel layout
-    QGridLayout *mainGridLayout = new QGridLayout();
+    QGridLayout* mainGridLayout = new QGridLayout();
     mainGridLayout->setSpacing(0);
     mainGridLayout->setMargin(0);
     setLayout(mainGridLayout);
 
     // Central widget
-    QWidget *centralWidget = new QWidget(this);
+    QWidget* centralWidget = new QWidget(this);
     centralWidget->setObjectName("centralWidget");
     centralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Main panel scroll area
-    QScrollArea *scrollArea = new QScrollArea(this);
+    QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setObjectName("mainPanelScrollArea");
     scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -154,7 +155,7 @@ void MainPanel::init()
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     // Vertical layout example
-    QVBoxLayout *verticalLayout = new QVBoxLayout();
+    QVBoxLayout* verticalLayout = new QVBoxLayout();
     verticalLayout->setSpacing(5);
     verticalLayout->setMargin(0);
     verticalLayout->setAlignment(Qt::AlignHCenter);

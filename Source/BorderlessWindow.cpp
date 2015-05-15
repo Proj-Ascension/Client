@@ -8,12 +8,12 @@
 #include <windowsx.h>
 #include <stdexcept>
 
-HWND winId = 0;
+HWND g_winId = 0;
 
-WinWindow *BorderlessWindow::mainPanel;
-QApplication *BorderlessWindow::a;
+WinWindow* BorderlessWindow::mainPanel;
+QApplication* BorderlessWindow::a;
 
-BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, const int width, const int height) : hWnd(0),
+BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, const int width, const int height) : hWnd(0),
     hInstance(GetModuleHandle(NULL)),
     closed(false),
     visible(false),
@@ -49,7 +49,7 @@ BorderlessWindow::BorderlessWindow(QApplication *app, HBRUSH windowBackground, c
 
 
     mainPanel = new WinWindow(hWnd);
-    winId = (HWND)mainPanel->winId();
+    g_winId = (HWND)mainPanel->winId();
 
     show();
     toggleBorderless();
@@ -68,7 +68,7 @@ PAINTSTRUCT ps;
 
 LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BorderlessWindow *window = reinterpret_cast<BorderlessWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    BorderlessWindow* window = reinterpret_cast<BorderlessWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
     if (!window) return DefWindowProc(hWnd, message, wParam, lParam);
 
     switch (message)
@@ -86,7 +86,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
         {
             window->toggleShadow();
             window->toggleBorderless();
-            SetFocus(winId);
+            SetFocus(g_winId);
             break;
         }
         case VK_F7:
@@ -98,7 +98,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
 
         if (wParam != VK_TAB) return DefWindowProc(hWnd, message, wParam, lParam);
 
-        SetFocus(winId);
+        SetFocus(g_winId);
         break;
     }
 
@@ -121,7 +121,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
     case WM_SETFOCUS:
     {
         QString str("Got focus");
-        QWidget *widget = QWidget::find((WId)HWND(wParam));
+        QWidget* widget = QWidget::find((WId)HWND(wParam));
         if (widget)
             str += QString(" from %1 (%2)").arg(widget->objectName()).arg(widget->metaObject()->className());
         str += "\n";
@@ -143,7 +143,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
     case WM_KILLFOCUS:
     {
         QString str("Lost focus");
-        QWidget *widget = QWidget::find((WId)HWND(wParam));
+        QWidget* widget = QWidget::find((WId)HWND(wParam));
         if (widget)
             str += QString(" to %1 (%2)").arg(widget->objectName()).arg(widget->metaObject()->className());
         str += "\n";
@@ -268,11 +268,11 @@ void BorderlessWindow::toggleBorderless()
 {
     if (visible)
     {
-        Style newStyle = (borderless) ? Style::windowed : Style::aero_borderless;
+        Style newStyle = (borderless) ? Style::windowed : Style::aeroBorderless;
         SetWindowLongPtr(hWnd, GWL_STYLE, static_cast<LONG>(newStyle));
 
         borderless = !borderless;
-        if (newStyle == Style::aero_borderless)
+        if (newStyle == Style::aeroBorderless)
         {
             toggleShadow();
         }

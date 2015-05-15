@@ -18,9 +18,9 @@ public:
 #if QT_VERSION >= 0x050000
     bool nativeEvent(const QByteArray&, void* msg, long* result);
 #else
-    bool winEvent(MSG *message, long *result);
+    bool winEvent(MSG* message, long* result);
 #endif
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent* event);
     void minimize();
     void maximize();
     void closeWindow();

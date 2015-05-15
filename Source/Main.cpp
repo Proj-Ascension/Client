@@ -10,10 +10,10 @@
 #include "UnixWindow.h"
 #endif
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QApplication::setStyle("fusion");
-    QApplication *application = new QApplication(argc, argv);
+    QApplication* application = new QApplication(argc, argv);
 
     // Stylesheet
     QFile stylesheet(":/Styles/PAClient.css");
@@ -55,21 +55,21 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifdef Q_OS_WIN
-    // Background color
-    // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
-    HBRUSH windowBackground = CreateSolidBrush(RGB(34, 38, 47));
+    #ifdef Q_OS_WIN
+        // Background color
+        // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
+        HBRUSH windowBackground = CreateSolidBrush(RGB(34, 38, 47));
 
-    // Create window
-    BorderlessWindow window(application, windowBackground, 1152, 648);
-    window.setMinimumSize(830, 550);
-#else
-    // Create a Unix window
-    UnixWindow window;
-    QSize *size = new QSize(1152, 648);
-    window.resize(*size);
-    window.setMinimumSize(830, 550);
-#endif
+        // Create a Win window
+        BorderlessWindow window(application, windowBackground, 1152, 648);
+        window.setMinimumSize(830, 550);
+    #else
+        // Create a Unix window
+        UnixWindow window;
+        QSize* size = new QSize(1152, 648);
+        window.resize(*size);
+        window.setMinimumSize(830, 550);
+    #endif
 
     // Launch
     application->exec();

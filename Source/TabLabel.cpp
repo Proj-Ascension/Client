@@ -1,6 +1,6 @@
 #include "TabLabel.h"
 
-TabLabel::TabLabel(QWidget *parent) : QLabel(parent)
+TabLabel::TabLabel(QWidget* parent) : QLabel(parent)
 {
     // Set up drop shadow effect for hover event.
     dse = new QGraphicsDropShadowEffect();
@@ -21,19 +21,19 @@ TabLabel::TabLabel(QWidget *parent) : QLabel(parent)
     connect(this, SIGNAL(unhovered()), this, SLOT(disableShadow()));
 }
 
-void TabLabel::enterEvent(QEvent *event)
+void TabLabel::enterEvent(QEvent* event)
 {
     Q_EMIT hovered();
     QWidget::enterEvent(event);
 }
 
-void TabLabel::leaveEvent(QEvent *event)
+void TabLabel::leaveEvent(QEvent* event)
 {
     Q_EMIT unhovered();
     QWidget::leaveEvent(event);
 }
 
-void TabLabel::mousePressEvent(QMouseEvent *event)
+void TabLabel::mousePressEvent(QMouseEvent* event)
 {
     Q_EMIT clicked();
     dse->setEnabled(false);

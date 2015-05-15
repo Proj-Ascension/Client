@@ -11,9 +11,9 @@ class Browser : public QWidget
     Q_OBJECT
 
 public:
-    explicit Browser(QWidget *parent = 0);
+    explicit Browser(QWidget* parent = 0);
     ~Browser();
 
 private:
-    Ui::Browser *ui;
+    Ui::Browser* ui;
 };
