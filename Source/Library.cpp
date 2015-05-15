@@ -27,7 +27,7 @@ void Library::on_testLaunch_clicked()
 {
 
     if (!processRunning) {
-        QFileDialog dialog();
+        QFileDialog dialog;
         dialog.setWindowTitle("Select Executable");
         dialog.setFileMode(QFileDialog::ExistingFile);
 
@@ -43,7 +43,7 @@ void Library::on_testLaunch_clicked()
             runProcess(file);
         }
     } else {
-        QMessageBox messageBox();
+        QMessageBox messageBox;
         messageBox.setText("Error: an application is already running.");
         messageBox.exec();
     }
