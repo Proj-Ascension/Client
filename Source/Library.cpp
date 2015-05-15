@@ -1,9 +1,9 @@
+#include "Library.h"
+#include "ui_Library.h"
+
 #include <QFileDialog>
 #include <QProcess>
 #include <QMessageBox>
-
-#include "Library.h"
-#include "ui_Library.h"
 
 Library::Library(QWidget *parent) :
     QWidget(parent),

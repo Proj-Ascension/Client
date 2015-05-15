@@ -1,12 +1,12 @@
 #pragma once
 
-#include <windows.h>
-
 #include "WinWindow.h"
 #include "QWinWidget.h"
 
 #include <QApplication>
 #include <QWidget>
+
+#include <windows.h>
 
 class BorderlessWindow
 {

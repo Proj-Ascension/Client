@@ -1,12 +1,13 @@
 #pragma once
 
+#include "QWinWidget.h"
+#include "WinPanel.h"
+#include "TabLabel.h"
+
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QWidget>
-#include "QWinWidget.h"
-#include "TabLabel.h"
-#include "WinPanel.h"
 
 class WinWindow : public QWinWidget
 {

@@ -1,14 +1,15 @@
 #pragma once
 
+#include "Library.h"
+#include "Browser.h"
+#include "TabLabel.h"
+
 #include <QWidget>
 #include <QStackedWidget>
-#include <TabLabel.h>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QScrollArea>
-#include "Library.h"
-#include "Browser.h"
 
 class MainPanel : public QWidget
 {

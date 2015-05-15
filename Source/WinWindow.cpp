@@ -1,4 +1,6 @@
-#include <windows.h>
+#include "WinWindow.h"
+#include "Library.h"
+#include "Browser.h"
 
 #include <QApplication>
 #include <QGridLayout>
@@ -8,13 +10,10 @@
 #include <QScrollArea>
 #include <QSpacerItem>
 #include <QGraphicsDropShadowEffect>
-
-#include "WinWindow.h"
-#include "Library.h"
-#include "Browser.h"
-
-#include <windowsx.h>
 #include <QFontDatabase>
+
+#include <windows.h>
+#include <windowsx.h>
 
 WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 {

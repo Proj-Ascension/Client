@@ -1,9 +1,9 @@
+#include "UnixWindow.h"
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
 #include <iostream>
-
-#include "UnixWindow.h"
 
 UnixWindow::UnixWindow()
 {

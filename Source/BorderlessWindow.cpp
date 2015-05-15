@@ -1,12 +1,12 @@
 #include "BorderlessWindow.h"
 
-#include <dwmapi.h>
-#include <windowsx.h>
-#include <stdexcept>
-
 #include <QDesktopWidget>
 #include <QPushButton>
 #include <QFile>
+
+#include <dwmapi.h>
+#include <windowsx.h>
+#include <stdexcept>
 
 HWND winId = 0;
 
