@@ -1,5 +1,4 @@
-#ifndef TABLABEL_H
-#define TABLABEL_H
+#pragma once
 
 #include <QLabel>
 #include <QEvent>
@@ -29,5 +28,3 @@ private slots:
     void enableShadow();
     void disableShadow();
 };
-
-#endif // TABLABEL_H

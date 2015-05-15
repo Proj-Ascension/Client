@@ -1,5 +1,4 @@
-#ifndef GAME
-#define GAME
+#pragma once
 
 #include <QString>
 
@@ -8,6 +7,3 @@ class Game
 public:
     Game();
 };
-
-#endif // GAME
-

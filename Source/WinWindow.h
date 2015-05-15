@@ -1,5 +1,4 @@
-#ifndef WINPANEL_H
-#define WINPANEL_H
+#pragma once
 
 #include <QMouseEvent>
 #include <QVBoxLayout>
@@ -29,5 +28,3 @@ private:
     HWND windowHandle;
     WinPanel* mainPanel;
 };
-
-#endif // WINPANEL_H

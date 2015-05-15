@@ -1,5 +1,4 @@
-#ifndef BROWSER_H
-#define BROWSER_H
+#pragma once
 
 #include <QWidget>
 
@@ -18,5 +17,3 @@ public:
 private:
     Ui::Browser *ui;
 };
-
-#endif // BROWSER_H

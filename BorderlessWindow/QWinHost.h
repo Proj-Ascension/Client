@@ -41,8 +41,7 @@
 
 // Declaration of the QWinHost classes
 
-#ifndef QWINHOST_H
-#define QWINHOST_H
+#pragma once
 
 #include <QWidget>
 
@@ -94,5 +93,3 @@ private:
     bool own_hwnd;
     HWND hwnd;
 };
-
-#endif // QWINHOST_H

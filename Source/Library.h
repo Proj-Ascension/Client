@@ -1,5 +1,4 @@
-#ifndef LIBRARY_H
-#define LIBRARY_H
+#pragma once
 
 #include <QWidget>
 #include <QProcess>
@@ -27,5 +26,3 @@ private:
 
     void runProcess(QString file);
 };
-
-#endif // LIBRARY_H

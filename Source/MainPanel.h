@@ -1,5 +1,4 @@
-#ifndef MAINPANEL_H
-#define MAINPANEL_H
+#pragma once
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -39,5 +38,3 @@ protected:
 
     void init();
 };
-
-#endif // MAINPANEL_H
