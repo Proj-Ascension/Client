@@ -1,9 +1,9 @@
+#include "UnixWindow.h"
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
 #include <iostream>
-
-#include "UnixWindow.h"
 
 UnixWindow::UnixWindow()
 {
@@ -30,9 +30,12 @@ void UnixWindow::minimize()
 
 void UnixWindow::maximize()
 {
-    if (isMaximized()) {
+    if (isMaximized())
+    {
         showNormal();
-    } else {
+    }
+    else
+    {
         showMaximized();
     }
 }
@@ -42,23 +45,23 @@ void UnixWindow::closeWindow()
     this->close();
 }
 
-void UnixWindow::mousePressEvent(QMouseEvent *evt)
+void UnixWindow::mousePressEvent(QMouseEvent* evt)
 {
     oldWindowPos = evt->globalPos();
 }
 
-void UnixWindow::mouseReleaseEvent(QMouseEvent *evt)
+void UnixWindow::mouseReleaseEvent(QMouseEvent* evt)
 {
     dragging = false;
 }
 
-void UnixWindow::mouseMoveEvent(QMouseEvent *evt)
+void UnixWindow::mouseMoveEvent(QMouseEvent* evt)
 {
-    const QPoint delta = evt->globalPos() - oldWindowPos;
+    const QPoint c_delta = evt->globalPos() - oldWindowPos;
     if (evt->pos().y() < 70 || dragging)
     {
         dragging = true;
-        move(x() + delta.x(), y() + delta.y());
+        move(x() + c_delta.x(), y() + c_delta.y());
         oldWindowPos = evt->globalPos();
     }
 }

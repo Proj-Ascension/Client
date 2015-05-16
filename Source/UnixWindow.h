@@ -1,5 +1,4 @@
-#ifndef UNIXWINDOW
-#define UNIXWINDOW
+#pragma once
 
 #include "UnixPanel.h"
 
@@ -19,9 +18,7 @@ private:
     QPoint oldWindowPos;
     bool dragging;
 
-    void mousePressEvent(QMouseEvent *evt);
-    void mouseReleaseEvent(QMouseEvent *evt);
-    void mouseMoveEvent(QMouseEvent *evt);
+    void mousePressEvent(QMouseEvent* evt);
+    void mouseReleaseEvent(QMouseEvent* evt);
+    void mouseMoveEvent(QMouseEvent* evt);
 };
-
-#endif // UNIXWINDOW

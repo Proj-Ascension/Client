@@ -1,6 +1,6 @@
 #include "MainPanel.h"
 
-TabLabel* tabFactory(TabLabel* label, QString name, QString text)
+TabLabel* g_tabFactory(TabLabel* label, QString name, QString text)
 {
     label->setObjectName(name);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -14,7 +14,8 @@ TabLabel* tabFactory(TabLabel* label, QString name, QString text)
     return label;
 }
 
-QString getStylesheet(QString location) {
+QString getStylesheet(QString location)
+{
     QFile stylesheet(location);
     if (stylesheet.open(QFile::ReadOnly))
     {
@@ -48,21 +49,21 @@ void MainPanel::init()
     stack->setCurrentWidget(libraryPtr);
 
     // System layout
-    QHBoxLayout *systemLayout = new QHBoxLayout;
+    QHBoxLayout* systemLayout = new QHBoxLayout;
     systemLayout->setSpacing(0);
     systemLayout->setMargin(8);
 
     // Header spacing
-    QVBoxLayout *topLayout = new QVBoxLayout;
+    QVBoxLayout* topLayout = new QVBoxLayout;
     topLayout->setMargin(0);
 
     // Header layout
-    QHBoxLayout *headerLayout = new QHBoxLayout;
+    QHBoxLayout* headerLayout = new QHBoxLayout;
     headerLayout->setSpacing(0);
     headerLayout->setMargin(0);
 
     // Window title
-    QLabel *windowTitle = new QLabel(this);
+    QLabel* windowTitle = new QLabel(this);
     windowTitle->setObjectName("windowTitle");
     windowTitle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     windowTitle->setMinimumWidth(175);
@@ -84,28 +85,28 @@ void MainPanel::init()
 
     // Header tabs
     libraryTab = new TabLabel(this);
-    libraryTab = tabFactory(libraryTab, "libraryTab", "LIBRARY");
+    libraryTab = g_tabFactory(libraryTab, "libraryTab", "LIBRARY");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(libraryTab);
     libraryTab->setStyleSheet("font-weight: bold; color: lightgreen;");
 
     storeTab = new TabLabel(this);
-    storeTab = tabFactory(storeTab, "storeTab", "  STORE");
+    storeTab = g_tabFactory(storeTab, "storeTab", "  STORE");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(storeTab);
 
     modsTab = new TabLabel(this);
-    modsTab = tabFactory(modsTab, "modsTab", " MODS");
+    modsTab = g_tabFactory(modsTab, "modsTab", " MODS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(modsTab);
 
     newsTab = new TabLabel(this);
-    newsTab = tabFactory(newsTab, "newsTab", "NEWS");
+    newsTab = g_tabFactory(newsTab, "newsTab", "NEWS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(newsTab);
 
     browserTab = new TabLabel(this);
-    browserTab = tabFactory(browserTab, "browserTab", "BROWSER");
+    browserTab = g_tabFactory(browserTab, "browserTab", "BROWSER");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(browserTab);
 
@@ -117,36 +118,36 @@ void MainPanel::init()
     systemLayout->addStretch();
 
     // Minimize
-    QPushButton *pushButtonMinimize = new QPushButton("", this);
+    QPushButton* pushButtonMinimize = new QPushButton("", this);
     pushButtonMinimize->setObjectName("pushButtonMinimize");
     systemLayout->addWidget(pushButtonMinimize);
     QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimize()));
 
     // Maximize
-    QPushButton *pushButtonMaximize = new QPushButton("", this);
+    QPushButton* pushButtonMaximize = new QPushButton("", this);
     pushButtonMaximize->setObjectName("pushButtonMaximize");
     systemLayout->addWidget(pushButtonMaximize);
     QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximize()));
 
     // Close
-    QPushButton *pushButtonClose = new QPushButton("", this);
+    QPushButton* pushButtonClose = new QPushButton("", this);
     pushButtonClose->setObjectName("pushButtonClose");
     systemLayout->addWidget(pushButtonClose);
     QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
 
     // Main panel layout
-    QGridLayout *mainGridLayout = new QGridLayout();
+    QGridLayout* mainGridLayout = new QGridLayout();
     mainGridLayout->setSpacing(0);
     mainGridLayout->setMargin(0);
     setLayout(mainGridLayout);
 
     // Central widget
-    QWidget *centralWidget = new QWidget(this);
+    QWidget* centralWidget = new QWidget(this);
     centralWidget->setObjectName("centralWidget");
     centralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Main panel scroll area
-    QScrollArea *scrollArea = new QScrollArea(this);
+    QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setObjectName("mainPanelScrollArea");
     scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -154,7 +155,7 @@ void MainPanel::init()
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     // Vertical layout example
-    QVBoxLayout *verticalLayout = new QVBoxLayout();
+    QVBoxLayout* verticalLayout = new QVBoxLayout();
     verticalLayout->setSpacing(5);
     verticalLayout->setMargin(0);
     verticalLayout->setAlignment(Qt::AlignHCenter);

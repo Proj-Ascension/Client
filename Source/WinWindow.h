@@ -1,13 +1,13 @@
-#ifndef WINPANEL_H
-#define WINPANEL_H
+#pragma once
+
+#include "QWinWidget.h"
+#include "WinPanel.h"
+#include "TabLabel.h"
 
 #include <QMouseEvent>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QWidget>
-#include "QWinWidget.h"
-#include "TabLabel.h"
-#include "WinPanel.h"
 
 class WinWindow : public QWinWidget
 {
@@ -18,9 +18,9 @@ public:
 #if QT_VERSION >= 0x050000
     bool nativeEvent(const QByteArray&, void* msg, long* result);
 #else
-    bool winEvent(MSG *message, long *result);
+    bool winEvent(MSG* message, long* result);
 #endif
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent* event);
     void minimize();
     void maximize();
     void closeWindow();
@@ -29,5 +29,3 @@ private:
     HWND windowHandle;
     WinPanel* mainPanel;
 };
-
-#endif // WINPANEL_H

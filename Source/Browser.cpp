@@ -1,7 +1,7 @@
 #include "Browser.h"
 #include "ui_Browser.h"
 
-Browser::Browser(QWidget *parent) :
+Browser::Browser(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::Browser)
 {

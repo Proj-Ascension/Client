@@ -1,11 +1,11 @@
+#include "Library.h"
+#include "ui_Library.h"
+
 #include <QFileDialog>
 #include <QProcess>
 #include <QMessageBox>
 
-#include "Library.h"
-#include "ui_Library.h"
-
-Library::Library(QWidget *parent) :
+Library::Library(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::Library)
 {
@@ -14,7 +14,6 @@ Library::Library(QWidget *parent) :
     runningProcess = new QProcess(this);
     processRunning = false;
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
-
 }
 
 Library::~Library()
@@ -25,13 +24,14 @@ Library::~Library()
 
 void Library::on_testLaunch_clicked()
 {
-
-    if (!processRunning) {
+    if (!processRunning)
+    {
         QFileDialog dialog;
         dialog.setWindowTitle("Select Executable");
         dialog.setFileMode(QFileDialog::ExistingFile);
 
-        if (dialog.exec()) {
+        if (dialog.exec())
+        {
             QStringList files = dialog.selectedFiles();
             QString file = files.at(0);
             #ifdef Q_WS_MACX
@@ -42,22 +42,27 @@ void Library::on_testLaunch_clicked()
             #endif
             runProcess(file);
         }
-    } else {
+    }
+    else
+    {
         QMessageBox messageBox;
         messageBox.setText("Error: an application is already running.");
         messageBox.exec();
     }
 }
 
-void Library::runProcess(QString location) {
+void Library::runProcess(QString location)
+{
     // TODO: Implement some threading
-    if (!processRunning) {
+    if (!processRunning)
+    {
         runningProcess->start(location);
         runningProcess->waitForStarted();
         processRunning = true;
     }
 }
 
-void Library::finished(int exitcode, QProcess::ExitStatus exitstatus) {
+void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
+{
     processRunning = false;
 }

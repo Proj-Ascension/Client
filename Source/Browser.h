@@ -1,9 +1,9 @@
-#ifndef BROWSER_H
-#define BROWSER_H
+#pragma once
 
 #include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class Browser;
 }
 
@@ -12,11 +12,9 @@ class Browser : public QWidget
     Q_OBJECT
 
 public:
-    explicit Browser(QWidget *parent = 0);
+    explicit Browser(QWidget* parent = 0);
     ~Browser();
 
 private:
-    Ui::Browser *ui;
+    Ui::Browser* ui;
 };
-
-#endif // BROWSER_H

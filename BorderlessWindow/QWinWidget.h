@@ -41,8 +41,7 @@
 
 // Declaration of the QWinWidget classes
 
-#ifndef QWINWIDGET_H
-#define QWINWIDGET_H
+#pragma once
 
 #include <QWidget>
 
@@ -102,5 +101,3 @@ private:
     HWND prevFocus;
     bool reenable_parent;
 };
-
-#endif // QWINWIDGET_H

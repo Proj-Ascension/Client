@@ -18,7 +18,6 @@ QT += \
     webkitwidgets
 
 HEADERS += \
-    Source/Game.h \
     Source/TabLabel.h \
     Source/Library.h \
     Source/Browser.h \

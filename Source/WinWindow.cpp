@@ -1,4 +1,6 @@
-#include <windows.h>
+#include "WinWindow.h"
+#include "Library.h"
+#include "Browser.h"
 
 #include <QApplication>
 #include <QGridLayout>
@@ -8,13 +10,10 @@
 #include <QScrollArea>
 #include <QSpacerItem>
 #include <QGraphicsDropShadowEffect>
-
-#include "WinWindow.h"
-#include "Library.h"
-#include "Browser.h"
-
-#include <windowsx.h>
 #include <QFontDatabase>
+
+#include <windows.h>
+#include <windowsx.h>
 
 WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 {
@@ -36,14 +35,14 @@ WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 }
 
 #if QT_VERSION >= 0x050000
-bool WinWindow::nativeEvent(const QByteArray &, void *msg, long *)
+bool WinWindow::nativeEvent(const QByteArray &, void *msg, long*)
 {
 #else
-bool WinPanel::winEvent(MSG *message, long *)
+bool WinPanel::winEvent(MSG* message, long*)
 {
 #endif
 #if QT_VERSION >= 0x050000
-    MSG *message = (MSG *)msg;
+    MSG* message = (MSG*)msg;
 #endif
     switch(message->message)
     {

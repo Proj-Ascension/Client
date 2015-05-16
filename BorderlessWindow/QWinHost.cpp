@@ -84,7 +84,7 @@
     after the native window has been created, i.e. do not call
     QWidget::setParent or move the QWinHost into a different layout.
 */
-QWinHost::QWinHost(QWidget *parent, Qt::WindowFlags f)
+QWinHost::QWinHost(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f), wndproc(0),own_hwnd(false), hwnd(0)
 {
     setAttribute(Qt::WA_NoBackground);
@@ -98,7 +98,8 @@ QWinHost::QWinHost(QWidget *parent, Qt::WindowFlags f)
 */
 QWinHost::~QWinHost()
 {
-    if (wndproc) {
+    if (wndproc)
+    {
 #if defined(GWLP_WNDPROC)
         QT_WA({
                   SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wndproc);
@@ -115,7 +116,9 @@ QWinHost::~QWinHost()
     }
 
     if (hwnd && own_hwnd)
+    {
         DestroyWindow(hwnd);
+    }
 }
 
 /*!
@@ -148,16 +151,23 @@ HWND QWinHost::createWindow(HWND parent, HINSTANCE instance)
 void QWinHost::fixParent()
 {
     if (!hwnd)
+    {
         return;
-    if (!::IsWindow(hwnd)) {
+    }
+    if (!::IsWindow(hwnd))
+    {
         hwnd = 0;
         return;
     }
     if (::GetParent(hwnd) == (HWND)winId())
+    {
         return;
+    }
     long style = GetWindowLong(hwnd, GWL_STYLE);
     if (style & WS_OVERLAPPED)
+    {
         return;
+    }
     ::SetParent(hwnd, (HWND)winId());
 }
 
@@ -175,7 +185,9 @@ void QWinHost::fixParent()
 void QWinHost::setWindow(HWND window)
 {
     if (hwnd && own_hwnd)
+    {
         DestroyWindow(hwnd);
+    }
 
     hwnd = window;
     fixParent();
@@ -194,19 +206,22 @@ HWND QWinHost::window() const
     return hwnd;
 }
 
-void *getWindowProc(QWinHost *host)
+void* getWindowProc(QWinHost* host)
 {
     return host ? host->wndproc : 0;
 }
 
 LRESULT CALLBACK WinHostProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    QWinHost *widget = qobject_cast<QWinHost*>(QWidget::find((WId)::GetParent(hwnd)));
+    QWinHost* widget = qobject_cast<QWinHost*>(QWidget::find((WId)::GetParent(hwnd)));
     WNDPROC oldproc = (WNDPROC)getWindowProc(widget);
-    if (widget) {
-        switch(msg) {
+    if (widget)
+    {
+        switch(msg)
+        {
         case WM_LBUTTONDOWN:
-            if (::GetFocus() != hwnd && (widget->focusPolicy() & Qt::ClickFocus)) {
+            if (::GetFocus() != hwnd && (widget->focusPolicy() & Qt::ClickFocus))
+            {
                 widget->setFocus(Qt::MouseFocusReason);
             }
             break;
@@ -221,7 +236,8 @@ LRESULT CALLBACK WinHostProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_KEYDOWN:
-            if (wParam == VK_TAB) {
+            if (wParam == VK_TAB)
+            {
                 QT_WA({
                           SendMessage((HWND)widget->winId(), msg, wParam, lParam);
                       }, {
@@ -249,16 +265,19 @@ LRESULT CALLBACK WinHostProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 /*!
     \reimp
 */
-bool QWinHost::event(QEvent *e)
+bool QWinHost::event(QEvent* e)
 {
-    switch(e->type()) {
+    switch(e->type())
+    {
     case QEvent::Polish:
-        if (!hwnd) {
+        if (!hwnd)
+        {
             hwnd = createWindow((HWND)winId(), qWinAppInst());
             fixParent();
             own_hwnd = hwnd != 0;
         }
-        if (hwnd && !wndproc && GetParent(hwnd) == (HWND)winId()) {
+        if (hwnd && !wndproc && GetParent(hwnd) == (HWND)winId())
+        {
 #if defined(GWLP_WNDPROC)
             QT_WA({
                       wndproc = (void*)GetWindowLongPtr(hwnd, GWLP_WNDPROC);
@@ -284,16 +303,22 @@ bool QWinHost::event(QEvent *e)
                       style = GetWindowLongA(hwnd, GWL_STYLE);
                   })
             if (style & WS_TABSTOP)
+            {
                 setFocusPolicy(Qt::FocusPolicy(focusPolicy() | Qt::StrongFocus));
+            }
         }
         break;
     case QEvent::WindowBlocked:
         if (hwnd)
+        {
             EnableWindow(hwnd, false);
+        }
         break;
     case QEvent::WindowUnblocked:
         if (hwnd)
+        {
             EnableWindow(hwnd, true);
+        }
         break;
     }
     return QWidget::event(e);
@@ -302,7 +327,7 @@ bool QWinHost::event(QEvent *e)
 /*!
     \reimp
 */
-void QWinHost::showEvent(QShowEvent *e)
+void QWinHost::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
 
@@ -313,7 +338,7 @@ void QWinHost::showEvent(QShowEvent *e)
 /*!
     \reimp
 */
-void QWinHost::focusInEvent(QFocusEvent *e)
+void QWinHost::focusInEvent(QFocusEvent* e)
 {
     QWidget::focusInEvent(e);
 
@@ -324,30 +349,33 @@ void QWinHost::focusInEvent(QFocusEvent *e)
 /*!
     \reimp
 */
-void QWinHost::resizeEvent(QResizeEvent *e)
+void QWinHost::resizeEvent(QResizeEvent* e)
 {
     QWidget::resizeEvent(e);
 
     if (hwnd)
+    {
         SetWindowPos(hwnd, HWND_TOP, 0, 0, width(), height(), 0);
+    }
 }
 
 /*!
     \reimp
 */
 #if QT_VERSION >= 0x050000
-bool QWinHost::nativeEvent(const QByteArray &eventType, void *message, long *result)
+bool QWinHost::nativeEvent(const QByteArray &eventType, void* message, long* result)
 #else
-bool QWinHost::winEvent(MSG *msg, long *result)
+bool QWinHost::winEvent(MSG* msg, long* result)
 #endif
 {
 #if QT_VERSION >= 0x050000
-    MSG *msg = (MSG *)message;
+    MSG* msg = (MSG*)message;
 #endif
     switch (msg->message)
     {
     case WM_SETFOCUS:
-        if (hwnd) {
+        if (hwnd)
+        {
             ::SetFocus(hwnd);
             return true;
         }

@@ -1,5 +1,4 @@
-#ifndef WINMAINPANEL_H
-#define WINMAINPANEL_H
+#pragma once
 
 #include "MainPanel.h"
 
@@ -21,5 +20,3 @@ private:
     WinWindow* winPanel;
 
 };
-
-#endif // WINMAINPANEL_H

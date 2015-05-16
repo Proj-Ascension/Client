@@ -1,5 +1,4 @@
-#ifndef TABLABEL_H
-#define TABLABEL_H
+#pragma once
 
 #include <QLabel>
 #include <QEvent>
@@ -11,11 +10,11 @@ class TabLabel : public QLabel
     Q_OBJECT
 
 public:
-    TabLabel(QWidget *parent = 0);
+    TabLabel(QWidget* parent = 0);
 
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+    void enterEvent(QEvent* event);
+    void leaveEvent(QEvent* event);
+    void mousePressEvent(QMouseEvent* event);
 
 signals:
     void hovered();
@@ -23,11 +22,9 @@ signals:
     void clicked();
 
 private:
-    QGraphicsDropShadowEffect *dse = NULL;
+    QGraphicsDropShadowEffect* dse = NULL;
 
 private slots:
     void enableShadow();
     void disableShadow();
 };
-
-#endif // TABLABEL_H

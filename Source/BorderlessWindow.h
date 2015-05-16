@@ -1,4 +1,4 @@
-#include <windows.h>
+#pragma once
 
 #include "WinWindow.h"
 #include "QWinWidget.h"
@@ -6,20 +6,22 @@
 #include <QApplication>
 #include <QWidget>
 
+#include <windows.h>
+
 class BorderlessWindow
 {
 
     enum class Style : DWORD
     {
         windowed = (WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CLIPCHILDREN | WS_SYSMENU),
-        aero_borderless = (WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CLIPCHILDREN)
+        aeroBorderless = (WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CLIPCHILDREN)
     };
 
 public:
     HWND hWnd;
     HINSTANCE hInstance;
 
-    BorderlessWindow(QApplication *app, HBRUSH windowBackground, const int width, const int height);
+    BorderlessWindow(QApplication* app, HBRUSH windowBackground, const int width, const int height);
     ~BorderlessWindow();
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     void show();
@@ -44,8 +46,8 @@ public:
     void removeMaximumSize();
 
 private:
-    static QApplication *a;
-    static WinWindow *mainPanel;
+    static QApplication* a;
+    static WinWindow* mainPanel;
 
     bool closed;
     bool visible;

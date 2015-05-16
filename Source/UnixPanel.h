@@ -1,5 +1,4 @@
-#ifndef UNIXWINPANEL_H
-#define UNIXWINPANEL_H
+#pragma once
 
 #include "MainPanel.h"
 
@@ -21,5 +20,3 @@ private:
     UnixWindow* unixPanel;
 
 };
-
-#endif // UNIXMAINPANEL_H
