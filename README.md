@@ -11,3 +11,6 @@ A tentative user interface for [Project Ascension](http://reddit.com/r/Project_A
 This project is licensed under the MIT License.
 
 Full license can be viewed [here](LICENSE).
+
+# Contributing
+If you would like to contribute, please read over [the contributing guidelines](CONTRIBUTING.md)
