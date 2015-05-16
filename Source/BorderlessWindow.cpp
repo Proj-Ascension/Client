@@ -63,8 +63,8 @@ BorderlessWindow::~BorderlessWindow()
     DestroyWindow(hWnd);
 }
 
-HDC hdc;
-PAINTSTRUCT ps;
+HDC g_hdc;
+PAINTSTRUCT g_ps;
 
 LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -164,53 +164,53 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
         {
             if (window->borderlessResizeable)
             {
-                const LONG borderWidth = 8; //in pixels
+                const LONG c_borderWidth = 8; //in pixels
                 RECT winrect;
                 GetWindowRect(hWnd, &winrect);
                 long x = GET_X_LPARAM(lParam);
                 long y = GET_Y_LPARAM(lParam);
 
                 //bottom left corner
-                if (x >= winrect.left && x < winrect.left + borderWidth &&
-                    y < winrect.bottom && y >= winrect.bottom - borderWidth)
+                if (x >= winrect.left && x < winrect.left + c_borderWidth &&
+                    y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
                 {
                     return HTBOTTOMLEFT;
                 }
                 //bottom right corner
-                if (x < winrect.right && x >= winrect.right - borderWidth &&
-                    y < winrect.bottom && y >= winrect.bottom - borderWidth)
+                if (x < winrect.right && x >= winrect.right - c_borderWidth &&
+                    y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
                 {
                     return HTBOTTOMRIGHT;
                 }
                 //top left corner
-                if (x >= winrect.left && x < winrect.left + borderWidth &&
-                    y >= winrect.top && y < winrect.top + borderWidth)
+                if (x >= winrect.left && x < winrect.left + c_borderWidth &&
+                    y >= winrect.top && y < winrect.top + c_borderWidth)
                 {
                     return HTTOPLEFT;
                 }
                 //top right corner
-                if (x < winrect.right && x >= winrect.right - borderWidth &&
-                    y >= winrect.top && y < winrect.top + borderWidth)
+                if (x < winrect.right && x >= winrect.right - c_borderWidth &&
+                    y >= winrect.top && y < winrect.top + c_borderWidth)
                 {
                     return HTTOPRIGHT;
                 }
                 //left border
-                if (x >= winrect.left && x < winrect.left + borderWidth)
+                if (x >= winrect.left && x < winrect.left + c_borderWidth)
                 {
                     return HTLEFT;
                 }
                 //right border
-                if (x < winrect.right && x >= winrect.right - borderWidth)
+                if (x < winrect.right && x >= winrect.right - c_borderWidth)
                 {
                     return HTRIGHT;
                 }
                 //bottom border
-                if (y < winrect.bottom && y >= winrect.bottom - borderWidth)
+                if (y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
                 {
                     return HTBOTTOM;
                 }
                 //top border
-                if (y >= winrect.top && y < winrect.top + borderWidth)
+                if (y >= winrect.top && y < winrect.top + c_borderWidth)
                 {
                     return HTTOP;
                 }
@@ -287,9 +287,9 @@ void BorderlessWindow::toggleShadow()
     if (borderless)
     {
         aeroShadow = !aeroShadow;
-        const MARGINS shadow_on = {1, 1, 1, 1};
-        const MARGINS shadow_off = {0, 0, 0, 0};
-        DwmExtendFrameIntoClientArea(hWnd, (aeroShadow) ? (&shadow_on) : (&shadow_off));
+        const MARGINS c_shadowOn = {1, 1, 1, 1};
+        const MARGINS c_shadowOff = {0, 0, 0, 0};
+        DwmExtendFrameIntoClientArea(hWnd, (aeroShadow) ? (&c_shadowOn) : (&c_shadowOff));
     }
 }
 

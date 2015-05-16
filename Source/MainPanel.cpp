@@ -1,6 +1,6 @@
 #include "MainPanel.h"
 
-TabLabel* tabFactory(TabLabel* label, QString name, QString text)
+TabLabel* g_tabFactory(TabLabel* label, QString name, QString text)
 {
     label->setObjectName(name);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -85,28 +85,28 @@ void MainPanel::init()
 
     // Header tabs
     libraryTab = new TabLabel(this);
-    libraryTab = tabFactory(libraryTab, "libraryTab", "LIBRARY");
+    libraryTab = g_tabFactory(libraryTab, "libraryTab", "LIBRARY");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(libraryTab);
     libraryTab->setStyleSheet("font-weight: bold; color: lightgreen;");
 
     storeTab = new TabLabel(this);
-    storeTab = tabFactory(storeTab, "storeTab", "  STORE");
+    storeTab = g_tabFactory(storeTab, "storeTab", "  STORE");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(storeTab);
 
     modsTab = new TabLabel(this);
-    modsTab = tabFactory(modsTab, "modsTab", " MODS");
+    modsTab = g_tabFactory(modsTab, "modsTab", " MODS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(modsTab);
 
     newsTab = new TabLabel(this);
-    newsTab = tabFactory(newsTab, "newsTab", "NEWS");
+    newsTab = g_tabFactory(newsTab, "newsTab", "NEWS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(newsTab);
 
     browserTab = new TabLabel(this);
-    browserTab = tabFactory(browserTab, "browserTab", "BROWSER");
+    browserTab = g_tabFactory(browserTab, "browserTab", "BROWSER");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(browserTab);
 
