@@ -32,6 +32,7 @@ while/if (a > 3)
     // Logic
 }
 ```
+- Use only spaces, and indent 4 spaces at a time. We use spaces for indentation. Do not use tabs in your code. You should set your editor to emit spaces when you hit the tab key.
 
 ### Precautions
 - Every header file must have the #pragma once directive as a multiple inclusion guard (header guard).
