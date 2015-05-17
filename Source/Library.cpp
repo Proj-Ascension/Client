@@ -4,9 +4,11 @@
 #include <QFileDialog>
 #include <QProcess>
 #include <QMessageBox>
+#include <QDebug>
 
-Library::Library(QWidget* parent) :
-    QWidget(parent),
+Library::Library(Database db) :
+    QWidget(0),
+    db(db),
     ui(new Ui::Library)
 {
     ui->setupUi(this);
@@ -14,6 +16,12 @@ Library::Library(QWidget* parent) :
     runningProcess = new QProcess(this);
     processRunning = false;
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+
+    QList<Game> games = db.getGames();
+    for (auto game : games)
+    {
+        qDebug() << game.id << ", " << game.gameName << ", " << game.gameDirectory << ", " << game.executablePath;
+    }
 }
 
 Library::~Library()

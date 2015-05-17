@@ -17,7 +17,7 @@ public:
     Database();
     bool init();
 
-    bool addGame(Game game);
+    bool addGame(QString gameName, QString gameDirectory, QString executablePath);
     bool removeGameById(unsigned int id);
     Game getGameById(unsigned int id);
     QList<Game> getGames();

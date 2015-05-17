@@ -23,13 +23,13 @@ bool Database::init()
     return true;
 }
 
-bool Database::addGame(Game game)
+bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath)
 {
     QSqlQuery query(db);
     query.prepare("INSERT INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE) VALUES (:gameName, :gameDirectory, :executablePath);");
-    query.bindValue(":gameName", game.gameName);
-    query.bindValue(":gameDirectory", game.gameDirectory);
-    query.bindValue(":executablePath", game.executablePath);
+    query.bindValue(":gameName", gameName);
+    query.bindValue(":gameDirectory", gameDirectory);
+    query.bindValue(":executablePath", executablePath);
     return query.exec();
 }
 
