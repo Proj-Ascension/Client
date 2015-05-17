@@ -20,7 +20,7 @@ void miracleSort(int numGroup[])
     }
 }
 ```
-- Include directives for both header and source files shhuold be in the following order, with a line break after each grouping:
+- Include directives for both header and source files should be in the following order, with a line break after each grouping:
     1. Local headers (interface first, if applicable)
     2. Headers from third-party libraries (i.e. Qt, Navajo, etc.)
     3. C/C++ system headers
