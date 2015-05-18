@@ -16,10 +16,12 @@ class Database
 public:
     Database();
     bool init();
+    bool reset();
 
     bool addGame(QString gameName, QString gameDirectory, QString executablePath);
     bool removeGameById(unsigned int id);
     Game getGameById(unsigned int id);
+    Game getGameByName(QString name);
     QList<Game> getGames();
     unsigned int getGameCount();
 private:

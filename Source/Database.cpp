@@ -23,6 +23,12 @@ bool Database::init()
     return true;
 }
 
+bool Database::reset()
+{
+    QSqlQuery query(db);
+    return  query.exec("DROP TABLES *");
+}
+
 bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath)
 {
     QSqlQuery query(db);
@@ -46,6 +52,25 @@ Game Database::getGameById(unsigned int id)
     QSqlQuery query(db);
     query.prepare("SELECT GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
     query.bindValue(":ID", id);
+    query.exec();
+
+    if (!query.next())
+    {
+        return {0}; // TODO: ERROR HANDLING
+    }
+
+    QString name = query.value(0).toString();
+    QString path = query.value(1).toString();
+    QString exe = query.value(2).toString();
+
+    return {id, name, path, exe};
+}
+
+Game Database::getGameByName(QString name)
+{
+    QSqlQuery query(db);
+    query.prepare("SELECT GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :NAME;");
+    query.bindValue(":NAME", name);
     query.exec();
 
     if (!query.next())
