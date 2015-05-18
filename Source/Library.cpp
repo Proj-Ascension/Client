@@ -21,7 +21,7 @@ Library::Library(Database db) :
     QList<Game> games = db.getGames();
     for (auto game : games)
     {
-        qDebug() << game.id << ", " << game.gameName << ", " << game.gameDirectory << ", " << game.executablePath;
+        qDebug() << game.id << game.gameName << game.gameDirectory << game.executablePath;
     }
 
     refreshGames();
@@ -102,8 +102,11 @@ void Library::runProcess(QString file, QString workingDirectory)
     // TODO: Implement some threading
     if (!processRunning)
     {
+        qDebug() << "Launching:" << file << ", at" << workingDirectory;
         runningProcess->setWorkingDirectory(workingDirectory);
-        runningProcess->start(file);
+        runningProcess->setStandardErrorFile("error.txt");
+        runningProcess->setStandardOutputFile("log.txt");
+        runningProcess->start("\"" + file + "\"");
         runningProcess->waitForStarted();
         processRunning = true;
     }
