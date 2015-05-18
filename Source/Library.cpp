@@ -2,6 +2,7 @@
 #include "ui_Library.h"
 
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QProcess>
 #include <QMessageBox>
 #include <QDebug>
@@ -56,6 +57,41 @@ void Library::on_testLaunch_clicked()
         QMessageBox messageBox;
         messageBox.setText("Error: an application is already running.");
         messageBox.exec();
+    }
+}
+
+void Library::on_addGame_clicked()
+{
+    QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
+
+    QFileDialog exeDialog;
+    exeDialog.setWindowTitle("Select Executable");
+    exeDialog.setFileMode(QFileDialog::ExistingFile);
+
+    if (exeDialog.exec())
+    {
+        QStringList files = exeDialog.selectedFiles();
+        QString exe = files.at(0);
+        #ifdef Q_WS_MACX
+            //Get the binary from the app bundle
+            QDir dir(file + "/Contents/MacOS");
+            QStringList fileList = dir.entryList();
+            file = dir.absoluteFilePath(fileList.at(2));// USUALLY this is the executable (after ., ..)
+        #endif
+
+        QFileDialog wdDialog; // Working Directory
+        wdDialog.setWindowTitle("Select Working Directory");
+        wdDialog.setFileMode(QFileDialog::DirectoryOnly);
+        wdDialog.setDirectory(exeDialog.directory().absolutePath());
+
+        if (wdDialog.exec())
+        {
+            QStringList dirs = wdDialog.selectedFiles();
+            QString dir = dirs.at(0);
+
+            qDebug() << "Adding game:" << name << exe << dir;
+            db.addGame(name, dir, exe);
+        }
     }
 }
 

@@ -38,11 +38,8 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <property name="horizontalSpacing">
-    <number>0</number>
-   </property>
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="mainHLayout">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -69,6 +66,24 @@
        <property name="styleSheet">
         <string notr="true"/>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QListView" name="listView"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addGame">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string>ADD GAME</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -82,22 +97,6 @@
        <property name="styleSheet">
         <string notr="true"/>
        </property>
-       <widget class="QPushButton" name="testLaunch">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>200</y>
-          <width>171</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>LAUNCH A GAME</string>
-        </property>
-       </widget>
       </widget>
      </item>
     </layout>
