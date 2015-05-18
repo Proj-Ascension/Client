@@ -36,7 +36,7 @@ Library::~Library()
 void Library::on_testLaunch_clicked()
 {
     Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
-    runProcess(game.executablePath);
+    runProcess(game.executablePath, game.gameDirectory);
 }
 
 void Library::on_addGame_clicked()
@@ -88,12 +88,13 @@ void Library::on_removeGame_clicked()
     refreshGames();
 }
 
-void Library::runProcess(QString location)
+void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
     if (!processRunning)
     {
-        runningProcess->start(location);
+        runningProcess->setWorkingDirectory(workingDirectory);
+        runningProcess->start(file);
         runningProcess->waitForStarted();
         processRunning = true;
     }
