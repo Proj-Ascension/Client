@@ -31,6 +31,6 @@ private:
     QProcess* runningProcess;
     bool processRunning;
 
-    void runProcess(QString file);
+    void runProcess(QString file, QString workingDirectory);
     void refreshGames();
 };

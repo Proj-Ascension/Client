@@ -88,11 +88,12 @@ void Library::on_removeGame_clicked()
     refreshGames();
 }
 
-void Library::runProcess(QString location)
+void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
     if (!processRunning)
     {
+        runningProcess->setWorkingDirectory(workingDirectory);
         runningProcess->start(location);
         runningProcess->waitForStarted();
         processRunning = true;
