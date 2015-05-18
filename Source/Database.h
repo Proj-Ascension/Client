@@ -20,6 +20,7 @@ public:
 
     bool addGame(QString gameName, QString gameDirectory, QString executablePath);
     bool removeGameById(unsigned int id);
+    bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
     Game getGameByName(QString name);
     QList<Game> getGames();

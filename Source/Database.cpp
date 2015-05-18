@@ -42,8 +42,16 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
 bool Database::removeGameById(unsigned int id)
 {
     QSqlQuery query(db);
-    query.prepare("DELETE FROM GAMES WHERE id = :id;");
+    query.prepare("DELETE FROM GAMES WHERE ID = :id;");
     query.bindValue(":id", id);
+    return query.exec();
+}
+
+bool Database::removeGameByName(QString name)
+{
+    QSqlQuery query(db);
+    query.prepare("DELETE FROM GAMES WHERE GAMENAME = :name;");
+    query.bindValue(":name", name);
     return query.exec();
 }
 
@@ -51,7 +59,7 @@ Game Database::getGameById(unsigned int id)
 {
     QSqlQuery query(db);
     query.prepare("SELECT GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
-    query.bindValue(":ID", id);
+    query.bindValue(":id", id);
     query.exec();
 
     if (!query.next())
@@ -69,8 +77,8 @@ Game Database::getGameById(unsigned int id)
 Game Database::getGameByName(QString name)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :NAME;");
-    query.bindValue(":NAME", name);
+    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :name;");
+    query.bindValue(":name", name);
     query.exec();
 
     if (!query.next())
