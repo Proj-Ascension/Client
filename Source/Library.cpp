@@ -35,31 +35,8 @@ Library::~Library()
 
 void Library::on_testLaunch_clicked()
 {
-    if (!processRunning)
-    {
-        QFileDialog dialog;
-        dialog.setWindowTitle("Select Executable");
-        dialog.setFileMode(QFileDialog::ExistingFile);
-
-        if (dialog.exec())
-        {
-            QStringList files = dialog.selectedFiles();
-            QString file = files.at(0);
-            #ifdef Q_WS_MACX
-                //Get the binary from the app bundle
-                QDir dir(file + "/Contents/MacOS");
-                QStringList fileList = dir.entryList();
-                file = dir.absoluteFilePath(fileList.at(2));//USUALLY this is the executable (after ., ..)
-            #endif
-            runProcess(file);
-        }
-    }
-    else
-    {
-        QMessageBox messageBox;
-        messageBox.setText("Error: an application is already running.");
-        messageBox.exec();
-    }
+    Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
+    runProcess(game.executablePath);
 }
 
 void Library::on_addGame_clicked()
