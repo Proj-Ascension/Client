@@ -35,8 +35,17 @@ Library::~Library()
 
 void Library::on_testLaunch_clicked()
 {
-    Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
-    runProcess(game.executablePath, game.gameDirectory);
+    if (!processRunning)
+    {
+        Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
+        runProcess(game.executablePath, game.gameDirectory);
+    }
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.setText("Error: an application is already running.");
+        messageBox.exec();
+    }
 }
 
 void Library::on_addGame_clicked()
