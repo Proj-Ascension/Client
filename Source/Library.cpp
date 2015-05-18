@@ -23,6 +23,8 @@ Library::Library(Database db) :
     {
         qDebug() << game.id << ", " << game.gameName << ", " << game.gameDirectory << ", " << game.executablePath;
     }
+
+    refreshGames();
 }
 
 Library::~Library()
@@ -64,6 +66,12 @@ void Library::on_addGame_clicked()
 {
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
 
+    if (name.trimmed() == "")
+    {
+        QMessageBox::critical(0, "Error", "You must specify a game name!");
+        return;
+    }
+
     QFileDialog exeDialog;
     exeDialog.setWindowTitle("Select Executable");
     exeDialog.setFileMode(QFileDialog::ExistingFile);
@@ -91,8 +99,16 @@ void Library::on_addGame_clicked()
 
             qDebug() << "Adding game:" << name << exe << dir;
             db.addGame(name, dir, exe);
+
+            refreshGames();
         }
     }
+}
+
+void Library::on_removeGame_clicked()
+{
+    db.removeGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
+    refreshGames();
 }
 
 void Library::runProcess(QString location)
@@ -103,6 +119,16 @@ void Library::runProcess(QString location)
         runningProcess->start(location);
         runningProcess->waitForStarted();
         processRunning = true;
+    }
+}
+
+void Library::refreshGames()
+{
+    ui->gameListWidget->clear();
+    QList<Game> gameList = db.getGames();
+    for (auto game : gameList)
+    {
+        ui->gameListWidget->addItem(game.gameName);
     }
 }
 

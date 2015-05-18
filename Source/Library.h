@@ -23,6 +23,8 @@ private slots:
     void on_addGame_clicked();
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
 
+    void on_removeGame_clicked();
+
 private:
     Database db;
     Ui::Library* ui;
@@ -30,4 +32,5 @@ private:
     bool processRunning;
 
     void runProcess(QString file);
+    void refreshGames();
 };
