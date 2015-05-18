@@ -69,7 +69,7 @@ Game Database::getGameById(unsigned int id)
 Game Database::getGameByName(QString name)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :NAME;");
+    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :NAME;");
     query.bindValue(":NAME", name);
     query.exec();
 
@@ -78,11 +78,12 @@ Game Database::getGameByName(QString name)
         return {0}; // TODO: ERROR HANDLING
     }
 
-    QString name = query.value(0).toString();
+    unsigned int id = query.value(0).toInt();
     QString path = query.value(1).toString();
     QString exe = query.value(2).toString();
 
-    return {id, name, path, exe};
+    Game game = {id, name, path, exe};
+    return game;
 }
 
 QList<Game> Database::getGames()
