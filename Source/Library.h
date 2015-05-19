@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Database.h"
+
 #include <QWidget>
 #include <QProcess>
 
@@ -13,17 +15,22 @@ class Library : public QWidget
     Q_OBJECT
 
 public:
-    explicit Library(QWidget* parent = 0);
+    Library(Database db);
     ~Library();
 
 private slots:
     void on_testLaunch_clicked();
+    void on_addGame_clicked();
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
 
+    void on_removeGame_clicked();
+
 private:
+    Database db;
     Ui::Library* ui;
     QProcess* runningProcess;
     bool processRunning;
 
-    void runProcess(QString file);
+    void runProcess(QString file, QString workingDirectory);
+    void refreshGames();
 };

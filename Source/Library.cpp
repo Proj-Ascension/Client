@@ -2,11 +2,14 @@
 #include "ui_Library.h"
 
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QProcess>
 #include <QMessageBox>
+#include <QDebug>
 
-Library::Library(QWidget* parent) :
-    QWidget(parent),
+Library::Library(Database db) :
+    QWidget(0),
+    db(db),
     ui(new Ui::Library)
 {
     ui->setupUi(this);
@@ -14,6 +17,14 @@ Library::Library(QWidget* parent) :
     runningProcess = new QProcess(this);
     processRunning = false;
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+
+    QList<Game> games = db.getGames();
+    for (auto game : games)
+    {
+        qDebug() << game.id << game.gameName << game.gameDirectory << game.executablePath;
+    }
+
+    refreshGames();
 }
 
 Library::~Library()
@@ -26,22 +37,8 @@ void Library::on_testLaunch_clicked()
 {
     if (!processRunning)
     {
-        QFileDialog dialog;
-        dialog.setWindowTitle("Select Executable");
-        dialog.setFileMode(QFileDialog::ExistingFile);
-
-        if (dialog.exec())
-        {
-            QStringList files = dialog.selectedFiles();
-            QString file = files.at(0);
-            #ifdef Q_WS_MACX
-                //Get the binary from the app bundle
-                QDir dir(file + "/Contents/MacOS");
-                QStringList fileList = dir.entryList();
-                file = dir.absoluteFilePath(fileList.at(2));//USUALLY this is the executable (after ., ..)
-            #endif
-            runProcess(file);
-        }
+        Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
+        runProcess(game.executablePath, game.gameDirectory);
     }
     else
     {
@@ -51,14 +48,77 @@ void Library::on_testLaunch_clicked()
     }
 }
 
-void Library::runProcess(QString location)
+void Library::on_addGame_clicked()
+{
+    QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
+
+    if (name.trimmed() == "")
+    {
+        QMessageBox::critical(0, "Error", "You must specify a game name!");
+        return;
+    }
+
+    QFileDialog exeDialog;
+    exeDialog.setWindowTitle("Select Executable");
+    exeDialog.setFileMode(QFileDialog::ExistingFile);
+
+    if (exeDialog.exec())
+    {
+        QStringList files = exeDialog.selectedFiles();
+        QString exe = files.at(0);
+        #ifdef Q_WS_MACX
+            //Get the binary from the app bundle
+            QDir dir(file + "/Contents/MacOS");
+            QStringList fileList = dir.entryList();
+            file = dir.absoluteFilePath(fileList.at(2));// USUALLY this is the executable (after ., ..)
+        #endif
+
+        QFileDialog wdDialog; // Working Directory
+        wdDialog.setWindowTitle("Select Working Directory");
+        wdDialog.setFileMode(QFileDialog::DirectoryOnly);
+        wdDialog.setDirectory(exeDialog.directory().absolutePath());
+
+        if (wdDialog.exec())
+        {
+            QStringList dirs = wdDialog.selectedFiles();
+            QString dir = dirs.at(0);
+
+            qDebug() << "Adding game:" << name << exe << dir;
+            db.addGame(name, dir, exe);
+
+            refreshGames();
+        }
+    }
+}
+
+void Library::on_removeGame_clicked()
+{
+    db.removeGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
+    refreshGames();
+}
+
+void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
     if (!processRunning)
     {
-        runningProcess->start(location);
+        qDebug() << "Launching:" << file << ", at" << workingDirectory;
+        runningProcess->setWorkingDirectory(workingDirectory);
+        runningProcess->setStandardErrorFile("error.txt");
+        runningProcess->setStandardOutputFile("log.txt");
+        runningProcess->start("\"" + file + "\"");
         runningProcess->waitForStarted();
         processRunning = true;
+    }
+}
+
+void Library::refreshGames()
+{
+    ui->gameListWidget->clear();
+    QList<Game> gameList = db.getGames();
+    for (auto game : gameList)
+    {
+        ui->gameListWidget->addItem(game.gameName);
     }
 }
 

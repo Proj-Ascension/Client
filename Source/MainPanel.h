@@ -3,6 +3,7 @@
 #include "Library.h"
 #include "Browser.h"
 #include "TabLabel.h"
+#include "Database.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -26,6 +27,8 @@ public slots:
     virtual void pushButtonClose() = 0;
 
 protected:
+    Database db;
+
     QStackedWidget* stack;
     QWidget* libraryPtr;
     QWidget* browserPtr;

@@ -15,20 +15,23 @@ QT += \
     widgets \
     network \
     webkit \
-    webkitwidgets
+    webkitwidgets \
+    sql
 
 HEADERS += \
     Source/TabLabel.h \
     Source/Library.h \
     Source/Browser.h \
-    Source/MainPanel.h
+    Source/MainPanel.h \
+    Source/Database.h
 
 SOURCES += \
     Source/Main.cpp \
     Source/TabLabel.cpp \
     Source/Library.cpp \
     Source/Browser.cpp \
-    Source/MainPanel.cpp
+    Source/MainPanel.cpp \
+    Source/Database.cpp
 
 win32 {
     HEADERS += \

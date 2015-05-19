@@ -1,5 +1,7 @@
 #include "MainPanel.h"
 
+#include <QMessageBox>
+
 TabLabel* g_tabFactory(TabLabel* label, QString name, QString text)
 {
     label->setObjectName(name);
@@ -25,7 +27,8 @@ QString getStylesheet(QString location)
     return "";
 }
 
-MainPanel::MainPanel(QWidget* parent) : QWidget(parent)
+MainPanel::MainPanel(QWidget* parent) :
+    QWidget(parent)
 {
     setObjectName("mainPanel");
 
@@ -36,11 +39,19 @@ MainPanel::MainPanel(QWidget* parent) : QWidget(parent)
 
 void MainPanel::init()
 {
+    if (!db.init())
+    {
+        QMessageBox error;
+        error.critical(0, "Error!", "An error occured while trying to load the database.");
+        exit(EXIT_FAILURE);
+        return;
+    }
+
     stack = new QStackedWidget(this);
 
     QString style = getStylesheet(":/Styles/Content.css");
     // Prepare UI objects for each tab
-    libraryPtr = new Library();
+    libraryPtr = new Library(db);
     libraryPtr->setStyleSheet(style);
     browserPtr = new Browser();
     browserPtr->setStyleSheet(style);
