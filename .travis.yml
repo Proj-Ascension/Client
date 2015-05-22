@@ -1,27 +1,23 @@
 language: cpp
 compiler:
-    - g++
-
+- g++
 before_install:
-    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-    - sudo apt-get update -qq
-
+- sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+- sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+- sudo apt-get update -qq
 install:
-    - sudo apt-get install -qq gcc-4.8 g++-4.8
-    - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev
-    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-
+- sudo apt-get install -qq gcc-4.8 g++-4.8
+- sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 before_script:
-    - qmake -qt=qt5
-
+- qmake -qt=qt5
 script:
-    - make
-
+- make
 notifications:
-    email:
-        on_success: change
-        on_failure: always
-
+  email:
+    on_success: change
+    on_failure: always
+  slack:
+    secure: YWuYn1oeOjim5xu0j0ip6Q7QndFViTtlxsX76IwKnr5BKgqXkjzVbdUQ4aLYhTm0vwP909JSyjKhULb3nZSGj5NOu7LI9pEw5pUhM/cAPrP/e2/hx5qMaKAMwbkMG8AQL9ngnAL1iZ588bJGC6mNOxcl7378eR3F/SMr+rTwuuU=
 os:
-    - linux
+- linux
