@@ -106,7 +106,7 @@ void Library::runProcess(QString file, QString workingDirectory)
         runningProcess->setWorkingDirectory(workingDirectory);
         runningProcess->setStandardErrorFile("error.txt");
         runningProcess->setStandardOutputFile("log.txt");
-        runningProcess->start("\"" + file + "\"");
+        runningProcess->start(file, QStringList());
         runningProcess->waitForStarted();
     }
 }
