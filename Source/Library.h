@@ -22,6 +22,7 @@ private slots:
     void on_testLaunch_clicked();
     void on_addGame_clicked();
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onLaunchError(QProcess::ProcessError error);
 
     void on_removeGame_clicked();
 
