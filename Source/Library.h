@@ -29,8 +29,8 @@ private:
     Database db;
     Ui::Library* ui;
     QProcess* runningProcess;
-    bool processRunning;
 
+    bool isProcessRunning() const;
     void runProcess(QString file, QString workingDirectory);
     void refreshGames();
 };

@@ -15,7 +15,6 @@ Library::Library(Database db) :
     ui->setupUi(this);
     this->setObjectName("libraryUI");
     runningProcess = new QProcess(this);
-    processRunning = false;
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
 
     QList<Game> games = db.getGames();
@@ -35,7 +34,7 @@ Library::~Library()
 
 void Library::on_testLaunch_clicked()
 {
-    if (!processRunning)
+    if (!isProcessRunning())
     {
         Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
         runProcess(game.executablePath, game.gameDirectory);
@@ -100,7 +99,7 @@ void Library::on_removeGame_clicked()
 void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
-    if (!processRunning)
+    if (!isProcessRunning())
     {
         qDebug() << "Launching:" << file << ", at" << workingDirectory;
         runningProcess->setWorkingDirectory(workingDirectory);
@@ -108,7 +107,6 @@ void Library::runProcess(QString file, QString workingDirectory)
         runningProcess->setStandardOutputFile("log.txt");
         runningProcess->start("\"" + file + "\"");
         runningProcess->waitForStarted();
-        processRunning = true;
     }
 }
 
@@ -124,5 +122,10 @@ void Library::refreshGames()
 
 void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    processRunning = false;
+}
+
+bool Library::isProcessRunning() const
+{
+    // We shall consider "Starting" to be running here too
+    return runningProcess->state() != QProcess::NotRunning;
 }
