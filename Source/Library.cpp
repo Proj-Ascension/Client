@@ -37,8 +37,12 @@ void Library::on_testLaunch_clicked()
 {
     if (!isProcessRunning())
     {
-        Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
-        runProcess(game.executablePath, game.gameDirectory);
+        auto selection = ui->gameListWidget->currentItem();
+        if (selection != nullptr)
+        {
+            Game game = db.getGameByName(selection->text());
+            runProcess(game.executablePath, game.gameDirectory);
+        }
     }
     else
     {
@@ -93,8 +97,12 @@ void Library::on_addGame_clicked()
 
 void Library::on_removeGame_clicked()
 {
-    db.removeGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
-    refreshGames();
+    auto selection = ui->gameListWidget->currentItem();
+    if (selection != nullptr)
+    {
+        db.removeGameByName(selection->text());
+        refreshGames();
+    }
 }
 
 void Library::runProcess(QString file, QString workingDirectory)
