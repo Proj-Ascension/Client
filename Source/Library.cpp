@@ -10,13 +10,13 @@
 Library::Library(Database db) :
     QWidget(0),
     db(db),
-    ui(new Ui::Library)
+    ui(new Ui::Library),
+    runningProcess(new QProcess(this))
 {
     ui->setupUi(this);
     this->setObjectName("libraryUI");
-    runningProcess = new QProcess(this);
-    processRunning = false;
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
+    connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
 
     QList<Game> games = db.getGames();
     for (auto game : games)
@@ -35,10 +35,14 @@ Library::~Library()
 
 void Library::on_testLaunch_clicked()
 {
-    if (!processRunning)
+    if (!isProcessRunning())
     {
-        Game game = db.getGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
-        runProcess(game.executablePath, game.gameDirectory);
+        auto selection = ui->gameListWidget->currentItem();
+        if (selection != nullptr)
+        {
+            Game game = db.getGameByName(selection->text());
+            runProcess(game.executablePath, game.gameDirectory);
+        }
     }
     else
     {
@@ -93,22 +97,25 @@ void Library::on_addGame_clicked()
 
 void Library::on_removeGame_clicked()
 {
-    db.removeGameByName(ui->gameListWidget->item(ui->gameListWidget->currentRow())->text());
-    refreshGames();
+    auto selection = ui->gameListWidget->currentItem();
+    if (selection != nullptr)
+    {
+        db.removeGameByName(selection->text());
+        refreshGames();
+    }
 }
 
 void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
-    if (!processRunning)
+    if (!isProcessRunning())
     {
         qDebug() << "Launching:" << file << ", at" << workingDirectory;
         runningProcess->setWorkingDirectory(workingDirectory);
         runningProcess->setStandardErrorFile("error.txt");
         runningProcess->setStandardOutputFile("log.txt");
-        runningProcess->start("\"" + file + "\"");
+        runningProcess->start(file, QStringList());
         runningProcess->waitForStarted();
-        processRunning = true;
     }
 }
 
@@ -124,5 +131,30 @@ void Library::refreshGames()
 
 void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    processRunning = false;
+    if (exitCode != 0)
+    {
+        QMessageBox(QMessageBox::Warning, "Warning", "The game finished, but it claims to have encountered an error").exec();
+    }
+}
+
+void Library::onLaunchError(QProcess::ProcessError error)
+{
+    switch (error)
+    {
+        case QProcess::FailedToStart:
+            QMessageBox(QMessageBox::Critical, "Error", "Could not start the game. Please double check that you are using the correct file to launch it.").exec();
+            break;
+        case QProcess::Crashed:
+            QMessageBox(QMessageBox::Warning, "Crash!", "The launched game has crashed").exec();
+            break;
+        default:
+            // Other cases are errors unrelated to startup, so let's not handle them
+            break;
+    }
+}
+
+bool Library::isProcessRunning() const
+{
+    // We shall consider "Starting" to be running here too
+    return runningProcess->state() != QProcess::NotRunning;
 }
