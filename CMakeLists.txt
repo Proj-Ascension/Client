@@ -107,9 +107,9 @@ target_link_libraries(ProjectAscension
     Qt5::Sql
 )
 if(WIN32)
-	target_link_libraries(ProjectAscension
-		user32.lib
-		gdi32.lib
-		dwmapi.lib
-	)
+    target_link_libraries(ProjectAscension
+	    user32.lib
+	    gdi32.lib
+	    dwmapi.lib
+    )
 endif()
