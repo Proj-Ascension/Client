@@ -119,35 +119,39 @@ if(WIN32)
 endif()
 
 # --- RUNTIME DEPENDENCIES ---
-# Only necessary on Windows
+# Only necessary on Windows.
 
 if(WIN32)
     cmake_policy(SET CMP0026 OLD)
 
     get_target_property(BuildLocation ProjectAscension LOCATION)
     get_filename_component(TargetDirectory ${BuildLocation} PATH)
-    
-    add_custom_command(TARGET ProjectAscension POST_BUILD
-        # Copies runtime dependencies into the executable directory.
-    
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll           ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Guid.dll               ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Cored.dll              ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Networkd.dll           ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebKitd.dll            ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebKitWidgetsd.dll     ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Sqld.dll               ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Sensorsd.dll           ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Positioningd.dll       ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Quickd.dll             ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Qmld.dll               ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Multimediad.dll        ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5MultimediaWidgetsd.dll ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebChanneld.dll        ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5OpenGLd.dll            ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5PrintSupportd.dll      ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuin53.dll               ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuuc53.dll               ${TargetDirectory}
-        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icudt53.dll               ${TargetDirectory}
+        
+    foreach(DEPENDENCY
+        Qt5Widgetsd.dll
+        Qt5Guid.dll
+        Qt5Cored.dll
+        Qt5Networkd.dll
+        Qt5WebKitd.dll
+        Qt5WebKitWidgetsd.dll
+        Qt5Sqld.dll
+        Qt5Sensorsd.dll
+        Qt5Positioningd.dll
+        Qt5Quickd.dll
+        Qt5Qmld.dll
+        Qt5Multimediad.dll
+        Qt5MultimediaWidgetsd.dll
+        Qt5WebChanneld.dll
+        Qt5OpenGLd.dll
+        Qt5PrintSupportd.dll
+        icuin53.dll
+        icuuc53.dll
+        icudt53.dll
     )
+        add_custom_command(TARGET ProjectAscension POST_BUILD
+            # Copy the given dependency into the executable directory.
+            COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/${DEPENDENCY} ${TargetDirectory}
+            COMMENT "Copying ${DEPENDENCY} into '${TargetDirectory}/'" VERBATIM
+        )
+    endforeach()
 endif()
