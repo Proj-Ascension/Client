@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(ProjectAscension)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
