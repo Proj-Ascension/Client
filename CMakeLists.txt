@@ -114,3 +114,10 @@ if(WIN32)
         dwmapi.lib
     )
 endif()
+
+# --- POST BUILD ---
+
+cmake_policy(SET CMP0026 OLD)
+
+get_target_property(BuildLocation ProjectAscension LOCATION)
+get_filename_component(TargetDirectory ${BuildLocation} PATH)
