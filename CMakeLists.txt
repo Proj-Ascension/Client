@@ -108,8 +108,8 @@ target_link_libraries(ProjectAscension
 )
 if(WIN32)
     target_link_libraries(ProjectAscension
-	    user32.lib
-	    gdi32.lib
-	    dwmapi.lib
+        user32.lib
+        gdi32.lib
+        dwmapi.lib
     )
 endif()
