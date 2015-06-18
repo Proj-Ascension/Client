@@ -119,18 +119,16 @@ if(WIN32)
 endif()
 
 # --- RUNTIME DEPENDENCIES ---
-
-cmake_policy(SET CMP0026 OLD)
-
-get_target_property(BuildLocation ProjectAscension LOCATION)
-get_filename_component(TargetDirectory ${BuildLocation} PATH)
-
 # Only necessary on Windows
-if(WIN32)
-    add_custom_target(Qt5CopyBinaries
-        # Copies runtime dependencies into the executable directory.
 
-        COMMENT "Copying Qt5 runtime dependencies into '${TargetDirectory}/'" VERBATIM
+if(WIN32)
+    cmake_policy(SET CMP0026 OLD)
+
+    get_target_property(BuildLocation ProjectAscension LOCATION)
+    get_filename_component(TargetDirectory ${BuildLocation} PATH)
+    
+    add_custom_command(TARGET ProjectAscension POST_BUILD
+        # Copies runtime dependencies into the executable directory.
     
         COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll           ${TargetDirectory}
         COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Guid.dll               ${TargetDirectory}
@@ -152,6 +150,4 @@ if(WIN32)
         COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuuc53.dll               ${TargetDirectory}
         COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icudt53.dll               ${TargetDirectory}
     )
-
-    add_dependencies(ProjectAscension Qt5CopyBinaries)
 endif()
