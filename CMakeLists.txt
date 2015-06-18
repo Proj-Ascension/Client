@@ -123,30 +123,33 @@ cmake_policy(SET CMP0026 OLD)
 get_target_property(BuildLocation ProjectAscension LOCATION)
 get_filename_component(TargetDirectory ${BuildLocation} PATH)
 
-add_custom_target(Qt5CopyBinaries
-    # Copies runtime dependencies into the executable directory.
+# Only necessary on Windows
+if(WIN32)
+    add_custom_target(Qt5CopyBinaries
+        # Copies runtime dependencies into the executable directory.
 
-    COMMENT "Copying Qt5 runtime dependencies into '${TargetDirectory}/'" VERBATIM
+        COMMENT "Copying Qt5 runtime dependencies into '${TargetDirectory}/'" VERBATIM
     
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll           ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Guid.dll               ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Cored.dll              ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Networkd.dll           ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebKitd.dll            ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebKitWidgetsd.dll     ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Sqld.dll               ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Sensorsd.dll           ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Positioningd.dll       ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Quickd.dll             ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Qmld.dll               ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Multimediad.dll        ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5MultimediaWidgetsd.dll ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebChanneld.dll        ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5OpenGLd.dll            ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5PrintSupportd.dll      ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuin53.dll               ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuuc53.dll               ${TargetDirectory}
-    COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icudt53.dll               ${TargetDirectory}
-)
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll           ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Guid.dll               ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Cored.dll              ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Networkd.dll           ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebKitd.dll            ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebKitWidgetsd.dll     ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Sqld.dll               ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Sensorsd.dll           ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Positioningd.dll       ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Quickd.dll             ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Qmld.dll               ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5Multimediad.dll        ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5MultimediaWidgetsd.dll ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5WebChanneld.dll        ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5OpenGLd.dll            ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/Qt5PrintSupportd.dll      ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuin53.dll               ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icuuc53.dll               ${TargetDirectory}
+        COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/icudt53.dll               ${TargetDirectory}
+    )
 
-add_dependencies(ProjectAscension Qt5CopyBinaries)
+    add_dependencies(ProjectAscension Qt5CopyBinaries)
+endif()
