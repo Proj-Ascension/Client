@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QFile>
 
+#include <tchar.h>
 #include <dwmapi.h>
 #include <windowsx.h>
 #include <stdexcept>
@@ -28,7 +29,7 @@ BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, c
     wcx.lpfnWndProc = WndProc;
     wcx.cbClsExtra	= 0;
     wcx.cbWndExtra	= 0;
-    wcx.lpszClassName = L"WindowClass";
+    wcx.lpszClassName = _T("WindowClass");
     wcx.hbrBackground = windowBackground;
     wcx.hCursor = LoadCursor( hInstance, IDC_ARROW );
     RegisterClassEx(&wcx);
@@ -41,7 +42,7 @@ BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, c
     int offsetX = (x - width) / 2;
     int offsetY = (y - (y * 0.05) - height) / 2;    // Compensate for taskbar
 
-    hWnd = CreateWindow(L"WindowClass", L"Project Ascension", static_cast<DWORD>( Style::windowed ), offsetX, offsetY, width, height, 0, 0, hInstance, nullptr);
+    hWnd = CreateWindow(_T("WindowClass"), _T("Project Ascension"), static_cast<DWORD>( Style::windowed ), offsetX, offsetY, width, height, 0, 0, hInstance, nullptr);
 
     if (!hWnd) throw std::runtime_error("Encountered an unknown error while constructing the launcher window.");
 
