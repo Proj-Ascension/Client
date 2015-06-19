@@ -116,6 +116,9 @@ if(WIN32)
         gdi32.lib
         dwmapi.lib
     )
+    
+    set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
+    set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
 endif()
 
 # --- RUNTIME DEPENDENCIES ---
