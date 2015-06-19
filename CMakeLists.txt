@@ -62,8 +62,6 @@ elseif(UNIX)
     # Additional configuration for Unix systems.
     if(APPLE)
         set(GUI_TYPE MACOSX_BUNDLE)
-        set(SOURCE ${SOURCE} Ascension_Icon.icns)
-        set_source_files_properties(Ascension_Icon.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resource/CMake)
     endif(APPLE)
     
     set(SOURCE ${SOURCE}
@@ -122,15 +120,6 @@ if(WIN32)
     set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
     set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
 endif()
-if(APPLE)
-    set(MACOSX_BUNDLE_BUNDLE_NAME "Project Ascension")
-    set(MACOSX_BUNDLE_BUNDLE_VERSION "0.1")
-    set(MACOSX_BUNDLE_LONG_VERSION_STRING "0.1")
-    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1")
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright (c) 2015 Project Ascension")
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.projectascension.client")
-    set(MACOSX_BUNDLE_ICON_FILE Ascension_Icon.icns)
-endif(APPLE)
 
 # --- RUNTIME DEPENDENCIES ---
 # Only necessary on Windows.
