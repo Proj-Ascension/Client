@@ -41,7 +41,9 @@ set(GUI_TYPE "")
 
 if(WIN32)
     #Additional configuration for Windows systems.
-    set(GUI_TYPE WIN32)
+    # TODO: Get working "Release" config for multi-configuration MSVC builds.
+    
+    # set(GUI_TYPE WIN32)
     
     set(SOURCE ${SOURCE}
         Source/BorderlessWindow.cpp
@@ -60,9 +62,11 @@ if(WIN32)
     )
 elseif(UNIX)
     # Additional configuration for Unix systems.
-    if(APPLE)
-        set(GUI_TYPE MACOSX_BUNDLE)
-    endif(APPLE)
+    # TODO: Get working icon / bundle for OSX systems without bricking the build.
+    
+    # if(APPLE)
+    #     set(GUI_TYPE MACOSX_BUNDLE)
+    # endif(APPLE)
     
     set(SOURCE ${SOURCE}
         Source/UnixWindow.cpp
