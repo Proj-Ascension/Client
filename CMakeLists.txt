@@ -89,12 +89,14 @@ find_package(Qt5Network REQUIRED)
 find_package(Qt5WebKit REQUIRED)
 find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
+find_package(Boost REQUIRED)
 
 qt5_wrap_ui(FORMS_HEADERS ${FORMS})
 qt5_add_resources(UI_RESOURCES ${RESOURCES})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    ${BOOST_INCLUDE_DIRS}
     BorderlessWindow 
     Source
 )
@@ -113,6 +115,7 @@ target_link_libraries(ProjectAscension
     Qt5::WebKit
     Qt5::WebKitWidgets
     Qt5::Sql
+    ${BOOST_LIBRARIES}
 )
 if(WIN32)
     target_link_libraries(ProjectAscension

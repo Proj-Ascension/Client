@@ -30,8 +30,10 @@ private:
     Database db;
     Ui::Library* ui;
     QProcess* runningProcess;
+    QList<QString> steamDirectoryList;
 
     bool isProcessRunning() const;
     void runProcess(QString file, QString workingDirectory);
     void refreshGames();
+    void findSteamGames();
 };

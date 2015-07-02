@@ -1,11 +1,18 @@
 #include "Library.h"
 #include "ui_Library.h"
 
+#include <cctype>
+
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QProcess>
 #include <QMessageBox>
 #include <QDebug>
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/info_parser.hpp>
+
+namespace pt = boost::property_tree;
 
 Library::Library(Database db) :
     QWidget(0),
@@ -25,6 +32,7 @@ Library::Library(Database db) :
     }
 
     refreshGames();
+    findSteamGames();
 }
 
 Library::~Library()
@@ -65,6 +73,7 @@ void Library::on_addGame_clicked()
     QFileDialog exeDialog;
     exeDialog.setWindowTitle("Select Executable");
     exeDialog.setFileMode(QFileDialog::ExistingFile);
+    exeDialog.setDirectory(QDir::home());
 
     if (exeDialog.exec())
     {
@@ -157,4 +166,32 @@ bool Library::isProcessRunning() const
 {
     // We shall consider "Starting" to be running here too
     return runningProcess->state() != QProcess::NotRunning;
+}
+
+void Library::findSteamGames()
+{
+    #if defined(_WIN32) || defined(_WIN64)
+        // TODO: open registry & RegQueryValueEx
+    #elseif defined(__apple__)
+        // TODO: however OS X handles steam
+    #elif defined(__linux__)
+        QDir steamRoot(QDir::home().filePath(".steam/steam"));
+        if (steamRoot.exists())
+        {
+            pt::ptree libraryFolders;
+            std::string root = steamRoot.filePath("steamapps/libraryfolders.vdf").toLocal8Bit().constData();
+            pt::read_info(root, libraryFolders);
+
+            for(auto &kv : libraryFolders.get_child("LibraryFolders"))
+            {
+                if(std::isdigit(static_cast<int>(*kv.first.data())))
+                {
+                    std::string path = kv.second.data();
+                    qDebug() << QString::fromStdString(path);
+                }
+            }
+        }
+    #else
+        QMessageBox::critical(0, "Error", "Platform doesn't support steam.");
+    #endif
 }
