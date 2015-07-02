@@ -179,19 +179,39 @@ void Library::findSteamGames()
         if (steamRoot.exists())
         {
             pt::ptree libraryFolders;
-            std::string root = steamRoot.filePath("steamapps/libraryfolders.vdf").toLocal8Bit().constData();
-            pt::read_info(root, libraryFolders);
+            pt::read_info(steamRoot.filePath("steamapps/libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
+            steamDirectoryList.append(steamRoot.filePath(""));
+            QString pathString = "";
 
             for(auto &kv : libraryFolders.get_child("LibraryFolders"))
             {
                 if(std::isdigit(static_cast<int>(*kv.first.data())))
                 {
                     std::string path = kv.second.data();
-                    qDebug() << QString::fromStdString(path);
+                    QDir dir(QString::fromStdString(path));
+                    if (dir.exists())
+                    {
+                        steamDirectoryList.append(dir.filePath(""));
+                        pathString += dir.filePath("");
+                        pathString += "\n";
+                    }
                 }
+            }
+
+            int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " directories.", QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
+            switch(ret)
+            {
+                case QMessageBox::Yes:
+                    qDebug() << "Yes";
+                    break;
+                case QMessageBox::No:
+                    qDebug() << "No";
+                    break;
+                default:
+                    break;
             }
         }
     #else
-        QMessageBox::critical(0, "Error", "Platform doesn't support steam.");
+        QMessageBox(QMessageBox::Critical, "Error", "Platform doesn't support steam.");
     #endif
 }
