@@ -36,4 +36,5 @@ private:
     void runProcess(QString file, QString workingDirectory);
     void refreshGames();
     void findSteamGames();
+    void parseAcf();
 };
