@@ -14,6 +14,7 @@
 
 /.qmake.cache
 /.qmake.stash
+CMakeLists.txt.user
 *.pro.user
 *.pro.user.*
 *.qbs.user
@@ -28,7 +29,6 @@ Makefile*
 *.*.Release
 
 # QtCreator
-
 *.autosave
 
 #QtCtreator Qml
