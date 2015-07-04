@@ -7,9 +7,9 @@ before_install:
 - sudo add-apt-repository -y ppa:sschuberth/cmake-here
 - sudo apt-get update -qq
 install:
-- sudo apt-get install -qq gcc-4.8 g++-4.8
-- sudo apt-get install -qq cmake
-- sudo apt-get install -qq qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev
+- sudo apt-get install -y gcc-4.8 g++-4.8
+- sudo apt-get install -y cmake
+- sudo apt-get install -y qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 before_script:
 - cmake .
