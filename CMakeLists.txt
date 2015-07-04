@@ -91,11 +91,33 @@ find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Boost REQUIRED)
 
+foreach(LIB
+        Widgets
+        Core
+        Gui
+        Network
+        WebKit
+        WebkitWidgets
+        Sql)
+    if(Qt5${LIB}_FOUND)
+        message("Found ${LIB}: ${Qt5${LIB}_INCLUDE_DIRS}")
+    endif()
+
+endforeach()
+
+
+
 qt5_wrap_ui(FORMS_HEADERS ${FORMS})
 qt5_add_resources(UI_RESOURCES ${RESOURCES})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    ${Qt5Gui_INCLUDE_DIRS}
+    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5Core_INCLUDE_DIRS}
+    ${Qt5Network_INCLUDE_DIRS}
+    ${Qt5WebKit_INCLUDE_DIRS}
+    ${Qt5WebKitWidgets_INCLUDE_DIRS}
+    ${Qt5Sql_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     BorderlessWindow
     Source
@@ -117,6 +139,15 @@ target_link_libraries(ProjectAscension
     Qt5::Sql
     ${Boost_LIBRARIES}
 )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Network_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebKit_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebkitWidgets_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Sql_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS -fPIC)
+
 if(WIN32)
     target_link_libraries(ProjectAscension
         user32.lib
