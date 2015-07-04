@@ -1,5 +1,6 @@
 # C++ objects and libs
 
+*.db
 *.slo
 *.lo
 *.o
@@ -26,6 +27,10 @@ Makefile*
 *-build-*
 *.*.Debug
 *.*.Release
+/build
+/msbuild
+*.txt.user
+*.aps
 
 # QtCreator
 

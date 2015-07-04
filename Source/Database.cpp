@@ -74,7 +74,7 @@ Game Database::getGameById(unsigned int id)
     return {id, name, path, exe};
 }
 
-Game Database::getGameByName(QString name)
+Game* Database::getGameByName(QString name)
 {
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :name;");
@@ -90,7 +90,7 @@ Game Database::getGameByName(QString name)
     QString path = query.value(1).toString();
     QString exe = query.value(2).toString();
 
-    Game game = {id, name, path, exe};
+    Game* game = new Game{id, name, path, exe};
     return game;
 }
 
