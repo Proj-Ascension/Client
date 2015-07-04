@@ -28,6 +28,9 @@ Makefile*
 *.*.Debug
 *.*.Release
 /build
+/msbuild
+*.txt.user
+*.aps
 
 # QtCreator
 
