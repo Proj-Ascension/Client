@@ -137,6 +137,12 @@ if(WIN32)
     get_target_property(BuildLocation ProjectAscension LOCATION)
     get_filename_component(TargetDirectory ${BuildLocation} PATH)
 
+    if (EXISTS ${Qt5Core_DIR}/../../../bin/icuin53.dll)
+        set(ICU_VER 53)
+    else()
+        set(ICU_VER 54)
+    endif()
+
     foreach(DEPENDENCY
         Qt5Widgetsd.dll
         Qt5Guid.dll
@@ -154,9 +160,9 @@ if(WIN32)
         Qt5WebChanneld.dll
         Qt5OpenGLd.dll
         Qt5PrintSupportd.dll
-        icuin54.dll
-        icuuc54.dll
-        icudt54.dll
+        icuin${ICU_VER}.dll
+        icuuc${ICU_VER}.dll
+        icudt${ICU_VER}.dll
     )
         add_custom_command(TARGET ProjectAscension POST_BUILD
             # Copy the given dependency into the executable directory.
