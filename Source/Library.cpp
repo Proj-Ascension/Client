@@ -78,7 +78,7 @@ void Library::on_addGame_clicked()
     QFileDialog exeDialog;
     exeDialog.setWindowTitle("Select Executable");
     exeDialog.setFileMode(QFileDialog::ExistingFile);
-    #if defined(__linux__)
+    #if defined(__unix__)
         exeDialog.setDirectory(QDir::home());
     #elif defined(_WIN32) || defined(_WIN64)
         exeDialog.setDirectory("C:");
