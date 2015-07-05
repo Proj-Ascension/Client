@@ -198,9 +198,9 @@ void Library::findSteamGames()
         steamDirectoryList.append(steamRoot.filePath(""));
         QString pathString = "" + steamDirectoryList.at(0) + "\n";
 
-        for( auto kv : libraryFolders.get_child("LibraryFolders") )
+        for ( auto kv : libraryFolders.get_child("LibraryFolders") )
         {
-            if( std::isdigit(static_cast<int>(*kv.first.data())) )
+            if ( std::isdigit(static_cast<int>(*kv.first.data())) )
             {
                 std::string path = kv.second.data();
                 QDir dir(QString::fromStdString(path));
@@ -238,7 +238,7 @@ void Library::parseAcf()
         steamAppsDir = steamAppsDir.filePath("steamapps");
         QStringList fileList = steamAppsDir.entryList(QStringList("*.acf"), QDir::Files | QDir::NoSymLinks);
 
-        for( auto fileIter : fileList )
+        for ( auto fileIter : fileList )
         {
             pt::ptree fileTree;
             std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
@@ -246,7 +246,7 @@ void Library::parseAcf()
 
             QString name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
             // TODO: Either add SteamID to db, or add getGameByPath
-            if( db.getGameByName(name) == nullptr )
+            if ( db.getGameByName(name) == nullptr )
             {
                 QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
                 QString exe;
@@ -256,7 +256,7 @@ void Library::parseAcf()
                 exeDialog.setWindowTitle("Select Executable");
                 exeDialog.setFileMode(QFileDialog::ExistingFile);
                 exeDialog.setDirectory(path);
-                if( exeDialog.exec() )
+                if ( exeDialog.exec() )
                 {
                     exe = exeDialog.selectedFiles().at(0);
                 }
