@@ -48,10 +48,10 @@ Library::~Library()
 
 void Library::on_testLaunch_clicked()
 {
-    if ( !isProcessRunning() )
+    if (!isProcessRunning())
     {
         auto selection = ui->gameListWidget->currentItem();
-        if ( selection != nullptr )
+        if (selection != nullptr)
         {
             Game* game = db.getGameByName(selection->text());
             runProcess(game->executablePath, game->gameDirectory);
@@ -69,7 +69,7 @@ void Library::on_addGame_clicked()
 {
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
 
-    if ( name.trimmed() == "" )
+    if (name.trimmed() == "")
     {
         QMessageBox::critical(0, "Error", "You must specify a game name!");
         return;
@@ -84,7 +84,7 @@ void Library::on_addGame_clicked()
         exeDialog.setDirectory("C:");
     #endif
 
-    if ( exeDialog.exec() )
+    if (exeDialog.exec())
     {
         QStringList files = exeDialog.selectedFiles();
         QString exe = files.at(0);
@@ -101,7 +101,7 @@ void Library::on_addGame_clicked()
         wdDialog.setFileMode(QFileDialog::DirectoryOnly);
         wdDialog.setDirectory(exeDialog.directory().absolutePath());
 
-        if ( wdDialog.exec() )
+        if (wdDialog.exec())
         {
             QStringList dirs = wdDialog.selectedFiles();
             QString dir = dirs.at(0);
@@ -117,7 +117,7 @@ void Library::on_addGame_clicked()
 void Library::on_removeGame_clicked()
 {
     auto selection = ui->gameListWidget->currentItem();
-    if ( selection != nullptr )
+    if (selection != nullptr)
     {
         db.removeGameByName(selection->text());
         refreshGames();
@@ -127,7 +127,7 @@ void Library::on_removeGame_clicked()
 void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
-    if ( !isProcessRunning() )
+    if (!isProcessRunning())
     {
         qDebug() << "Launching:" << file << ", at" << workingDirectory;
         runningProcess->setWorkingDirectory(workingDirectory);
@@ -150,7 +150,7 @@ void Library::refreshGames()
 
 void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    if ( exitCode != 0 )
+    if (exitCode != 0)
     {
         QMessageBox(QMessageBox::Warning, "Warning", "The game finished, but it claims to have encountered an error").exec();
     }
@@ -191,7 +191,7 @@ void Library::findSteamGames()
         QMessageBox(QMessageBox::Critical, "Error", "Platform doesn't support steam.");
     #endif
 
-    if ( steamRoot.exists() )
+    if (steamRoot.exists())
     {
         pt::ptree libraryFolders;
         pt::read_info(steamRoot.filePath("steamapps/libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
@@ -200,11 +200,11 @@ void Library::findSteamGames()
 
         for ( auto kv : libraryFolders.get_child("LibraryFolders") )
         {
-            if ( std::isdigit(static_cast<int>(*kv.first.data())) )
+            if (std::isdigit(static_cast<int>(*kv.first.data())))
             {
                 std::string path = kv.second.data();
                 QDir dir(QString::fromStdString(path));
-                if ( dir.exists() )
+                if (dir.exists())
                 {
                     steamDirectoryList.append(dir.filePath(""));
                     pathString += dir.filePath("");
@@ -246,7 +246,7 @@ void Library::parseAcf()
 
             QString name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
             // TODO: Either add SteamID to db, or add getGameByPath
-            if ( db.getGameByName(name) == nullptr )
+            if (db.getGameByName(name) == nullptr)
             {
                 QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
                 QString exe;
@@ -256,7 +256,7 @@ void Library::parseAcf()
                 exeDialog.setWindowTitle("Select Executable");
                 exeDialog.setFileMode(QFileDialog::ExistingFile);
                 exeDialog.setDirectory(path);
-                if ( exeDialog.exec() )
+                if (exeDialog.exec())
                 {
                     exe = exeDialog.selectedFiles().at(0);
                 }
