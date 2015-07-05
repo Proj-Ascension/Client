@@ -31,7 +31,7 @@ Library::Library(Database db) :
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
 
     QList<Game> games = db.getGames();
-    for ( auto game : games )
+    for (auto game : games)
     {
         qDebug() << game.id << game.gameName << game.gameDirectory << game.executablePath;
     }
@@ -142,7 +142,7 @@ void Library::refreshGames()
 {
     ui->gameListWidget->clear();
     QList<Game> gameList = db.getGames();
-    for ( auto game : gameList )
+    for (auto game : gameList)
     {
         ui->gameListWidget->addItem(game.gameName);
     }
@@ -198,7 +198,7 @@ void Library::findSteamGames()
         steamDirectoryList.append(steamRoot.filePath(""));
         QString pathString = "" + steamDirectoryList.at(0) + "\n";
 
-        for ( auto kv : libraryFolders.get_child("LibraryFolders") )
+        for (auto kv : libraryFolders.get_child("LibraryFolders"))
         {
             if (std::isdigit(static_cast<int>(*kv.first.data())))
             {
@@ -232,13 +232,13 @@ void Library::findSteamGames()
 void Library::parseAcf()
 {
     // TODO: This stuff needs its own thread
-    for( QString iter : steamDirectoryList )
+    for(QString iter : steamDirectoryList)
     {
         QDir steamAppsDir(iter);
         steamAppsDir = steamAppsDir.filePath("steamapps");
         QStringList fileList = steamAppsDir.entryList(QStringList("*.acf"), QDir::Files | QDir::NoSymLinks);
 
-        for ( auto fileIter : fileList )
+        for (auto fileIter : fileList)
         {
             pt::ptree fileTree;
             std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
