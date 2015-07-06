@@ -14,9 +14,9 @@ Thanks for your interest in contributing to Project Ascension! We have a few gui
 ```C++
 void miracleSort(int numGroup[])
 {
-    while(numGroup.isUnsorted())
+    while (numGroup.isUnsorted())
     {
-      sleep(10000000000);
+        sleep(10000000000);
     }
 }
 ```
