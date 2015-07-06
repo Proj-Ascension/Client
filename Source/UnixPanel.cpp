@@ -1,8 +1,9 @@
 #include "UnixPanel.h"
 #include "UnixWindow.h"
 
-UnixPanel::UnixPanel(UnixWindow* panel) : MainPanel((QWidget*) panel),
-    unixPanel(panel)
+UnixPanel::UnixPanel(UnixWindow* panel)
+    : MainPanel((QWidget*) panel),
+      unixPanel(panel)
 {
     this->adjustSize();
 }

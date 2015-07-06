@@ -19,11 +19,11 @@
 
 namespace pt = boost::property_tree;
 
-Library::Library(Database db) :
-    QWidget(0),
-    db(db),
-    ui(new Ui::Library),
-    runningProcess(new QProcess(this))
+Library::Library(Database db)
+    : QWidget(0),
+      db(db),
+      ui(new Ui::Library),
+      runningProcess(new QProcess(this))
 {
     ui->setupUi(this);
     this->setObjectName("libraryUI");
@@ -214,8 +214,8 @@ void Library::findSteamGames()
         }
 
         // TODO: Make this prompting better/less obtrusive
-        bool directoryPlural = (steamDirectoryList.size()>1);
-        int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural? "ies":"y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
+        bool directoryPlural = (steamDirectoryList.size() > 1);
+        int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
         switch(ret)
         {
             case QMessageBox::Yes:
