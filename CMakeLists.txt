@@ -96,6 +96,7 @@ qt5_add_resources(UI_RESOURCES ${RESOURCES})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${Qt5Gui_INCLUDE_DIRS}
+    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Network_INCLUDE_DIRS}
