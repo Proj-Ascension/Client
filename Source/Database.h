@@ -3,7 +3,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-typedef struct
+struct
 {
     unsigned int id;
     QString gameName;
