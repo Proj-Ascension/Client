@@ -48,6 +48,10 @@ void UnixWindow::closeWindow()
 void UnixWindow::mousePressEvent(QMouseEvent* evt)
 {
     oldWindowPos = evt->globalPos();
+    if (evt->pos().y() < 70)
+    {
+        dragging = true;
+    }
 }
 
 void UnixWindow::mouseReleaseEvent(QMouseEvent* evt)
@@ -58,7 +62,7 @@ void UnixWindow::mouseReleaseEvent(QMouseEvent* evt)
 void UnixWindow::mouseMoveEvent(QMouseEvent* evt)
 {
     const QPoint c_delta = evt->globalPos() - oldWindowPos;
-    if (evt->pos().y() < 70 || dragging)
+    if (dragging)
     {
         dragging = true;
         move(x() + c_delta.x(), y() + c_delta.y());
