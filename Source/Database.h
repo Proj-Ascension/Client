@@ -22,7 +22,7 @@ public:
     bool removeGameById(unsigned int id);
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
-    Game* getGameByName(QString name);
+    Game getGameByName(QString name);
     QList<Game> getGames();
     unsigned int getGameCount();
 private:
