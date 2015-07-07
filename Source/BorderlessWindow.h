@@ -57,14 +57,14 @@ private:
     bool borderlessResizeable;
     bool aeroShadow;
 
-    struct sizeType
+    struct SizeType
     {
-        sizeType() : required(false), width(0), height(0) {}
+        SizeType() : required(false), width(0), height(0) {}
         bool required;
         int width;
         int height;
     };
 
-    sizeType minimumSize;
-    sizeType maximumSize;
+    SizeType minimumSize;
+    SizeType maximumSize;
 };
