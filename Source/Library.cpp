@@ -53,8 +53,8 @@ void Library::on_testLaunch_clicked()
         auto selection = ui->gameListWidget->currentItem();
         if (selection != nullptr)
         {
-            Game* game = db.getGameByName(selection->text());
-            runProcess(game->executablePath, game->gameDirectory);
+            Game game = db.getGameByName(selection->text());
+            runProcess(game.executablePath, game.gameDirectory);
         }
     }
     else
@@ -246,28 +246,20 @@ void Library::parseAcf()
 
             QString name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
             // TODO: Either add SteamID to db, or add getGameByPath
-            if (db.getGameByName(name) == nullptr)
-            {
-                QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
-                QString exe;
-                QStringList exeList = QDir(path).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
+            QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+            QString exe;
+            QStringList exeList = QDir(path).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
 
-                QFileDialog exeDialog;
-                exeDialog.setWindowTitle("Select Executable");
-                exeDialog.setFileMode(QFileDialog::ExistingFile);
-                exeDialog.setDirectory(path);
-                if (exeDialog.exec())
-                {
-                    exe = exeDialog.selectedFiles().at(0);
-                }
-                db.addGame(name, path, exe);
-                refreshGames();
-            }
-            else
+            QFileDialog exeDialog;
+            exeDialog.setWindowTitle("Select Executable");
+            exeDialog.setFileMode(QFileDialog::ExistingFile);
+            exeDialog.setDirectory(path);
+            if (exeDialog.exec())
             {
-                QMessageBox(QMessageBox::Critical, name + " exists", name + " already exists in the database.").exec();
-                refreshGames();
+                exe = exeDialog.selectedFiles().at(0);
             }
+            db.addGame(name, path, exe);
+            refreshGames();
         }
     }
 }
