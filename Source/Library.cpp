@@ -246,20 +246,24 @@ void Library::parseAcf()
 
             QString name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
             // TODO: Either add SteamID to db, or add getGameByPath
-            QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
-            QString exe;
-            QStringList exeList = QDir(path).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
-
-            QFileDialog exeDialog;
-            exeDialog.setWindowTitle("Select Executable");
-            exeDialog.setFileMode(QFileDialog::ExistingFile);
-            exeDialog.setDirectory(path);
-            if (exeDialog.exec())
+            if (!std::get<0>(db.isExists(name)))
             {
-                exe = exeDialog.selectedFiles().at(0);
+                QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+                QString exe;
+                QStringList exeList = QDir(path).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
+
+                QFileDialog exeDialog;
+                exeDialog.setWindowTitle("Select Executable");
+                exeDialog.setFileMode(QFileDialog::ExistingFile);
+                exeDialog.setDirectory(path);
+                if (exeDialog.exec())
+                {
+                    exe = exeDialog.selectedFiles().at(0);
+                }
+
+                db.addGame(name, path, exe);
+                refreshGames();
             }
-            db.addGame(name, path, exe);
-            refreshGames();
         }
     }
 }
