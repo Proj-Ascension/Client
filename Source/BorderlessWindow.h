@@ -24,6 +24,7 @@ public:
     BorderlessWindow(QApplication* app, HBRUSH windowBackground, const int width, const int height);
     ~BorderlessWindow();
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
     void show();
     void hide();
     bool isVisible();
