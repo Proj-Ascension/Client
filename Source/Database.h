@@ -3,13 +3,13 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-typedef struct
+struct Game
 {
     unsigned int id;
     QString gameName;
     QString gameDirectory;
     QString executablePath;
-} Game;
+};
 
 class Database
 {
@@ -22,7 +22,7 @@ public:
     bool removeGameById(unsigned int id);
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
-    Game* getGameByName(QString name);
+    Game getGameByName(QString name);
     QList<Game> getGames();
     unsigned int getGameCount();
 private:
