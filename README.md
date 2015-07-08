@@ -25,4 +25,4 @@ This project is MIT licensed.
 Full text can be found [here](LICENSE).
 
 # Contributing
-If you would like to contribute, please read over [the contributing guidelines](CONTRIBUTING.md)
+If you would like to contribute, please read over [the contributing guidelines](CONTRIBUTING.md).
