@@ -246,7 +246,7 @@ void Library::parseAcf()
 
             QString name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
             // TODO: Either add SteamID to db, or add getGameByPath
-            if (!std::get<0>(db.isExists(name)))
+            if (!std::get<0>(db.isExistant(name)))
             {
                 QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
                 QString exe;

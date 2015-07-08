@@ -24,7 +24,8 @@ public:
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
     Game getGameByName(QString name);
-    std::tuple<bool, Game> isExists(QString name);
+    std::tuple<bool, Game> isExistant(unsigned int id);
+    std::tuple<bool, Game> isExistant(QString name);
     QList<Game> getGames();
     unsigned int getGameCount();
 private:
