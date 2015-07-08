@@ -12,7 +12,7 @@ Thanks for your interest in contributing to Project Ascension! We have a few gui
 - Pointers should be formatted with the `*` operator aligned to the type: `int* ptr`
 - We use the Allman indentation style:
 ```C++
-void miracleSort(int numGroup[])
+void miracleSort(FancyArray<int> numGroup)
 {
     while (numGroup.isUnsorted())
     {
