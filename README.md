@@ -1,6 +1,13 @@
-#BuildStatus
+#Project Ascension Client
+
+This is the official repo for the client of Project Ascension.
 
 [![Join the chat at https://gitter.im/Proj-Ascension/Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Proj-Ascension/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+Gitter is for general development discussion.
+
+# Travis Build
+
 [![Build Status](https://travis-ci.org/Proj-Ascension/Client.svg?branch=master)](https://travis-ci.org/Proj-Ascension/Client)
 
 # Project Ascension Client Interface
