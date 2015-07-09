@@ -2,7 +2,8 @@
 
 #include <QDebug>
 
-Database::Database() : db(QSqlDatabase::addDatabase("QSQLITE"))
+Database::Database()
+    : db(QSqlDatabase::addDatabase("QSQLITE"))
 {
     db.setHostName("localhost");
     db.setDatabaseName("ascension.db");
@@ -26,7 +27,7 @@ bool Database::init()
 bool Database::reset()
 {
     QSqlQuery query(db);
-    return  query.exec("DROP TABLES *");
+    return query.exec("DROP TABLES *");
 }
 
 bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath)
