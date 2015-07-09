@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/Primary">
+    <qresource prefix="/Typeface">
         <file alias="Montserrat-Black.ttf">Fonts/Montserrat-Black.ttf</file>
         <file alias="Montserrat-Bold.ttf">Fonts/Montserrat-Bold.ttf</file>
         <file alias="Montserrat-Light.ttf">Fonts/Montserrat-Light.ttf</file>
@@ -29,9 +29,6 @@
         <file alias="SourceSansPro-Regular.ttf">Fonts/SourceSansPro-Regular.ttf</file>
         <file alias="SourceSansPro-Semibold.ttf">Fonts/SourceSansPro-Semibold.ttf</file>
         <file alias="SourceSansPro-SemiboldItalic.ttf">Fonts/SourceSansPro-SemiboldItalic.ttf</file>
-    </qresource>
-
-    <qresource prefix="/Secondary">
         <file alias="SourceCodePro-Black.ttf">Fonts/SourceCodePro-Black.ttf</file>
         <file alias="SourceCodePro-Bold.ttf">Fonts/SourceCodePro-Bold.ttf</file>
         <file alias="SourceCodePro-ExtraLight.ttf">Fonts/SourceCodePro-ExtraLight.ttf</file>
