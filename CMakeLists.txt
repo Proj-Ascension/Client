@@ -65,6 +65,13 @@ if(WIN32)
         BorderlessWindow/QWinWidget.h
     )
 elseif(UNIX)
+    # Additional configuration for Unix systems.
+    # TODO: Get working icon / bundle for OSX systems without bricking the build.
+
+    # if(APPLE)
+    #     set(GUI_TYPE MACOSX_BUNDLE)
+    # endif(APPLE)
+
     set(SOURCE ${SOURCE}
         Source/UnixWindow.cpp
         Source/UnixPanel.cpp
