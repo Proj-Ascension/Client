@@ -46,9 +46,9 @@ set(GUI_TYPE "")
 if(WIN32)
     #Additional configuration for Windows systems.
     # TODO: Get working "Release" config for multi-configuration MSVC builds.
-    
+
     # set(GUI_TYPE WIN32)
-    
+
     set(SOURCE ${SOURCE}
         Source/BorderlessWindow.cpp
         Source/WinWindow.cpp
@@ -56,7 +56,7 @@ if(WIN32)
         BorderlessWindow/QWinHost.cpp
         BorderlessWindow/QWinWidget.cpp
     )
-    
+
     set(HEADERS ${HEADERS}
         Source/BorderlessWindow.h
         Source/WinWindow.h
@@ -67,16 +67,16 @@ if(WIN32)
 elseif(UNIX)
     # Additional configuration for Unix systems.
     # TODO: Get working icon / bundle for OSX systems without bricking the build.
-    
+
     # if(APPLE)
     #     set(GUI_TYPE MACOSX_BUNDLE)
     # endif(APPLE)
-    
+
     set(SOURCE ${SOURCE}
         Source/UnixWindow.cpp
         Source/UnixPanel.cpp
     )
-    
+
     set(HEADERS ${HEADERS}
         Source/UnixWindow.h
         Source/UnixPanel.h
@@ -93,23 +93,32 @@ find_package(Qt5Network REQUIRED)
 find_package(Qt5WebKit REQUIRED)
 find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
+find_package(Boost REQUIRED)
 
 qt5_wrap_ui(FORMS_HEADERS ${FORMS})
 qt5_add_resources(UI_RESOURCES ${RESOURCES})
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${Qt5Gui_INCLUDE_DIRS}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
-    BorderlessWindow 
+    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5Core_INCLUDE_DIRS}
+    ${Qt5Network_INCLUDE_DIRS}
+    ${Qt5WebKit_INCLUDE_DIRS}
+    ${Qt5WebKitWidgets_INCLUDE_DIRS}
+    ${Qt5Sql_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
+    BorderlessWindow
     Source
 )
-add_executable(ProjectAscension 
-    ${GUI_TYPE} 
-    ${SOURCE} 
-    ${OS_SOURCE} 
-    ${FORMS_HEADERS} 
+add_executable(ProjectAscension
+    ${GUI_TYPE}
+    ${SOURCE}
+    ${OS_SOURCE}
+    ${FORMS_HEADERS}
     ${UI_RESOURCES}
 )
-target_link_libraries(ProjectAscension 
+target_link_libraries(ProjectAscension
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
@@ -117,7 +126,17 @@ target_link_libraries(ProjectAscension
     Qt5::WebKit
     Qt5::WebKitWidgets
     Qt5::Sql
+    ${Boost_LIBRARIES}
 )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Network_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebKit_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebkitWidgets_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Sql_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS -fPIC)
+
 if(WIN32)
     target_link_libraries(ProjectAscension
         user32.lib
@@ -125,8 +144,11 @@ if(WIN32)
         dwmapi.lib
     )
     
-    set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
-    set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
+    if(MSVC)
+        set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
+        set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
+        set_target_properties(ProjectAscension PROPERTIES COMPILE_FLAGS "/EHsc")
+    endif(MSVC)
 endif()
 
 # --- RUNTIME DEPENDENCIES ---
@@ -137,7 +159,13 @@ if(WIN32)
 
     get_target_property(BuildLocation ProjectAscension LOCATION)
     get_filename_component(TargetDirectory ${BuildLocation} PATH)
-        
+
+    if (EXISTS ${Qt5Core_DIR}/../../../bin/icuin53.dll)
+        set(ICU_VER 53)
+    else()
+        set(ICU_VER 54)
+    endif()
+
     foreach(DEPENDENCY
         Qt5Widgetsd.dll
         Qt5Guid.dll
@@ -155,9 +183,9 @@ if(WIN32)
         Qt5WebChanneld.dll
         Qt5OpenGLd.dll
         Qt5PrintSupportd.dll
-        icuin53.dll
-        icuuc53.dll
-        icudt53.dll
+        icuin${ICU_VER}.dll
+        icuuc${ICU_VER}.dll
+        icudt${ICU_VER}.dll
     )
         add_custom_command(TARGET ProjectAscension POST_BUILD
             # Copy the given dependency into the executable directory.

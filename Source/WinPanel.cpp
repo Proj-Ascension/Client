@@ -1,8 +1,9 @@
 #include "WinPanel.h"
 #include "WinWindow.h"
 
-WinPanel::WinPanel(WinWindow* panel) : MainPanel((QWidget*) panel),
-    winPanel(panel)
+WinPanel::WinPanel(WinWindow* panel)
+    : MainPanel((QWidget*) panel),
+      winPanel(panel)
 {
     this->adjustSize();
 }
@@ -22,3 +23,4 @@ void WinPanel::pushButtonClose()
 {
     winPanel->closeWindow();
 }
+

@@ -3,13 +3,13 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-typedef struct
+struct Game
 {
     unsigned int id;
     QString gameName;
     QString gameDirectory;
     QString executablePath;
-} Game;
+};
 
 class Database
 {
