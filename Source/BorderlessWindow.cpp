@@ -14,40 +14,46 @@ HWND g_winId = 0;
 WinWindow* BorderlessWindow::mainPanel;
 QApplication* BorderlessWindow::a;
 
-BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, const int width, const int height) : hWnd(0),
-    hInstance(GetModuleHandle(NULL)),
-    closed(false),
-    visible(false),
-    borderless(false),
-    borderlessResizeable(true),
-    aeroShadow(true)
+BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, const int width, const int height)
+    : hWnd(0),
+      hInstance(GetModuleHandle(NULL)),
+      closed(false),
+      visible(false),
+      borderless(false),
+      borderlessResizeable(true),
+      aeroShadow(true)
 {
     WNDCLASSEX wcx = {0};
     wcx.cbSize = sizeof(WNDCLASSEX);
     wcx.style = CS_HREDRAW | CS_VREDRAW;
     wcx.hInstance = hInstance;
     wcx.lpfnWndProc = WndProc;
-    wcx.cbClsExtra	= 0;
-    wcx.cbWndExtra	= 0;
+    wcx.cbClsExtra = 0;
+    wcx.cbWndExtra = 0;
     wcx.lpszClassName = _T("WindowClass");
     wcx.hbrBackground = windowBackground;
-    wcx.hCursor = LoadCursor( hInstance, IDC_ARROW );
+    wcx.hCursor = LoadCursor(hInstance, IDC_ARROW);
     RegisterClassEx(&wcx);
-    if (FAILED(RegisterClassEx(&wcx))) throw std::runtime_error("Couldn't register window class");
+    if (FAILED(RegisterClassEx(&wcx)))
+    {
+        throw std::runtime_error("Couldn't register window class");
+    }
 
     // Center window at runtime
     QRect rec = QApplication::desktop()->screenGeometry();
     int x = rec.width();
     int y = rec.height();
     int offsetX = (x - width) / 2;
-    int offsetY = (y - (y * 0.05) - height) / 2;    // Compensate for taskbar
+    int offsetY = (y - (y * 0.05) - height) / 2; // Compensate for taskbar
 
-    hWnd = CreateWindow(_T("WindowClass"), _T("Project Ascension"), static_cast<DWORD>( Style::windowed ), offsetX, offsetY, width, height, 0, 0, hInstance, nullptr);
+    hWnd = CreateWindow(_T("WindowClass"), _T("Project Ascension"), static_cast<DWORD>(Style::windowed), offsetX, offsetY, width, height, 0, 0, hInstance, nullptr);
 
-    if (!hWnd) throw std::runtime_error("Encountered an unknown error while constructing the launcher window.");
+    if (!hWnd)
+    {
+        throw std::runtime_error("Encountered an unknown error while constructing the launcher window.");
+    }
 
     SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
-
 
     mainPanel = new WinWindow(hWnd);
     g_winId = (HWND)mainPanel->winId();
@@ -70,7 +76,10 @@ PAINTSTRUCT g_ps;
 LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     BorderlessWindow* window = reinterpret_cast<BorderlessWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    if (!window) return DefWindowProc(hWnd, message, wParam, lParam);
+    if (!window)
+    {
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
 
     switch (message)
     {
@@ -97,14 +106,15 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
         }
         }
 
-        if (wParam != VK_TAB) return DefWindowProc(hWnd, message, wParam, lParam);
+        if (wParam != VK_TAB)
+        {
+            return DefWindowProc(hWnd, message, wParam, lParam);
+        }
 
         SetFocus(g_winId);
         break;
     }
-
-        // ALT + SPACE or F10 system menu
-    case WM_SYSCOMMAND:
+    case WM_SYSCOMMAND: // ALT + SPACE or F10 system menu
     {
         if (wParam == SC_KEYMENU)
         {
@@ -118,47 +128,48 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
             return DefWindowProc(hWnd, message, wParam, lParam);
         }
     }
-
     case WM_SETFOCUS:
     {
         QString str("Got focus");
         QWidget* widget = QWidget::find((WId)HWND(wParam));
         if (widget)
+        {
             str += QString(" from %1 (%2)").arg(widget->objectName()).arg(widget->metaObject()->className());
+        }
+
         str += "\n";
         OutputDebugStringA(str.toLocal8Bit().data());
         break;
     }
-
     case WM_NCCALCSIZE:
     {
-        //this kills the window frame and title bar we added with
-        //WS_THICKFRAME and WS_CAPTION
+        // this kills the window frame and title bar we added with
+        // WS_THICKFRAME and WS_CAPTION
         if (window->borderless)
         {
             return 0;
         }
+
         break;
     }
-
     case WM_KILLFOCUS:
     {
         QString str("Lost focus");
-        QWidget* widget = QWidget::find((WId)HWND(wParam));
+        QWidget* widget = QWidget::find((WId) HWND (wParam));
         if (widget)
+        {
             str += QString(" to %1 (%2)").arg(widget->objectName()).arg(widget->metaObject()->className());
+        } 
         str += "\n";
 
         OutputDebugStringA(str.toLocal8Bit().data());
         break;
     }
-
     case WM_DESTROY:
     {
         PostQuitMessage(0);
         break;
     }
-
     case WM_NCHITTEST:
     {
         if (window->borderless)
@@ -171,57 +182,55 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
                 long x = GET_X_LPARAM(lParam);
                 long y = GET_Y_LPARAM(lParam);
 
-                //bottom left corner
+                // bottom left corner
                 if (x >= winrect.left && x < winrect.left + c_borderWidth &&
-                    y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
+                        y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
                 {
                     return HTBOTTOMLEFT;
                 }
-                //bottom right corner
+                // bottom right corner
                 if (x < winrect.right && x >= winrect.right - c_borderWidth &&
-                    y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
+                        y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
                 {
                     return HTBOTTOMRIGHT;
                 }
-                //top left corner
+                // top left corner
                 if (x >= winrect.left && x < winrect.left + c_borderWidth &&
-                    y >= winrect.top && y < winrect.top + c_borderWidth)
+                        y >= winrect.top && y < winrect.top + c_borderWidth)
                 {
                     return HTTOPLEFT;
                 }
-                //top right corner
+                // top right corner
                 if (x < winrect.right && x >= winrect.right - c_borderWidth &&
-                    y >= winrect.top && y < winrect.top + c_borderWidth)
+                        y >= winrect.top && y < winrect.top + c_borderWidth)
                 {
                     return HTTOPRIGHT;
                 }
-                //left border
+                // left border
                 if (x >= winrect.left && x < winrect.left + c_borderWidth)
                 {
                     return HTLEFT;
                 }
-                //right border
+                // right border
                 if (x < winrect.right && x >= winrect.right - c_borderWidth)
                 {
                     return HTRIGHT;
                 }
-                //bottom border
+                // bottom border
                 if (y < winrect.bottom && y >= winrect.bottom - c_borderWidth)
                 {
                     return HTBOTTOM;
                 }
-                //top border
+                // top border
                 if (y >= winrect.top && y < winrect.top + c_borderWidth)
                 {
                     return HTTOP;
                 }
             }
-
             return HTCAPTION;
         }
         break;
     }
-
     case WM_SIZE:
     {
         RECT winrect;
@@ -244,10 +253,9 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
         }
         break;
     }
-
     case WM_GETMINMAXINFO:
     {
-        MINMAXINFO* minMaxInfo = (MINMAXINFO*)lParam;
+        MINMAXINFO* minMaxInfo = (MINMAXINFO*) lParam;
         if (window->minimumSize.required)
         {
             minMaxInfo->ptMinTrackSize.x = window->getMinimumWidth();;
@@ -277,7 +285,7 @@ void BorderlessWindow::toggleBorderless()
         {
             toggleShadow();
         }
-        //redraw frame
+        // redraw frame
         SetWindowPos(hWnd, 0, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
         show();
     }
@@ -380,3 +388,4 @@ int BorderlessWindow::getMaximumHeight()
 {
     return maximumSize.height;
 }
+

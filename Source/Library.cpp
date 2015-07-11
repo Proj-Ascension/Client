@@ -1,17 +1,29 @@
 #include "Library.h"
 #include "ui_Library.h"
 
+
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QProcess>
 #include <QMessageBox>
 #include <QDebug>
 
-Library::Library(Database db) :
-    QWidget(0),
-    db(db),
-    ui(new Ui::Library),
-    runningProcess(new QProcess(this))
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/info_parser.hpp>
+
+#include <cctype>
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <QSettings>
+#endif
+
+namespace pt = boost::property_tree;
+
+Library::Library(Database db)
+    : QWidget(0),
+      db(db),
+      ui(new Ui::Library),
+      runningProcess(new QProcess(this))
 {
     ui->setupUi(this);
     this->setObjectName("libraryUI");
@@ -25,6 +37,7 @@ Library::Library(Database db) :
     }
 
     refreshGames();
+    findSteamGames();
 }
 
 Library::~Library()
@@ -65,6 +78,11 @@ void Library::on_addGame_clicked()
     QFileDialog exeDialog;
     exeDialog.setWindowTitle("Select Executable");
     exeDialog.setFileMode(QFileDialog::ExistingFile);
+    #if defined(__unix__)
+        exeDialog.setDirectory(QDir::home());
+    #elif defined(_WIN32) || defined(_WIN64)
+        exeDialog.setDirectory("C:");
+    #endif
 
     if (exeDialog.exec())
     {
@@ -73,6 +91,7 @@ void Library::on_addGame_clicked()
         #ifdef Q_WS_MACX
             //Get the binary from the app bundle
             QDir dir(file + "/Contents/MacOS");
+            // TODO: Change to dir.entryList(QDir::NoDotAndDotDot) to be safe
             QStringList fileList = dir.entryList();
             file = dir.absoluteFilePath(fileList.at(2));// USUALLY this is the executable (after ., ..)
         #endif
@@ -157,4 +176,97 @@ bool Library::isProcessRunning() const
 {
     // We shall consider "Starting" to be running here too
     return runningProcess->state() != QProcess::NotRunning;
+}
+
+void Library::findSteamGames()
+{
+	bool steamFound = true;
+    #if defined(_WIN32) || defined(_WIN64)
+        QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
+        QString steamPath = settings.value("SteamPath").toString();
+        if (steamPath.trimmed() == "")
+        {
+            qDebug("Steam was not found, probably not installed.");
+            steamFound = false;
+        }
+        QDir steamRoot(steamPath);
+    #elif defined(__apple__)
+        // TODO: however OS X handles steam
+    #elif defined(__linux__)
+        QDir steamRoot(QDir::home().filePath(".steam/steam"));
+    #else
+        QMessageBox(QMessageBox::Critical, "Error", "Platform doesn't support steam.");
+    #endif
+
+    if (steamRoot.exists() && steamFound)
+    {
+        pt::ptree libraryFolders;
+        pt::read_info(steamRoot.filePath("steamapps/libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
+        steamDirectoryList.append(steamRoot.filePath(""));
+        QString pathString = "" + steamDirectoryList.at(0) + "\n";
+
+        for (auto kv : libraryFolders.get_child("LibraryFolders"))
+        {
+            if (std::isdigit(static_cast<int>(*kv.first.data())))
+            {
+                std::string path = kv.second.data();
+                QDir dir(QString::fromStdString(path));
+                if (dir.exists())
+                {
+                    steamDirectoryList.append(dir.filePath(""));
+                    pathString += dir.filePath("");
+                    pathString += "\n";
+                }
+            }
+        }
+
+        // TODO: Make this prompting better/less obtrusive
+        bool directoryPlural = (steamDirectoryList.size() > 1);
+        int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
+        switch(ret)
+        {
+            case QMessageBox::Yes:
+                parseAcf();
+                break;
+            case QMessageBox::No:
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void Library::parseAcf()
+{
+    // TODO: This stuff needs its own thread
+    for(QString iter : steamDirectoryList)
+    {
+        QDir steamAppsDir(iter);
+        steamAppsDir = steamAppsDir.filePath("steamapps");
+        QStringList fileList = steamAppsDir.entryList(QStringList("*.acf"), QDir::Files | QDir::NoSymLinks);
+
+        for (auto fileIter : fileList)
+        {
+            pt::ptree fileTree;
+            std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
+            pt::read_info(acfDir, fileTree);
+
+            QString name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
+            // TODO: Either add SteamID to db, or add getGameByPath
+            QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+            QString exe;
+            QStringList exeList = QDir(path).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
+
+            QFileDialog exeDialog;
+            exeDialog.setWindowTitle("Select Executable");
+            exeDialog.setFileMode(QFileDialog::ExistingFile);
+            exeDialog.setDirectory(path);
+            if (exeDialog.exec())
+            {
+                exe = exeDialog.selectedFiles().at(0);
+            }
+            db.addGame(name, path, exe);
+            refreshGames();
+        }
+    }
 }
