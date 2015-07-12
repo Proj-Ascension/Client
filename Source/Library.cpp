@@ -180,7 +180,7 @@ bool Library::isProcessRunning() const
 
 void Library::findSteamGames()
 {
-	bool steamFound = true;
+    bool steamFound = true;
     QDir steamRoot;
     steamRoot.setPath("");
     #if defined(_WIN32) || defined(_WIN64)
