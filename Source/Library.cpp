@@ -192,7 +192,7 @@ void Library::findSteamGames()
             steamFound = false;
         }
         steamRoot = QDir(steamPath);
-    #elif defined(__apple__)
+    #elif defined(__APPLE__)
         // TODO: however OS X handles steam
         return;
     #elif defined(__linux__)
