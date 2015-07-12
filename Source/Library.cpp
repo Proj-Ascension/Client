@@ -181,6 +181,8 @@ bool Library::isProcessRunning() const
 void Library::findSteamGames()
 {
 	bool steamFound = true;
+    QDir steamRoot;
+    steamRoot.setPath("");
     #if defined(_WIN32) || defined(_WIN64)
         QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
         QString steamPath = settings.value("SteamPath").toString();
@@ -189,13 +191,15 @@ void Library::findSteamGames()
             qDebug("Steam was not found, probably not installed.");
             steamFound = false;
         }
-        QDir steamRoot(steamPath);
+        steamRoot = QDir(steamPath);
     #elif defined(__apple__)
         // TODO: however OS X handles steam
+        return;
     #elif defined(__linux__)
-        QDir steamRoot(QDir::home().filePath(".steam/steam"));
+        steamRoot = QDir(QDir::home().filePath(".steam/steam"));
     #else
         QMessageBox(QMessageBox::Critical, "Error", "Platform doesn't support steam.");
+        return;
     #endif
 
     if (steamRoot.exists() && steamFound)
