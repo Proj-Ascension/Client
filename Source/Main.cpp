@@ -113,9 +113,9 @@ int main(int argc, char* argv[])
     #else
         // Create a Unix window
         UnixWindow window;
-        QSize* size = new QSize(1152, 648);
-        window.resize(*size);
+        window.resize(QSize(1152, 648));
         window.setMinimumSize(830, 550);
+
     #endif
 
     // Launch
