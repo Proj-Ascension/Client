@@ -41,10 +41,9 @@ BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, c
 
     // Center window at runtime
     QRect rec = QApplication::desktop()->screenGeometry();
-    int x = rec.width();
-    int y = rec.height();
-    int offsetX = (x - width) / 2;
-    int offsetY = (y - (y * 0.05) - height) / 2; // Compensate for taskbar
+    int screenWidth = rec.width(), screenHeight = rec.height();
+    int offsetX = (screenWidth - width) / 2;
+    int offsetY = (screenHeight - height) / 2;
 
     hWnd = CreateWindow(_T("WindowClass"), _T("Project Ascension"), static_cast<DWORD>(Style::windowed), offsetX, offsetY, width, height, 0, 0, hInstance, nullptr);
 
