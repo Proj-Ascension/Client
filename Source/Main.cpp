@@ -3,12 +3,47 @@
 #include <QFile>
 #include <QSize>
 #include <QApplication>
+#include <QSettings>
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
 #else
 #include "UnixWindow.h"
 #endif
+
+void g_initSettings()
+{
+    QString configFile = "config.ini", paletteFile = "palette.ini";
+    QSettings config(configFile, QSettings::IniFormat), palette(paletteFile, QSettings::IniFormat);
+
+    if (!QFile(configFile).exists() && config.isWritable())
+    {
+        // TODO: Set default config settings.
+    }
+    if (!QFile(paletteFile).exists() && palette.isWritable())
+    {
+        palette.beginGroup("Primary");
+
+        palette.setValue("ActiveElement"  , "#FFFFFF");
+        palette.setValue("ActiveSelection", "#242424");
+        palette.setValue("HoverSelection" , "#1B1B1B");
+        palette.setValue("LightText"      , "#FFFFFF");
+        palette.setValue("DarkText"       , "#242424");
+        palette.setValue("SubText"        , "#8B8B8B");
+        palette.setValue("PrimaryBase"    , "#282828");
+        palette.setValue("SecondaryBase"  , "#1F1F1F");
+        palette.setValue("TertiaryBase"   , "#181818");
+        palette.setValue("DarkestBase"    , "#0F0F0F");
+        palette.endGroup();
+
+        palette.beginGroup("Accent");
+
+        palette.setValue("LightAccent" , "#68AD28");
+        palette.setValue("MediumAccent", "#589828");
+        palette.setValue("DarkAccent"  , "#487D28");
+        palette.endGroup();
+    }
+}
 
 void g_loadFonts(QApplication* application)
 {
@@ -100,6 +135,7 @@ int main(int argc, char* argv[])
         application->setStyleSheet(styleSheet);
     }
 
+    g_initSettings();
     g_loadFonts(application);
 
     #ifdef Q_OS_WIN
