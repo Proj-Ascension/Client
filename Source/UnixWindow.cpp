@@ -19,7 +19,14 @@ UnixWindow::UnixWindow()
     this->setWindowFlags(Qt::FramelessWindowHint);
     mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    this->adjustSize();
+    // Center window at runtime
+    QRect rec = QApplication::desktop()->screenGeometry();
+    int width = 1152, height = 648, screenWidth = rec.width(), screenHeight = rec.height();
+    int offsetX = (screenWidth - width) / 2;
+    int offsetY = (screenHeight - height) / 2;
+
+    this->resize(width, height);
+    this->move(offsetX, offsetY);
     this->show();
 }
 
