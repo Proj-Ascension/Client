@@ -49,3 +49,14 @@ while/if (a > 3)
     - If your changes are OS-dependent, or you suspect that there may be conflict in that regard, please make that clear.
     - Please don’t open a pull request that adds entirely new features or aesthetic - most of this will be decided by the UI team. PRs should extend or complement existing functionality.
 - Official releases will be reviewed by members of all teams, and confirmed to function properly on several different operating systems and desktop environments.    
+
+## Clang Format
+
+To automate this style, some of our team use [clang-format](http://clang.llvm.org/docs/ClangFormat.html) with the below setup:  
+```YAML
+    BasedOnStyle: "Google"  
+    IndentWidth: 4
+    UseTab: Never   
+    BreakBeforeBraces: Allman  
+    PointerAlignment: Left
+```
