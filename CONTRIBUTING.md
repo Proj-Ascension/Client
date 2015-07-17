@@ -54,9 +54,9 @@ while/if (a > 3)
 
 To automate this style, some of our team use [clang-format](http://clang.llvm.org/docs/ClangFormat.html) with the below setup:  
 ```YAML
-    BasedOnStyle: "Google"  
-    IndentWidth: 4
-    UseTab: Never   
-    BreakBeforeBraces: Allman  
-    PointerAlignment: Left
+BasedOnStyle: "Google"  
+IndentWidth: 4
+UseTab: Never   
+BreakBeforeBraces: Allman  
+PointerAlignment: Left
 ```
