@@ -20,10 +20,10 @@
 namespace pt = boost::property_tree;
 
 Library::Library(Database db)
-  : QWidget(0),
-  db(db),
-  ui(new Ui::Library),
-  runningProcess(new QProcess(this))
+	: QWidget(0),
+	  db(db),
+	  ui(new Ui::Library),
+	  runningProcess(new QProcess(this))
 {
 	ui->setupUi(this);
 	this->setObjectName("libraryUI");
