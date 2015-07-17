@@ -58,41 +58,55 @@ bool Database::removeGameByName(QString name)
 
 Game Database::getGameById(unsigned int id)
 {
-    QSqlQuery query(db);
-    query.prepare("SELECT GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
-    query.bindValue(":id", id);
-    query.exec();
-
-    if (!query.next())
-    {
-        return {0}; // TODO: ERROR HANDLING
-    }
-
-    QString name = query.value(0).toString();
-    QString path = query.value(1).toString();
-    QString exe = query.value(2).toString();
-
-    return {id, name, path, exe};
+    return std::get<1>(isExistant(id));
 }
 
 Game Database::getGameByName(QString name)
+{
+    return std::get<1>(isExistant(name));
+}
+
+std::tuple<bool, Game> Database::isExistant(unsigned int id)
+{
+    QSqlQuery query(db);
+    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
+    query.bindValue(":id", id);
+    query.exec();
+
+    if (query.next())
+    {
+        QString name = query.value(0).toString();
+        QString path = query.value(1).toString();
+        QString exe = query.value(2).toString();
+
+        Game game = {id, name, path, exe};
+        return std::make_tuple(true, game);
+    }
+    else
+    {
+        Game game;
+        return std::make_tuple(false, game);
+    }
+}
+std::tuple<bool, Game> Database::isExistant(QString name)
 {
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :name;");
     query.bindValue(":name", name);
     query.exec();
-
-    if (!query.next())
+    if (query.next())
     {
-        return {0}; // TODO: ERROR HANDLING
+        unsigned int id = query.value(0).toInt();
+        QString path = query.value(1).toString();
+        QString exe = query.value(2).toString();
+        Game game = {id, name, path, exe};
+        return std::make_tuple(true, game);
     }
-
-    unsigned int id = query.value(0).toInt();
-    QString path = query.value(1).toString();
-    QString exe = query.value(2).toString();
-
-    Game game = {id, name, path, exe};
-    return game;
+    else
+    {
+        Game game;
+        return std::make_tuple(false, game);
+    }
 }
 
 QList<Game> Database::getGames()
