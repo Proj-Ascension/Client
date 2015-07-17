@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QProcess>
+#include <QDir>
 
 namespace Ui
 {
@@ -33,8 +34,10 @@ private:
     QList<QString> steamDirectoryList;
 
     bool isProcessRunning() const;
+    QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void runProcess(QString file, QString workingDirectory);
     void refreshGames();
-    void findSteamGames();
+    void findSteamGames(QDir steamRoot);
+    void findOriginGames(QDir originRoot);
     void parseAcf();
 };
