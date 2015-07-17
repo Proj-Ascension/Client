@@ -1,3 +1,5 @@
+#pragma once
+
 #include <QApplication>
 #include <QFontDatabase>
 #include <QSettings>
