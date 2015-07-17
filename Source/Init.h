@@ -8,10 +8,13 @@
 
 namespace entryPoint
 {
-    void initSettings()
+    void initSettings(QApplication* application)
     {
         QString configFile = "config.ini", paletteFile = "palette.ini";
         QSettings config(configFile, QSettings::IniFormat), palette(paletteFile, QSettings::IniFormat);
+
+        config.setPath(QSettings::IniFormat, QSettings::UserScope, application->applicationDirPath());
+        palette.setPath(QSettings::IniFormat, QSettings::UserScope, application->applicationDirPath());
 
         if (!QFile(configFile).exists() && config.isWritable())
         {

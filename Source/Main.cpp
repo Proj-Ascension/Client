@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         application->setStyleSheet(styleSheet);
     }
 
-    entryPoint::initSettings();
+    entryPoint::initSettings(application);
     entryPoint::initFonts(application);
 
     #ifdef Q_OS_WIN
