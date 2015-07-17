@@ -20,12 +20,12 @@
 namespace pt = boost::property_tree;
 
 Library::Library(Database db)
-    : QWidget(0),
-      db(db),
-      ui(new Ui::Library),
-      runningProcess(new QProcess(this))
+: QWidget(0),
+db(db),
+ui(new Ui::Library),
+runningProcess(new QProcess(this))
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 	this->setObjectName("libraryUI");
 	connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
 	connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
@@ -77,7 +77,7 @@ Library::Library(Database db)
 
 Library::~Library()
 {
-    delete ui;
+	delete ui;
 	delete runningProcess;
 }
 
