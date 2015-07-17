@@ -28,7 +28,7 @@ set(HEADERS
     Source/Browser.h
     Source/MainPanel.h
     Source/Database.h
-	Source/Init.h
+    Source/Init.h
 )
 
 set(FORMS
