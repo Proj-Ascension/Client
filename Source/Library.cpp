@@ -20,10 +20,10 @@
 namespace pt = boost::property_tree;
 
 Library::Library(Database db)
-: QWidget(0),
-db(db),
-ui(new Ui::Library),
-runningProcess(new QProcess(this))
+	: QWidget(0),
+	  db(db),
+	  ui(new Ui::Library),
+	  runningProcess(new QProcess(this))
 {
 	ui->setupUi(this);
 	this->setObjectName("libraryUI");
@@ -255,7 +255,7 @@ void Library::findOriginGames(QDir originRoot)
 	QDir originFolder;
 	pt::ptree originTree;
 	read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
-	for (auto &xmlIter : originTree.get_child("Settings"))
+	for (auto& xmlIter : originTree.get_child("Settings"))
 	{
 		if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
 		{
