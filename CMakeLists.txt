@@ -1,10 +1,10 @@
 if(WIN32)
     cmake_minimum_required(VERSION 3.1.0)
+    set(CMAKE_CXX_STANDARD 11)
 else()
-    cmake_minimum_required(VERSION 2.8.11)
+    cmake_minimum_required(VERSION 2.8.12)
+    add_compile_options(-std=c++11)
 endif()
-
-set(CMAKE_CXX_STANDARD 11)
 
 # --- BUILD CONFIGURATION ---
 
@@ -28,6 +28,7 @@ set(HEADERS
     Source/Browser.h
     Source/MainPanel.h
     Source/Database.h
+    Source/Init.h
 )
 
 set(FORMS
@@ -143,10 +144,12 @@ if(WIN32)
         gdi32.lib
         dwmapi.lib
     )
-
-    set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
-    set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
-    set_target_properties(ProjectAscension PROPERTIES COMPILE_FLAGS "/EHsc")
+    
+    if(MSVC)
+        set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
+        set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
+        set_target_properties(ProjectAscension PROPERTIES COMPILE_FLAGS "/EHsc")
+    endif(MSVC)
 endif()
 
 # --- RUNTIME DEPENDENCIES ---

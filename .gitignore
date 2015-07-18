@@ -47,3 +47,7 @@ Makefile*
 *.sdf
 *.vcxproj
 *.vcxproj.filters
+
+#misc
+*.py
+*.pyc

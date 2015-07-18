@@ -1,7 +1,40 @@
 <RCC>
     <qresource prefix="/Typeface">
-        <file>Fonts/Sansation_Bold.ttf</file>
-        <file>Fonts/Sansation_Light.ttf</file>
-        <file>Fonts/Sansation_Regular.ttf</file>
+        <file alias="Montserrat-Black.ttf">Fonts/Montserrat-Black.ttf</file>
+        <file alias="Montserrat-Bold.ttf">Fonts/Montserrat-Bold.ttf</file>
+        <file alias="Montserrat-Light.ttf">Fonts/Montserrat-Light.ttf</file>
+        <file alias="Montserrat-Regular.ttf">Fonts/Montserrat-Regular.ttf</file>
+        <file alias="Montserrat-Thin.ttf">Fonts/Montserrat-Thin.ttf</file>
+        <file alias="Roboto-Black.ttf">Fonts/Roboto-Black.ttf</file>
+        <file alias="Roboto-BlackItalic.ttf">Fonts/Roboto-BlackItalic.ttf</file>
+        <file alias="Roboto-Bold.ttf">Fonts/Roboto-Bold.ttf</file>
+        <file alias="Roboto-BoldItalic.ttf">Fonts/Roboto-BoldItalic.ttf</file>
+        <file alias="Roboto-Italic.ttf">Fonts/Roboto-Italic.ttf</file>
+        <file alias="Roboto-Light.ttf">Fonts/Roboto-Light.ttf</file>
+        <file alias="Roboto-LightItalic.ttf">Fonts/Roboto-LightItalic.ttf</file>
+        <file alias="Roboto-Medium.ttf">Fonts/Roboto-Medium.ttf</file>
+        <file alias="Roboto-MediumItalic.ttf">Fonts/Roboto-MediumItalic.ttf</file>
+        <file alias="Roboto-Regular.ttf">Fonts/Roboto-Regular.ttf</file>
+        <file alias="Roboto-Thin.ttf">Fonts/Roboto-Thin.ttf</file>
+        <file alias="Roboto-ThinItalic.ttf">Fonts/Roboto-ThinItalic.ttf</file>
+        <file alias="SourceSansPro-Black.ttf">Fonts/SourceSansPro-Black.ttf</file>
+        <file alias="SourceSansPro-BlackItalic.ttf">Fonts/SourceSansPro-BlackItalic.ttf</file>
+        <file alias="SourceSansPro-Bold.ttf">Fonts/SourceSansPro-Bold.ttf</file>
+        <file alias="SourceSansPro-BoldItalic.ttf">Fonts/SourceSansPro-BoldItalic.ttf</file>
+        <file alias="SourceSansPro-ExtraLight.ttf">Fonts/SourceSansPro-ExtraLight.ttf</file>
+        <file alias="SourceSansPro-ExtraLightItalic.ttf">Fonts/SourceSansPro-ExtraLightItalic.ttf</file>
+        <file alias="SourceSansPro-Italic.ttf">Fonts/SourceSansPro-Italic.ttf</file>
+        <file alias="SourceSansPro-Light.ttf">Fonts/SourceSansPro-Light.ttf</file>
+        <file alias="SourceSansPro-LightItalic.ttf">Fonts/SourceSansPro-LightItalic.ttf</file>
+        <file alias="SourceSansPro-Regular.ttf">Fonts/SourceSansPro-Regular.ttf</file>
+        <file alias="SourceSansPro-Semibold.ttf">Fonts/SourceSansPro-Semibold.ttf</file>
+        <file alias="SourceSansPro-SemiboldItalic.ttf">Fonts/SourceSansPro-SemiboldItalic.ttf</file>
+        <file alias="SourceCodePro-Black.ttf">Fonts/SourceCodePro-Black.ttf</file>
+        <file alias="SourceCodePro-Bold.ttf">Fonts/SourceCodePro-Bold.ttf</file>
+        <file alias="SourceCodePro-ExtraLight.ttf">Fonts/SourceCodePro-ExtraLight.ttf</file>
+        <file alias="SourceCodePro-Light.ttf">Fonts/SourceCodePro-Light.ttf</file>
+        <file alias="SourceCodePro-Medium.ttf">Fonts/SourceCodePro-Medium.ttf</file>
+        <file alias="SourceCodePro-Regular.ttf">Fonts/SourceCodePro-Regular.ttf</file>
+        <file alias="SourceCodePro-Semibold.ttf">Fonts/SourceCodePro-Semibold.ttf</file>
     </qresource>
 </RCC>
