@@ -19,7 +19,14 @@ UnixWindow::UnixWindow()
     this->setWindowFlags(Qt::FramelessWindowHint);
     mainPanel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    this->adjustSize();
+    // Center window at runtime
+    QRect rec = QApplication::desktop()->screenGeometry();
+    int width = 1152, height = 648, screenWidth = rec.width(), screenHeight = rec.height();
+    int offsetX = (screenWidth - width) / 2;
+    int offsetY = (screenHeight - height) / 2;
+
+    this->resize(width, height);
+    this->move(offsetX, offsetY);
     this->show();
 }
 
@@ -48,6 +55,10 @@ void UnixWindow::closeWindow()
 void UnixWindow::mousePressEvent(QMouseEvent* evt)
 {
     oldWindowPos = evt->globalPos();
+    if (evt->pos().y() < 70)
+    {
+        dragging = true;
+    }
 }
 
 void UnixWindow::mouseReleaseEvent(QMouseEvent* evt)
@@ -58,7 +69,7 @@ void UnixWindow::mouseReleaseEvent(QMouseEvent* evt)
 void UnixWindow::mouseMoveEvent(QMouseEvent* evt)
 {
     const QPoint c_delta = evt->globalPos() - oldWindowPos;
-    if (evt->pos().y() < 70 || dragging)
+    if (dragging)
     {
         dragging = true;
         move(x() + c_delta.x(), y() + c_delta.y());
