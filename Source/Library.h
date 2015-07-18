@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QProcess>
+#include <QDir>
 
 namespace Ui
 {
@@ -27,15 +28,17 @@ public:
 	void on_removeGame_clicked();
 
 private:
-	Database db;
-	Ui::Library* ui;
-	QProcess* runningProcess;
-	QList<QString> steamDirectoryList;
+    Database db;
+    Ui::Library* ui;
+    QProcess* runningProcess;
+    QList<QString> steamDirectoryList;
 
-	bool isProcessRunning() const;
-	void runProcess(QString file, QString workingDirectory);
-	void refreshGames();
-	void findSteamGames();
-	void findUplayGames();
-	void parseAcf();
+    bool isProcessRunning() const;
+    QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
+    void runProcess(QString file, QString workingDirectory);
+    void refreshGames();
+    void findSteamGames(QDir steamRoot);
+    void findOriginGames(QDir originRoot);
+		void findUplayGames();
+    void parseAcf();
 };
