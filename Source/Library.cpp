@@ -58,6 +58,8 @@ Library::Library(Database db)
                        QSettings::NativeFormat);
     QString steamPath = settings.value("SteamPath").toString();
     steamRoot = QDir(steamPath);
+
+    steamFound = steamRoot != QDir::currentPath();
 #elif defined(__APPLE__)
     // TODO: however OS X handles steam
     return;
