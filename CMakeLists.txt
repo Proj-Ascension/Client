@@ -125,7 +125,7 @@ if(WIN32)
         dwmapi.lib
     )
     
-    set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
+    set(WIN_LINKFLAGS \"${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res\")
     set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
 endif()
 
