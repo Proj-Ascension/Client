@@ -59,4 +59,5 @@ IndentWidth: 4
 UseTab: Never   
 BreakBeforeBraces: Allman  
 PointerAlignment: Left
+ColumnLimit: 0
 ```
