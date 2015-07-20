@@ -40,7 +40,8 @@ Library::Library(Database db)
 
     refreshGames();
 
-    bool loadSteam = false;
+	// For debugging
+    bool loadSteam = true;
     bool loadOrigin = false;
     bool loadUplay = true;
     QDir originRoot(qgetenv("APPDATA").append("/Origin"));
@@ -53,9 +54,14 @@ Library::Library(Database db)
         qDebug() << "Origin not found. Possibly not installed.";
     }
 
+	QDir steamRoot;
 #if defined(_WIN32) || defined(_WIN64)
     QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
-    QDir steamRoot = settings.value("SteamPath").toString();
+	if (!settings.value("SteamPath").isNull())
+	{
+		steamRoot = QDir(settings.value("SteamPath").toString());
+	}
+
 #elif defined(__APPLE__)
     // TODO: however OS X handles steam
     return;
@@ -66,7 +72,7 @@ Library::Library(Database db)
     return;
 #endif
 
-    if (steamRoot.exists() && loadSteam)
+    if (steamRoot != QDir(".") && loadSteam)
     {
         findSteamGames(steamRoot);
     }
