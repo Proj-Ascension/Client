@@ -233,8 +233,14 @@ bool Library::isProcessRunning() const
 
 void Library::findSteamGames(QDir steamRoot)
 {
+
+    QDir steamAppsDir = steamRoot.filePath("steamapps");
+    if (!steamAppsDir.exists())
+    {
+        steamAppsDir = steamRoot.filePath("SteamApps");
+    }
     pt::ptree libraryFolders;
-    pt::read_info(steamRoot.filePath("steamapps/libraryfolders.vdf")
+    pt::read_info(steamAppsDir.filePath("libraryfolders.vdf")
                       .toLocal8Bit()
                       .constData(),
                   libraryFolders);
@@ -371,7 +377,15 @@ void Library::parseAcf()
     for (QString iter : steamDirectoryList)
     {
         QDir steamAppsDir(iter);
-        steamAppsDir = steamAppsDir.filePath("steamapps");
+        if (steamAppsDir.exists("SteamApps"))
+        {
+            steamAppsDir = steamAppsDir.filePath("SteamApps");
+        }
+        else
+        {
+            steamAppsDir = steamAppsDir.filePath("steamapps");
+        }
+
         QStringList fileList = steamAppsDir.entryList(
             QStringList("*.acf"), QDir::Files | QDir::NoSymLinks);
 
