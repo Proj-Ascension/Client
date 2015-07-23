@@ -8,7 +8,7 @@
 
 namespace Ui
 {
-    class Library;
+class Library;
 }
 
 class Library : public QWidget
@@ -39,5 +39,6 @@ private:
     void refreshGames();
     void findSteamGames(QDir steamRoot);
     void findOriginGames(QDir originRoot);
+    void findUplayGames(QDir uplayRoot);
     void parseAcf();
 };
