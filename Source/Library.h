@@ -39,5 +39,5 @@ private:
     void refreshGames();
     void findSteamGames(QDir steamRoot);
     void findOriginGames(QDir originRoot);
-    void parseAcf();
+    void parseAcf(QDir steamRoot);
 };
