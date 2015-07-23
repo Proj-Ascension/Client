@@ -13,20 +13,16 @@ namespace SteamVdfParse
 {
 uint32_t read32_le(std::istream& stream)
 {
-    char b[4];
-    stream.read(b, 4);
-    return static_cast<uint32_t>((b[0]) | (b[1] << 8) | (b[2] << 16) |
-                                 (b[3] << 24));
+    return static_cast<uint32_t>((stream.get()) | (stream.get() << 8) | (stream.get() << 16) |
+                                 (stream.get() << 24));
 }
 
 uint64_t read64_le(std::istream& stream)
 {
-    char b[8];
-    stream.read(b, 8);
     return static_cast<uint64_t>(
-        (b[0]) | (b[1] << 8) | (b[2] << 16) | (b[3] << 24) |
-        ((uint64_t)b[4] << 32) | ((uint64_t)b[5] << 40) |
-        ((uint64_t)b[6] << 48) | ((uint64_t)b[7] << 56));
+        (stream.get()) | (stream.get() << 8) | (stream.get() << 16) | (stream.get() << 24) |
+        ((uint64_t)stream.get() << 32) | ((uint64_t)stream.get() << 40) |
+        ((uint64_t)stream.get() << 48) | ((uint64_t)stream.get() << 56));
 }
 
 std::string readString(std::istream& stream)
@@ -152,6 +148,7 @@ Game parseGame(std::istream& input)
     {
         return game;
     }
+    std::cout << "Parsing game id: " << game.appID << std::endl;
     game.size = read32_le(input);
     game.infoState = read32_le(input);
     game.lastUpdated = read32_le(input);
