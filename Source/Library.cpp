@@ -340,35 +340,6 @@ void Library::findOriginGames(QDir originRoot)
     }
 }
 
-QStringList Library::recursiveFindFiles(QDir dir, QStringList ignoreList)
-{
-    QStringList dirList;
-    QDirIterator it(dir, QDirIterator::Subdirectories);
-
-    while (it.hasNext())
-    {
-        QDir cur = it.next();
-        if (!ignoreList.contains(cur.dirName()))
-        {
-            bool found = false;
-            for (auto foundIter : dirList)
-            {
-                if (QDir(foundIter).dirName() == cur.dirName())
-                {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found && cur.dirName() != QDir::currentPath())
-            {
-                dirList.append(cur.filePath(""));
-            }
-        }
-    }
-
-    return dirList;
-}
-
 void Library::findUplayGames(QDir uplayRoot)
 {
     QDir uplayFolder;
@@ -425,6 +396,35 @@ void Library::findUplayGames(QDir uplayRoot)
             qDebug() << fileIter;
         }
     }
+}
+
+QStringList Library::recursiveFindFiles(QDir dir, QStringList ignoreList)
+{
+    QStringList dirList;
+    QDirIterator it(dir, QDirIterator::Subdirectories);
+
+    while (it.hasNext())
+    {
+        QDir cur = it.next();
+        if (!ignoreList.contains(cur.dirName()))
+        {
+            bool found = false;
+            for (auto foundIter : dirList)
+            {
+                if (QDir(foundIter).dirName() == cur.dirName())
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && cur.dirName() != QDir::currentPath())
+            {
+                dirList.append(cur.filePath(""));
+            }
+        }
+    }
+
+    return dirList;
 }
 
 void Library::parseAcf()
