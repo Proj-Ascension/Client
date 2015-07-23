@@ -1,5 +1,4 @@
-#BuildStatus
-[![Build Status](https://semaphoreci.com/api/v1/projects/bf0fff31-460c-4811-8ad8-89a7da549a34/492096/badge.svg)](https://semaphoreci.com/elken/client)      [![Join the chat at https://gitter.im/Proj-Ascension/Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Proj-Ascension/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+#Project Ascension Client [![Join the chat at https://gitter.im/Proj-Ascension/Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Proj-Ascension/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/Proj-Ascension/Client.svg?branch=master)](https://travis-ci.org/Proj-Ascension/Client)
 
 
 This is the official repo for the client of Project Ascension. 
