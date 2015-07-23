@@ -412,7 +412,13 @@ void Library::parseAcf(QDir steamRoot)
                         {
 #endif
                             exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
-                            path = QDir(path).filePath(QString::fromStdString(section.get<std::string>("workingdir")));
+                            try
+                            {
+                                path = QDir(path).filePath(QString::fromStdString(section.get<std::string>("workingdir")));
+                            }
+                            catch (boost::bad_any_cast&)
+                            {
+                            }
                         }
                     }
                 }

@@ -44,11 +44,11 @@ struct Section
         {
             return boost::any_cast<Type>(kv[key]);
         }
-        catch (const boost::bad_any_cast&)
+        catch (const boost::bad_any_cast& e)
         {
             std::cerr << "Cannot cast value at " << key
                       << " to the wanted type." << std::endl;
-            return {0};
+            throw e;
         }
     }
 };
