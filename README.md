@@ -1,5 +1,10 @@
 #BuildStatus
-[![Build Status](https://semaphoreci.com/api/v1/projects/bf0fff31-460c-4811-8ad8-89a7da549a34/492096/badge.svg)](https://semaphoreci.com/elken/client)      
+[![Build Status](https://semaphoreci.com/api/v1/projects/bf0fff31-460c-4811-8ad8-89a7da549a34/492096/badge.svg)](https://semaphoreci.com/elken/client)      [![Join the chat at https://gitter.im/Proj-Ascension/Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Proj-Ascension/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+
+
+This is the official repo for the client of Project Ascension. 
+
+If you have any questions about the project, feel free to jump in our gitter room and ask!
 
 
 # Project Ascension Client Interface

@@ -28,6 +28,7 @@ set(HEADERS
     Source/Browser.h
     Source/MainPanel.h
     Source/Database.h
+    Source/Init.h
 )
 
 set(FORMS
@@ -145,7 +146,7 @@ if(WIN32)
     )
     
     if(MSVC)
-        set(WIN_LINKFLAGS ${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res)
+        set(WIN_LINKFLAGS \"${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res\")
         set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
         set_target_properties(ProjectAscension PROPERTIES COMPILE_FLAGS "/EHsc")
     endif(MSVC)
