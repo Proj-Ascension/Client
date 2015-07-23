@@ -1,5 +1,6 @@
 #BuildStatus
-[![Build Status](https://travis-ci.org/Proj-Ascension/Client.svg?branch=master)](https://travis-ci.org/Proj-Ascension/Client)
+[![Build Status](https://semaphoreci.com/api/v1/projects/bf0fff31-460c-4811-8ad8-89a7da549a34/492096/badge.svg)](https://semaphoreci.com/elken/client)      
+
 
 # Project Ascension Client Interface
 A tentative user interface for [Project Ascension](http://reddit.com/r/Project_Ascension). Code and styling for the borderless window system is pulled from deimos1877's [BorderlessWindow](http://github.com/deimos1877/BorderlessWindow).
