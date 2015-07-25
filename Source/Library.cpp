@@ -1,5 +1,6 @@
 #include "Library.h"
 #include "ui_Library.h"
+#include "Libs/SteamVdfParse.hpp"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -263,19 +264,17 @@ void Library::findSteamGames(QDir steamRoot)
 
     // TODO: Make this prompting better/less obtrusive
     bool directoryPlural = (steamDirectoryList.size() > 1);
-    int ret =
-        QMessageBox(QMessageBox::Question,
+    int ret = QMessageBox(QMessageBox::Question,
                     "Found " + QString::number(steamDirectoryList.size()) +
                         " director" + (directoryPlural ? "ies" : "y"),
                     QString::number(steamDirectoryList.size()) +
                         " directories have been found.\n\n" + pathString +
                         "Proceed?",
-                    QMessageBox::Yes | QMessageBox::No)
-            .exec();
+                    QMessageBox::Yes | QMessageBox::No).exec();
     switch (ret)
     {
         case QMessageBox::Yes:
-            parseAcf();
+            parseAcf(steamRoot);
             break;
         case QMessageBox::No:
             break;
@@ -292,11 +291,9 @@ void Library::findOriginGames(QDir originRoot)
              originTree);
     for (auto& xmlIter : originTree.get_child("Settings"))
     {
-        if (xmlIter.second.get<std::string>("<xmlattr>.key") ==
-            "DownloadInPlaceDir")
+        if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
         {
-            originFolder = QString::fromStdString(
-                xmlIter.second.get<std::string>("<xmlattr>.value"));
+            originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
             qDebug() << originFolder;
             break;
         }
@@ -427,9 +424,13 @@ QStringList Library::recursiveFindFiles(QDir dir, QStringList ignoreList)
     return dirList;
 }
 
-void Library::parseAcf()
+void Library::parseAcf(QDir steamRoot)
 {
     // TODO: This stuff needs its own thread
+    QString vdfPath = steamRoot.filePath("appcache/appinfo.vdf");
+    qDebug() << "Parsing Steam vdf, located at:" << vdfPath;
+    auto games = SteamVdfParse::parseVdf(vdfPath.toLocal8Bit().constData());
+
     for (QString iter : steamDirectoryList)
     {
         QDir steamAppsDir(iter);
@@ -462,10 +463,62 @@ void Library::parseAcf()
             exeDialog.setDirectory(path);
             if (exeDialog.exec())
             {
-                exe = exeDialog.selectedFiles().at(0);
+                QString path = steamAppsDir.filePath("common/" + QString::fromStdString(
+                        fileTree.get<std::string>("AppState.installdir")));
+
+                QString exe;
+
+                int id = std::stoi(fileTree.get<std::string>("AppState.appid"));
+                try
+                {
+                    auto game = games.at(id);
+                    auto config = game.sections.at("config");
+                    auto launch = config.get<SteamVdfParse::Section>("launch");
+                    for (auto pair : launch.kv)
+                    {
+                        auto section = boost::any_cast<SteamVdfParse::Section>(pair.second);
+                        auto osList = section.get<SteamVdfParse::Section>("config").get<std::string>("oslist");
+#if defined(__linux__)
+                        if (osList == "linux")
+                        {
+#elif defined(_WIN32) || defined(_WIN64)
+                        if (osList == "windows")
+                        {
+#elif defined(__APPLE__)
+                        if (osList == "macos")
+                        {
+#endif
+                            exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                            try
+                            {
+                                path = QDir(path).filePath(QString::fromStdString(section.get<std::string>("workingdir")));
+                            }
+                            catch (boost::bad_any_cast&)
+                            {
+                            }
+                        }
+                    }
+                }
+                catch (const std::out_of_range&)
+                {
+                    qDebug() << "The game id:" << id
+                             << "was not found in the Steam appinfo.vdf.";
+                    QStringList exeList = QDir(path).entryList(
+                        QDir::Files | QDir::NoSymLinks | QDir::Executable);
+
+                    QFileDialog exeDialog;
+                    exeDialog.setWindowTitle("Select Executable");
+                    exeDialog.setFileMode(QFileDialog::ExistingFile);
+                    exeDialog.setDirectory(path);
+                    if (exeDialog.exec())
+                    {
+                        exe = exeDialog.selectedFiles().at(0);
+                    }
+                }
+
+                db.addGame(name, path, exe);
+                refreshGames();
             }
-            db.addGame(name, path, exe);
-            refreshGames();
         }
     }
 }

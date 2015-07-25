@@ -29,6 +29,7 @@ set(HEADERS
     Source/MainPanel.h
     Source/Database.h
     Source/Init.h
+    Source/Libs/SteamVdfParse.hpp
 )
 
 set(FORMS

@@ -40,5 +40,5 @@ private:
     void findSteamGames(QDir steamRoot);
     void findOriginGames(QDir originRoot);
     void findUplayGames(QDir uplayRoot);
-    void parseAcf();
+    void parseAcf(QDir steamRoot);
 };
