@@ -148,7 +148,7 @@ Game parseGame(std::istream& input)
     {
         return game;
     }
-    std::cout << "Parsing game id: " << game.appID << std::endl;
+
     game.size = read32_le(input);
     game.infoState = read32_le(input);
     game.lastUpdated = read32_le(input);
