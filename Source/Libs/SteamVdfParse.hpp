@@ -46,8 +46,8 @@ struct Section
         }
         catch (const boost::bad_any_cast& e)
         {
-            std::cerr << "Cannot cast value at " << key
-                      << " to the wanted type." << std::endl;
+            std::cerr << "Cannot cast value at \"" << key
+                      << "\" to the intended type." << std::endl;
             throw e;
         }
     }
