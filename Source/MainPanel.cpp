@@ -48,15 +48,12 @@ void MainPanel::init()
     }
 
     stack = new QStackedWidget(this);
-
     QString style = g_getStylesheet(":/Styles/Content.css");
+
     // Prepare UI objects for each tab
     libraryPtr = new Library(db);
     libraryPtr->setStyleSheet(style);
-    browserPtr = new Browser();
-    browserPtr->setStyleSheet(style);
     stack->addWidget(libraryPtr);
-    stack->addWidget(browserPtr);
     stack->setCurrentWidget(libraryPtr);
 
     // System layout
@@ -94,7 +91,7 @@ void MainPanel::init()
     headerLayout->addWidget(windowTitle);
     headerLayout->addSpacing(40);
 
-    // Header tabs
+    // Sidebar tabs
     libraryTab = new TabLabel(this);
     libraryTab = g_tabFactory(libraryTab, "libraryTab", "LIBRARY");
     headerLayout->addSpacing(8);
@@ -115,11 +112,6 @@ void MainPanel::init()
     newsTab = g_tabFactory(newsTab, "newsTab", "NEWS");
     headerLayout->addSpacing(8);
     headerLayout->addWidget(newsTab);
-
-    browserTab = new TabLabel(this);
-    browserTab = g_tabFactory(browserTab, "browserTab", "BROWSER");
-    headerLayout->addSpacing(8);
-    headerLayout->addWidget(browserTab);
 
     activeTab = libraryTab;
 
@@ -176,7 +168,6 @@ void MainPanel::init()
 
     // Connect signals
     connect(libraryTab, SIGNAL(clicked()), this, SLOT(setTabLibrary()));
-    connect(browserTab, SIGNAL(clicked()), this, SLOT(setTabBrowser()));
 
     // Show
     centralWidget->setLayout(verticalLayout);
@@ -192,17 +183,6 @@ void MainPanel::setTabLibrary()
         activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
         stack->setCurrentWidget(libraryPtr);
         activeTab = libraryTab;
-        activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
-    }
-}
-
-void MainPanel::setTabBrowser()
-{
-    if (stack->currentWidget()->objectName() != "browserUI")
-    {
-        activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
-        stack->setCurrentWidget(browserPtr);
-        activeTab = browserTab;
         activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
     }
 }

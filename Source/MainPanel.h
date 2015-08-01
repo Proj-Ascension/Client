@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Library.h"
-#include "Browser.h"
 #include "TabLabel.h"
 #include "Database.h"
 
@@ -21,7 +20,6 @@ public:
 
 public slots:
     void setTabLibrary();
-    void setTabBrowser();
     virtual void pushButtonMinimize() = 0;
     virtual void pushButtonMaximize() = 0;
     virtual void pushButtonClose() = 0;
@@ -31,14 +29,12 @@ protected:
 
     QStackedWidget* stack;
     QWidget* libraryPtr;
-    QWidget* browserPtr;
 
     TabLabel* activeTab;
     TabLabel* libraryTab;
     TabLabel* storeTab;
     TabLabel* modsTab;
     TabLabel* newsTab;
-    TabLabel* browserTab;
 
     void init();
 };

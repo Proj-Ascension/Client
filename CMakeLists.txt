@@ -17,7 +17,6 @@ set(SOURCE
     Source/Main.cpp
     Source/TabLabel.cpp
     Source/Library.cpp
-    Source/Browser.cpp
     Source/MainPanel.cpp
     Source/Database.cpp
 )
@@ -25,7 +24,6 @@ set(SOURCE
 set(HEADERS
     Source/TabLabel.h
     Source/Library.h
-    Source/Browser.h
     Source/MainPanel.h
     Source/Database.h
     Source/Init.h
@@ -34,7 +32,6 @@ set(HEADERS
 
 set(FORMS
     Resource/UI/Library.ui
-    Resource/UI/Browser.ui
 )
 
 set(RESOURCES
@@ -91,9 +88,9 @@ endif()
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(Qt5Network REQUIRED)
-find_package(Qt5WebKit REQUIRED)
-find_package(Qt5WebKitWidgets REQUIRED)
+# find_package(Qt5Network REQUIRED)
+# find_package(Qt5WebKit REQUIRED)
+# find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Boost REQUIRED)
 
@@ -105,9 +102,9 @@ include_directories(
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Network_INCLUDE_DIRS}
-    ${Qt5WebKit_INCLUDE_DIRS}
-    ${Qt5WebKitWidgets_INCLUDE_DIRS}
+#   ${Qt5Network_INCLUDE_DIRS}
+#   ${Qt5WebKit_INCLUDE_DIRS}
+#   ${Qt5WebKitWidgets_INCLUDE_DIRS}
     ${Qt5Sql_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     BorderlessWindow
@@ -124,18 +121,18 @@ target_link_libraries(ProjectAscension
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
-    Qt5::Network
-    Qt5::WebKit
-    Qt5::WebKitWidgets
+#	Qt5::Network
+#	Qt5::WebKit
+#	Qt5::WebkitWidgets
     Qt5::Sql
     ${Boost_LIBRARIES}
 )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Network_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebKit_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebkitWidgets_EXECUTABLE_COMPILE_FLAGS}")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Network_EXECUTABLE_COMPILE_FLAGS}")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebKit_EXECUTABLE_COMPILE_FLAGS}")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebkitWidgets_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Sql_EXECUTABLE_COMPILE_FLAGS}")
 set(CMAKE_CXX_FLAGS -fPIC)
 
@@ -172,9 +169,9 @@ if(WIN32)
         Qt5Widgetsd.dll
         Qt5Guid.dll
         Qt5Cored.dll
-        Qt5Networkd.dll
-        Qt5WebKitd.dll
-        Qt5WebKitWidgetsd.dll
+#       Qt5Networkd.dll
+#       Qt5WebKitd.dll
+#       Qt5WebKitWidgetsd.dll
         Qt5Sqld.dll
         Qt5Sensorsd.dll
         Qt5Positioningd.dll
@@ -182,7 +179,7 @@ if(WIN32)
         Qt5Qmld.dll
         Qt5Multimediad.dll
         Qt5MultimediaWidgetsd.dll
-        Qt5WebChanneld.dll
+#       Qt5WebChanneld.dll
         Qt5OpenGLd.dll
         Qt5PrintSupportd.dll
         icuin${ICU_VER}.dll

@@ -1,6 +1,5 @@
 #include "WinWindow.h"
 #include "Library.h"
-#include "Browser.h"
 
 #include <QApplication>
 #include <QGridLayout>
