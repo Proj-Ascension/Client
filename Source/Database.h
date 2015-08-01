@@ -10,6 +10,7 @@ struct Game
     QString gameName;
     QString gameDirectory;
     QString executablePath;
+	QString arguments;
 };
 
 class Database
@@ -19,7 +20,7 @@ public:
     bool init();
     bool reset();
 
-    bool addGame(QString gameName, QString gameDirectory, QString executablePath);
+    bool addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments);
     bool removeGameById(unsigned int id);
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
