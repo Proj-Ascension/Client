@@ -95,7 +95,6 @@ void Library::on_testLaunch_clicked()
         if (selection != nullptr)
         {
             Game game = db.getGameByName(selection->text());
-			qDebug() << game.arguments;
 			if (game.arguments.trimmed() == "")
 			{
 				runProcess(game.executablePath, game.gameDirectory);
