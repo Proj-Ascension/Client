@@ -38,9 +38,9 @@ void initSettings(QApplication* application)
 
         palette.beginGroup("Accent");
 
-        palette.setValue("LightAccent", "#68AD28");
-        palette.setValue("MediumAccent", "#589828");
-        palette.setValue("DarkAccent", "#487D28");
+        palette.setValue("LightAccent", "#FF9F14");
+        palette.setValue("MediumAccent", "#E58F12");
+        palette.setValue("DarkAccent", "#BF770F");
         palette.endGroup();
     }
 }
