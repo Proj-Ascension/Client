@@ -8,13 +8,13 @@
 
 namespace entryPoint
 {
-void initSettings(QApplication* application)
+void initSettings(QApplication &application)
 {
     QString configFile = "config.ini", paletteFile = "palette.ini";
     QSettings config(configFile, QSettings::IniFormat), palette(paletteFile, QSettings::IniFormat);
 
-    config.setPath(QSettings::IniFormat, QSettings::UserScope, application->applicationDirPath());
-    palette.setPath(QSettings::IniFormat, QSettings::UserScope, application->applicationDirPath());
+    config.setPath(QSettings::IniFormat, QSettings::UserScope, application.applicationDirPath());
+    palette.setPath(QSettings::IniFormat, QSettings::UserScope, application.applicationDirPath());
 
     if (!QFile(configFile).exists() && config.isWritable())
     {
@@ -45,12 +45,12 @@ void initSettings(QApplication* application)
     }
 }
 
-void initFonts(QApplication* application)
+void initFonts(QApplication &application)
 {
     // Font
-    QFont mainFont = application->font();
+    QFont mainFont = application.font();
     mainFont.setStyleStrategy(QFont::PreferAntialias);
-    application->setFont(mainFont);
+    application.setFont(mainFont);
 
     // Dynamically load fonts
     QStringList list;

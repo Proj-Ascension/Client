@@ -166,6 +166,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
     }
     case WM_DESTROY:
     {
+        delete(mainPanel);
         PostQuitMessage(0);
         break;
     }
