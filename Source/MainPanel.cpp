@@ -16,7 +16,7 @@ TabLabel* g_tabFactory(TabLabel* label, QString name, QString text)
     return label;
 }
 
-QString getStylesheet(QString location)
+QString g_getStylesheet(QString location)
 {
     QFile stylesheet(location);
     if (stylesheet.open(QFile::ReadOnly))
@@ -27,8 +27,8 @@ QString getStylesheet(QString location)
     return "";
 }
 
-MainPanel::MainPanel(QWidget* parent) :
-    QWidget(parent)
+MainPanel::MainPanel(QWidget* parent)
+    : QWidget(parent)
 {
     setObjectName("mainPanel");
 
@@ -49,7 +49,7 @@ void MainPanel::init()
 
     stack = new QStackedWidget(this);
 
-    QString style = getStylesheet(":/Styles/Content.css");
+    QString style = g_getStylesheet(":/Styles/Content.css");
     // Prepare UI objects for each tab
     libraryPtr = new Library(db);
     libraryPtr->setStyleSheet(style);
@@ -198,7 +198,7 @@ void MainPanel::setTabLibrary()
 
 void MainPanel::setTabBrowser()
 {
-    if(stack->currentWidget()->objectName() != "browserUI")
+    if (stack->currentWidget()->objectName() != "browserUI")
     {
         activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
         stack->setCurrentWidget(browserPtr);

@@ -1,15 +1,16 @@
 #pragma once
 
+#include <tuple>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-typedef struct
+struct Game
 {
     unsigned int id;
     QString gameName;
     QString gameDirectory;
     QString executablePath;
-} Game;
+};
 
 class Database
 {
@@ -23,6 +24,8 @@ public:
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
     Game getGameByName(QString name);
+    std::tuple<bool, Game> isExistant(unsigned int id);
+    std::tuple<bool, Game> isExistant(QString name);
     QList<Game> getGames();
     unsigned int getGameCount();
 private:
