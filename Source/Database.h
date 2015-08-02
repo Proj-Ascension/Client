@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tuple>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
@@ -12,8 +13,8 @@ typedef struct
 {
     unsigned int id; /*!< Unique identifier for each game. */
     QString gameName;  /*!< Name to display within the client. */
-    QString gameDirectory; /*! Directory to use, for loading save files & configuration. */
-    QString executablePath; /*! Path to the executable. */
+    QString gameDirectory; /*!< Directory to use, for loading save files & configuration. */
+    QString executablePath; /*!< Path to the executable. */
 } Game;
 
 //! Database class
@@ -32,6 +33,8 @@ public:
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);
     Game getGameByName(QString name);
+    std::tuple<bool, Game> isExistant(unsigned int id);
+    std::tuple<bool, Game> isExistant(QString name);
     QList<Game> getGames();
     unsigned int getGameCount();
 private:

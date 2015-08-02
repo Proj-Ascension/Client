@@ -8,7 +8,8 @@
  * Currently no interface to handle remote databases, just creates on in the
  * current working directory.
 */
-Database::Database() : db(QSqlDatabase::addDatabase("QSQLITE"))
+Database::Database()
+    : db(QSqlDatabase::addDatabase("QSQLITE"))
 {
     db.setHostName("localhost");
     db.setDatabaseName("ascension.db");
@@ -38,7 +39,7 @@ bool Database::init()
 bool Database::reset()
 {
     QSqlQuery query(db);
-    return  query.exec("DROP TABLES *");
+    return query.exec("DROP TABLES *");
 }
 
 /*! Add a game to the database and repopulate the games list.
@@ -80,52 +81,77 @@ bool Database::removeGameByName(QString name)
     return query.exec();
 }
 
+/*! Wrapper to access the Game object from the ID
+ * \param id ID to find
+ * \return A Game object, empty upon failure
+*/
+Game Database::getGameById(unsigned int id)
+{
+    return std::get<1>(isExistant(id));
+}
+
+/*! Wrapper to access the Game object from the name
+ * \param id ID to find
+ * \return A Game object, empty upon failure
+*/
+Game Database::getGameByName(QString name)
+{
+    return std::get<1>(isExistant(name));
+}
+
 /*! Perform a query to find a specific game in the database by their ID. Unsafe at the
  * moment.
  * \param id ID of the game to find.
  * \return A Game object upon success, 0 upon failure.
 */
-Game Database::getGameById(unsigned int id)
+std::tuple<bool, Game> Database::isExistant(unsigned int id)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
+    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
     query.bindValue(":id", id);
     query.exec();
 
-    if (!query.next())
+    if (query.next())
     {
-        return {0}; // TODO: ERROR HANDLING
+        QString name = query.value(0).toString();
+        QString path = query.value(1).toString();
+        QString exe = query.value(2).toString();
+
+        Game game = {id, name, path, exe};
+        return std::make_tuple(true, game);
     }
-
-    QString name = query.value(0).toString();
-    QString path = query.value(1).toString();
-    QString exe = query.value(2).toString();
-
-    return {id, name, path, exe};
+    else
+    {
+        Game game;
+        return std::make_tuple(false, game);
+    }
 }
 
-/*! Perform a query to find a specific game by their name. Unsafe at the moment.
+/*! Perform a query to find a specific game by their name. (Soon to be
+ * deprecated)
+ *
  * \param name Name of the game to find.
  * \return A Game object upon success, 0 upon failure.
 */
-Game Database::getGameByName(QString name)
+std::tuple<bool, Game> Database::isExistant(QString name)
 {
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :name;");
     query.bindValue(":name", name);
     query.exec();
-
-    if (!query.next())
+    if (query.next())
     {
-        return {0}; // TODO: ERROR HANDLING
+        unsigned int id = query.value(0).toInt();
+        QString path = query.value(1).toString();
+        QString exe = query.value(2).toString();
+        Game game = {id, name, path, exe};
+        return std::make_tuple(true, game);
     }
-
-    unsigned int id = query.value(0).toInt();
-    QString path = query.value(1).toString();
-    QString exe = query.value(2).toString();
-
-    Game game = {id, name, path, exe};
-    return game;
+    else
+    {
+        Game game;
+        return std::make_tuple(false, game);
+    }
 }
 
 /*! Perform a query to find every game in the database.

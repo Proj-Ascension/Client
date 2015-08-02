@@ -6,9 +6,9 @@
  * Creates the Browser object, allocates the UI and sets up a parent QWidget
  * \param parent QWidget* object to use as the parent.
 */
-Browser::Browser(QWidget* parent) :
-    QWidget(parent),
-    ui(new Ui::Browser)
+Browser::Browser(QWidget* parent)
+    : QWidget(parent),
+      ui(new Ui::Browser)
 {
     ui->setupUi(this);
     this->setObjectName("browserUI");

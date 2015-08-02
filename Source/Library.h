@@ -4,11 +4,12 @@
 
 #include <QWidget>
 #include <QProcess>
+#include <QDir>
 
 /*! Library UI namespace. */
 namespace Ui
 {
-    class Library;
+class Library;
 }
 
 /*! Library class
@@ -34,8 +35,14 @@ private:
     Database db;
     Ui::Library* ui;
     QProcess* runningProcess;
+    QList<QString> steamDirectoryList;
 
     bool isProcessRunning() const;
+    QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void runProcess(QString file, QString workingDirectory);
     void refreshGames();
+    void findSteamGames(QDir steamRoot);
+    void findOriginGames(QDir originRoot);
+    void findUplayGames(QDir uplayRoot);
+    void parseAcf(QDir steamRoot);
 };
