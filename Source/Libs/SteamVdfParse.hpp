@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <boost/any.hpp>
-#include <string>
 #include <unordered_map>
 #include <fstream>
 #include <iostream>

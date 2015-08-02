@@ -1,15 +1,7 @@
 #include "WinWindow.h"
 #include "Library.h"
 
-#include <QApplication>
 #include <QGridLayout>
-#include <QDebug>
-#include <QLabel>
-#include <QPushButton>
-#include <QScrollArea>
-#include <QSpacerItem>
-#include <QGraphicsDropShadowEffect>
-#include <QFontDatabase>
 
 #include <windows.h>
 #include <windowsx.h>

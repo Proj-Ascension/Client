@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QLabel>
-#include <QEvent>
 #include <QMouseEvent>
 #include <QGraphicsDropShadowEffect>
 

@@ -1,8 +1,5 @@
 #include "Init.h"
 
-#include <QApplication>
-#include <QFile>
-
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
 #else

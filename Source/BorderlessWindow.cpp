@@ -2,12 +2,10 @@
 
 #include <QDesktopWidget>
 #include <QPushButton>
-#include <QFile>
 
 #include <tchar.h>
 #include <dwmapi.h>
 #include <windowsx.h>
-#include <stdexcept>
 
 HWND g_winId = 0;
 

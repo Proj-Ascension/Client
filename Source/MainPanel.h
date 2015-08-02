@@ -3,7 +3,6 @@
 #include "TabLabel.h"
 #include "Database.h"
 
-#include <QWidget>
 #include <QStackedWidget>
 
 class MainPanel : public QWidget

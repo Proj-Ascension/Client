@@ -8,11 +8,8 @@
 #include <QDebug>
 #include <QDirIterator>
 
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-
-#include <cctype>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <QSettings>

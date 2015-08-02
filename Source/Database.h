@@ -1,7 +1,5 @@
 #pragma once
 
-#include <tuple>
-#include <QSqlDatabase>
 #include <QSqlQuery>
 
 struct Game
