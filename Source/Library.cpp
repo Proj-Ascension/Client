@@ -7,6 +7,9 @@
 #include <QMessageBox>
 #include <QDebug>
 
+/*! Library constructor
+ * Initialize the UI and generate an initial list of all the games available.
+*/
 Library::Library(Database db) :
     QWidget(0),
     db(db),
@@ -33,6 +36,9 @@ Library::~Library()
     delete runningProcess;
 }
 
+/*! Event handler for launching a game.
+ * Populates a message box on failure, or runs the games upon success.
+*/
 void Library::on_testLaunch_clicked()
 {
     if (!isProcessRunning())
@@ -52,6 +58,9 @@ void Library::on_testLaunch_clicked()
     }
 }
 
+/*! Event handler for adding a game.
+ * Prompts the user for various paths, and adds the final game to the database.
+*/
 void Library::on_addGame_clicked()
 {
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
@@ -95,6 +104,8 @@ void Library::on_addGame_clicked()
     }
 }
 
+/*! Event handler for removing a game.
+*/
 void Library::on_removeGame_clicked()
 {
     auto selection = ui->gameListWidget->currentItem();
@@ -105,6 +116,10 @@ void Library::on_removeGame_clicked()
     }
 }
 
+/*! Launch a new QProcess using the passed exe and working directory.
+ * \param file Location of the exe to run
+ * \param workingDirectory The directory that QProcess should spawn in
+*/
 void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
@@ -119,6 +134,8 @@ void Library::runProcess(QString file, QString workingDirectory)
     }
 }
 
+/*! Recreate the list of games displayed in the main widget.
+*/
 void Library::refreshGames()
 {
     ui->gameListWidget->clear();
@@ -129,6 +146,10 @@ void Library::refreshGames()
     }
 }
 
+/*! Attempt to handle process ending unexpectedly or fork.
+ * \param exitCode Exit code to check
+ * \param exitStatus Status to check
+*/
 void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     if (exitCode != 0)
@@ -137,6 +158,9 @@ void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
     }
 }
 
+/*! Handle errors before the process has launched.
+ * \param error The error to translate
+*/
 void Library::onLaunchError(QProcess::ProcessError error)
 {
     switch (error)
@@ -153,6 +177,9 @@ void Library::onLaunchError(QProcess::ProcessError error)
     }
 }
 
+/*! Check if a process is running already
+ * \return Success/failure upon completion.
+*/
 bool Library::isProcessRunning() const
 {
     // We shall consider "Starting" to be running here too
