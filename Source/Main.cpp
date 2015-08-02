@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     #ifdef Q_OS_WIN
         // Background color
         // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
-        HBRUSH windowBackground = CreateSolidBrush(RGB(34, 38, 47));
+        HBRUSH windowBackground = CreateSolidBrush(RGB(15, 15, 15));
 
         // Create a Win window
         BorderlessWindow window(application, windowBackground, 1152, 648);
