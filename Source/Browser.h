@@ -2,7 +2,6 @@
 
 #include <QWidget>
 
-
 /* Namespace containing the Browser UI */
 namespace Ui
 {

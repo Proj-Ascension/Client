@@ -3,14 +3,23 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
+//! Game type
+/*! 
+ * Defines a game type. 
+ * Members correspond to a field within the database.
+*/
 typedef struct
 {
-    unsigned int id;
-    QString gameName;
-    QString gameDirectory;
-    QString executablePath;
+    unsigned int id; /*!< Unique identifier for each game. */
+    QString gameName;  /*!< Name to display within the client. */
+    QString gameDirectory; /*! Directory to use, for loading save files & configuration. */
+    QString executablePath; /*! Path to the executable. */
 } Game;
 
+//! Database class
+/*! Wrapper class to manage the internal game database.
+ * Also has a simple interface to find games by certain conditions.
+*/
 class Database
 {
 public:
