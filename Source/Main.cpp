@@ -1,5 +1,7 @@
 #include "Init.h"
 
+#include <QIcon>
+
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
 #else
@@ -13,7 +15,7 @@ int main(int argc, char* argv[])
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX
-        application->setWindowIcon(QIcon(":/SystemMenu/Icons/Ascension_Icon.ico"));
+        application.setWindowIcon(QIcon(":/SystemMenu/Icons/Ascension_Icon.ico"));
     #endif
 
     // Stylesheet
