@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QSettings>
 
 QString g_getStylesheet(QString location)
 {
@@ -37,9 +38,10 @@ void MainPanel::init()
     }
 
     QString style = g_getStylesheet(":/Styles/Content.css");
+    QSettings p("palette.ini", QSettings::IniFormat);
 
     setObjectName("mainPanel");
-    setStyleSheet("background-color: #0F0F0F;");
+    setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() + ";");
 
     // Horizontal layout
     QHBoxLayout *horizontalLayout = new QHBoxLayout;
@@ -92,9 +94,9 @@ void MainPanel::init()
     // Accent border
     QLabel *accentBorder = new QLabel(this);
     accentBorder->setMaximumHeight(3);
-    accentBorder->setStyleSheet("background-color: #0F0F0F;"
-                                "border-top: 2px solid #E58F12;"
-                                "border-bottom: 1px solid #BF770F;");
+    accentBorder->setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() +
+                                ";border-top: 2px solid " + p.value("Accent/MediumAccent").toString() +
+                                ";border-bottom: 1px solid" + p.value("Accent/DarkAccent").toString() + ";");
 
     // Vertical layout example
     QVBoxLayout *verticalLayout = new QVBoxLayout();
