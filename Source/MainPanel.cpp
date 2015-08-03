@@ -89,15 +89,25 @@ void MainPanel::init()
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
+    // Accent border
+    QLabel *accentBorder = new QLabel(this);
+    accentBorder->setMaximumHeight(3);
+    accentBorder->setStyleSheet("background-color: #0F0F0F;"
+                                "border-top: 2px solid #E58F12;"
+                                "border-bottom: 1px solid #BF770F;");
+
     // Vertical layout example
     QVBoxLayout *verticalLayout = new QVBoxLayout();
     verticalLayout->setSpacing(0);
     verticalLayout->setMargin(0);
     verticalLayout->setAlignment(Qt::AlignHCenter);
+
+    verticalLayout->addWidget(accentBorder);
     verticalLayout->addLayout(horizontalLayout);
 
     // Label example
     QLabel *label = new QLabel(centralWidget);
+    verticalLayout->addStretch();
     verticalLayout->addWidget(label);
 
     // Show
