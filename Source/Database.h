@@ -10,7 +10,7 @@ struct Game
     QString gameName;
     QString gameDirectory;
     QString executablePath;
-	QString arguments;
+    QString arguments;
 };
 
 class Database

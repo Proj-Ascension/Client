@@ -32,7 +32,7 @@ Library::Library(Database db)
     this->setObjectName("libraryUI");
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
-    
+
     QList<Game> games = db.getGames();
     for (auto game : games)
     {
@@ -106,14 +106,14 @@ void Library::on_testLaunch_clicked()
         if (selection != nullptr)
         {
             Game game = db.getGameByName(selection->text());
-			if (game.arguments.trimmed() == "")
-			{
-				runProcess(game.executablePath, game.gameDirectory);
-			}
-			else
-			{
-				runProcessWithArgs(game.executablePath, game.gameDirectory, game.arguments);
-			}
+            if (game.arguments.trimmed() == "")
+            {
+                runProcess(game.executablePath, game.gameDirectory);
+            }
+            else
+            {
+                runProcessWithArgs(game.executablePath, game.gameDirectory, game.arguments);
+            }
         }
     }
     else
@@ -128,7 +128,7 @@ void Library::on_addGame_clicked()
 {
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
 
-	QString args = QInputDialog::getText(0, "Arguments for " + name, "Args (optional): ");
+    QString args = QInputDialog::getText(0, "Arguments for " + name, "Args (optional): ");
 
     if (name.trimmed() == "")
     {
@@ -187,30 +187,30 @@ void Library::on_removeGame_clicked()
 
 void Library::runProcess(QString file, QString workingDirectory)
 {
-	// TODO: Implement some threading
-	if (!isProcessRunning())
-	{
-		qDebug() << "Launching:" << file << ", at" << workingDirectory;
-		runningProcess->setWorkingDirectory(workingDirectory);
-		runningProcess->setStandardErrorFile("error.txt");
-		runningProcess->setStandardOutputFile("log.txt");
-		runningProcess->start(file, QStringList());
-		runningProcess->waitForStarted();
-	}
+    // TODO: Implement some threading
+    if (!isProcessRunning())
+    {
+        qDebug() << "Launching:" << file << ", at" << workingDirectory;
+        runningProcess->setWorkingDirectory(workingDirectory);
+        runningProcess->setStandardErrorFile("error.txt");
+        runningProcess->setStandardOutputFile("log.txt");
+        runningProcess->start(file, QStringList());
+        runningProcess->waitForStarted();
+    }
 }
 
 void Library::runProcessWithArgs(QString file, QString workingDirectory, QString args)
 {
-	// TODO: Implement some threading
-	if (!isProcessRunning())
-	{
-		qDebug() << "Launching:" << file << ", at" << workingDirectory << "with " << args;
-		runningProcess->setWorkingDirectory(workingDirectory);
-		runningProcess->setStandardErrorFile("error.txt");
-		runningProcess->setStandardOutputFile("log.txt");
-		runningProcess->start(file, QStringList(args.split(" ")));
-		runningProcess->waitForStarted();
-	}
+    // TODO: Implement some threading
+    if (!isProcessRunning())
+    {
+        qDebug() << "Launching:" << file << ", at" << workingDirectory << "with " << args;
+        runningProcess->setWorkingDirectory(workingDirectory);
+        runningProcess->setStandardErrorFile("error.txt");
+        runningProcess->setStandardOutputFile("log.txt");
+        runningProcess->start(file, QStringList(args.split(" ")));
+        runningProcess->waitForStarted();
+    }
 }
 
 void Library::refreshGames()

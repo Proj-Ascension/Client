@@ -37,7 +37,7 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
     query.bindValue(":gameName", gameName);
     query.bindValue(":gameDirectory", gameDirectory);
     query.bindValue(":executablePath", executablePath);
-	query.bindValue(":arguments", arguments);
+    query.bindValue(":arguments", arguments);
     return query.exec();
 }
 
@@ -57,15 +57,9 @@ bool Database::removeGameByName(QString name)
     return query.exec();
 }
 
-Game Database::getGameById(unsigned int id)
-{
-    return std::get<1>(isExistant(id));
-}
+Game Database::getGameById(unsigned int id) { return std::get<1>(isExistant(id)); }
 
-Game Database::getGameByName(QString name)
-{
-    return std::get<1>(isExistant(name));
-}
+Game Database::getGameByName(QString name) { return std::get<1>(isExistant(name)); }
 
 std::tuple<bool, Game> Database::isExistant(unsigned int id)
 {
@@ -79,7 +73,7 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
         QString name = query.value(0).toString();
         QString path = query.value(1).toString();
         QString exe = query.value(2).toString();
-		QString args = query.value(3).toString();
+        QString args = query.value(3).toString();
 
         Game game = {id, name, path, exe, args};
         return std::make_tuple(true, game);
@@ -100,10 +94,10 @@ std::tuple<bool, Game> Database::isExistant(QString name)
     {
         unsigned int id = query.value(0).toInt();
         QString path = query.value(1).toString();
-		QString exe = query.value(2).toString();
-		QString args = query.value(3).toString();
+        QString exe = query.value(2).toString();
+        QString args = query.value(3).toString();
 
-		Game game = { id, name, path, exe, args };
+        Game game = {id, name, path, exe, args};
         return std::make_tuple(true, game);
     }
     else
@@ -118,13 +112,13 @@ QList<Game> Database::getGames()
     QList<Game> games;
     QSqlQuery query;
     query.exec("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES;");
-    while(query.next())
+    while (query.next())
     {
         unsigned int id = query.value(0).toInt();
         QString name = query.value(1).toString();
         QString path = query.value(2).toString();
         QString exe = query.value(3).toString();
-		QString args = query.value(4).toString();
+        QString args = query.value(4).toString();
 
         games.append({id, name, path, exe, args});
     }
