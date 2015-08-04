@@ -1,16 +1,19 @@
 #pragma once
 
+#include <boost/property_tree/ptree.hpp>
+
 #include <cstdint>
-#include <boost/any.hpp>
-#include <string>
-#include <unordered_map>
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 
 #define MAGIC_VALUE 0x07564426
 
 namespace SteamVdfParse
 {
+
+namespace pt = boost::property_tree;
+    
 uint32_t read32_le(std::istream& stream)
 {
     return static_cast<uint32_t>((stream.get()) | (stream.get() << 8) | (stream.get() << 16) |
@@ -32,27 +35,6 @@ std::string readString(std::istream& stream)
     return str;
 }
 
-struct Section
-{
-    std::string name;
-    std::unordered_map<std::string, boost::any> kv;
-
-    template <typename Type>
-    Type get(std::string key)
-    {
-        try
-        {
-            return boost::any_cast<Type>(kv[key]);
-        }
-        catch (const boost::bad_any_cast& e)
-        {
-            std::cerr << "Cannot cast value at \"" << key
-                      << "\" to the intended type." << std::endl;
-            throw e;
-        }
-    }
-};
-
 struct Game
 {
     uint32_t appID;
@@ -62,14 +44,12 @@ struct Game
     uint64_t accessToken;
     uint8_t sha[20];
     uint32_t changeNumber;
-    std::unordered_map<std::string, Section> sections;
+    pt::ptree pt;
 };
 
-Section parseSection(std::istream& input, bool root, std::string name)
+pt::ptree parseSection(std::istream& input, bool root, std::string name)
 {
-    Section section;
-
-    section.name = name;
+    pt::ptree section; 
 
     while (true)
     {
@@ -86,23 +66,21 @@ Section parseSection(std::istream& input, bool root, std::string name)
 
         std::string key = readString(input);
 
-        boost::any value;
-
         switch (valueType)
         {
             case 0x00:  // None
             {
-                value = parseSection(input, false, key);
+                section.add_child(key, parseSection(input, false, key));
                 break;
             }
             case 0x01:  // string
             {
-                value = readString(input);
+                section.put(key, readString(input));
                 break;
             }
             case 0x02:  // int
             {
-                value = read32_le(input);
+                section.put(key, read32_le(input));
                 break;
             }
             case 0x03:  // float
@@ -127,14 +105,12 @@ Section parseSection(std::istream& input, bool root, std::string name)
             }
             case 0x07:  // 64 bit int
             {
-                value = read64_le(input);
+                section.put(key, read64_le(input));
                 break;
             }
             default:
                 std::cerr << "Unknown type: " << (int)valueType << std::endl;
         }
-
-        section.kv.insert(std::make_pair(key, value));
     }
 
     return section;
@@ -172,8 +148,8 @@ Game parseGame(std::istream& input)
         input.get();  // read the 00 before name
 
         std::string name = readString(input);
-        Section section = parseSection(input, true, name);
-        game.sections.insert(std::make_pair(name, section));
+        pt::ptree section = parseSection(input, true, name);
+        game.pt.add_child(name, section);
     }
 
     return game;
@@ -207,3 +183,4 @@ std::unordered_map<int, Game> parseVdf(std::string location)
     return games;
 }
 }
+
