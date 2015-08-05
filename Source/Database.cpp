@@ -19,7 +19,7 @@ bool Database::init()
     }
 
     QSqlQuery createQuery(db);
-    createQuery.exec("CREATE TABLE IF NOT EXISTS games(ID INTEGER PRIMARY KEY ASC, GAMENAME TEXT NOT NULL, GAMEDIRECTORY TEXT NOT NULL, GAMEEXECUTABLE TEXT NOT NULL);");
+    createQuery.exec("CREATE TABLE IF NOT EXISTS games(ID INTEGER PRIMARY KEY ASC, GAMENAME TEXT NOT NULL, GAMEDIRECTORY TEXT NOT NULL, GAMEEXECUTABLE TEXT NOT NULL, ARGUMENTS TEXT NOT NULL);");
 
     return true;
 }
@@ -30,13 +30,14 @@ bool Database::reset()
     return query.exec("DROP TABLES *");
 }
 
-bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath)
+bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments)
 {
     QSqlQuery query(db);
-    query.prepare("INSERT INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE) VALUES (:gameName, :gameDirectory, :executablePath);");
+    query.prepare("INSERT INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS) VALUES (:gameName, :gameDirectory, :executablePath, :arguments);");
     query.bindValue(":gameName", gameName);
     query.bindValue(":gameDirectory", gameDirectory);
     query.bindValue(":executablePath", executablePath);
+    query.bindValue(":arguments", arguments);
     return query.exec();
 }
 
@@ -56,20 +57,14 @@ bool Database::removeGameByName(QString name)
     return query.exec();
 }
 
-Game Database::getGameById(unsigned int id)
-{
-    return std::get<1>(isExistant(id));
-}
+Game Database::getGameById(unsigned int id) { return std::get<1>(isExistant(id)); }
 
-Game Database::getGameByName(QString name)
-{
-    return std::get<1>(isExistant(name));
-}
+Game Database::getGameByName(QString name) { return std::get<1>(isExistant(name)); }
 
 std::tuple<bool, Game> Database::isExistant(unsigned int id)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE ID = :id;");
+    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE ID = :id;");
     query.bindValue(":id", id);
     query.exec();
 
@@ -78,8 +73,9 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
         QString name = query.value(0).toString();
         QString path = query.value(1).toString();
         QString exe = query.value(2).toString();
+        QString args = query.value(3).toString();
 
-        Game game = {id, name, path, exe};
+        Game game = {id, name, path, exe, args};
         return std::make_tuple(true, game);
     }
     else
@@ -91,7 +87,7 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
 std::tuple<bool, Game> Database::isExistant(QString name)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES WHERE GAMENAME = :name;");
+    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE GAMENAME = :name;");
     query.bindValue(":name", name);
     query.exec();
     if (query.next())
@@ -99,7 +95,9 @@ std::tuple<bool, Game> Database::isExistant(QString name)
         unsigned int id = query.value(0).toInt();
         QString path = query.value(1).toString();
         QString exe = query.value(2).toString();
-        Game game = {id, name, path, exe};
+        QString args = query.value(3).toString();
+
+        Game game = {id, name, path, exe, args};
         return std::make_tuple(true, game);
     }
     else
@@ -113,15 +111,16 @@ QList<Game> Database::getGames()
 {
     QList<Game> games;
     QSqlQuery query;
-    query.exec("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE FROM GAMES;");
-    while(query.next())
+    query.exec("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES;");
+    while (query.next())
     {
         unsigned int id = query.value(0).toInt();
         QString name = query.value(1).toString();
         QString path = query.value(2).toString();
         QString exe = query.value(3).toString();
+        QString args = query.value(4).toString();
 
-        games.append({id, name, path, exe});
+        games.append({id, name, path, exe, args});
     }
     return games;
 }
