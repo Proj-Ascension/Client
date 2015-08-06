@@ -7,7 +7,7 @@ If you have any questions about the project, feel free to jump in our gitter roo
 
 
 # Useful Links
-- [Website](http://projectascension.io)
+- [Website](https://projectascension.io)
 - [Subreddit](http://reddit.com/r/Project_Ascension)
 - [Twitter](https://twitter.com/Proj_Ascension)
 - [Twitch](http://twitch.tv/Project_Ascension)
