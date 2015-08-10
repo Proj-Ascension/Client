@@ -11,7 +11,7 @@ struct Game
     QString gameDirectory;
     QString executablePath;
     QString arguments;
-} Game;
+};
 
 class Database
 {
