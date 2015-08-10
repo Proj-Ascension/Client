@@ -5,7 +5,7 @@
 //! Constructor
 /*!
  * Constructs the local database. 
- * Currently no interface to handle remote databases, just creates on in the
+ * Currently no interface to handle remote databases, just creates one in the
  * current working directory.
 */
 Database::Database()
