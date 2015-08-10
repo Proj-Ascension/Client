@@ -64,7 +64,6 @@ Library::Library(Database db)
     {
         steamRoot = QDir(settings.value("SteamPath").toString());
     }
-
 #elif defined(__APPLE__)
     // TODO: however OS X handles steam
     return;
@@ -112,7 +111,14 @@ void Library::on_testLaunch_clicked()
         if (selection != nullptr)
         {
             Game game = db.getGameByName(selection->text());
-            runProcess(game.executablePath, game.gameDirectory);
+            if (game.arguments.trimmed() == "")
+            {
+                runProcess(game.executablePath, game.gameDirectory);
+            }
+            else
+            {
+                runProcessWithArgs(game.executablePath, game.gameDirectory, game.arguments);
+            }
         }
     }
     else
@@ -129,6 +135,8 @@ void Library::on_testLaunch_clicked()
 void Library::on_addGame_clicked()
 {
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
+
+    QString args = QInputDialog::getText(0, "Arguments for " + name, "Args (optional): ");
 
     if (name.trimmed() == "")
     {
@@ -150,7 +158,7 @@ void Library::on_addGame_clicked()
         QStringList files = exeDialog.selectedFiles();
         QString exe = files.at(0);
 #ifdef Q_WS_MACX
-        //Get the binary from the app bundle
+        // Get the binary from the app bundle
         QDir dir(file + "/Contents/MacOS");
         // TODO: Change to dir.entryList(QDir::NoDotAndDotDot) to be safe
         QStringList fileList = dir.entryList();
@@ -167,8 +175,8 @@ void Library::on_addGame_clicked()
             QStringList dirs = wdDialog.selectedFiles();
             QString dir = dirs.at(0);
 
-            qDebug() << "Adding game:" << name << exe << dir;
-            db.addGame(name, dir, exe);
+            qDebug() << "Adding game:" << name << exe << dir << args;
+            db.addGame(name, dir, exe, args);
 
             refreshGames();
         }
@@ -201,6 +209,25 @@ void Library::runProcess(QString file, QString workingDirectory)
         runningProcess->setStandardErrorFile("error.txt");
         runningProcess->setStandardOutputFile("log.txt");
         runningProcess->start(file, QStringList());
+        runningProcess->waitForStarted();
+    }
+}
+
+/*! Launch a new QProcess using the passed exe and working directory.
+ * \param file Location of the exe to run
+ * \param workingDirectory The directory that QProcess should spawn in
+ * \param args String of arguments to launch the executable with
+*/
+void Library::runProcessWithArgs(QString file, QString workingDirectory, QString args)
+{
+    // TODO: Implement some threading
+    if (!isProcessRunning())
+    {
+        qDebug() << "Launching:" << file << ", at" << workingDirectory << "with " << args;
+        runningProcess->setWorkingDirectory(workingDirectory);
+        runningProcess->setStandardErrorFile("error.txt");
+        runningProcess->setStandardOutputFile("log.txt");
+        runningProcess->start(file, QStringList(args.split(" ")));
         runningProcess->waitForStarted();
     }
 }
@@ -268,10 +295,7 @@ void Library::findSteamGames(QDir steamRoot)
         steamAppsDir = steamRoot.filePath("SteamApps");
     }
     pt::ptree libraryFolders;
-    pt::read_info(steamAppsDir.filePath("libraryfolders.vdf")
-                      .toLocal8Bit()
-                      .constData(),
-                  libraryFolders);
+    pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
     steamDirectoryList.append(steamRoot.filePath(""));
     QString pathString = "" + steamDirectoryList.at(0) + "\n";
 
@@ -292,14 +316,7 @@ void Library::findSteamGames(QDir steamRoot)
 
     // TODO: Make this prompting better/less obtrusive
     bool directoryPlural = (steamDirectoryList.size() > 1);
-    int ret = QMessageBox(QMessageBox::Question,
-                          "Found " + QString::number(steamDirectoryList.size()) +
-                              " director" + (directoryPlural ? "ies" : "y"),
-                          QString::number(steamDirectoryList.size()) +
-                              " directories have been found.\n\n" + pathString +
-                              "Proceed?",
-                          QMessageBox::Yes | QMessageBox::No)
-                  .exec();
+    int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
     switch (ret)
     {
         case QMessageBox::Yes:
@@ -413,7 +430,7 @@ void Library::findUplayGames(QDir uplayRoot)
     {
         // TODO: Populate a widget with this info
         QDir dir(uplayFolder.absoluteFilePath(i));
-        //dir.setNameFilters(QStringList("*.exe"));
+        // dir.setNameFilters(QStringList("*.exe"));
         dir.setFilter(QDir::Files | QDir::Executable | QDir::NoDotAndDotDot | QDir::NoSymLinks);
         qDebug() << "Looking in: " << dir.filePath("");
         QStringList test = recursiveFindFiles(dir, ignoreList);
@@ -505,15 +522,18 @@ void Library::parseAcf(QDir steamRoot)
             catch (std::exception& e)
             {
                 if (e.what() == "No such node")
+                {
                     name = QString::fromStdString(fileTree.get<std::string>("AppState.UserConfig.name"));
+                }
             }
 
             // TODO: Either add SteamID to db, or add getGameByPath
             if (!std::get<0>(db.isExistant(name)))
             {
                 QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
-
                 QString exe;
+                QString args;
+
                 int id;
                 try
                 {
@@ -523,31 +543,31 @@ void Library::parseAcf(QDir steamRoot)
                 {
                     id = std::stoi(fileTree.get<std::string>("AppState.appid"));
                 }
-#if defined(_WIN32) || defined(_WIN64)
-                auto osNum = 0;
-#elif defined(__APPLE__)
-                auto osNum = 1;
-#elif defined(__linux__)
-                auto osNum = 2;
-#endif
+
                 try
                 {
                     auto game = games.at(id);
-                    auto config = game.sections.at("config");
-                    auto launch = config.get<SteamVdfParse::Section>("launch");
+                    auto launch = game.pt.get_child("config.launch");
 
-                    for (auto pair : launch.kv)
+                    // Loop through the 0, 1, and 2 configurations
+                    for (auto pair : launch)
                     {
-                        auto section = boost::any_cast<SteamVdfParse::Section>(pair.second);
+                        pt::ptree section = pair.second;
 
-                        exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                        QString oslist = QString::fromStdString(section.get("config.oslist", "windows"));
 
-                        try
+#if defined(__linux__)
+                        if (oslist == "linux")
+
+#elif defined(_WIN32) || defined(_WIN64)
+                        if (oslist == "windows")
+#elif defined(__APPLE__)
+                        if (oslist == "macos")
+#endif
                         {
-                            path = QDir(path).filePath(QString::fromStdString(section.get<std::string>("workingdir")));
-                        }
-                        catch (boost::bad_any_cast&)
-                        {
+                            exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                            path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
+                            args = QString::fromStdString(section.get("arguments", ""));
                         }
                     }
                 }
@@ -566,7 +586,7 @@ void Library::parseAcf(QDir steamRoot)
                     }
                 }
 
-                db.addGame(name, path, exe);
+                db.addGame(name, path, exe, args);
                 refreshGames();
             }
         }
