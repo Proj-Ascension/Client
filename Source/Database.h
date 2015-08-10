@@ -16,7 +16,7 @@ typedef struct
     QString gameDirectory;
     QString executablePath;
     QString arguments;
-};
+} Game;
 
 //! Database class
 /*! Wrapper class to manage the internal game database.
