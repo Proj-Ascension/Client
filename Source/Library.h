@@ -6,11 +6,15 @@
 #include <QProcess>
 #include <QDir>
 
+/** Library UI namespace. */
 namespace Ui
 {
 class Library;
 }
 
+/** Library class.
+ * Class to handle the library section of the launcher 
+*/
 class Library : public QWidget
 {
     Q_OBJECT

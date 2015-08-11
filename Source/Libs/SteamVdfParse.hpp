@@ -9,17 +9,28 @@
 
 #define MAGIC_VALUE 0x07564426
 
+/** Steam VDF Parsing. 
+ * A bunch of utility functions to parse the Steam VDF binary format
+ */
 namespace SteamVdfParse
 {
 
 namespace pt = boost::property_tree;
     
+/** Function to convert an istream object into a 32-bit little endian integer.
+ * \param stream The stream to convert
+ * \return The converted integer
+ */
 uint32_t read32_le(std::istream& stream)
 {
     return static_cast<uint32_t>((stream.get()) | (stream.get() << 8) | (stream.get() << 16) |
                                  (stream.get() << 24));
 }
 
+/** Function to convert an istream object into a 64-bit little endian integer.
+ * \param stream The stream to convert
+ * \return The converted integer
+ */
 uint64_t read64_le(std::istream& stream)
 {
     return static_cast<uint64_t>(
@@ -28,6 +39,10 @@ uint64_t read64_le(std::istream& stream)
         ((uint64_t)stream.get() << 48) | ((uint64_t)stream.get() << 56));
 }
 
+/** Function to convert an istream object into a std::string.
+ * \param stream The stream to convert
+ * \return The converted string
+ */
 std::string readString(std::istream& stream)
 {
     std::string str;
@@ -35,18 +50,29 @@ std::string readString(std::istream& stream)
     return str;
 }
 
-struct Game
+/** Struct containing information about a game, as well as a property tree of
+ * the parsed sections.
+ */
+struct GameHeader
 {
-    uint32_t appID;
-    uint32_t size;
-    uint32_t infoState;  // 1-unavailable, 2-available
-    uint32_t lastUpdated;
-    uint64_t accessToken;
-    uint8_t sha[20];
-    uint32_t changeNumber;
-    pt::ptree pt;
+    uint32_t appID; /**< Steam ID of the game */
+    uint32_t size; /**< Size on disk */
+    uint32_t infoState;  /**< State of the game, 1-unavailable, 2-available */
+    uint32_t lastUpdated; /**< UNIX time of the last update */
+    uint64_t accessToken; /**< Token needed to auth services (if needed) */
+    uint8_t sha[20]; /**< Checksum of the fs */
+    uint32_t changeNumber; /**< ID of the latest change on the game repo */
+    pt::ptree pt; /**< Unordered sections of the games in appinfo */
 };
 
+/** Take an istream object and a flag to check if the current node is the root
+ * node, as well as the key name, and translate the bytes into a property tree.
+ * \param input The stream to translate
+ * \param root A flag to check if the current node is root
+ * \param name Name of the key to use in the section
+ * \return The parsed property tree
+ * \sa parseGame(), parseVdf()
+ */
 pt::ptree parseSection(std::istream& input, bool root, std::string name)
 {
     pt::ptree section; 
@@ -116,9 +142,15 @@ pt::ptree parseSection(std::istream& input, bool root, std::string name)
     return section;
 }
 
-Game parseGame(std::istream& input)
+/** Take an istream object, file expected, and convert the block of bytes to a
+ * GameHeader type.
+ * \param input The stream to translate
+ * \return A GameHeader of the section
+ * \sa parseSection(), parseVdf()
+ */
+GameHeader parseGame(std::istream& input)
 {
-    Game game;
+    GameHeader game;
     game.appID = read32_le(input);
     if (game.appID == 0)
     {
@@ -155,14 +187,20 @@ Game parseGame(std::istream& input)
     return game;
 }
 
-std::unordered_map<int, Game> parseVdf(std::string location)
+/** Takes the location of an appinfo file and handles the parsing if the file is
+ * correct.
+ * \param location Location of the appinfo file
+ * \return A full map of each game, with the key being the game's Steam ID
+ * \sa parseSection(), parseVdf()
+ */
+std::unordered_map<int, GameHeader> parseVdf(std::string location)
 {
     std::ifstream input(location, std::ifstream::binary);
 
     uint32_t magic = read32_le(input);
     uint32_t universe = read32_le(input);  // Parse this later
 
-    std::unordered_map<int, Game> games;
+    std::unordered_map<int, GameHeader> games;
 
     if (magic != MAGIC_VALUE)
     {
@@ -172,7 +210,7 @@ std::unordered_map<int, Game> parseVdf(std::string location)
 
     while (!input.eof())
     {
-        Game game = parseGame(input);
+        GameHeader game = parseGame(input);
         if (game.appID == 0)
         {
             break;
