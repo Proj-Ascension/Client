@@ -11,11 +11,11 @@
 */
 typedef struct
 {
-    unsigned int id;
-    QString gameName;
-    QString gameDirectory;
-    QString executablePath;
-    QString arguments;
+    unsigned int id;  /*!< DB ID of the game. */
+    QString gameName; /*!< Name of the game to display */
+    QString gameDirectory; /*!< Working directory of the game */
+    QString executablePath; /*!< Path to the executable */
+    QString arguments; /*!< Arguments to pas to the executable */
 } Game;
 
 //! Database class
