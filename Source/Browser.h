@@ -8,12 +8,11 @@ namespace Ui
 class Browser;
 }
 
-//! WebKit Browser class
-/*!
+/** WebKit Browser class.
  * A simple QWebKit browser of the sub-reddit (Soon to be deprecated).
  *
  * Inherits: [QWidget](http://doc.qt.io/qt-5/qwidget.html)
-*/
+ */
 class Browser : public QWidget
 {
     Q_OBJECT 

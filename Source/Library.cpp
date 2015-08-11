@@ -21,7 +21,7 @@
 #endif
 namespace pt = boost::property_tree;
 
-/*! Library constructor
+/** Library constructor
  * Initialize the UI and generate an initial list of all the games available.
 */
 Library::Library(Database db)
@@ -100,7 +100,7 @@ Library::~Library()
     delete runningProcess;
 }
 
-/*! Event handler for launching a game.
+/** Event handler for launching a game.
  * Populates a message box on failure, or runs the games upon success.
 */
 void Library::on_testLaunch_clicked()
@@ -129,7 +129,7 @@ void Library::on_testLaunch_clicked()
     }
 }
 
-/*! Event handler for adding a game.
+/** Event handler for adding a game.
  * Prompts the user for various paths, and adds the final game to the database.
 */
 void Library::on_addGame_clicked()
@@ -183,7 +183,7 @@ void Library::on_addGame_clicked()
     }
 }
 
-/*! Event handler for removing a game.
+/** Event handler for removing a game.
 */
 void Library::on_removeGame_clicked()
 {
@@ -195,7 +195,7 @@ void Library::on_removeGame_clicked()
     }
 }
 
-/*! Launch a new QProcess using the passed exe and working directory.
+/** Launch a new QProcess using the passed exe and working directory.
  * \param file Location of the exe to run
  * \param workingDirectory The directory that QProcess should spawn in
 */
@@ -213,7 +213,7 @@ void Library::runProcess(QString file, QString workingDirectory)
     }
 }
 
-/*! Launch a new QProcess using the passed exe and working directory.
+/** Launch a new QProcess using the passed exe and working directory.
  * \param file Location of the exe to run
  * \param workingDirectory The directory that QProcess should spawn in
  * \param args String of arguments to launch the executable with
@@ -232,7 +232,7 @@ void Library::runProcessWithArgs(QString file, QString workingDirectory, QString
     }
 }
 
-/*! Recreate the list of games displayed in the main widget.
+/** Recreate the list of games displayed in the main widget.
 */
 void Library::refreshGames()
 {
@@ -244,7 +244,7 @@ void Library::refreshGames()
     }
 }
 
-/*! Attempt to handle process ending unexpectedly or fork.
+/** Attempt to handle process ending unexpectedly or fork.
  * \param exitCode Exit code to check
  * \param exitStatus Status to check
 */
@@ -256,7 +256,7 @@ void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
     }
 }
 
-/*! Handle errors before the process has launched.
+/** Handle errors before the process has launched.
  * \param error The error to translate
 */
 void Library::onLaunchError(QProcess::ProcessError error)
@@ -275,7 +275,7 @@ void Library::onLaunchError(QProcess::ProcessError error)
     }
 }
 
-/*! Check if a process is running already
+/** Check if a process is running already
  * \return Success/failure upon completion.
 */
 bool Library::isProcessRunning() const
@@ -284,7 +284,7 @@ bool Library::isProcessRunning() const
     return runningProcess->state() != QProcess::NotRunning;
 }
 
-/*! Find the location of every steam game, using steamRoot as a basepoint. 
+/** Find the location of every steam game, using steamRoot as a basepoint. 
  * \param steamRoot The root of your steam installation
 */
 void Library::findSteamGames(QDir steamRoot)
@@ -329,7 +329,7 @@ void Library::findSteamGames(QDir steamRoot)
     }
 }
 
-/*! Find the location of every origin game as best we can. Unlike Valve, EA
+/** Find the location of every origin game as best we can. Unlike Valve, EA
  * decided to be almost as awkward as Ubisoft so this is mostly trial and error.
  * \param originRoot The root directory of you Origin installation
  */
@@ -387,7 +387,7 @@ void Library::findOriginGames(QDir originRoot)
     }
 }
 
-/*! Find the location of every Uplay game as best we can. Ubisoft also decided
+/** Find the location of every Uplay game as best we can. Ubisoft also decided
  * to be as awkward as possible, so this isn't accurate.
  * \param uplayRoot The root directory of your Uplay installation.
 */
@@ -449,7 +449,7 @@ void Library::findUplayGames(QDir uplayRoot)
     }
 }
 
-/*! Given a directory, recursively find every file not part of the ignoreList.
+/** Given a directory, recursively find every file not part of the ignoreList.
  * \param dir The directory to search in.
  * \param ignoreList List of filenames to not add to the final list.
  * \return A QStringList of all the correct files.
@@ -483,7 +483,7 @@ QStringList Library::recursiveFindFiles(QDir dir, QStringList ignoreList)
     return dirList;
 }
 
-/*! Given the root of a Steam installation directory, for every appmanifest we
+/** Given the root of a Steam installation directory, for every appmanifest we
  * find, parse the correct information out of it.
  * \param steamRoot The root of a Steam installation.
 */

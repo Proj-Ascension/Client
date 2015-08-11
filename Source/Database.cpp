@@ -2,12 +2,11 @@
 
 #include <QDebug>
 
-//! Constructor
-/*!
+/** Constructor
  * Constructs the local database. 
  * Currently no interface to handle remote databases, just creates one in the
  * current working directory.
-*/
+ */
 Database::Database()
     : db(QSqlDatabase::addDatabase("QSQLITE"))
 {
@@ -15,7 +14,7 @@ Database::Database()
     db.setDatabaseName("ascension.db");
 }
 
-/*! Initialize the actual database, if it hasn't been done already.
+/** Initialize the actual database, if it hasn't been done already.
  * \return Success/failure of the operation.
 */
 bool Database::init()
@@ -33,7 +32,7 @@ bool Database::init()
     return true;
 }
 
-/*! Remove every table in the database.
+/** Remove every table in the database.
  * \return Success/failure of the operation.
 */
 bool Database::reset()
@@ -42,7 +41,7 @@ bool Database::reset()
     return query.exec("DROP TABLES *");
 }
 
-/*! Add a game to the database and repopulate the games list.
+/** Add a game to the database and repopulate the games list.
  * \param gameName The name of the game.
  * \param gameDirectory Working directory of the game.
  * \param executablePath The location of the executable on the filesystem.
@@ -60,7 +59,7 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
     return query.exec();
 }
 
-/*! Remove a game from the database by their ID.
+/** Remove a game from the database by their ID.
  * \param id ID of the game to remove.
  * \return Success/failure of the operation.
 */
@@ -72,7 +71,7 @@ bool Database::removeGameById(unsigned int id)
     return query.exec();
 }
 
-/*! Remove a game from the database by their name.
+/** Remove a game from the database by their name.
  * \param name Name of the game to remove
 */
 bool Database::removeGameByName(QString name)
@@ -83,7 +82,7 @@ bool Database::removeGameByName(QString name)
     return query.exec();
 }
 
-/*! Wrapper to access the Game object from the ID
+/** Wrapper to access the Game object from the ID
  * \param id ID to find
  * \return A Game object, empty upon failure
 */
@@ -92,7 +91,7 @@ Game Database::getGameById(unsigned int id)
     return std::get<1>(isExistant(id));
 }
 
-/*! Wrapper to access the Game object from the name
+/** Wrapper to access the Game object from the name
  * \param id ID to find
  * \return A Game object, empty upon failure
 */
@@ -101,7 +100,7 @@ Game Database::getGameByName(QString name)
     return std::get<1>(isExistant(name));
 }
 
-/*! Perform a query to find a specific game in the database by their ID. Unsafe at the
+/** Perform a query to find a specific game in the database by their ID. Unsafe at the
  * moment.
  * \param id ID of the game to find.
  * \return A Game object upon success, 0 upon failure.
@@ -130,7 +129,7 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
     }
 }
 
-/*! Perform a query to find a specific game by their name. (Soon to be
+/** Perform a query to find a specific game by their name. (Soon to be
  * deprecated)
  *
  * \param name Name of the game to find.
@@ -159,7 +158,7 @@ std::tuple<bool, Game> Database::isExistant(QString name)
     }
 }
 
-/*! Perform a query to find every game in the database.
+/** Perform a query to find every game in the database.
  * \return A QList of Game objects containing everything in the database.
 */
 QList<Game> Database::getGames()
@@ -180,7 +179,7 @@ QList<Game> Database::getGames()
     return games;
 }
 
-/*! Queries the database to find the number of games.
+/** Queries the database to find the number of games.
  * \return Total number of games stored so far.
 */
 unsigned int Database::getGameCount()
