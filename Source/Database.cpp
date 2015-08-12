@@ -108,16 +108,16 @@ Game Database::getGameByName(QString name)
 std::tuple<bool, Game> Database::isExistant(unsigned int id)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE ID = :id;");
+    query.prepare("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE ID = :id;");
     query.bindValue(":id", id);
     query.exec();
 
     if (query.next())
     {
-        QString name = query.value(0).toString();
-        QString path = query.value(1).toString();
-        QString exe = query.value(2).toString();
-        QString args = query.value(3).toString();
+        QString name = query.value(1).toString();
+        QString path = query.value(2).toString();
+        QString exe = query.value(3).toString();
+        QString args = query.value(4).toString();
 
         Game game = {id, name, path, exe, args};
         return std::make_tuple(true, game);
