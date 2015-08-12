@@ -7,7 +7,7 @@
 
 inline bool operator==(Game g1, Game g2) 
 {
-    return g1.id == g2.id && g1.gameName == g2.gameName && g1.gameDirectory == g2.gameDirectory && g1.executablePath == g2.executablePath && g1.arguments == g2.arguments ? true : false;
+    return g1.id == g2.id && g1.gameName == g2.gameName && g1.gameDirectory == g2.gameDirectory && g1.executablePath == g2.executablePath && g1.arguments == g2.arguments;
 }
 
 TEST_CASE ("Database", "[db]")
@@ -34,7 +34,7 @@ TEST_CASE ("Database", "[db]")
     REQUIRE (db.removeGameById(1) == true);
     REQUIRE (db.removeGameById(1) == false);
     REQUIRE (db.removeGameByName("Half-Life 3") == true);
-    REQUIRE (db.removeGameByName("Test Game") == true);
+    REQUIRE (db.removeGameByName("Test Game") == false);
     REQUIRE (db.reset() == true);
     file.remove();
 }
