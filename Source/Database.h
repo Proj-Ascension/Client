@@ -17,6 +17,7 @@ class Database
 {
 public:
     Database();
+    Database(QString name);
     bool init();
     bool reset();
 
