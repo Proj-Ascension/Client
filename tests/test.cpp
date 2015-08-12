@@ -34,7 +34,7 @@ TEST_CASE ("Database", "[db]")
     REQUIRE (db.removeGameById(1) == true);
     REQUIRE (db.removeGameById(1) == false);
     REQUIRE (db.removeGameByName("Half-Life 3") == true);
-    REQUIRE (db.removeGameByName("Test Game") == false);
+    REQUIRE (db.removeGameByName("Test Game") == true);
     REQUIRE (db.reset() == true);
     file.remove();
 }
