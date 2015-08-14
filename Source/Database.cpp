@@ -3,7 +3,7 @@
 #include <QDebug>
 
 /** Constructor
- * Constructs the local database. 
+ * Constructs the local database.
  * Currently no interface to handle remote databases, just creates one in the
  * current working directory.
  */
@@ -12,6 +12,13 @@ Database::Database()
 {
     db.setHostName("localhost");
     db.setDatabaseName("ascension.db");
+}
+
+Database::Database(QString path)
+    : db(QSqlDatabase::addDatabase("QSQLITE"))
+{
+    db.setHostName("localhost");
+    db.setDatabaseName(path);
 }
 
 /** Initialize the actual database, if it hasn't been done already.
@@ -27,9 +34,7 @@ bool Database::init()
     }
 
     QSqlQuery createQuery(db);
-    createQuery.exec("CREATE TABLE IF NOT EXISTS games(ID INTEGER PRIMARY KEY ASC, GAMENAME TEXT NOT NULL, GAMEDIRECTORY TEXT NOT NULL, GAMEEXECUTABLE TEXT NOT NULL, ARGUMENTS TEXT NOT NULL);");
-
-    return true;
+    return createQuery.exec("CREATE TABLE IF NOT EXISTS games(ID INTEGER PRIMARY KEY ASC, GAMENAME TEXT NOT NULL, GAMEDIRECTORY TEXT NOT NULL, GAMEEXECUTABLE TEXT NOT NULL, ARGUMENTS TEXT NOT NULL);");
 }
 
 /** Remove every table in the database.
@@ -38,7 +43,7 @@ bool Database::init()
 bool Database::reset()
 {
     QSqlQuery query(db);
-    return query.exec("DROP TABLES *");
+    return query.exec("DROP TABLE IF EXISTS games");
 }
 
 /** Add a game to the database and repopulate the games list.
@@ -51,7 +56,7 @@ bool Database::reset()
 bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments)
 {
     QSqlQuery query(db);
-    query.prepare("INSERT INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS) VALUES (:gameName, :gameDirectory, :executablePath, :arguments);");
+    query.prepare("INSERT OR IGNORE INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS) VALUES (:gameName, :gameDirectory, :executablePath, :arguments);");
     query.bindValue(":gameName", gameName);
     query.bindValue(":gameDirectory", gameDirectory);
     query.bindValue(":executablePath", executablePath);
@@ -65,10 +70,17 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
 */
 bool Database::removeGameById(unsigned int id)
 {
-    QSqlQuery query(db);
-    query.prepare("DELETE FROM GAMES WHERE ID = :id;");
-    query.bindValue(":id", id);
-    return query.exec();
+    if (std::get<0>(isExistant(id)))
+    {
+        QSqlQuery query(db);
+        query.prepare("DELETE FROM games WHERE ID = :id;");
+        query.bindValue(":id", id);
+        return query.exec();
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /** Remove a game from the database by their name.
@@ -76,10 +88,17 @@ bool Database::removeGameById(unsigned int id)
 */
 bool Database::removeGameByName(QString name)
 {
-    QSqlQuery query(db);
-    query.prepare("DELETE FROM GAMES WHERE GAMENAME = :name;");
-    query.bindValue(":name", name);
-    return query.exec();
+    if (std::get<0>(isExistant(name)))
+    {
+        QSqlQuery query(db);
+        query.prepare("DELETE FROM GAMES WHERE GAMENAME = :name;");
+        query.bindValue(":name", name);
+        return query.exec();
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /** Wrapper to access the Game object from the ID
