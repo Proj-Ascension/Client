@@ -9,12 +9,10 @@
 #include <QStandardPaths>
 #include <QDirIterator>
 
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <cctype>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <QSettings>
@@ -45,8 +43,8 @@ Library::Library(Database db)
 
     // For debugging
     bool loadSteam = true;
-    bool loadOrigin = false;
-    bool loadUplay = false;
+    bool loadOrigin = true;
+    bool loadUplay = true;
     QDir originRoot(qgetenv("APPDATA").append("/Origin"));
     if (originRoot.exists() && loadOrigin)
     {
@@ -344,9 +342,13 @@ void Library::findOriginGames(QDir originRoot)
         if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
         {
             originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
-            qDebug() << originFolder;
             break;
         }
+    }
+
+    if (originFolder == QDir("."))
+    {
+        originFolder = QDir("C:\\Program Files (x86)\\Origin Games\\");
     }
 
     QStringList ignoreList;
@@ -360,7 +362,18 @@ void Library::findOriginGames(QDir originRoot)
                << "activation.exe"
                << "EACoreServer.exe"
                << "EAProxyInstaller.exe"
-               << "D3D11Install.exe";
+               << "D3D11Install.exe"
+               << "ATISET.EXE"
+               << "DOS4GW.EXE"
+               << "INFO.EXE"
+               << "INSTALL.EXE"
+               << "INTRO.EXE"
+               << "MUNGE.EXE"
+               << "SC2K.EXE"
+               << "UNIVBE.EXE"
+               << "VDETECT.EXE"
+               << "VRF_DLL.EXE"
+               << "WILLTV.EXE";
     originFolder.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QStringList folderList = originFolder.entryList();
     QHash<QString, QStringList> masterList;
@@ -405,7 +418,16 @@ void Library::findUplayGames(QDir uplayRoot)
                 std::vector<std::string> strSplit;
                 boost::split(strSplit, line, boost::is_any_of("\""));
                 uplayFolder = QDir(QString::fromStdString(strSplit.at(1)));
+                break;
             }
+        }
+    }
+
+    if (uplayFolder == QDir("."))
+    {
+        QSettings settings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Uplay", QSettings::NativeFormat);
+        if (!settings.value("InstallLocation").isNull()) {
+            uplayFolder = QDir(settings.value("InstallLocation").toString());
         }
     }
 
