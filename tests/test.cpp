@@ -41,12 +41,12 @@ TEST_CASE ("Database", "[db]")
 
 TEST_CASE ("VDF Parser", "[vdf]")
 {
-    std::unordered_map<int, SteamVdfParse::Game> map = SteamVdfParse::parseVdf("appinfo.vdf");
+    std::unordered_map<int, SteamVdfParse::GameHeader> map = SteamVdfParse::parseVdf("appinfo.vdf");
     std::ifstream game("game", std::ios::binary);
     REQUIRE (SteamVdfParse::read32_le(game) == uint32_t(208050));
     REQUIRE (SteamVdfParse::read64_le(game) == uint64_t(8589935831));
     game.seekg(0, std::ios::beg);
-    SteamVdfParse::Game gameTest = SteamVdfParse::parseGame(game);
+    SteamVdfParse::GameHeader gameTest = SteamVdfParse::parseGame(game);
     
     REQUIRE (gameTest.appID == 208050);
     REQUIRE (gameTest.size == 1239);
