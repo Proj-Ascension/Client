@@ -8,15 +8,13 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDirIterator>
+#include <QSettings>
 
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <QSettings>
-#endif
 namespace pt = boost::property_tree;
 
 /** Library constructor
