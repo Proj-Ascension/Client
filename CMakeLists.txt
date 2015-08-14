@@ -149,7 +149,7 @@ if(WITH_TESTS)
     enable_testing()
     add_executable(test_runner
         Source/Database.cpp
-        tests/test.cpp)
+        tests/Test.cpp)
     target_link_libraries(test_runner
         Qt5::Sql)
     add_test(test_runner test_runner)
