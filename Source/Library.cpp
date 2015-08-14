@@ -47,10 +47,11 @@ Library::Library(Database db)
     bool loadSteam = true;
     bool loadOrigin = true;
     bool loadUplay = false;
+    QDir originRoot;
 #if defined(_WIN32) || defined(_WIN64)
-    QDir originRoot(qgetenv("APPDATA").append("/Origin"));
+    originRoot(qgetenv("APPDATA").append("/Origin"));
 #elif defined(__APPLE__)
-    QDir originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
+    originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
 #else
     QMessageBox(QMessageBox::Critical, "Error", "Platform does not support Origin.");
     return;
