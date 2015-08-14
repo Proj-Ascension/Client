@@ -45,7 +45,16 @@ Library::Library(Database db)
     bool loadSteam = true;
     bool loadOrigin = true;
     bool loadUplay = true;
-    QDir originRoot(qgetenv("APPDATA").append("/Origin"));
+    QDir originRoot;
+#if defined(_WIN32) || defined(_WIN64)
+    originRoot(qgetenv("APPDATA").append("/Origin"));
+#elif defined(__APPLE__)
+    originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
+#else
+    QMessageBox(QMessageBox::Critical, "Error", "Platform does not support Origin.");
+    return;
+#endif
+
     if (originRoot.exists() && loadOrigin)
     {
         findOriginGames(originRoot);
@@ -63,8 +72,7 @@ Library::Library(Database db)
         steamRoot = QDir(settings.value("SteamPath").toString());
     }
 #elif defined(__APPLE__)
-    // TODO: however OS X handles steam
-    return;
+    steamRoot = QDir(QDir::home().filePath("Library/Application Support/Steam"));
 #elif defined(__linux__)
     steamRoot = QDir(QDir::home().filePath(".steam/steam"));
 #else
@@ -284,7 +292,7 @@ bool Library::isProcessRunning() const
     return runningProcess->state() != QProcess::NotRunning;
 }
 
-/** Find the location of every steam game, using steamRoot as a basepoint. 
+/** Find the location of every steam game, using steamRoot as a basepoint.
  * \param steamRoot The root of your steam installation
 */
 void Library::findSteamGames(QDir steamRoot)
@@ -339,6 +347,7 @@ void Library::findOriginGames(QDir originRoot)
     pt::ptree originTree;
     read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
 
+
     for (auto& xmlIter : originTree.get_child("Settings"))
     {
         if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
@@ -353,6 +362,22 @@ void Library::findOriginGames(QDir originRoot)
         originFolder = QDir("C:\\Program Files (x86)\\Origin Games\\");
     }
 
+
+    // Setting orginFolder path to "Downloaded Games" folder
+#if defined(_WIN32)
+    // Temp fix. need to get regkey on 32bit machine
+    originFolder(qgetenv("programfiles").append("\Origin Games"));
+#elif defined (_WIN64)
+    QSettings settings("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Origin", QSettings::NativeFormat);
+    if (!settings.value("InstallLocation").isNull())
+    {
+        steamRoot = QDir(settings.value("InstallLocation").toString());
+    }
+#elif defined(__APPLE__)
+    originFolder = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+#endif
+
+>>>>>>> a02c9f66080c9967ee5432a2946ac93fd4c2be78
     QStringList ignoreList;
     ignoreList << "Cleanup.exe"
                << "Touchup.exe"
