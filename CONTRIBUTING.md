@@ -50,6 +50,10 @@ while/if (a > 3)
     - Please don’t open a pull request that adds entirely new features or aesthetic - most of this will be decided by the UI team. PRs should extend or complement existing functionality.
 - Official releases will be reviewed by members of all teams, and confirmed to function properly on several different operating systems and desktop environments.    
 
+## Comments
+- Any new functions ___must___ contain full Qt-style doxygen comments. See [here](http://www.stack.nl/~dimitri/doxygen/manual/docblocks.html#cppblock) and scroll down for an example.
+- Any modifications to existing funtions, ie adding/removing parameters, adjusting return type, changing functionality, *_must_* also contain the relevant changes to the function at hand.
+
 ## Clang Format
 
 To automate this style, some of our team use [clang-format](http://clang.llvm.org/docs/ClangFormat.html) with the below setup:  

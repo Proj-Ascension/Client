@@ -1,21 +1,36 @@
 #pragma once
 
+#include <boost/property_tree/ptree.hpp>
+
 #include <cstdint>
-#include <boost/any.hpp>
-#include <unordered_map>
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 
 #define MAGIC_VALUE 0x07564426
 
+/** Steam VDF Parsing. 
+ * A bunch of utility functions to parse the Steam VDF binary format
+ */
 namespace SteamVdfParse
 {
+
+namespace pt = boost::property_tree;
+    
+/** Function to convert an istream object into a 32-bit little endian integer.
+ * \param stream The stream to convert
+ * \return The converted integer
+ */
 uint32_t read32_le(std::istream& stream)
 {
     return static_cast<uint32_t>((stream.get()) | (stream.get() << 8) | (stream.get() << 16) |
                                  (stream.get() << 24));
 }
 
+/** Function to convert an istream object into a 64-bit little endian integer.
+ * \param stream The stream to convert
+ * \return The converted integer
+ */
 uint64_t read64_le(std::istream& stream)
 {
     return static_cast<uint64_t>(
@@ -24,6 +39,10 @@ uint64_t read64_le(std::istream& stream)
         ((uint64_t)stream.get() << 48) | ((uint64_t)stream.get() << 56));
 }
 
+/** Function to convert an istream object into a std::string.
+ * \param stream The stream to convert
+ * \return The converted string
+ */
 std::string readString(std::istream& stream)
 {
     std::string str;
@@ -31,44 +50,32 @@ std::string readString(std::istream& stream)
     return str;
 }
 
-struct Section
+/** Struct containing information about a game, as well as a property tree of
+ * the parsed sections.
+ */
+struct GameHeader
 {
-    std::string name;
-    std::unordered_map<std::string, boost::any> kv;
-
-    template <typename Type>
-    Type get(std::string key)
-    {
-        try
-        {
-            return boost::any_cast<Type>(kv[key]);
-        }
-        catch (const boost::bad_any_cast& e)
-        {
-            std::cerr << "Cannot cast value at \"" << key
-                      << "\" to the intended type." << std::endl;
-            throw e;
-        }
-    }
+    uint32_t appID; /**< Steam ID of the game */
+    uint32_t size; /**< Size on disk */
+    uint32_t infoState;  /**< State of the game, 1-unavailable, 2-available */
+    uint32_t lastUpdated; /**< UNIX time of the last update */
+    uint64_t accessToken; /**< Token needed to auth services (if needed) */
+    uint8_t sha[20]; /**< Checksum of the fs */
+    uint32_t changeNumber; /**< ID of the latest change on the game repo */
+    pt::ptree pt; /**< Unordered sections of the games in appinfo */
 };
 
-struct Game
+/** Take an istream object and a flag to check if the current node is the root
+ * node, as well as the key name, and translate the bytes into a property tree.
+ * \param input The stream to translate
+ * \param root A flag to check if the current node is root
+ * \param name Name of the key to use in the section
+ * \return The parsed property tree
+ * \sa parseGame(), parseVdf()
+ */
+pt::ptree parseSection(std::istream& input, bool root, std::string name)
 {
-    uint32_t appID;
-    uint32_t size;
-    uint32_t infoState;  // 1-unavailable, 2-available
-    uint32_t lastUpdated;
-    uint64_t accessToken;
-    uint8_t sha[20];
-    uint32_t changeNumber;
-    std::unordered_map<std::string, Section> sections;
-};
-
-Section parseSection(std::istream& input, bool root, std::string name)
-{
-    Section section;
-
-    section.name = name;
+    pt::ptree section; 
 
     while (true)
     {
@@ -85,23 +92,21 @@ Section parseSection(std::istream& input, bool root, std::string name)
 
         std::string key = readString(input);
 
-        boost::any value;
-
         switch (valueType)
         {
             case 0x00:  // None
             {
-                value = parseSection(input, false, key);
+                section.add_child(key, parseSection(input, false, key));
                 break;
             }
             case 0x01:  // string
             {
-                value = readString(input);
+                section.put(key, readString(input));
                 break;
             }
             case 0x02:  // int
             {
-                value = read32_le(input);
+                section.put(key, read32_le(input));
                 break;
             }
             case 0x03:  // float
@@ -126,22 +131,26 @@ Section parseSection(std::istream& input, bool root, std::string name)
             }
             case 0x07:  // 64 bit int
             {
-                value = read64_le(input);
+                section.put(key, read64_le(input));
                 break;
             }
             default:
                 std::cerr << "Unknown type: " << (int)valueType << std::endl;
         }
-
-        section.kv.insert(std::make_pair(key, value));
     }
 
     return section;
 }
 
-Game parseGame(std::istream& input)
+/** Take an istream object, file expected, and convert the block of bytes to a
+ * GameHeader type.
+ * \param input The stream to translate
+ * \return A GameHeader of the section
+ * \sa parseSection(), parseVdf()
+ */
+GameHeader parseGame(std::istream& input)
 {
-    Game game;
+    GameHeader game;
     game.appID = read32_le(input);
     if (game.appID == 0)
     {
@@ -171,21 +180,27 @@ Game parseGame(std::istream& input)
         input.get();  // read the 00 before name
 
         std::string name = readString(input);
-        Section section = parseSection(input, true, name);
-        game.sections.insert(std::make_pair(name, section));
+        pt::ptree section = parseSection(input, true, name);
+        game.pt.add_child(name, section);
     }
 
     return game;
 }
 
-std::unordered_map<int, Game> parseVdf(std::string location)
+/** Takes the location of an appinfo file and handles the parsing if the file is
+ * correct.
+ * \param location Location of the appinfo file
+ * \return A full map of each game, with the key being the game's Steam ID
+ * \sa parseSection(), parseVdf()
+ */
+std::unordered_map<int, GameHeader> parseVdf(std::string location)
 {
     std::ifstream input(location, std::ifstream::binary);
 
     uint32_t magic = read32_le(input);
     uint32_t universe = read32_le(input);  // Parse this later
 
-    std::unordered_map<int, Game> games;
+    std::unordered_map<int, GameHeader> games;
 
     if (magic != MAGIC_VALUE)
     {
@@ -195,7 +210,7 @@ std::unordered_map<int, Game> parseVdf(std::string location)
 
     while (!input.eof())
     {
-        Game game = parseGame(input);
+        GameHeader game = parseGame(input);
         if (game.appID == 0)
         {
             break;
@@ -206,3 +221,4 @@ std::unordered_map<int, Game> parseVdf(std::string location)
     return games;
 }
 }
+

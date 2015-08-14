@@ -16,9 +16,11 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include <QSettings>
 #endif
-
 namespace pt = boost::property_tree;
 
+/** Library constructor
+ * Initialize the UI and generate an initial list of all the games available.
+*/
 Library::Library(Database db)
     : QWidget(0),
       db(db),
@@ -40,9 +42,18 @@ Library::Library(Database db)
 
     // For debugging
     bool loadSteam = true;
-    bool loadOrigin = false;
+    bool loadOrigin = true;
     bool loadUplay = false;
-    QDir originRoot(qgetenv("APPDATA").append("/Origin"));
+    QDir originRoot;
+#if defined(_WIN32) || defined(_WIN64)
+    originRoot(qgetenv("APPDATA").append("/Origin"));
+#elif defined(__APPLE__)
+    originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
+#else
+    QMessageBox(QMessageBox::Critical, "Error", "Platform does not support Origin.");
+    return;
+#endif
+    
     if (originRoot.exists() && loadOrigin)
     {
         findOriginGames(originRoot);
@@ -59,10 +70,8 @@ Library::Library(Database db)
     {
         steamRoot = QDir(settings.value("SteamPath").toString());
     }
-
 #elif defined(__APPLE__)
-    // TODO: however OS X handles steam
-    return;
+    steamRoot = QDir(QDir::home().filePath("Library/Application Support/Steam"));
 #elif defined(__linux__)
     steamRoot = QDir(QDir::home().filePath(".steam/steam"));
 #else
@@ -96,6 +105,9 @@ Library::~Library()
     delete runningProcess;
 }
 
+/** Event handler for launching a game.
+ * Populates a message box on failure, or runs the games upon success.
+*/
 void Library::on_testLaunch_clicked()
 {
     if (!isProcessRunning())
@@ -104,7 +116,14 @@ void Library::on_testLaunch_clicked()
         if (selection != nullptr)
         {
             Game game = db.getGameByName(selection->text());
-            runProcess(game.executablePath, game.gameDirectory);
+            if (game.arguments.trimmed() == "")
+            {
+                runProcess(game.executablePath, game.gameDirectory);
+            }
+            else
+            {
+                runProcessWithArgs(game.executablePath, game.gameDirectory, game.arguments);
+            }
         }
     }
     else
@@ -115,9 +134,14 @@ void Library::on_testLaunch_clicked()
     }
 }
 
+/** Event handler for adding a game.
+ * Prompts the user for various paths, and adds the final game to the database.
+*/
 void Library::on_addGame_clicked()
 {
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
+
+    QString args = QInputDialog::getText(0, "Arguments for " + name, "Args (optional): ");
 
     if (name.trimmed() == "")
     {
@@ -139,7 +163,7 @@ void Library::on_addGame_clicked()
         QStringList files = exeDialog.selectedFiles();
         QString exe = files.at(0);
 #ifdef Q_WS_MACX
-        //Get the binary from the app bundle
+        // Get the binary from the app bundle
         QDir dir(file + "/Contents/MacOS");
         // TODO: Change to dir.entryList(QDir::NoDotAndDotDot) to be safe
         QStringList fileList = dir.entryList();
@@ -156,14 +180,16 @@ void Library::on_addGame_clicked()
             QStringList dirs = wdDialog.selectedFiles();
             QString dir = dirs.at(0);
 
-            qDebug() << "Adding game:" << name << exe << dir;
-            db.addGame(name, dir, exe);
+            qDebug() << "Adding game:" << name << exe << dir << args;
+            db.addGame(name, dir, exe, args);
 
             refreshGames();
         }
     }
 }
 
+/** Event handler for removing a game.
+*/
 void Library::on_removeGame_clicked()
 {
     auto selection = ui->gameListWidget->currentItem();
@@ -174,6 +200,10 @@ void Library::on_removeGame_clicked()
     }
 }
 
+/** Launch a new QProcess using the passed exe and working directory.
+ * \param file Location of the exe to run
+ * \param workingDirectory The directory that QProcess should spawn in
+*/
 void Library::runProcess(QString file, QString workingDirectory)
 {
     // TODO: Implement some threading
@@ -188,6 +218,27 @@ void Library::runProcess(QString file, QString workingDirectory)
     }
 }
 
+/** Launch a new QProcess using the passed exe and working directory.
+ * \param file Location of the exe to run
+ * \param workingDirectory The directory that QProcess should spawn in
+ * \param args String of arguments to launch the executable with
+*/
+void Library::runProcessWithArgs(QString file, QString workingDirectory, QString args)
+{
+    // TODO: Implement some threading
+    if (!isProcessRunning())
+    {
+        qDebug() << "Launching:" << file << ", at" << workingDirectory << "with " << args;
+        runningProcess->setWorkingDirectory(workingDirectory);
+        runningProcess->setStandardErrorFile("error.txt");
+        runningProcess->setStandardOutputFile("log.txt");
+        runningProcess->start(file, QStringList(args.split(" ")));
+        runningProcess->waitForStarted();
+    }
+}
+
+/** Recreate the list of games displayed in the main widget.
+*/
 void Library::refreshGames()
 {
     ui->gameListWidget->clear();
@@ -198,6 +249,10 @@ void Library::refreshGames()
     }
 }
 
+/** Attempt to handle process ending unexpectedly or fork.
+ * \param exitCode Exit code to check
+ * \param exitStatus Status to check
+*/
 void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     if (exitCode != 0)
@@ -206,6 +261,9 @@ void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
     }
 }
 
+/** Handle errors before the process has launched.
+ * \param error The error to translate
+*/
 void Library::onLaunchError(QProcess::ProcessError error)
 {
     switch (error)
@@ -222,12 +280,18 @@ void Library::onLaunchError(QProcess::ProcessError error)
     }
 }
 
+/** Check if a process is running already
+ * \return Success/failure upon completion.
+*/
 bool Library::isProcessRunning() const
 {
     // We shall consider "Starting" to be running here too
     return runningProcess->state() != QProcess::NotRunning;
 }
 
+/** Find the location of every steam game, using steamRoot as a basepoint. 
+ * \param steamRoot The root of your steam installation
+*/
 void Library::findSteamGames(QDir steamRoot)
 {
     QDir steamAppsDir = steamRoot.filePath("steamapps");
@@ -236,10 +300,7 @@ void Library::findSteamGames(QDir steamRoot)
         steamAppsDir = steamRoot.filePath("SteamApps");
     }
     pt::ptree libraryFolders;
-    pt::read_info(steamAppsDir.filePath("libraryfolders.vdf")
-                      .toLocal8Bit()
-                      .constData(),
-                  libraryFolders);
+    pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
     steamDirectoryList.append(steamRoot.filePath(""));
     QString pathString = "" + steamDirectoryList.at(0) + "\n";
 
@@ -260,14 +321,7 @@ void Library::findSteamGames(QDir steamRoot)
 
     // TODO: Make this prompting better/less obtrusive
     bool directoryPlural = (steamDirectoryList.size() > 1);
-    int ret = QMessageBox(QMessageBox::Question,
-                          "Found " + QString::number(steamDirectoryList.size()) +
-                              " director" + (directoryPlural ? "ies" : "y"),
-                          QString::number(steamDirectoryList.size()) +
-                              " directories have been found.\n\n" + pathString +
-                              "Proceed?",
-                          QMessageBox::Yes | QMessageBox::No)
-                  .exec();
+    int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
     switch (ret)
     {
         case QMessageBox::Yes:
@@ -280,22 +334,43 @@ void Library::findSteamGames(QDir steamRoot)
     }
 }
 
+/** Find the location of every origin game as best we can. Unlike Valve, EA
+ * decided to be almost as awkward as Ubisoft so this is mostly trial and error.
+ * \param originRoot The root directory of you Origin installation
+ */
 void Library::findOriginGames(QDir originRoot)
 {
     QDir originFolder;
     pt::ptree originTree;
     read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
+    
+    //TODO: This key is no longer in local.xml Need to figure out another way to do this.
 
-    for (auto& xmlIter : originTree.get_child("Settings"))
+   /* for (auto& xmlIter : originTree.get_child("Settings"))
     {
         if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
         {
-            originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
+            //originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
             qDebug() << originFolder;
             break;
         }
     }
-
+*/
+    
+    // Setting orginFolder path to "Downloaded Games" folder
+#if defined(_WIN32)
+    // Temp fix. need to get regkey on 32bit machine
+    originFolder(qgetenv("programfiles").append("\Origin Games"));
+#elif defined (_WIN64)
+    QSettings settings("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Origin", QSettings::NativeFormat);
+    if (!settings.value("InstallLocation").isNull())
+    {
+        steamRoot = QDir(settings.value("InstallLocation").toString());
+    }
+#elif defined(__APPLE__)
+    originFolder = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+#endif
+    
     QStringList ignoreList;
     ignoreList << "Cleanup.exe"
                << "Touchup.exe"
@@ -334,6 +409,10 @@ void Library::findOriginGames(QDir originRoot)
     }
 }
 
+/** Find the location of every Uplay game as best we can. Ubisoft also decided
+ * to be as awkward as possible, so this isn't accurate.
+ * \param uplayRoot The root directory of your Uplay installation.
+*/
 void Library::findUplayGames(QDir uplayRoot)
 {
     QDir uplayFolder;
@@ -373,7 +452,7 @@ void Library::findUplayGames(QDir uplayRoot)
     {
         // TODO: Populate a widget with this info
         QDir dir(uplayFolder.absoluteFilePath(i));
-        //dir.setNameFilters(QStringList("*.exe"));
+        // dir.setNameFilters(QStringList("*.exe"));
         dir.setFilter(QDir::Files | QDir::Executable | QDir::NoDotAndDotDot | QDir::NoSymLinks);
         qDebug() << "Looking in: " << dir.filePath("");
         QStringList test = recursiveFindFiles(dir, ignoreList);
@@ -392,6 +471,11 @@ void Library::findUplayGames(QDir uplayRoot)
     }
 }
 
+/** Given a directory, recursively find every file not part of the ignoreList.
+ * \param dir The directory to search in.
+ * \param ignoreList List of filenames to not add to the final list.
+ * \return A QStringList of all the correct files.
+*/
 QStringList Library::recursiveFindFiles(QDir dir, QStringList ignoreList)
 {
     QStringList dirList;
@@ -421,6 +505,10 @@ QStringList Library::recursiveFindFiles(QDir dir, QStringList ignoreList)
     return dirList;
 }
 
+/** Given the root of a Steam installation directory, for every appmanifest we
+ * find, parse the correct information out of it.
+ * \param steamRoot The root of a Steam installation.
+*/
 void Library::parseAcf(QDir steamRoot)
 {
     // TODO: This stuff needs its own thread
@@ -456,15 +544,18 @@ void Library::parseAcf(QDir steamRoot)
             catch (std::exception& e)
             {
                 if (e.what() == "No such node")
+                {
                     name = QString::fromStdString(fileTree.get<std::string>("AppState.UserConfig.name"));
+                }
             }
 
             // TODO: Either add SteamID to db, or add getGameByPath
             if (!std::get<0>(db.isExistant(name)))
             {
                 QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
-
                 QString exe;
+                QString args;
+
                 int id;
                 try
                 {
@@ -474,31 +565,31 @@ void Library::parseAcf(QDir steamRoot)
                 {
                     id = std::stoi(fileTree.get<std::string>("AppState.appid"));
                 }
-#if defined(_WIN32) || defined(_WIN64)
-                auto osNum = 0;
-#elif defined(__APPLE__)
-                auto osNum = 1;
-#elif defined(__linux__)
-                auto osNum = 2;
-#endif
+
                 try
                 {
                     auto game = games.at(id);
-                    auto config = game.sections.at("config");
-                    auto launch = config.get<SteamVdfParse::Section>("launch");
+                    auto launch = game.pt.get_child("config.launch");
 
-                    for (auto pair : launch.kv)
+                    // Loop through the 0, 1, and 2 configurations
+                    for (auto pair : launch)
                     {
-                        auto section = boost::any_cast<SteamVdfParse::Section>(pair.second);
+                        pt::ptree section = pair.second;
 
-                        exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                        QString oslist = QString::fromStdString(section.get("config.oslist", "windows"));
 
-                        try
+#if defined(__linux__)
+                        if (oslist == "linux")
+
+#elif defined(_WIN32) || defined(_WIN64)
+                        if (oslist == "windows")
+#elif defined(__APPLE__)
+                        if (oslist == "macos")
+#endif
                         {
-                            path = QDir(path).filePath(QString::fromStdString(section.get<std::string>("workingdir")));
-                        }
-                        catch (boost::bad_any_cast&)
-                        {
+                            exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                            path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
+                            args = QString::fromStdString(section.get("arguments", ""));
                         }
                     }
                 }
@@ -517,7 +608,7 @@ void Library::parseAcf(QDir steamRoot)
                     }
                 }
 
-                db.addGame(name, path, exe);
+                db.addGame(name, path, exe, args);
                 refreshGames();
             }
         }
