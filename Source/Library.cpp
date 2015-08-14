@@ -47,7 +47,7 @@ Library::Library(Database db)
     bool loadUplay = true;
     QDir originRoot;
 #if defined(_WIN32) || defined(_WIN64)
-    originRoot(qgetenv("APPDATA").append("/Origin"));
+    originRoot = QDir(qgetenv("APPDATA").append("/Origin"));
 #elif defined(__APPLE__)
     originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
 #else
@@ -55,6 +55,7 @@ Library::Library(Database db)
     return;
 #endif
 
+#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
     if (originRoot.exists() && loadOrigin)
     {
         findOriginGames(originRoot);
@@ -63,6 +64,7 @@ Library::Library(Database db)
     {
         qDebug() << "Origin not found. Possibly not installed.";
     }
+#endif
 
     QDir steamRoot;
 #if defined(_WIN32) || defined(_WIN64)
@@ -361,23 +363,8 @@ void Library::findOriginGames(QDir originRoot)
     {
         originFolder = QDir("C:\\Program Files (x86)\\Origin Games\\");
     }
+    
 
-
-    // Setting orginFolder path to "Downloaded Games" folder
-#if defined(_WIN32)
-    // Temp fix. need to get regkey on 32bit machine
-    originFolder(qgetenv("programfiles").append("\Origin Games"));
-#elif defined (_WIN64)
-    QSettings settings("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Origin", QSettings::NativeFormat);
-    if (!settings.value("InstallLocation").isNull())
-    {
-        steamRoot = QDir(settings.value("InstallLocation").toString());
-    }
-#elif defined(__APPLE__)
-    originFolder = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-#endif
-
->>>>>>> a02c9f66080c9967ee5432a2946ac93fd4c2be78
     QStringList ignoreList;
     ignoreList << "Cleanup.exe"
                << "Touchup.exe"
