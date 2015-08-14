@@ -1,4 +1,4 @@
-#include "test.h"
+#include "Test.h"
 #include "../Source/Database.h"
 #include "../Source/Libs/SteamVdfParse.hpp"
 #include <QList>
