@@ -152,6 +152,22 @@ if(WIN32)
     endif(MSVC)
 endif()
 
+if(WITH_TESTS)
+    enable_testing()
+    add_executable(test_runner
+        Source/Database.cpp
+        tests/test.cpp)
+    target_link_libraries(test_runner
+        Qt5::Sql)
+    add_test(test_runner test_runner)
+    foreach(FILE
+            appinfo.vdf
+            game)
+    add_custom_command(TARGET ProjectAscension POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+        endforeach()
+endif(WITH_TESTS)
+
 # --- RUNTIME DEPENDENCIES ---
 # Only necessary on Windows.
 
