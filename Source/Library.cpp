@@ -45,9 +45,17 @@ Library::Library(Database db)
 
     // For debugging
     bool loadSteam = true;
-    bool loadOrigin = false;
+    bool loadOrigin = true;
     bool loadUplay = false;
+#if defined(_WIN32) || defined(_WIN64)
     QDir originRoot(qgetenv("APPDATA").append("/Origin"));
+#elif defined(__APPLE__)
+    QDir originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
+#else
+    QMessageBox(QMessageBox::Critical, "Error", "Platform does not support Origin.");
+    return;
+#endif
+    
     if (originRoot.exists() && loadOrigin)
     {
         findOriginGames(originRoot);
@@ -65,8 +73,7 @@ Library::Library(Database db)
         steamRoot = QDir(settings.value("SteamPath").toString());
     }
 #elif defined(__APPLE__)
-    // TODO: however OS X handles steam
-    return;
+    steamRoot = QDir(QDir::home().filePath("Library/Application Support/Steam"));
 #elif defined(__linux__)
     steamRoot = QDir(QDir::home().filePath(".steam/steam"));
 #else
@@ -338,17 +345,34 @@ void Library::findOriginGames(QDir originRoot)
     QDir originFolder;
     pt::ptree originTree;
     read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
+    
+    //TODO: This key is no longer in local.xml Need to figure out another way to do this.
 
-    for (auto& xmlIter : originTree.get_child("Settings"))
+   /* for (auto& xmlIter : originTree.get_child("Settings"))
     {
         if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
         {
-            originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
+            //originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
             qDebug() << originFolder;
             break;
         }
     }
-
+*/
+    
+    // Setting orginFolder path to "Downloaded Games" folder
+#if defined(_WIN32)
+    // Temp fix. need to get regkey on 32bit machine
+    originFolder(qgetenv("programfiles").append("\Origin Games"));
+#elif defined (_WIN64)
+    QSettings settings("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Origin", QSettings::NativeFormat);
+    if (!settings.value("InstallLocation").isNull())
+    {
+        steamRoot = QDir(settings.value("InstallLocation").toString());
+    }
+#elif defined(__APPLE__)
+    originFolder = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+#endif
+    
     QStringList ignoreList;
     ignoreList << "Cleanup.exe"
                << "Touchup.exe"
