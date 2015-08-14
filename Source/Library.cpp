@@ -81,6 +81,7 @@ Library::Library(Database db)
         qDebug("Steam was not found, probably not installed.");
     }
 
+#if defined(_WIN32) || defined(_WIN64)
     QDir uplayRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Ubisoft Game Launcher");
     if (uplayRoot.exists() && loadUplay)
     {
@@ -90,6 +91,7 @@ Library::Library(Database db)
     {
         qDebug("UPlay was not found, probably not installed.");
     }
+#endif
 }
 
 Library::~Library()
