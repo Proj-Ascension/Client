@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TabLabel.h"
+#include "TabWidget.h"
 #include "Database.h"
 
 #include <QStackedWidget>
@@ -22,9 +22,6 @@ protected:
 
     QStackedWidget* stack;
     QWidget* libraryPtr;
-
-    TabLabel* activeTab;
-    TabLabel* libraryTab;
 
     void init();
 };

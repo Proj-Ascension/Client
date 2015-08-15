@@ -15,7 +15,7 @@ set(CMAKE_AUTOMOC ON)
 
 set(SOURCE
     Source/Main.cpp
-    Source/TabLabel.cpp
+    Source/TabWidget.cpp
     Source/Library.cpp
     Source/MainPanel.cpp
     Source/Database.cpp
@@ -23,7 +23,7 @@ set(SOURCE
 )
 
 set(HEADERS
-    Source/TabLabel.h
+    Source/TabWidget.h
     Source/Library.h
     Source/MainPanel.h
     Source/Database.h

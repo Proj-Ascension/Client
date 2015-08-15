@@ -2,6 +2,7 @@
 #include "Library.h"
 
 #include <QGridLayout>
+#include <QMouseEvent>
 
 #include <windows.h>
 #include <windowsx.h>

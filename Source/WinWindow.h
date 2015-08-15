@@ -2,7 +2,6 @@
 
 #include "QWinWidget.h"
 #include "WinPanel.h"
-#include "TabLabel.h"
 
 class WinWindow : public QWinWidget
 {

@@ -77,11 +77,13 @@ Sidebar::Sidebar(const QSettings &p, QWidget* parent) : QWidget(parent)
 
     // Info box
     QWidget* infoBox = new QWidget(this);
+    infoBox->setObjectName("infoBox");
     infoBox->setMinimumHeight(58);
     infoBox->setMaximumHeight(58);
     infoBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    infoBox->setStyleSheet("background-color: " + p.value("Primary/TertiaryBase").toString() +
-                           ";border-top: 2px solid " + p.value("Accent/DarkAccent").toString() + ";");
+    infoBox->setStyleSheet("QWidget#infoBox "
+                           "{background-color: " + p.value("Primary/TertiaryBase").toString() +
+                           ";border-top: 2px solid " + p.value("Accent/DarkAccent").toString() + ";}");
     mainLayout->addWidget(infoBox);
 
     show();

@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QSettings>
+#include <QLabel>
+#include <QFile>
 
 QString g_getStylesheet(QString location)
 {
@@ -132,7 +134,7 @@ void MainPanel::init()
     QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
 
     // Stacked content panel
-    QStackedWidget* stack = new QStackedWidget(coreWidget);
+    stack = new QStackedWidget(coreWidget);
     stack->setObjectName("stack");
     stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     verticalLayout3->addWidget(stack);
