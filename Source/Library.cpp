@@ -46,7 +46,7 @@ Library::Library(Database db)
     bool loadUplay = false;
     QDir originRoot;
 #if defined(_WIN32) || defined(_WIN64)
-    originRoot(qgetenv("APPDATA").append("/Origin"));
+    originRoot = QDir(qgetenv("APPDATA").append("/Origin"));
 #elif defined(__APPLE__)
     originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
 #else
@@ -360,7 +360,7 @@ void Library::findOriginGames(QDir originRoot)
     // Setting orginFolder path to "Downloaded Games" folder
 #if defined(_WIN32)
     // Temp fix. need to get regkey on 32bit machine
-    originFolder(qgetenv("programfiles").append("\Origin Games"));
+    originFolder = QDir(qgetenv("programfiles").append("\Origin Games"));
 #elif defined (_WIN64)
     QSettings settings("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Origin", QSettings::NativeFormat);
     if (!settings.value("InstallLocation").isNull())
