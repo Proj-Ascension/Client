@@ -1,4 +1,5 @@
 #include "Sidebar.h"
+#include "TabWidget.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -22,7 +23,7 @@ Sidebar::Sidebar(const QSettings &p, QWidget* parent) : QWidget(parent)
 
     // Upper layout
     QVBoxLayout* upperLayout = new QVBoxLayout;
-    upperLayout->setSpacing(6);
+    upperLayout->setSpacing(5);
     upperLayout->setMargin(18);
     mainLayout->addLayout(upperLayout);
 
@@ -35,7 +36,6 @@ Sidebar::Sidebar(const QSettings &p, QWidget* parent) : QWidget(parent)
     userDropdown->setStyleSheet("QWidget#userDropdown {background-color: " + 
                                 p.value("Primary/SidebarElement").toString() + ";}");
     upperLayout->addWidget(userDropdown);
-    upperLayout->addStretch();
 
     // User dropdown layout
     QVBoxLayout* dropdownLayout = new QVBoxLayout;
@@ -75,6 +75,48 @@ Sidebar::Sidebar(const QSettings &p, QWidget* parent) : QWidget(parent)
     usernameLabel->setText("username");
     usernameLayout->addWidget(usernameLabel);
 
+    // Tabs
+    // Home tab
+    QPixmap homePixmap(":/SystemMenu/Icons/Home_Icon.png");
+    TabWidget* homeTab = new TabWidget(homePixmap, "homeTab", "Home", p, this);
+    upperLayout->addWidget(homeTab);
+
+    // Store tab
+    QPixmap storePixmap(":/SystemMenu/Icons/Store_Icon.png");
+    TabWidget* storeTab = new TabWidget(storePixmap, "storeTab", "Store", p, this);
+    upperLayout->addWidget(storeTab);
+
+    // Games tab
+    QPixmap gamesPixmap(":/SystemMenu/Icons/Games_Icon.png");
+    TabWidget* gamesTab = new TabWidget(gamesPixmap, "gamesTab", "Games", p, this);
+    upperLayout->addWidget(gamesTab);
+
+    // Community tab
+    QPixmap communityPixmap(":/SystemMenu/Icons/Community_Icon.png");
+    TabWidget* communityTab = new TabWidget(communityPixmap, "communityTab", "Community", p, this);
+    upperLayout->addWidget(communityTab);
+
+    // News tab
+    QPixmap newsPixmap(":/SystemMenu/Icons/News_Icon.png");
+    TabWidget* newsTab = new TabWidget(newsPixmap, "newsTab", "News", p, this);
+    upperLayout->addWidget(newsTab);
+    upperLayout->addStretch();
+
+    // Downloads tab
+    QPixmap downloadsPixmap(":/SystemMenu/Icons/Downloads_Icon.png");
+    TabWidget* downloadsTab = new TabWidget(downloadsPixmap, "downloadsTab", "Downloads", p, this);
+    upperLayout->addWidget(downloadsTab);
+
+    // Settings tab
+    QPixmap settingsPixmap(":/SystemMenu/Icons/Settings_Icon.png");
+    TabWidget* settingsTab = new TabWidget(settingsPixmap, "settingsTab", "Settings", p, this);
+    upperLayout->addWidget(settingsTab);
+
+    // Exit tab
+    QPixmap exitPixmap(":/SystemMenu/Icons/Exit_Icon.png");
+    TabWidget* exitTab = new TabWidget(exitPixmap, "exitTab", "Exit", p, this);
+    upperLayout->addWidget(exitTab);
+
     // Info box
     QWidget* infoBox = new QWidget(this);
     infoBox->setObjectName("infoBox");
@@ -105,3 +147,4 @@ void Sidebar::paintEvent(QPaintEvent* event)
     option.init(this);
     style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
 }
+

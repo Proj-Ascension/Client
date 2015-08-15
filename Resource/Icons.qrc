@@ -12,5 +12,13 @@
         <file>Icons/Ascension_Small.png</file>
         <file>Icons/Ascension_Icon.ico</file>
         <file>Icons/Status_Online.png</file>
+        <file>Icons/Home_Icon.png</file>
+        <file>Icons/Store_Icon.png</file>
+        <file>Icons/Games_Icon.png</file>
+        <file>Icons/Community_Icon.png</file>
+        <file>Icons/News_Icon.png</file>
+        <file>Icons/Downloads_Icon.png</file>
+        <file>Icons/Settings_Icon.png</file>
+        <file>Icons/Exit_Icon.png</file>
     </qresource>
 </RCC>
