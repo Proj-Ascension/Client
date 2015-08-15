@@ -11,5 +11,6 @@
         <file>Icons/Ascension.png</file>
         <file>Icons/Ascension_Small.png</file>
         <file>Icons/Ascension_Icon.ico</file>
+        <file>Icons/Status_Online.png</file>
     </qresource>
 </RCC>

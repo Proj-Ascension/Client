@@ -45,11 +45,35 @@ Sidebar::Sidebar(const QSettings &p, QWidget* parent) : QWidget(parent)
 
     // Dropdown title
     QLabel* dropdownTitle = new QLabel(userDropdown);
-    dropdownTitle->setStyleSheet(/*"background-color: rgba(0, 0, 0, 0);"*/
-                                 "color: " + p.value("Primary/LightText").toString() + ";");
-    dropdownTitle->setFont(QFont("SourceSansPro", 12));
+    dropdownTitle->setObjectName("dropdownTitle");
+    dropdownTitle->setStyleSheet("color: " + p.value("Primary/LightText").toString() + ";");
+    dropdownTitle->setFont(QFont("SourceSansPro", 12, QFont::Black));
     dropdownTitle->setText("Project Ascension");
     dropdownLayout->addWidget(dropdownTitle);
+
+    // Username layout
+    QHBoxLayout* usernameLayout = new QHBoxLayout;
+    usernameLayout->setSpacing(4);
+    usernameLayout->setMargin(0);
+    usernameLayout->setAlignment(Qt::AlignVCenter);
+    dropdownLayout->addLayout(usernameLayout);
+
+    // Status label
+    QLabel* statusLabel = new QLabel(userDropdown);
+    statusLabel->setObjectName("statusLabel");
+    statusLabel->setMinimumSize(QSize(10, 10));
+    statusLabel->setMaximumSize(QSize(10, 10));
+    statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Status_Online.png"));
+    statusLabel->setScaledContents(true);
+    usernameLayout->addWidget(statusLabel);
+
+    // Username label
+    QLabel* usernameLabel = new QLabel(userDropdown);
+    usernameLabel->setObjectName("usernameLabel");
+    usernameLabel->setStyleSheet("color: " + p.value("Primary/SubText").toString() + ";");
+    usernameLabel->setFont(QFont("SourceSansPro", 10, QFont::DemiBold));
+    usernameLabel->setText("username");
+    usernameLayout->addWidget(usernameLabel);
 
     show();
 }
