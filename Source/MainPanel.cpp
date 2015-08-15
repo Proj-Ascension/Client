@@ -74,6 +74,7 @@ void MainPanel::init()
 
     // Accent border
     QLabel* accentBorder = new QLabel(coreWidget);
+    accentBorder->setObjectName("accentBorder");
     accentBorder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     accentBorder->setMaximumHeight(3);
     accentBorder->setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() +
@@ -90,7 +91,7 @@ void MainPanel::init()
     verticalLayout1->addLayout(horizontalLayout1);
 
     // Sidebar widget - locked width
-    Sidebar* sidebar = new Sidebar;
+    Sidebar* sidebar = new Sidebar(coreWidget);
     horizontalLayout1->addWidget(sidebar);
 
     // Vertical layout #3
@@ -129,6 +130,7 @@ void MainPanel::init()
 
     // Stacked content panel
     QStackedWidget* stack = new QStackedWidget(coreWidget);
+    stack->setObjectName("stack");
     stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     verticalLayout3->addWidget(stack);
 
