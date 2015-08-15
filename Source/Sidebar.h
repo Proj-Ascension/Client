@@ -1,13 +1,14 @@
 #pragma once
 
 #include <QWidget>
+#include <QSettings>
 
 class Sidebar : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Sidebar(QWidget* parent = 0);
+    explicit Sidebar(const QSettings &settings, QWidget* parent = 0);
     virtual QSize sizeHint() const;
 
 protected:

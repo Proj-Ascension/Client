@@ -41,9 +41,6 @@ void MainPanel::init()
     QString style = g_getStylesheet(":/Styles/Content.css");
     QSettings p("palette.ini", QSettings::IniFormat);
 
-    setObjectName("mainPanel");
-    setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() + ";");
-
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
     mainGridLayout->setSpacing(0);
@@ -91,15 +88,22 @@ void MainPanel::init()
     verticalLayout1->addLayout(horizontalLayout1);
 
     // Sidebar widget - locked width
-    Sidebar* sidebar = new Sidebar(coreWidget);
+    Sidebar* sidebar = new Sidebar(p, coreWidget);
     horizontalLayout1->addWidget(sidebar);
+
+    // Backdrop widget - vertical layout #3
+    QWidget* mainPanelBackdrop = new QWidget(coreWidget);
+    mainPanelBackdrop->setObjectName("mainPanelBackdrop");
+    mainPanelBackdrop->setStyleSheet("QWidget#mainPanelBackdrop {background-color: " +
+                                     p.value("Primary/DarkestBase").toString() + ";}");
+    horizontalLayout1->addWidget(mainPanelBackdrop);
 
     // Vertical layout #3
     QVBoxLayout* verticalLayout3 = new QVBoxLayout;
     verticalLayout3->setSpacing(0);
     verticalLayout3->setMargin(0);
     verticalLayout3->setAlignment(Qt::AlignHCenter);
-    horizontalLayout1->addLayout(verticalLayout3);
+    mainPanelBackdrop->setLayout(verticalLayout3);
 
     // Horizontal layout #2 - window controls
     QHBoxLayout* horizontalLayout2 = new QHBoxLayout;

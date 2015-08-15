@@ -5,7 +5,7 @@
 #include <QLayout>
 #include <QLabel>
 
-Sidebar::Sidebar(QWidget* parent) : QWidget(parent)
+Sidebar::Sidebar(const QSettings &p, QWidget* parent) : QWidget(parent)
 {
     setObjectName("sidebar");
 
@@ -28,12 +28,28 @@ Sidebar::Sidebar(QWidget* parent) : QWidget(parent)
 
     // User dropdown label
     QWidget* userDropdown = new QWidget(this);
+    userDropdown->setObjectName("userDropdown");
     userDropdown->setMinimumWidth(188);
     userDropdown->setMinimumHeight(58);
     userDropdown->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    userDropdown->setStyleSheet("background-color: #4D5250;");
+    userDropdown->setStyleSheet("QWidget#userDropdown {background-color: " + 
+                                p.value("Primary/SidebarElement").toString() + ";}");
     upperLayout->addWidget(userDropdown);
     upperLayout->addStretch();
+
+    // User dropdown layout
+    QVBoxLayout* dropdownLayout = new QVBoxLayout;
+    dropdownLayout->setSpacing(8);
+    dropdownLayout->setMargin(8);
+    userDropdown->setLayout(dropdownLayout);
+
+    // Dropdown title
+    QLabel* dropdownTitle = new QLabel(userDropdown);
+    dropdownTitle->setStyleSheet(/*"background-color: rgba(0, 0, 0, 0);"*/
+                                 "color: " + p.value("Primary/LightText").toString() + ";");
+    dropdownTitle->setFont(QFont("SourceSansPro", 12));
+    dropdownTitle->setText("Project Ascension");
+    dropdownLayout->addWidget(dropdownTitle);
 
     show();
 }

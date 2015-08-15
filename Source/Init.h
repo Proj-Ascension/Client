@@ -25,14 +25,15 @@ void initSettings(QApplication &application)
         palette.beginGroup("Primary");
 
         palette.setValue("ActiveElement", "#FFFFFF");
-        palette.setValue("ActiveSelection", "#242424");
+        palette.setValue("InactiveSelection", "#686868");
         palette.setValue("HoverSelection", "#1B1B1B");
+        palette.setValue("SidebarElement", "#4D5250");
         palette.setValue("LightText", "#FFFFFF");
         palette.setValue("DarkText", "#242424");
-        palette.setValue("SubText", "#8B8B8B");
+        palette.setValue("SubText", "#B2B4B3");
         palette.setValue("PrimaryBase", "#282828");
         palette.setValue("SecondaryBase", "#1F1F1F");
-        palette.setValue("TertiaryBase", "#181818");
+        palette.setValue("TertiaryBase", "#131313");
         palette.setValue("DarkestBase", "#0F0F0F");
         palette.endGroup();
 
