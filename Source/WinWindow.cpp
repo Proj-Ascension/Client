@@ -14,7 +14,7 @@ WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 
     mainPanel = new WinPanel(this);
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QGridLayout* layout = new QGridLayout();
     layout->setMargin(0);
     setLayout(layout);
     layout->addWidget(mainPanel);

@@ -44,7 +44,7 @@ void MainPanel::init()
     setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() + ";");
 
     // Main panel layout
-    QGridLayout *mainGridLayout = new QGridLayout(this);
+    QGridLayout *mainGridLayout = new QGridLayout;
     mainGridLayout->setSpacing(0);
     mainGridLayout->setMargin(0);
     setLayout(mainGridLayout);
@@ -59,20 +59,20 @@ void MainPanel::init()
     mainGridLayout->addWidget(scrollArea);
 
     // Core widget
-    QWidget *coreWidget = new QWidget(this);
-    coreWidget->setObjectName("centralWidget");
+    QWidget *coreWidget = new QWidget(scrollArea);
+    coreWidget->setObjectName("coreWidget");
     coreWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollArea->setWidget(coreWidget);
 
     // Vertical layout #1
-    QVBoxLayout *verticalLayout1 = new QVBoxLayout(this);
+    QVBoxLayout *verticalLayout1 = new QVBoxLayout;
     verticalLayout1->setSpacing(0);
     verticalLayout1->setMargin(0);
     verticalLayout1->setAlignment(Qt::AlignHCenter);
     coreWidget->setLayout(verticalLayout1);
 
     // Accent border
-    QLabel *accentBorder = new QLabel(this);
+    QLabel *accentBorder = new QLabel(coreWidget);
     accentBorder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     accentBorder->setMaximumHeight(3);
     accentBorder->setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() +
@@ -82,14 +82,14 @@ void MainPanel::init()
     verticalLayout1->addWidget(accentBorder);
 
     // Horizontal layout #1
-    QHBoxLayout *horizontalLayout1 = new QHBoxLayout(this);
+    QHBoxLayout *horizontalLayout1 = new QHBoxLayout;
     horizontalLayout1->setSpacing(0);
     horizontalLayout1->setMargin(0);
     horizontalLayout1->setAlignment(Qt::AlignVCenter);
     verticalLayout1->addLayout(horizontalLayout1);
 
     // Sidebar widget - locked width
-    QWidget *sidebar = new QWidget(this);
+    QWidget *sidebar = new QWidget(coreWidget);
     sidebar->setMinimumWidth(224);
     sidebar->setMaximumWidth(224);
     sidebar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
@@ -97,14 +97,14 @@ void MainPanel::init()
     horizontalLayout1->addWidget(sidebar);
 
     // Vertical layout #3
-    QVBoxLayout *verticalLayout3 = new QVBoxLayout(this);
+    QVBoxLayout *verticalLayout3 = new QVBoxLayout;
     verticalLayout3->setSpacing(0);
     verticalLayout3->setMargin(0);
     verticalLayout3->setAlignment(Qt::AlignHCenter);
     horizontalLayout1->addLayout(verticalLayout3);
 
     // Horizontal layout #2 - window controls
-    QHBoxLayout *horizontalLayout2 = new QHBoxLayout(this);
+    QHBoxLayout *horizontalLayout2 = new QHBoxLayout;
     horizontalLayout2->setSpacing(0);
     horizontalLayout2->setMargin(8);
     verticalLayout3->addLayout(horizontalLayout2);
@@ -113,25 +113,25 @@ void MainPanel::init()
 
     // Window controls
     // Minimize
-    QPushButton *pushButtonMinimize = new QPushButton("", this);
+    QPushButton *pushButtonMinimize = new QPushButton("", coreWidget);
     pushButtonMinimize->setObjectName("pushButtonMinimize");
     horizontalLayout2->addWidget(pushButtonMinimize);
     QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimize()));
 
     // Maximize
-    QPushButton *pushButtonMaximize = new QPushButton("", this);
+    QPushButton *pushButtonMaximize = new QPushButton("", coreWidget);
     pushButtonMaximize->setObjectName("pushButtonMaximize");
     horizontalLayout2->addWidget(pushButtonMaximize);
     QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximize()));
 
     // Close
-    QPushButton *pushButtonClose = new QPushButton("", this);
+    QPushButton *pushButtonClose = new QPushButton("", coreWidget);
     pushButtonClose->setObjectName("pushButtonClose");
     horizontalLayout2->addWidget(pushButtonClose);
     QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
 
     // Stacked content panel
-    QStackedWidget *stack = new QStackedWidget(this);
+    QStackedWidget *stack = new QStackedWidget(coreWidget);
     stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     verticalLayout3->addWidget(stack);
 
