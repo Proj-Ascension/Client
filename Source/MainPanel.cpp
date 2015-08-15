@@ -109,12 +109,6 @@ void MainPanel::init()
     horizontalLayout2->setMargin(8);
     verticalLayout3->addLayout(horizontalLayout2);
 
-    // Window title
-    QLabel *windowTitle = new QLabel(this);
-    windowTitle->setText("Project Ascension");
-    windowTitle->setStyleSheet("font-size: 16px; color: #444444;");
-    windowTitle->setAttribute(Qt::WA_TransparentForMouseEvents);
-    horizontalLayout2->addWidget(windowTitle);
     horizontalLayout2->addStretch();
 
     // Window controls
