@@ -1,4 +1,5 @@
 #include "MainPanel.h"
+#include "Sidebar.h"
 
 #include <QMessageBox>
 #include <QGridLayout>
@@ -89,11 +90,7 @@ void MainPanel::init()
     verticalLayout1->addLayout(horizontalLayout1);
 
     // Sidebar widget - locked width
-    QWidget *sidebar = new QWidget(coreWidget);
-    sidebar->setMinimumWidth(224);
-    sidebar->setMaximumWidth(224);
-    sidebar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    sidebar->setStyleSheet("background-image: url(:/Elements/Sidebar.png);");
+    Sidebar *sidebar = new Sidebar;
     horizontalLayout1->addWidget(sidebar);
 
     // Vertical layout #3

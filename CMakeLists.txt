@@ -19,6 +19,7 @@ set(SOURCE
     Source/Library.cpp
     Source/MainPanel.cpp
     Source/Database.cpp
+	Source/Sidebar.cpp
 )
 
 set(HEADERS
@@ -27,6 +28,7 @@ set(HEADERS
     Source/MainPanel.h
     Source/Database.h
     Source/Init.h
+	Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
 )
 
