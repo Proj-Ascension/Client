@@ -38,6 +38,7 @@ set(RESOURCES
     Resource/Icons.qrc
     Resource/Fonts.qrc
     Resource/Styles.qrc
+    Resource/Elements.qrc
 )
 
 set(GUI_TYPE "")

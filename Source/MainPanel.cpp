@@ -90,10 +90,10 @@ void MainPanel::init()
 
     // Sidebar widget - locked width
     QWidget *sidebar = new QWidget(this);
-    sidebar->setMinimumWidth(250);
-    sidebar->setMaximumWidth(250);
+    sidebar->setMinimumWidth(224);
+    sidebar->setMaximumWidth(224);
     sidebar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    sidebar->setStyleSheet("background-color: #222222;");
+    sidebar->setStyleSheet("background-image: url(:/Elements/Sidebar.png);");
     horizontalLayout1->addWidget(sidebar);
 
     // Vertical layout #3
