@@ -19,7 +19,7 @@ BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, c
       visible(false),
       borderless(false),
       borderlessResizeable(true),
-      aeroShadow(false)
+      aeroShadow(true)
 {
     WNDCLASSEX wcx = {0};
     wcx.cbSize = sizeof(WNDCLASSEX);

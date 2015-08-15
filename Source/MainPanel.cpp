@@ -74,8 +74,7 @@ void MainPanel::init()
     accentBorder->setObjectName("accentBorder");
     accentBorder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     accentBorder->setMaximumHeight(3);
-    accentBorder->setStyleSheet("background-color: " + p.value("Primary/DarkestBase").toString() +
-                                ";border-top: 2px solid " + p.value("Accent/MediumAccent").toString() +
+    accentBorder->setStyleSheet("border-top: 2px solid " + p.value("Accent/MediumAccent").toString() +
                                 ";border-bottom: 1px solid" + p.value("Accent/DarkAccent").toString() + ";");
     accentBorder->adjustSize();
     verticalLayout1->addWidget(accentBorder);
