@@ -5,21 +5,34 @@
 #include <QStyleOption>
 #include <QDebug>
 
-TabWidget::TabWidget(const QPixmap &icon, const QString &name, const QString &text, const QSettings &p, QWidget* parent) : QWidget(parent)
+TabWidget::TabWidget(const QPixmap &icon, const QString &name, const QString &text, QSettings* palette, QWidget* parent) : QWidget(parent)
 {
     this->setObjectName(name);
     this->setMaximumHeight(34);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
+    p = palette;
+
     // Toggle mouse tracking
     this->setAttribute(Qt::WA_Hover, true);
     this->setMouseTracking(true);
     
+    // Background layout
+    QGridLayout* bgLayout = new QGridLayout;
+    bgLayout->setMargin(0);
+    bgLayout->setSpacing(0);
+    this->setLayout(bgLayout);
+
+    // Content widget
+    QWidget* contentWidget = new QWidget(this);
+    contentWidget->setObjectName("contentWidget");
+    bgLayout->addWidget(contentWidget);
+
     // Horizontal layout
     QHBoxLayout* tabLayout = new QHBoxLayout;
     tabLayout->setMargin(5);
     tabLayout->setSpacing(10);
-    this->setLayout(tabLayout);
+    contentWidget->setLayout(tabLayout);
 
     // Tab icon
     tabIcon = new QLabel(this);
@@ -33,21 +46,21 @@ TabWidget::TabWidget(const QPixmap &icon, const QString &name, const QString &te
     // Tab text
     tabText = new QLabel(this);
     tabText->setObjectName("tabText");
-    tabText->setStyleSheet("color: " + p.value("Primary/InactiveSelection").toString() + ";");
+    tabText->setStyleSheet("color: " + p->value("Primary/InactiveSelection").toString() + ";");
     tabText->setFont(QFont("SourceSansPro", 10));
     tabText->setText(text);
     tabLayout->addWidget(tabText);
 
-    // Colorize effect
+    // Hover colorize effect
     opacity = 0;
     effect = new QGraphicsColorizeEffect();
-    effect->setColor(QColor(p.value("Primary/HoverSelection").toString()));
+    effect->setColor(QColor(p->value("Primary/HoverSelection").toString()));
     effect->setStrength(opacity);
-    this->setGraphicsEffect(effect);
+    contentWidget->setGraphicsEffect(effect);
 
     // Colorize animation
     animation = new QPropertyAnimation(this, "opacity");
-    animation->setDuration(150);
+    animation->setDuration(100);
     animation->setEasingCurve(QEasingCurve::Linear);
 
     // Effect signals
@@ -105,4 +118,21 @@ void TabWidget::toggleUnhovered()
         animation->setEndValue(0.0);
         animation->start();
     }
+}
+
+void TabWidget::toggleActive()
+{
+    isActive = true;
+    this->setStyleSheet("TabWidget#" + this->objectName() + 
+                        " {background-color: " + p->value("Primary/TertiaryBase").toString() + ";}");
+    effect->setColor(QColor(p->value("Accent/LightAccent").toString()));
+    setOpacity(1.0);
+}
+
+void TabWidget::toggleInactive()
+{
+    isActive = false;
+    this->setStyleSheet("background-color: rgba(0, 0, 0, 0);");
+    effect->setColor(QColor(p->value("Primary/HoverSelection").toString()));
+    setOpacity(0.0);
 }

@@ -1,11 +1,9 @@
 #include "MainPanel.h"
-#include "Sidebar.h"
 
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QScrollArea>
-#include <QSettings>
 #include <QLabel>
 #include <QFile>
 
@@ -41,7 +39,7 @@ void MainPanel::init()
     }
 
     QString style = g_getStylesheet(":/Styles/Content.css");
-    QSettings p("palette.ini", QSettings::IniFormat);
+    p = new QSettings("palette.ini", QSettings::IniFormat);
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
@@ -76,8 +74,8 @@ void MainPanel::init()
     accentBorder->setObjectName("accentBorder");
     accentBorder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     accentBorder->setMaximumHeight(3);
-    accentBorder->setStyleSheet("border-top: 2px solid " + p.value("Accent/MediumAccent").toString() +
-                                ";border-bottom: 1px solid" + p.value("Accent/DarkAccent").toString() + ";");
+    accentBorder->setStyleSheet("border-top: 2px solid " + p->value("Accent/MediumAccent").toString() +
+                                ";border-bottom: 1px solid" + p->value("Accent/DarkAccent").toString() + ";");
     accentBorder->adjustSize();
     verticalLayout1->addWidget(accentBorder);
 
@@ -89,14 +87,14 @@ void MainPanel::init()
     verticalLayout1->addLayout(horizontalLayout1);
 
     // Sidebar widget - locked width
-    Sidebar* sidebar = new Sidebar(p, coreWidget);
+    sidebar = new Sidebar(p, coreWidget);
     horizontalLayout1->addWidget(sidebar);
 
     // Backdrop widget - vertical layout #3
     QWidget* mainPanelBackdrop = new QWidget(coreWidget);
     mainPanelBackdrop->setObjectName("mainPanelBackdrop");
     mainPanelBackdrop->setStyleSheet("QWidget#mainPanelBackdrop {background-color: " +
-                                     p.value("Primary/DarkestBase").toString() + ";}");
+                                     p->value("Primary/DarkestBase").toString() + ";}");
     horizontalLayout1->addWidget(mainPanelBackdrop);
 
     // Vertical layout #3
@@ -138,6 +136,20 @@ void MainPanel::init()
     stack->setObjectName("stack");
     stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     verticalLayout3->addWidget(stack);
+
+    // Connect signals
+    connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
+    connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
+    connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
+    connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
+    connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
+    connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
+    connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
+    connect(sidebar->exitTab, SIGNAL(clicked()), this, SLOT(setExit()));
+
+    // Set active tab
+    activeTab = sidebar->gamesTab;
+    activeTab->toggleActive();
 
     // Show
     show();

@@ -12,12 +12,13 @@ class TabWidget : public QWidget
     Q_PROPERTY(qreal opacity READ getOpacity WRITE setOpacity)
 
 public:
-    TabWidget(const QPixmap &icon, const QString &name, const QString &text, const QSettings &p, QWidget* parent = 0);
+    TabWidget(const QPixmap &icon, const QString &name, const QString &text, QSettings* p, QWidget* parent = 0);
 
     void enterEvent(QEvent* event);
     void leaveEvent(QEvent* event);
     void mousePressEvent(QMouseEvent* event);
-    int currentState = 0;
+    void toggleActive();
+    void toggleInactive();
 
     qreal getOpacity()
     {
@@ -41,14 +42,12 @@ private:
     qreal opacity;
     bool isActive = false;
 
+    QSettings* p;
+
 signals:
     void hovered();
     void unhovered();
     void clicked();
-
-public slots:
-    void toggleActive();
-    void toggleInactive();
 
 private slots:
     void toggleHovered();
