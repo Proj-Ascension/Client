@@ -52,7 +52,7 @@ Sidebar::Sidebar(QSettings* p, QWidget* parent) : QWidget(parent)
     QLabel* dropdownTitle = new QLabel(userDropdown);
     dropdownTitle->setObjectName("dropdownTitle");
     dropdownTitle->setStyleSheet("color: " + p->value("Primary/LightText").toString() + ";");
-    dropdownTitle->setFont(QFont("SourceSansPro", 12, QFont::Black));
+    dropdownTitle->setFont(QFont("SourceSansPro", 12, QFont::DemiBold));
     dropdownTitle->setText("Project Ascension");
     dropdownLayout->addWidget(dropdownTitle);
 
