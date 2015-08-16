@@ -8,17 +8,13 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QDirIterator>
+#include <QSettings>
 
-#include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include <cctype>
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <QSettings>
-#endif
 namespace pt = boost::property_tree;
 
 /** Library constructor
@@ -46,17 +42,18 @@ Library::Library(Database db)
     // For debugging
     bool loadSteam = true;
     bool loadOrigin = true;
-    bool loadUplay = false;
+    bool loadUplay = true;
     QDir originRoot;
 #if defined(_WIN32) || defined(_WIN64)
-    originRoot(qgetenv("APPDATA").append("/Origin"));
+    originRoot = QDir(qgetenv("APPDATA").append("/Origin"));
 #elif defined(__APPLE__)
     originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
 #else
     QMessageBox(QMessageBox::Critical, "Error", "Platform does not support Origin.");
     return;
 #endif
-    
+
+#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
     if (originRoot.exists() && loadOrigin)
     {
         findOriginGames(originRoot);
@@ -65,6 +62,7 @@ Library::Library(Database db)
     {
         qDebug() << "Origin not found. Possibly not installed.";
     }
+#endif
 
     QDir steamRoot;
 #if defined(_WIN32) || defined(_WIN64)
@@ -91,6 +89,7 @@ Library::Library(Database db)
         qDebug("Steam was not found, probably not installed.");
     }
 
+#if defined(_WIN32) || defined(_WIN64)
     QDir uplayRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Ubisoft Game Launcher");
     if (uplayRoot.exists() && loadUplay)
     {
@@ -100,6 +99,7 @@ Library::Library(Database db)
     {
         qDebug("UPlay was not found, probably not installed.");
     }
+#endif
 }
 
 Library::~Library()
@@ -292,7 +292,7 @@ bool Library::isProcessRunning() const
     return runningProcess->state() != QProcess::NotRunning;
 }
 
-/** Find the location of every steam game, using steamRoot as a basepoint. 
+/** Find the location of every steam game, using steamRoot as a basepoint.
  * \param steamRoot The root of your steam installation
 */
 void Library::findSteamGames(QDir steamRoot)
@@ -346,34 +346,23 @@ void Library::findOriginGames(QDir originRoot)
     QDir originFolder;
     pt::ptree originTree;
     read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
-    
-    //TODO: This key is no longer in local.xml Need to figure out another way to do this.
 
-   /* for (auto& xmlIter : originTree.get_child("Settings"))
+
+    for (auto& xmlIter : originTree.get_child("Settings"))
     {
         if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
         {
-            //originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
-            qDebug() << originFolder;
+            originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
             break;
         }
     }
-*/
-    
-    // Setting orginFolder path to "Downloaded Games" folder
-#if defined(_WIN32)
-    // Temp fix. need to get regkey on 32bit machine
-    originFolder(qgetenv("programfiles").append("\Origin Games"));
-#elif defined (_WIN64)
-    QSettings settings("HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Origin", QSettings::NativeFormat);
-    if (!settings.value("InstallLocation").isNull())
+
+    if (originFolder == QDir("."))
     {
-        steamRoot = QDir(settings.value("InstallLocation").toString());
+        originFolder = QDir("C:\\Program Files (x86)\\Origin Games\\");
     }
-#elif defined(__APPLE__)
-    originFolder = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-#endif
     
+
     QStringList ignoreList;
     ignoreList << "Cleanup.exe"
                << "Touchup.exe"
@@ -385,7 +374,18 @@ void Library::findOriginGames(QDir originRoot)
                << "activation.exe"
                << "EACoreServer.exe"
                << "EAProxyInstaller.exe"
-               << "D3D11Install.exe";
+               << "D3D11Install.exe"
+               << "ATISET.EXE"
+               << "DOS4GW.EXE"
+               << "INFO.EXE"
+               << "INSTALL.EXE"
+               << "INTRO.EXE"
+               << "MUNGE.EXE"
+               << "SC2K.EXE"
+               << "UNIVBE.EXE"
+               << "VDETECT.EXE"
+               << "VRF_DLL.EXE"
+               << "WILLTV.EXE";
     originFolder.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QStringList folderList = originFolder.entryList();
     QHash<QString, QStringList> masterList;
@@ -430,7 +430,16 @@ void Library::findUplayGames(QDir uplayRoot)
                 std::vector<std::string> strSplit;
                 boost::split(strSplit, line, boost::is_any_of("\""));
                 uplayFolder = QDir(QString::fromStdString(strSplit.at(1)));
+                break;
             }
+        }
+    }
+
+    if (uplayFolder == QDir("."))
+    {
+        QSettings settings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Uplay", QSettings::NativeFormat);
+        if (!settings.value("InstallLocation").isNull()) {
+            uplayFolder = QDir(settings.value("InstallLocation").toString());
         }
     }
 
