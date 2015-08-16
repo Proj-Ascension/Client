@@ -13,9 +13,6 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
 
-#if defined(_WIN32) || defined(_WIN64)
-#include <QSettings>
-#endif
 namespace pt = boost::property_tree;
 
 /** Library constructor
@@ -32,13 +29,16 @@ Library::Library(Database db, QSettings* p, QWidget* parent)
     this->setStyleSheet("#leftSidebar {"
                         "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
                         "#content {"
-                        "background-color: " + p->value("Primary/DarkestBase").toString() + ";} "
+                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
                         "QPushButton {"
                         "color: " + p->value("Primary/LightText").toString() + "; "
                         "background-color: " + p->value("Primary/DarkElement").toString() + "; "
                         "font: 12pt; border: none; margin: 0px; padding: 0px;} "
                         "QPushButton:hover {"
-                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";}");
+                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+                        "QListWidget {"
+                        "background-color: " + p->value("Primary/TertiaryBase").toString() + "; "
+                        "color: " + p->value("Primary/LightText").toString() + ";}");
 
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
