@@ -5,18 +5,6 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QLabel>
-#include <QFile>
-
-QString g_getStylesheet(QString location)
-{
-    QFile stylesheet(location);
-    if (stylesheet.open(QFile::ReadOnly))
-    {
-        QString styleSheet = stylesheet.readAll();
-        return styleSheet;
-    }
-    return "";
-}
 
 MainPanel::MainPanel(QWidget* parent)
     : QWidget(parent)
@@ -38,7 +26,6 @@ void MainPanel::init()
         return;
     }
 
-    QString style = g_getStylesheet(":/Styles/Content.css");
     p = new QSettings("palette.ini", QSettings::IniFormat);
 
     // Main panel layout
@@ -139,8 +126,7 @@ void MainPanel::init()
 
     // Stack widgets
     home = new QWidget(stack);
-    library = new Library(db, stack);
-    library->setStyleSheet(style);
+    library = new Library(db, p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
     stack->setCurrentWidget(library);

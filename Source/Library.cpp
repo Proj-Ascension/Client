@@ -21,7 +21,7 @@ namespace pt = boost::property_tree;
 /** Library constructor
  * Initialize the UI and generate an initial list of all the games available.
 */
-Library::Library(Database db, QWidget* parent)
+Library::Library(Database db, QSettings* p, QWidget* parent)
     : QWidget(parent),
       db(db),
       ui(new Ui::Library),
@@ -29,6 +29,17 @@ Library::Library(Database db, QWidget* parent)
 {
     ui->setupUi(this);
     this->setObjectName("libraryUI");
+    this->setStyleSheet("#leftSidebar {"
+                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+                        "#content {"
+                        "background-color: " + p->value("Primary/DarkestBase").toString() + ";} "
+                        "QPushButton {"
+                        "color: " + p->value("Primary/LightText").toString() + "; "
+                        "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                        "font: 12pt; border: none; margin: 0px; padding: 0px;} "
+                        "QPushButton:hover {"
+                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";}");
+
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
 

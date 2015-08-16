@@ -124,7 +124,7 @@ void TabWidget::toggleActive()
 {
     isActive = true;
     this->setStyleSheet("TabWidget#" + this->objectName() + 
-                        " {background-color: " + p->value("Primary/TertiaryBase").toString() + ";}");
+                        " {background-color: " + p->value("Primary/DarkestBase").toString() + ";}");
     effect->setColor(QColor(p->value("Accent/LightAccent").toString()));
     setOpacity(1.0);
 }

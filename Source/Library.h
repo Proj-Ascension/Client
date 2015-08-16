@@ -4,6 +4,7 @@
 
 #include <QWidget>
 #include <QProcess>
+#include <QSettings>
 #include <QDir>
 
 /** Library UI namespace. */
@@ -20,7 +21,7 @@ class Library : public QWidget
     Q_OBJECT
 
 public:
-    Library(Database db, QWidget* parent = 0);
+    Library(Database db, QSettings* p, QWidget* parent = 0);
     ~Library();
 
 private slots:

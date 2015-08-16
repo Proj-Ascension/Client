@@ -34,7 +34,7 @@ Sidebar::Sidebar(QSettings* p, QWidget* parent) : QWidget(parent)
     userDropdown->setMinimumHeight(58);
     userDropdown->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     userDropdown->setStyleSheet("QWidget#userDropdown {background-color: " + 
-                                p->value("Primary/SidebarElement").toString() + ";}");
+                                p->value("Primary/DarkElement").toString() + ";}");
     upperLayout->addWidget(userDropdown);
 
     // User dropdown layout

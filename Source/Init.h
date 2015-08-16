@@ -27,7 +27,7 @@ void initSettings(QApplication &application)
         palette.setValue("ActiveElement", "#FFFFFF");
         palette.setValue("InactiveSelection", "#686868");
         palette.setValue("HoverSelection", "#ADADAD");
-        palette.setValue("SidebarElement", "#4D5250");
+        palette.setValue("DarkElement", "#4D5250");
         palette.setValue("LightText", "#FFFFFF");
         palette.setValue("DarkText", "#242424");
         palette.setValue("SubText", "#B2B4B3");
