@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
+#include <QMouseEvent>
+
 #include <iostream>
 
 UnixWindow::UnixWindow()
