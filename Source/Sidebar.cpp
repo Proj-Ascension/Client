@@ -6,6 +6,11 @@
 #include <QLayout>
 #include <QLabel>
 
+/** MainPanel constructor
+* Constructs the sidebar by depth - back to front.
+* \param p Inherited palette configuration for setting StyleSheets.
+* \param parent Pointer to parent widget.
+*/
 Sidebar::Sidebar(QSettings* p, QWidget* parent) : QWidget(parent)
 {
     setObjectName("sidebar");
@@ -131,11 +136,19 @@ Sidebar::Sidebar(QSettings* p, QWidget* parent) : QWidget(parent)
     show();
 }
 
+/** Overridden size hint.
+* Ensures visibility of the sidebar at app launch.
+* \return Constant QSize representing the preferred sidebar size.
+*/
 QSize Sidebar::sizeHint() const
 {
     return QSize(224, 224);
 }
 
+/** Overridden paint event.
+* Necessary for displaying stylesheets correctly.
+* \param event The QPaintEvent trigger.
+*/
 void Sidebar::paintEvent(QPaintEvent* event)
 {
     // Default paint event

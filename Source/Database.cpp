@@ -2,7 +2,7 @@
 
 #include <QDebug>
 
-/** Constructor
+/** Database constructor
  * Constructs the local database.
  * Currently no interface to handle remote databases, just creates one in the
  * current working directory.
@@ -50,7 +50,7 @@ bool Database::reset()
  * \param gameName The name of the game.
  * \param gameDirectory Working directory of the game.
  * \param executablePath The location of the executable on the filesystem.
- * \param arguments List of arguments to launch with
+ * \param arguments List of arguments to launch with.
  * \return Success/failure of the operation.
 */
 bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments)
@@ -84,7 +84,7 @@ bool Database::removeGameById(unsigned int id)
 }
 
 /** Remove a game from the database by their name.
- * \param name Name of the game to remove
+ * \param name Name of the game to remove.
 */
 bool Database::removeGameByName(QString name)
 {
@@ -101,18 +101,18 @@ bool Database::removeGameByName(QString name)
     }
 }
 
-/** Wrapper to access the Game object from the ID
- * \param id ID to find
- * \return A Game object, empty upon failure
+/** Wrapper to access the Game object from the ID.
+ * \param id ID to find.
+ * \return A Game object, empty upon failure.
 */
 Game Database::getGameById(unsigned int id)
 {
     return std::get<1>(isExistant(id));
 }
 
-/** Wrapper to access the Game object from the name
- * \param id ID to find
- * \return A Game object, empty upon failure
+/** Wrapper to access the Game object from the name.
+ * \param id ID to find.
+ * \return A Game object, empty upon failure.
 */
 Game Database::getGameByName(QString name)
 {
@@ -148,8 +148,8 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
     }
 }
 
-/** Perform a query to find a specific game by their name. (Soon to be
- * deprecated)
+/** Perform a query to find a specific game by their name (soon to be
+ * deprecated).
  *
  * \param name Name of the game to find.
  * \return A Game object upon success, 0 upon failure.

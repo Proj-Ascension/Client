@@ -5,6 +5,9 @@
 #include <QWidget>
 #include <QSettings>
 
+/** Sidebar class.
+* Class to handle the layout and control of the sidebar.
+*/
 class Sidebar : public QWidget
 {
     Q_OBJECT

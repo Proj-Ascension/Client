@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QFile>
 
+/** Namespace for entry point initialization functions. */
 namespace entryPoint
 {
 void initSettings(QApplication &application)

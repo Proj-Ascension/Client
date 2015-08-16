@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
         application.setWindowIcon(QIcon(":/SystemMenu/Icons/Ascension_Icon.ico"));
     #endif
 
-    // Stylesheet
+    // Global stylesheet
     QFile stylesheet(":/Styles/PAClient.css");
     if (stylesheet.open(QFile::ReadOnly))
     {
@@ -43,7 +43,6 @@ int main(int argc, char* argv[])
         window.setMinimumSize(830, 550);
     #endif
 
-    // Launch
     application.exec();
 
     return 0;

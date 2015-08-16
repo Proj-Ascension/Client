@@ -6,6 +6,10 @@
 #include <QScrollArea>
 #include <QLabel>
 
+/** MainPanel constructor
+* Sets base size policy and object name.
+* \param parent Pointer to parent widget.
+*/
 MainPanel::MainPanel(QWidget* parent)
     : QWidget(parent)
 {
@@ -16,6 +20,10 @@ MainPanel::MainPanel(QWidget* parent)
     show();
 }
 
+/** Main initializer for the UI.
+* QObjects are initialized by depth - back to front.
+* Note that the sidebar is initialized as a derived class.
+*/
 void MainPanel::init()
 {
     if (!db.init())

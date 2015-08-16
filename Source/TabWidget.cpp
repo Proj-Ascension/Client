@@ -5,7 +5,16 @@
 #include <QStyleOption>
 #include <QDebug>
 
-TabWidget::TabWidget(const QPixmap &icon, const QString &name, const QString &text, QSettings* palette, QWidget* parent) : QWidget(parent)
+/** TabWidget constructor
+* Initialize the layout of the tab, as well as colorization settings.
+* \param icon The pixmap (icon) for this tab.
+* \param name The desired object name for this tab.
+* \param text The text written on this tab.
+* \param palette Inherited palette configuration for setting StyleSheets.
+* \param parent Pointer to parent widget.
+*/
+TabWidget::TabWidget(const QPixmap &icon, const QString &name, const QString &text, 
+                     QSettings* palette, QWidget* parent) : QWidget(parent)
 {
     this->setObjectName(name);
     this->setMaximumHeight(34);
@@ -68,24 +77,37 @@ TabWidget::TabWidget(const QPixmap &icon, const QString &name, const QString &te
     connect(this, SIGNAL(unhovered()), this, SLOT(toggleUnhovered()));
 }
 
+/** Overridden enter event.
+* Emits the hover signal for this tab.
+*/
 void TabWidget::enterEvent(QEvent* event)
 {
     Q_EMIT hovered();
     QWidget::enterEvent(event);
 }
 
+/** Overridden leave event.
+* Emits the unhover signal for this tab.
+*/
 void TabWidget::leaveEvent(QEvent* event)
 {
     Q_EMIT unhovered();
     QWidget::leaveEvent(event);
 }
 
+/** Overridden mouse press event.
+* Emits the click signal for this tab.
+*/
 void TabWidget::mousePressEvent(QMouseEvent* event)
 {
     Q_EMIT clicked();
     QWidget::mousePressEvent(event);
 }
 
+/** Overridden paint event.
+* Necessary for displaying stylesheets correctly.
+* \param event The QPaintEvent trigger.
+*/
 void TabWidget::paintEvent(QPaintEvent* event)
 {
     // Default paint event
@@ -98,6 +120,8 @@ void TabWidget::paintEvent(QPaintEvent* event)
     style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
 }
 
+/** Starts the hover colorization animation.
+*/
 void TabWidget::toggleHovered()
 {
     if (!isActive)
@@ -109,6 +133,8 @@ void TabWidget::toggleHovered()
     }
 }
 
+/** Starts the unhover colorization animation.
+*/
 void TabWidget::toggleUnhovered()
 {
     if (!isActive)
@@ -120,6 +146,8 @@ void TabWidget::toggleUnhovered()
     }
 }
 
+/** Sets this tab active on the sidebar.
+*/
 void TabWidget::toggleActive()
 {
     isActive = true;
@@ -129,6 +157,8 @@ void TabWidget::toggleActive()
     setOpacity(1.0);
 }
 
+/** Sets this tab inactive on the sidebar.
+*/
 void TabWidget::toggleInactive()
 {
     isActive = false;

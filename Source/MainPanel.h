@@ -8,6 +8,10 @@
 #include <QStackedWidget>
 #include <QSettings>
 
+/** MainPanel class.
+* Class to construct the core content of the launcher window.
+* Also moderates interaction between sidebar and stacked content.
+*/
 class MainPanel : public QWidget
 {
     Q_OBJECT

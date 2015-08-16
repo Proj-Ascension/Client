@@ -6,6 +6,9 @@
 #include <QGraphicsEffect>
 #include <QPropertyAnimation>
 
+/** TabWidget class.
+* Class to handle the construction and behavior of sidebar tabs.
+*/
 class TabWidget : public QWidget
 {
     Q_OBJECT
