@@ -6,6 +6,7 @@
 #include "Library.h"
 
 #include <QStackedWidget>
+#include <QApplication>
 #include <QSettings>
 
 /** MainPanel class.

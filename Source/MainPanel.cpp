@@ -151,7 +151,7 @@ void MainPanel::init()
     // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
     // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
     // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
-    // connect(sidebar->exitTab, SIGNAL(clicked()), this, SLOT(setExit()));
+    connect(sidebar->exitTab, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
 
     // Show
     show();
