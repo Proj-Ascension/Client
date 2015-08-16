@@ -36,12 +36,19 @@ Library::Library(Database db, QSettings* p, QWidget* parent)
                         "QPushButton {"
                         "color: " + p->value("Primary/LightText").toString() + "; "
                         "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                        "font: 12pt; border: none; margin: 0px; padding: 0px;} "
+                        "border: none; margin: 0px; padding: 0px;} "
                         "QPushButton:hover {"
                         "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
                         "QListWidget {"
                         "background-color: " + p->value("Primary/TertiaryBase").toString() + "; "
                         "color: " + p->value("Primary/LightText").toString() + ";}");
+    ui->addGame->setFont(QFont("SourceSansPro", 12));
+    ui->addGame->setText("Add Game");
+    ui->removeGame->setFont(QFont("SourceSansPro", 12));
+    ui->removeGame->setText("Remove Game");
+    ui->testLaunch->setFont(QFont("SourceSansPro", 12));
+    ui->testLaunch->setText("Launch Game");
+
 
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
