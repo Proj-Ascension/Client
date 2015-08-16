@@ -137,19 +137,27 @@ void MainPanel::init()
     stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     verticalLayout3->addWidget(stack);
 
-    // Connect signals
-    connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
-    connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
-    connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
-    connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
-    connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
-    connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
-    connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
-    connect(sidebar->exitTab, SIGNAL(clicked()), this, SLOT(setExit()));
+    // Stack widgets
+    home = new QWidget(stack);
+    library = new Library(db, stack);
+    library->setStyleSheet(style);
+    stack->addWidget(home);
+    stack->addWidget(library);
+    stack->setCurrentWidget(library);
 
     // Set active tab
     activeTab = sidebar->gamesTab;
     activeTab->toggleActive();
+
+    // Connect signals
+    connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
+    // connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
+    connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
+    // connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
+    // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
+    // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
+    // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
+    // connect(sidebar->exitTab, SIGNAL(clicked()), this, SLOT(setExit()));
 
     // Show
     show();

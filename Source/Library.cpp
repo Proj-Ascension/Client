@@ -21,8 +21,8 @@ namespace pt = boost::property_tree;
 /** Library constructor
  * Initialize the UI and generate an initial list of all the games available.
 */
-Library::Library(Database db)
-    : QWidget(0),
+Library::Library(Database db, QWidget* parent)
+    : QWidget(parent),
       db(db),
       ui(new Ui::Library),
       runningProcess(new QProcess(this))

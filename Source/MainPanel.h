@@ -3,6 +3,7 @@
 #include "TabWidget.h"
 #include "Database.h"
 #include "Sidebar.h"
+#include "Library.h"
 
 #include <QStackedWidget>
 #include <QSettings>
@@ -25,17 +26,17 @@ public slots:
 
 protected:
     Database db;
-
     QStackedWidget* stack;
-    QWidget* libraryPtr;
 
     void init();
 
 private:
     QSettings* p;
-
     Sidebar* sidebar;
     TabWidget* activeTab;
+
+    QWidget* home;
+    Library* library;
 
 private slots:
     void setHome()
@@ -43,6 +44,7 @@ private slots:
         if (!(activeTab == sidebar->homeTab))
         {
             activeTab->toggleInactive();
+            stack->setCurrentWidget(home);
             activeTab = sidebar->homeTab;
             activeTab->toggleActive();
         }
@@ -61,6 +63,7 @@ private slots:
         if (!(activeTab == sidebar->gamesTab))
         {
             activeTab->toggleInactive();
+            stack->setCurrentWidget(library);
             activeTab = sidebar->gamesTab;
             activeTab->toggleActive();
         }
