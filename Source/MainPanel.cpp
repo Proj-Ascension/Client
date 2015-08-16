@@ -26,14 +26,6 @@ MainPanel::MainPanel(QWidget* parent)
 */
 void MainPanel::init()
 {
-    if (!db.init())
-    {
-        QMessageBox error;
-        error.critical(0, "Error!", "An error occured while trying to load the database.");
-        exit(EXIT_FAILURE);
-        return;
-    }
-
     p = new QSettings("palette.ini", QSettings::IniFormat);
 
     // Main panel layout
@@ -134,7 +126,7 @@ void MainPanel::init()
 
     // Stack widgets
     home = new QWidget(stack);
-    library = new Library(db, p, stack);
+    library = new Library(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
     stack->setCurrentWidget(library);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "TabWidget.h"
-#include "Database.h"
 #include "Sidebar.h"
 #include "Library.h"
 
@@ -30,9 +29,7 @@ public slots:
     virtual void pushButtonClose() = 0;
 
 protected:
-    Database db;
     QStackedWidget* stack;
-
     void init();
 
 private:

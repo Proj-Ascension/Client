@@ -17,13 +17,11 @@ namespace pt = boost::property_tree;
 
 /** Library constructor
  * Initialize the library UI and generate an initial list of all the games available.
- * \param db The local QSqlDatabase for this game library.
  * \param p Inherited palette configuration for setting StyleSheets.
  * \param parent Pointer to parent widget.
 */
-Library::Library(Database db, QSettings* p, QWidget* parent)
+Library::Library(QSettings* p, QWidget* parent)
     : QWidget(parent),
-      db(db),
       ui(new Ui::Library),
       runningProcess(new QProcess(this))
 {
@@ -42,13 +40,21 @@ Library::Library(Database db, QSettings* p, QWidget* parent)
                         "QListWidget {"
                         "background-color: " + p->value("Primary/TertiaryBase").toString() + "; "
                         "color: " + p->value("Primary/LightText").toString() + ";}");
-    ui->addGame->setFont(QFont("SourceSansPro", 12));
+    QFont buttonFont("SourceSansPro", 12);
+    ui->addGame->setFont(buttonFont);
     ui->addGame->setText("Add Game");
-    ui->removeGame->setFont(QFont("SourceSansPro", 12));
+    ui->removeGame->setFont(buttonFont);
     ui->removeGame->setText("Remove Game");
-    ui->testLaunch->setFont(QFont("SourceSansPro", 12));
+    ui->testLaunch->setFont(buttonFont);
     ui->testLaunch->setText("Launch Game");
 
+    if (!db.init())
+    {
+        QMessageBox error;
+        error.critical(0, "Error!", "An error occured while trying to load the database.");
+        exit(EXIT_FAILURE);
+        return;
+    }
 
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
