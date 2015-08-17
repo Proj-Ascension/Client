@@ -130,13 +130,6 @@ target_link_libraries(ProjectAscension
     Qt5::Sql
     ${Boost_LIBRARIES}
 )
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Network_EXECUTABLE_COMPILE_FLAGS}")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebKit_EXECUTABLE_COMPILE_FLAGS}")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5WebkitWidgets_EXECUTABLE_COMPILE_FLAGS}")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Sql_EXECUTABLE_COMPILE_FLAGS}")
 
 if(WIN32)
     target_link_libraries(ProjectAscension
@@ -156,7 +149,7 @@ if(WITH_TESTS)
     enable_testing()
     add_executable(test_runner
         Source/Database.cpp
-        tests/test.cpp)
+        tests/Test.cpp)
     target_link_libraries(test_runner
         Qt5::Sql)
     add_test(test_runner test_runner)
