@@ -15,32 +15,32 @@ set(CMAKE_AUTOMOC ON)
 
 set(SOURCE
     Source/Main.cpp
-    Source/TabLabel.cpp
+    Source/TabWidget.cpp
     Source/Library.cpp
-    Source/Browser.cpp
     Source/MainPanel.cpp
     Source/Database.cpp
+	Source/Sidebar.cpp
 )
 
 set(HEADERS
-    Source/TabLabel.h
+    Source/TabWidget.h
     Source/Library.h
-    Source/Browser.h
     Source/MainPanel.h
     Source/Database.h
     Source/Init.h
+	Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
 )
 
 set(FORMS
     Resource/UI/Library.ui
-    Resource/UI/Browser.ui
 )
 
 set(RESOURCES
     Resource/Icons.qrc
     Resource/Fonts.qrc
     Resource/Styles.qrc
+    Resource/Elements.qrc
 )
 
 set(GUI_TYPE "")
@@ -91,9 +91,9 @@ endif()
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(Qt5Network REQUIRED)
-find_package(Qt5WebKit REQUIRED)
-find_package(Qt5WebKitWidgets REQUIRED)
+# find_package(Qt5Network REQUIRED)
+# find_package(Qt5WebKit REQUIRED)
+# find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Boost REQUIRED)
 
@@ -105,9 +105,9 @@ include_directories(
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Network_INCLUDE_DIRS}
-    ${Qt5WebKit_INCLUDE_DIRS}
-    ${Qt5WebKitWidgets_INCLUDE_DIRS}
+#   ${Qt5Network_INCLUDE_DIRS}
+#   ${Qt5WebKit_INCLUDE_DIRS}
+#   ${Qt5WebKitWidgets_INCLUDE_DIRS}
     ${Qt5Sql_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     BorderlessWindow
@@ -124,9 +124,9 @@ target_link_libraries(ProjectAscension
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
-    Qt5::Network
-    Qt5::WebKit
-    Qt5::WebKitWidgets
+#	Qt5::Network
+#	Qt5::WebKit
+#	Qt5::WebkitWidgets
     Qt5::Sql
     ${Boost_LIBRARIES}
 )
@@ -149,7 +149,7 @@ if(WITH_TESTS)
     enable_testing()
     add_executable(test_runner
         Source/Database.cpp
-        tests/Test.cpp)
+        Tests/Test.cpp)
     target_link_libraries(test_runner
         Qt5::Sql)
     add_test(test_runner test_runner)
@@ -157,7 +157,7 @@ if(WITH_TESTS)
             appinfo.vdf
             game)
     add_custom_command(TARGET ProjectAscension POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
         endforeach()
 endif(WITH_TESTS)
 
@@ -180,9 +180,9 @@ if(WIN32)
         Qt5Widgetsd.dll
         Qt5Guid.dll
         Qt5Cored.dll
-        Qt5Networkd.dll
-        Qt5WebKitd.dll
-        Qt5WebKitWidgetsd.dll
+#       Qt5Networkd.dll
+#       Qt5WebKitd.dll
+#       Qt5WebKitWidgetsd.dll
         Qt5Sqld.dll
         Qt5Sensorsd.dll
         Qt5Positioningd.dll
@@ -190,7 +190,7 @@ if(WIN32)
         Qt5Qmld.dll
         Qt5Multimediad.dll
         Qt5MultimediaWidgetsd.dll
-        Qt5WebChanneld.dll
+#       Qt5WebChanneld.dll
         Qt5OpenGLd.dll
         Qt5PrintSupportd.dll
         icuin${ICU_VER}.dll

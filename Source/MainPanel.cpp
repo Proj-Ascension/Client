@@ -1,32 +1,15 @@
 #include "MainPanel.h"
 
 #include <QMessageBox>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QLabel>
 
-TabLabel* g_tabFactory(TabLabel* label, QString name, QString text)
-{
-    label->setObjectName(name);
-    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    label->setMinimumWidth(80);
-    label->setMaximumWidth(110);
-    label->setAlignment(Qt::AlignTop);
-    label->setFont(QFont("Sansation", 14));
-    label->setText(text);
-    label->setStyleSheet("color: #FFF;");
-
-    return label;
-}
-
-QString g_getStylesheet(QString location)
-{
-    QFile stylesheet(location);
-    if (stylesheet.open(QFile::ReadOnly))
-    {
-        QString styleSheet = stylesheet.readAll();
-        return styleSheet;
-    }
-    return "";
-}
-
+/** MainPanel constructor
+* Sets base size policy and object name.
+* \param parent Pointer to parent widget.
+*/
 MainPanel::MainPanel(QWidget* parent)
     : QWidget(parent)
 {
@@ -37,125 +20,19 @@ MainPanel::MainPanel(QWidget* parent)
     show();
 }
 
+/** Main initializer for the UI.
+* QObjects are initialized by depth - back to front.
+* Note that the sidebar is initialized as a derived class.
+*/
 void MainPanel::init()
 {
-    if (!db.init())
-    {
-        QMessageBox error;
-        error.critical(0, "Error!", "An error occured while trying to load the database.");
-        exit(EXIT_FAILURE);
-        return;
-    }
-
-    stack = new QStackedWidget(this);
-
-    QString style = g_getStylesheet(":/Styles/Content.css");
-    // Prepare UI objects for each tab
-    libraryPtr = new Library(db);
-    libraryPtr->setStyleSheet(style);
-    browserPtr = new Browser();
-    browserPtr->setStyleSheet(style);
-    stack->addWidget(libraryPtr);
-    stack->addWidget(browserPtr);
-    stack->setCurrentWidget(libraryPtr);
-
-    // System layout
-    QHBoxLayout* systemLayout = new QHBoxLayout;
-    systemLayout->setSpacing(0);
-    systemLayout->setMargin(8);
-
-    // Header spacing
-    QVBoxLayout* topLayout = new QVBoxLayout;
-    topLayout->setMargin(0);
-
-    // Header layout
-    QHBoxLayout* headerLayout = new QHBoxLayout;
-    headerLayout->setSpacing(0);
-    headerLayout->setMargin(0);
-
-    // Window title
-    QLabel* windowTitle = new QLabel(this);
-    windowTitle->setObjectName("windowTitle");
-    windowTitle->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    windowTitle->setMinimumWidth(175);
-    windowTitle->setMaximumWidth(175);
-    windowTitle->setAlignment(Qt::AlignTop);
-    windowTitle->setFont(QFont("Sansation", 18));
-    windowTitle->setText("Project \nASCENSION");
-    windowTitle->setStyleSheet("color: #7D818C;");
-    windowTitle->setAttribute(Qt::WA_TransparentForMouseEvents);
-
-    // Post-initialization header spacing
-    topLayout->addLayout(systemLayout);
-    topLayout->addLayout(headerLayout);
-    topLayout->addSpacing(10);
-
-    headerLayout->addSpacing(20);
-    headerLayout->addWidget(windowTitle);
-    headerLayout->addSpacing(40);
-
-    // Header tabs
-    libraryTab = new TabLabel(this);
-    libraryTab = g_tabFactory(libraryTab, "libraryTab", "LIBRARY");
-    headerLayout->addSpacing(8);
-    headerLayout->addWidget(libraryTab);
-    libraryTab->setStyleSheet("font-weight: bold; color: lightgreen;");
-
-    storeTab = new TabLabel(this);
-    storeTab = g_tabFactory(storeTab, "storeTab", "  STORE");
-    headerLayout->addSpacing(8);
-    headerLayout->addWidget(storeTab);
-
-    modsTab = new TabLabel(this);
-    modsTab = g_tabFactory(modsTab, "modsTab", " MODS");
-    headerLayout->addSpacing(8);
-    headerLayout->addWidget(modsTab);
-
-    newsTab = new TabLabel(this);
-    newsTab = g_tabFactory(newsTab, "newsTab", "NEWS");
-    headerLayout->addSpacing(8);
-    headerLayout->addWidget(newsTab);
-
-    browserTab = new TabLabel(this);
-    browserTab = g_tabFactory(browserTab, "browserTab", "BROWSER");
-    headerLayout->addSpacing(8);
-    headerLayout->addWidget(browserTab);
-
-    activeTab = libraryTab;
-
-    headerLayout->addStretch();
-
-    // System buttons
-    systemLayout->addStretch();
-
-    // Minimize
-    QPushButton* pushButtonMinimize = new QPushButton("", this);
-    pushButtonMinimize->setObjectName("pushButtonMinimize");
-    systemLayout->addWidget(pushButtonMinimize);
-    QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimize()));
-
-    // Maximize
-    QPushButton* pushButtonMaximize = new QPushButton("", this);
-    pushButtonMaximize->setObjectName("pushButtonMaximize");
-    systemLayout->addWidget(pushButtonMaximize);
-    QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximize()));
-
-    // Close
-    QPushButton* pushButtonClose = new QPushButton("", this);
-    pushButtonClose->setObjectName("pushButtonClose");
-    systemLayout->addWidget(pushButtonClose);
-    QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
+    p = new QSettings("palette.ini", QSettings::IniFormat);
 
     // Main panel layout
-    QGridLayout* mainGridLayout = new QGridLayout();
+    QGridLayout* mainGridLayout = new QGridLayout;
     mainGridLayout->setSpacing(0);
     mainGridLayout->setMargin(0);
     setLayout(mainGridLayout);
-
-    // Central widget
-    QWidget* centralWidget = new QWidget(this);
-    centralWidget->setObjectName("centralWidget");
-    centralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     // Main panel scroll area
     QScrollArea* scrollArea = new QScrollArea(this);
@@ -163,46 +40,111 @@ void MainPanel::init()
     scrollArea->setObjectName("mainPanelScrollArea");
     scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    mainGridLayout->addWidget(scrollArea);
 
-    // Vertical layout example
-    QVBoxLayout* verticalLayout = new QVBoxLayout();
-    verticalLayout->setSpacing(5);
-    verticalLayout->setMargin(0);
-    verticalLayout->setAlignment(Qt::AlignHCenter);
-    verticalLayout->addLayout(topLayout, 1);
+    // Core widget
+    QWidget* coreWidget = new QWidget(scrollArea);
+    coreWidget->setObjectName("coreWidget");
+    coreWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    scrollArea->setWidget(coreWidget);
 
-    verticalLayout->addWidget(stack, 4);
+    // Vertical layout #1
+    QVBoxLayout* verticalLayout1 = new QVBoxLayout;
+    verticalLayout1->setSpacing(0);
+    verticalLayout1->setMargin(0);
+    verticalLayout1->setAlignment(Qt::AlignHCenter);
+    coreWidget->setLayout(verticalLayout1);
+
+    // Accent border
+    QLabel* accentBorder = new QLabel(coreWidget);
+    accentBorder->setObjectName("accentBorder");
+    accentBorder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    accentBorder->setMaximumHeight(3);
+    accentBorder->setStyleSheet("border-top: 2px solid " + p->value("Accent/MediumAccent").toString() +
+                                ";border-bottom: 1px solid" + p->value("Accent/DarkAccent").toString() + ";");
+    accentBorder->adjustSize();
+    verticalLayout1->addWidget(accentBorder);
+
+    // Horizontal layout #1
+    QHBoxLayout* horizontalLayout1 = new QHBoxLayout;
+    horizontalLayout1->setSpacing(0);
+    horizontalLayout1->setMargin(0);
+    horizontalLayout1->setAlignment(Qt::AlignVCenter);
+    verticalLayout1->addLayout(horizontalLayout1);
+
+    // Sidebar widget - locked width
+    sidebar = new Sidebar(p, coreWidget);
+    horizontalLayout1->addWidget(sidebar);
+
+    // Backdrop widget - vertical layout #3
+    QWidget* mainPanelBackdrop = new QWidget(coreWidget);
+    mainPanelBackdrop->setObjectName("mainPanelBackdrop");
+    mainPanelBackdrop->setStyleSheet("QWidget#mainPanelBackdrop {background-color: " +
+                                     p->value("Primary/DarkestBase").toString() + ";}");
+    horizontalLayout1->addWidget(mainPanelBackdrop);
+
+    // Vertical layout #3
+    QVBoxLayout* verticalLayout3 = new QVBoxLayout;
+    verticalLayout3->setSpacing(0);
+    verticalLayout3->setMargin(0);
+    verticalLayout3->setAlignment(Qt::AlignHCenter);
+    mainPanelBackdrop->setLayout(verticalLayout3);
+
+    // Horizontal layout #2 - window controls
+    QHBoxLayout* horizontalLayout2 = new QHBoxLayout;
+    horizontalLayout2->setSpacing(0);
+    horizontalLayout2->setMargin(8);
+    verticalLayout3->addLayout(horizontalLayout2);
+
+    horizontalLayout2->addStretch();
+
+    // Window controls
+    // Minimize
+    QPushButton* pushButtonMinimize = new QPushButton("", coreWidget);
+    pushButtonMinimize->setObjectName("pushButtonMinimize");
+    horizontalLayout2->addWidget(pushButtonMinimize);
+    QObject::connect(pushButtonMinimize, SIGNAL(clicked()), this, SLOT(pushButtonMinimize()));
+
+    // Maximize
+    QPushButton* pushButtonMaximize = new QPushButton("", coreWidget);
+    pushButtonMaximize->setObjectName("pushButtonMaximize");
+    horizontalLayout2->addWidget(pushButtonMaximize);
+    QObject::connect(pushButtonMaximize, SIGNAL(clicked()), this, SLOT(pushButtonMaximize()));
+
+    // Close
+    QPushButton* pushButtonClose = new QPushButton("", coreWidget);
+    pushButtonClose->setObjectName("pushButtonClose");
+    horizontalLayout2->addWidget(pushButtonClose);
+    QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
+
+    // Stacked content panel
+    stack = new QStackedWidget(coreWidget);
+    stack->setObjectName("stack");
+    stack->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    verticalLayout3->addWidget(stack);
+
+    // Stack widgets
+    home = new QWidget(stack);
+    library = new Library(p, stack);
+    stack->addWidget(home);
+    stack->addWidget(library);
+    stack->setCurrentWidget(library);
+
+    // Set active tab
+    activeTab = sidebar->gamesTab;
+    activeTab->toggleActive();
 
     // Connect signals
-    connect(libraryTab, SIGNAL(clicked()), this, SLOT(setTabLibrary()));
-    connect(browserTab, SIGNAL(clicked()), this, SLOT(setTabBrowser()));
+    connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
+    // connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
+    connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
+    // connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
+    // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
+    // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
+    // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
+    connect(sidebar->exitTab, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
 
     // Show
-    centralWidget->setLayout(verticalLayout);
-    scrollArea->setWidget(centralWidget);
-    mainGridLayout->addWidget(scrollArea);
-}
-
-// Tab swap slots
-void MainPanel::setTabLibrary()
-{
-    if (stack->currentWidget()->objectName() != "libraryUI")
-    {
-        activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
-        stack->setCurrentWidget(libraryPtr);
-        activeTab = libraryTab;
-        activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
-    }
-}
-
-void MainPanel::setTabBrowser()
-{
-    if (stack->currentWidget()->objectName() != "browserUI")
-    {
-        activeTab->setStyleSheet("font-weight: regular; color: #FFF;");
-        stack->setCurrentWidget(browserPtr);
-        activeTab = browserTab;
-        activeTab->setStyleSheet("font-weight: bold; color: lightgreen;");
-    }
+    show();
 }

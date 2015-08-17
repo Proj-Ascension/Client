@@ -18,16 +18,46 @@
 namespace pt = boost::property_tree;
 
 /** Library constructor
- * Initialize the UI and generate an initial list of all the games available.
+ * Initialize the library UI and generate an initial list of all the games available.
+ * \param p Inherited palette configuration for setting StyleSheets.
+ * \param parent Pointer to parent widget.
 */
-Library::Library(Database db)
-    : QWidget(0),
-      db(db),
+Library::Library(QSettings* p, QWidget* parent)
+    : QWidget(parent),
       ui(new Ui::Library),
       runningProcess(new QProcess(this))
 {
     ui->setupUi(this);
     this->setObjectName("libraryUI");
+    this->setStyleSheet("#leftSidebar {"
+                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+                        "#content {"
+                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+                        "QPushButton {"
+                        "color: " + p->value("Primary/LightText").toString() + "; "
+                        "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                        "border: none; margin: 0px; padding: 0px;} "
+                        "QPushButton:hover {"
+                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+                        "QListWidget {"
+                        "background-color: " + p->value("Primary/TertiaryBase").toString() + "; "
+                        "color: " + p->value("Primary/LightText").toString() + ";}");
+    QFont buttonFont("SourceSansPro", 12);
+    ui->addGame->setFont(buttonFont);
+    ui->addGame->setText("Add Game");
+    ui->removeGame->setFont(buttonFont);
+    ui->removeGame->setText("Remove Game");
+    ui->testLaunch->setFont(buttonFont);
+    ui->testLaunch->setText("Launch Game");
+
+    if (!db.init())
+    {
+        QMessageBox error;
+        error.critical(0, "Error!", "An error occured while trying to load the database.");
+        exit(EXIT_FAILURE);
+        return;
+    }
+
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
 
@@ -204,8 +234,8 @@ void Library::on_removeGame_clicked()
 }
 
 /** Launch a new QProcess using the passed exe and working directory.
- * \param file Location of the exe to run
- * \param workingDirectory The directory that QProcess should spawn in
+ * \param file Location of the exe to run.
+ * \param workingDirectory The directory that QProcess should spawn in.
 */
 void Library::runProcess(QString file, QString workingDirectory)
 {
@@ -222,9 +252,9 @@ void Library::runProcess(QString file, QString workingDirectory)
 }
 
 /** Launch a new QProcess using the passed exe and working directory.
- * \param file Location of the exe to run
- * \param workingDirectory The directory that QProcess should spawn in
- * \param args String of arguments to launch the executable with
+ * \param file Location of the exe to run.
+ * \param workingDirectory The directory that QProcess should spawn in.
+ * \param args String of arguments to launch the executable with.
 */
 void Library::runProcessWithArgs(QString file, QString workingDirectory, QString args)
 {
@@ -253,8 +283,8 @@ void Library::refreshGames()
 }
 
 /** Attempt to handle process ending unexpectedly or fork.
- * \param exitCode Exit code to check
- * \param exitStatus Status to check
+ * \param exitCode Exit code to check.
+ * \param exitStatus Status to check.
 */
 void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
@@ -265,7 +295,7 @@ void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 }
 
 /** Handle errors before the process has launched.
- * \param error The error to translate
+ * \param error The error to translate.
 */
 void Library::onLaunchError(QProcess::ProcessError error)
 {
@@ -283,7 +313,7 @@ void Library::onLaunchError(QProcess::ProcessError error)
     }
 }
 
-/** Check if a process is running already
+/** Check if a process is running already.
  * \return Success/failure upon completion.
 */
 bool Library::isProcessRunning() const
@@ -339,7 +369,7 @@ void Library::findSteamGames(QDir steamRoot)
 
 /** Find the location of every origin game as best we can. Unlike Valve, EA
  * decided to be almost as awkward as Ubisoft so this is mostly trial and error.
- * \param originRoot The root directory of you Origin installation
+ * \param originRoot The root directory of you Origin installation.
  */
 void Library::findOriginGames(QDir originRoot)
 {
