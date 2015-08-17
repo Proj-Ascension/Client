@@ -35,14 +35,14 @@ WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 }
 
 #if QT_VERSION >= 0x050000
-bool WinWindow::nativeEvent(const QByteArray &, void *msg, long*)
+bool WinWindow::nativeEvent(const QByteArray&, void* msg, long*)
 {
 #else
 bool WinPanel::winEvent(MSG* message, long*)
 {
 #endif
 #if QT_VERSION >= 0x050000
-    MSG* message = (MSG*)msg;
+    MSG* message = (MSG*) msg;
 #endif
     switch(message->message)
     {
@@ -60,8 +60,7 @@ bool WinPanel::winEvent(MSG* message, long*)
     {
         if (message->wParam == VK_F5 ||
                 message->wParam == VK_F6 ||
-                message->wParam == VK_F7
-                )
+                message->wParam == VK_F7)
         {
             SendMessage(windowHandle, WM_KEYDOWN, message->wParam, message->lParam);
             break;
@@ -72,7 +71,7 @@ bool WinPanel::winEvent(MSG* message, long*)
     return false;
 }
 
-void WinWindow::mousePressEvent(QMouseEvent *event)
+void WinWindow::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton)
     {
