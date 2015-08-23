@@ -57,7 +57,7 @@ void UnixWindow::closeWindow()
 void UnixWindow::mousePressEvent(QMouseEvent* evt)
 {
     oldWindowPos = evt->globalPos();
-    if (evt->pos().y() < 70)
+    if (evt->pos().y() < 32)
     {
         dragging = true;
     }
