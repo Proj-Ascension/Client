@@ -2,17 +2,32 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QDebug>
+#include <iostream>
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
 #else
 #include "UnixWindow.h"
+#include "Wizard.h"
+
 #endif
 
 int main(int argc, char* argv[])
 {
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
+    Wizard wiz;
+
+    QFile db("ascension.db");
+    if (!db.exists())
+    {
+        std::cout << "No db";
+    }
+    else
+    {
+        wiz.show();
+    }
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX

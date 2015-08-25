@@ -20,6 +20,7 @@ set(SOURCE
     Source/Browser.cpp
     Source/MainPanel.cpp
     Source/Database.cpp
+    Source/Wizard.cpp
 )
 
 set(HEADERS
@@ -30,6 +31,7 @@ set(HEADERS
     Source/Database.h
     Source/Init.h
     Source/Libs/SteamVdfParse.hpp
+    Source/Wizard.h
 )
 
 set(FORMS
