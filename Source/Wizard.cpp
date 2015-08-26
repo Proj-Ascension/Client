@@ -1,5 +1,4 @@
 #include <QtWidgets>
-#include <QProcess>
 #include <iostream>
 #include "Wizard.h"
 #include "Libs/SteamVdfParse.hpp"
@@ -11,7 +10,8 @@ namespace pt = boost::property_tree;
 Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
     setPage(pages::INTRO, new IntroPage());
-    setPage(pages::DRM, new DRMPage(db));
+    setPage(pages::DRM, new DRMPage());
+    setPage(pages::RESULTS, new ResultsPage(db));
     setPage(pages::FINAL, new FinalPage());
     setWindowTitle("Project Ascension setup");
 }
@@ -31,7 +31,7 @@ FinalPage::FinalPage(QWidget* parent) : QWizardPage(parent)
     setTitle("Done");
 }
 
-DRMPage::DRMPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
+DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Checking for Steam, Origin and Uplay");
     auto layout = new QGridLayout();
@@ -75,12 +75,38 @@ DRMPage::DRMPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
     setLayout(layout);
 }
 
-ResultsPage::ResultsPage(QWidget* parent) : QWizardPage(parent)
+ResultsPage::ResultsPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
 {
-
+    setSubTitle("We found the following on your system.");
 }
 
-QStringList DRMPage::findSteamGames(QDir steamRoot)
+void ResultsPage::initializePage()
+{
+    const QDir steamRoot = QDir(QDir::homePath() + "/.local/share/Steam/");
+    findSteamGames(steamRoot);
+    setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
+    top_layout = new QGridLayout();
+    layout = new QGridLayout();
+    scrollArea = new QScrollArea();
+
+    for (auto i : steamVector)
+    {
+        QLabel* name = new QLabel("<b>" + i.at(0) +"</b>");
+        QLabel* exe = new QLabel(i.at(2).remove(steamRoot.filePath("")));
+        exe->setText(exe->text().remove(0, 1));
+        name->setTextFormat(Qt::TextFormat::RichText);
+        layout->addWidget(name);
+        layout->addWidget(exe);
+    }
+
+    QWidget* viewport = new QWidget();
+    viewport->setLayout(layout);
+    scrollArea->setWidget(viewport);
+    top_layout->addWidget(scrollArea);
+    setLayout(top_layout);
+}
+
+void ResultsPage::findSteamGames(QDir steamRoot)
 {
     QDir steamAppsDir = steamRoot.filePath("steamapps");
     if (!steamAppsDir.exists())
@@ -122,7 +148,7 @@ QStringList DRMPage::findSteamGames(QDir steamRoot)
     }
 }
 
-QStringList DRMPage::parseAcf(QDir steamRoot)
+void ResultsPage::parseAcf(QDir steamRoot)
 {
     // TODO: This stuff needs its own thread
     QString vdfPath = steamRoot.filePath("appcache/appinfo.vdf");
@@ -145,9 +171,9 @@ QStringList DRMPage::parseAcf(QDir steamRoot)
 
         for (auto fileIter : fileList)
         {
-            pt::ptree fileTree;
+            boost::property_tree::ptree fileTree;
             std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
-            pt::read_info(acfDir, fileTree);
+            boost::property_tree::info_parser::read_info(acfDir, fileTree);
 
             QString name;
             try
@@ -173,11 +199,11 @@ QStringList DRMPage::parseAcf(QDir steamRoot)
                 int id;
                 try
                 {
-                    id = std::stoi(fileTree.get<std::string>("AppState.appID"));
+                    id = stoi(fileTree.get<std::string>("AppState.appID"));
                 }
                 catch (std::exception& e)
                 {
-                    id = std::stoi(fileTree.get<std::string>("AppState.appid"));
+                    id = stoi(fileTree.get<std::string>("AppState.appid"));
                 }
 
                 try
@@ -188,7 +214,7 @@ QStringList DRMPage::parseAcf(QDir steamRoot)
                     // Loop through the 0, 1, and 2 configurations
                     for (auto pair : launch)
                     {
-                        pt::ptree section = pair.second;
+                        boost::property_tree::ptree section = pair.second;
 
                         QString oslist = QString::fromStdString(section.get("config.oslist", "windows"));
 
@@ -202,7 +228,9 @@ QStringList DRMPage::parseAcf(QDir steamRoot)
 #endif
                         {
                             exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                            exe = QString(QDir::cleanPath(exe));
                             path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
+                            path = QString(QDir::cleanPath(path));
                             args = QString::fromStdString(section.get("arguments", ""));
                         }
                     }
@@ -222,8 +250,9 @@ QStringList DRMPage::parseAcf(QDir steamRoot)
                     }
                 }
 
-                db.addGame(name, path, exe, args);
+//                db.addGame(name, path, exe, args);
 //                refreshGames();
+                steamVector.push_back(std::vector<QString>{name, path, exe, args});
             }
         }
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWizard>
+#include <vector>
 #include "Database.h"
 
 class Wizard : public QWizard
@@ -8,7 +9,7 @@ class Wizard : public QWizard
     Q_OBJECT
 public:
     Database db;
-    enum pages { INTRO, DRM, FINAL };
+    enum pages { INTRO, DRM, RESULTS, FINAL };
     Wizard(QWidget* parent = 0, QString dbPath = "./");
 };
 
@@ -22,21 +23,35 @@ public:
 class DRMPage : public QWizardPage
 {
     Q_OBJECT
-    QStringList steamDirectoryList;
-    Database db;
+
 public:
-    DRMPage(Database, QWidget* parent = 0);
-    QStringList findSteamGames(QDir steamRoot);
-    QStringList parseAcf(QDir steamRoot);
-    QStringList findOriginGames(QDir originRoot);
-    QStringList findUplayGames(QDir uplayRoot);
+    DRMPage(QWidget* parent = 0);
 };
 
 class ResultsPage : public QWizardPage
 {
     Q_OBJECT
+
+    void findOriginGames(QDir originRoot);
+    void findUplayGames(QDir uplayRoot);
+    void findSteamGames(QDir steamRoot);
+
+    void parseAcf(QDir steamRoot);
+    QGridLayout* top_layout;
+    QGridLayout* layout;
+    QScrollArea* scrollArea;
+    QStringList steamDirectoryList;
+    Database db;
+
+    std::vector<std::vector<QString>> steamVector;
+    std::vector<std::vector<QString>> originVector;
+    std::vector<std::vector<QString>> uplayVector;
+
+protected:
+    void initializePage();
+
 public:
-    ResultsPage(QWidget* parent = 0);
+    ResultsPage(Database db, QWidget* parent = 0);
 };
 
 class FinalPage : public QWizardPage
