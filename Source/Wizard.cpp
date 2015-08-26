@@ -110,7 +110,7 @@ void ResultsPage::initializePage()
     qDebug() << field("steamFound").toBool();
     QDir steamRoot;
 #if defined(__linux__)
-    const QDir steamRoot = QDir(QDir::homePath() + "/.local/share/Steam/");
+    steamRoot = QDir(QDir::homePath() + "/.local/share/Steam/");
 #elif defined(_WIN32) || defined(_WIN64)
     QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
     if (!settings.value("SteamPath").isNull())

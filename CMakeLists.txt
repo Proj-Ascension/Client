@@ -193,6 +193,7 @@ if(WIN32)
         Qt5Multimediad.dll
         Qt5MultimediaWidgetsd.dll
 #       Qt5WebChanneld.dll
+        Qt5Svgd.dll
         Qt5OpenGLd.dll
         Qt5PrintSupportd.dll
         icuin${ICU_VER}.dll
