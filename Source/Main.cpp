@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <iostream>
 #include "Wizard.h"
+#include <QIcon>
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
@@ -20,19 +21,19 @@ int main(int argc, char* argv[])
     QApplication* application = new QApplication(argc, argv);
     Wizard wiz;
 
-//    QFile db("ascension.db");
+    QApplication application(argc, argv);
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX
-        application->setWindowIcon(QIcon(":/SystemMenu/Icons/Ascension_Icon.ico"));
+        application.setWindowIcon(QIcon(":/SystemMenu/Icons/Ascension_Icon.ico"));
     #endif
 
-    // Stylesheet
+    // Global stylesheet
     QFile stylesheet(":/Styles/PAClient.css");
     if (stylesheet.open(QFile::ReadOnly))
     {
         QString styleSheet = stylesheet.readAll();
-        application->setStyleSheet(styleSheet);
+        application.setStyleSheet(styleSheet);
     }
 
     entryPoint::initSettings(application);
@@ -41,10 +42,10 @@ int main(int argc, char* argv[])
     #ifdef Q_OS_WIN
         // Background color
         // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
-        HBRUSH windowBackground = CreateSolidBrush(RGB(34, 38, 47));
+        HBRUSH windowBackground = CreateSolidBrush(RGB(15, 15, 15));
 
         // Create a Win window
-        BorderlessWindow window(application, windowBackground, 1152, 648);
+        BorderlessWindow window(&application, windowBackground, 1152, 648);
         window.setMinimumSize(830, 550);
     #else
         // Create a Unix window

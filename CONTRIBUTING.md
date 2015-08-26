@@ -2,6 +2,8 @@
 
 Thanks for your interest in contributing to Project Ascension! We have a few guidelines to make sure that your pull request is accepted and merged.
 
+**Note that ALL pull requests must be opened on the 'dev' branch.**
+
 ## Official Coding Style
 
 - Directories (folders), classes (as well as their source and header files), structs, and enumerators should be all formatted in PascalCase.

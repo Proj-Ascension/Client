@@ -1,10 +1,8 @@
 #pragma once
 
-#include <tuple>
-#include <QSqlDatabase>
 #include <QSqlQuery>
 
-/** Game type
+/** Game type.
  * Defines a game type. 
  * Members correspond to a field within the database.
  */

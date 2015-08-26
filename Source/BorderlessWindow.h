@@ -1,10 +1,8 @@
 #pragma once
 
 #include "WinWindow.h"
-#include "QWinWidget.h"
 
 #include <QApplication>
-#include <QWidget>
 
 #include <windows.h>
 

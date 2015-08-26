@@ -1,16 +1,8 @@
 #include "WinWindow.h"
 #include "Library.h"
-#include "Browser.h"
 
-#include <QApplication>
 #include <QGridLayout>
-#include <QDebug>
-#include <QLabel>
-#include <QPushButton>
-#include <QScrollArea>
-#include <QSpacerItem>
-#include <QGraphicsDropShadowEffect>
-#include <QFontDatabase>
+#include <QMouseEvent>
 
 #include <windows.h>
 #include <windowsx.h>
@@ -23,7 +15,7 @@ WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 
     mainPanel = new WinPanel(this);
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    QGridLayout* layout = new QGridLayout();
     layout->setMargin(0);
     setLayout(layout);
     layout->addWidget(mainPanel);

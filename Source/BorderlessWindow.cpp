@@ -2,12 +2,10 @@
 
 #include <QDesktopWidget>
 #include <QPushButton>
-#include <QFile>
 
 #include <tchar.h>
 #include <dwmapi.h>
 #include <windowsx.h>
-#include <stdexcept>
 
 HWND g_winId = 0;
 
@@ -21,7 +19,7 @@ BorderlessWindow::BorderlessWindow(QApplication* app, HBRUSH windowBackground, c
       visible(false),
       borderless(false),
       borderlessResizeable(true),
-      aeroShadow(true)
+      aeroShadow(false)
 {
     WNDCLASSEX wcx = {0};
     wcx.cbSize = sizeof(WNDCLASSEX);
@@ -166,6 +164,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
     }
     case WM_DESTROY:
     {
+        delete(mainPanel);
         PostQuitMessage(0);
         break;
     }
@@ -248,7 +247,7 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
         {
             QPushButton* pushButtonMaximize = mainPanel->findChild<QPushButton*>("pushButtonMaximize");
             pushButtonMaximize->setStyleSheet("#pushButtonMaximize {image: url(:/SystemMenu/Icons/Maximize.png);} #pushButtonMaximize:hover { image: url(:/SystemMenu/Icons/MaximizeHover.png); }");
-            mainPanel->setGeometry(2, 2, winrect.right - 4, winrect.bottom - 4);
+            mainPanel->setGeometry(0, 0, winrect.right, winrect.bottom);
         }
         break;
     }
