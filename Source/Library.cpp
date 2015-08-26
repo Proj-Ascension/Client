@@ -50,7 +50,7 @@ Library::Library(Database db)
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
     if (originRoot.exists() && loadOrigin)
     {
-        findOriginGames(originRoot);
+//        findOriginGames(originRoot);
     }
     else
     {
@@ -76,7 +76,7 @@ Library::Library(Database db)
 
     if (steamRoot != QDir(".") && loadSteam)
     {
-        findSteamGames(steamRoot);
+//        findSteamGames(steamRoot);
     }
     else
     {
@@ -87,7 +87,7 @@ Library::Library(Database db)
     QDir uplayRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Ubisoft Game Launcher");
     if (uplayRoot.exists() && loadUplay)
     {
-        findUplayGames(uplayRoot);
+//        findUplayGames(uplayRoot);
     }
     else
     {

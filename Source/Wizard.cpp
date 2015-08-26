@@ -22,7 +22,7 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
     setSubTitle("This wizard will try to find all your games.");
     auto layout = new QGridLayout();
     auto label = new QLabel("Click next to attempt to find Steam, Origin and Uplay games where applicable.");
-    layout->addWidget(label, 0, 0, 0, 0);
+    layout->addWidget(label);
     setLayout(layout);
 }
 
@@ -34,10 +34,17 @@ FinalPage::FinalPage(QWidget* parent) : QWizardPage(parent)
 DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Checking for Steam, Origin and Uplay");
+    auto steamBox = new QCheckBox();
+    auto originBox = new QCheckBox();
+    auto uplayBox = new QCheckBox();
+    registerField("steamFound", steamBox);
+    registerField("uplayFound", uplayBox);
+    registerField("originFound", originBox);
     auto layout = new QGridLayout();
-    auto platformLabel = new QLabel("Steam");
+    auto platformLabel = new QLabel("<b>Steam</b>");
     auto descLabel = new QLabel();
     auto statusLabel = new QLabel();
+    platformLabel->setTextFormat(Qt::TextFormat::RichText);
 #if defined(__linux__)
     QProcess which;
     which.setProcessChannelMode(QProcess::MergedChannels);
@@ -49,29 +56,47 @@ DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
     {
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
         descLabel->setText("Steam binary found, assuming $HOME/.local/share/Steam as steampath");
+        steamBox->setChecked(true);
     }
     else
     {
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
         descLabel->setText("Steam binary not found. Install Steam or add to $PATH if already installed.");
     }
+#elif defined(_WIN32) || defined(_WIN64)
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
+    if (!settings.value("SteamPath").isNull())
+    {
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        descLabel->setText("Steam root found in " + settings.value("SteamPath").toString());
+        steamBox->setChecked(true);
+    }
+    else
+    {
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
+        descLabel->setText("Steam not found, verify installation and try again.");
+        steamBox->setChecked(false);
+    }
 #endif
     layout->addWidget(platformLabel, 0, 0, 0);
     layout->addWidget(descLabel, 1, 0, 0);
     layout->addWidget(statusLabel, 0, 1, 0);
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    platformLabel = new QLabel("Origin");
+    platformLabel = new QLabel("<b>Origin</b>");
     statusLabel = new QLabel();
-    statusLabel->setPixmap(QPixmap("/home/elken/ClionProjects/Wizard/res/failed.svg"));
+    statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
     layout->addWidget(platformLabel, 2, 0, 0);
     layout->addWidget(statusLabel, 2, 1, 0);
-#elif defined(_WIN32) || defined (_WIN64)
-    platformLabel = new QLabel("Uplay");
+#endif
+
+#if defined(_WIN32) || defined (_WIN64)
+    platformLabel = new QLabel("<b>Uplay</b>");
     statusLabel = new QLabel();
-    statusLabel->setPixmap(QPixmap("/home/elken/ClionProjects/Wizard/res/failed.svg"));
+    statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
     layout->addWidget(platformLabel, 4, 0, 0);
     layout->addWidget(statusLabel, 4, 1, 0);
 #endif
+
     setLayout(layout);
 }
 
@@ -82,7 +107,17 @@ ResultsPage::ResultsPage(Database db, QWidget* parent) : QWizardPage(parent), db
 
 void ResultsPage::initializePage()
 {
+    qDebug() << field("steamFound").toBool();
+    QDir steamRoot;
+#if defined(__linux__)
     const QDir steamRoot = QDir(QDir::homePath() + "/.local/share/Steam/");
+#elif defined(_WIN32) || defined(_WIN64)
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
+    if (!settings.value("SteamPath").isNull())
+    {
+        steamRoot = settings.value("SteamPath").toString();
+    }
+#endif
     findSteamGames(steamRoot);
     setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
     top_layout = new QGridLayout();

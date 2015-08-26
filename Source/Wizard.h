@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QWizard>
+#include <QtWidgets>
 #include <vector>
 #include "Database.h"
 

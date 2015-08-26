@@ -4,12 +4,13 @@
 #include <QFile>
 #include <QDebug>
 #include <iostream>
+#include "Wizard.h"
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
+
 #else
 #include "UnixWindow.h"
-#include "Wizard.h"
 
 #endif
 
@@ -19,15 +20,7 @@ int main(int argc, char* argv[])
     QApplication* application = new QApplication(argc, argv);
     Wizard wiz;
 
-    QFile db("ascension.db");
-    if (!db.exists())
-    {
-        std::cout << "No db";
-    }
-    else
-    {
-        wiz.show();
-    }
+//    QFile db("ascension.db");
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX
@@ -60,6 +53,7 @@ int main(int argc, char* argv[])
     #endif
 
     // Launch
+    wiz.show();
     application->exec();
 
     return 0;
