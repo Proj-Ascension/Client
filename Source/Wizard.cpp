@@ -34,7 +34,7 @@ FinalPage::FinalPage(QWidget* parent) : QWizardPage(parent)
 
 DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 {
-    setTitle("Checking for Steam, Origin and Uplay");
+    setTitle("Checking for Steam");
     steamBox = new QCheckBox();
     originBox = new QCheckBox();
     uplayBox = new QCheckBox();
@@ -48,12 +48,14 @@ DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
     platformLabel->setTextFormat(Qt::TextFormat::RichText);
     checkSteamExists();
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
+    setTitle(title() += ", Origin");
     platformLabel = new QLabel("<b>Origin</b>");
     statusLabel = new QLabel();
     checkOriginExists();
 #endif
 
 #if defined(_WIN32) || defined (_WIN64)
+    setTitle(title() += " and Uplay.");
     platformLabel = new QLabel("<b>Uplay</b>");
     statusLabel = new QLabel();
     checkUplayExists();
@@ -206,7 +208,6 @@ ResultsPage::ResultsPage(Database db, QWidget* parent) : QWizardPage(parent), db
 
 void ResultsPage::initializePage()
 {
-    qDebug() << field("steamFound").toBool();
     QDir steamRoot;
 #if defined(__linux__)
     steamRoot = QDir(QDir::homePath() + "/.local/share/Steam/");
