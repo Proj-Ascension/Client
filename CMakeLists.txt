@@ -132,7 +132,7 @@ target_link_libraries(ProjectAscension
 #	Qt5::WebkitWidgets
     Qt5::Sql
     ${Boost_LIBRARIES}
-    Threads::Threads
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 if(WIN32)
