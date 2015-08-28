@@ -59,7 +59,21 @@ void UnixWindow::mousePressEvent(QMouseEvent* evt)
     oldWindowPos = evt->globalPos();
     if (evt->pos().y() < 32)
     {
-        dragging = true;
+        if (evt->button() == Qt::LeftButton)
+        {
+            dragging = true;
+        }
+    }
+}
+
+void UnixWindow::mouseDoubleClickEvent(QMouseEvent* evt)
+{
+    if (evt->pos().y() < 32)
+    {
+        if (evt->button() == Qt::LeftButton)
+        {
+            maximize();
+        }
     }
 }
 

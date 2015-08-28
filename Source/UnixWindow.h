@@ -19,6 +19,7 @@ private:
     bool dragging;
 
     void mousePressEvent(QMouseEvent* evt);
+    void mouseDoubleClickEvent(QMouseEvent* evt);
     void mouseReleaseEvent(QMouseEvent* evt);
     void mouseMoveEvent(QMouseEvent* evt);
 };
