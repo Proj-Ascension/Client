@@ -23,6 +23,19 @@ public:
 class DRMPage : public QWizardPage
 {
     Q_OBJECT
+    QGridLayout* layout;
+
+    QCheckBox* steamBox;
+    QCheckBox* originBox;
+    QCheckBox* uplayBox;
+
+    QLabel* statusLabel;
+    QLabel* platformLabel;
+    QLabel* descLabel;
+
+    void checkSteamExists();
+    void checkUplayExists();
+    void checkOriginExists();
 
 public:
     DRMPage(QWidget* parent = 0);

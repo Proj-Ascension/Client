@@ -4,6 +4,7 @@
 #include "Libs/SteamVdfParse.hpp"
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace pt = boost::property_tree;
 
@@ -34,17 +35,85 @@ FinalPage::FinalPage(QWidget* parent) : QWizardPage(parent)
 DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Checking for Steam, Origin and Uplay");
-    auto steamBox = new QCheckBox();
-    auto originBox = new QCheckBox();
-    auto uplayBox = new QCheckBox();
+    steamBox = new QCheckBox();
+    originBox = new QCheckBox();
+    uplayBox = new QCheckBox();
     registerField("steamFound", steamBox);
     registerField("uplayFound", uplayBox);
     registerField("originFound", originBox);
-    auto layout = new QGridLayout();
-    auto platformLabel = new QLabel("<b>Steam</b>");
-    auto descLabel = new QLabel();
-    auto statusLabel = new QLabel();
+    layout = new QGridLayout();
+    platformLabel = new QLabel("<b>Steam</b>");
+    descLabel = new QLabel();
+    statusLabel = new QLabel();
     platformLabel->setTextFormat(Qt::TextFormat::RichText);
+    checkSteamExists();
+#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
+    platformLabel = new QLabel("<b>Origin</b>");
+    statusLabel = new QLabel();
+    checkOriginExists();
+#endif
+
+#if defined(_WIN32) || defined (_WIN64)
+    platformLabel = new QLabel("<b>Uplay</b>");
+    statusLabel = new QLabel();
+    checkUplayExists();
+#endif
+
+    setLayout(layout);
+}
+
+void DRMPage::checkOriginExists()
+{
+    QDir originRoot;
+    QDir originFolder;
+#if defined(_WIN32) || defined(_WIN64)
+    originRoot = QDir(qgetenv("APPDATA").append("/Origin"));
+#else
+    originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
+#endif
+
+
+    if (originRoot.exists())
+    {
+        pt::ptree originTree;
+        read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
+
+
+        for (auto &xmlIter : originTree.get_child("Settings"))
+        {
+            if (xmlIter.second.get<std::string>("<xmlattr>.key") == "DownloadInPlaceDir")
+            {
+                originFolder = QString::fromStdString(xmlIter.second.get<std::string>("<xmlattr>.value"));
+                break;
+            }
+        }
+
+        if (originFolder == QDir("."))
+        {
+            originFolder = QDir("C:\\Program Files (x86)\\Origin Games\\");
+        }
+    }
+
+    if (originFolder.filePath("").trimmed() != "" && originFolder.exists())
+    {
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        descLabel = new QLabel("Origin found in " + originFolder.filePath(""));
+        originBox->setChecked(true);
+    }
+    else
+    {
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
+        descLabel = new QLabel("Origin not found on the system. Install and try again.");
+    }
+    layout->addWidget(platformLabel, 3, 0, 0);
+    layout->addWidget(descLabel, 4, 0, 0);
+    layout->addWidget(statusLabel, 3, 1, 0);
+}
+
+void DRMPage::checkSteamExists()
+{
+    QDir steamFolder;
+
 #if defined(__linux__)
     QProcess which;
     which.setProcessChannelMode(QProcess::MergedChannels);
@@ -54,50 +123,80 @@ DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
     which.waitForFinished();
     if (which.exitCode() == 0)
     {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
-        descLabel->setText("Steam binary found, assuming $HOME/.local/share/Steam as steampath");
-        steamBox->setChecked(true);
-    }
-    else
-    {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
-        descLabel->setText("Steam binary not found. Install Steam or add to $PATH if already installed.");
+        steamFolder = QDir(QDir::homePath() + "/.local/share/Steam");
     }
 #elif defined(_WIN32) || defined(_WIN64)
     QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
     if (!settings.value("SteamPath").isNull())
     {
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
-        descLabel->setText("Steam root found in " + settings.value("SteamPath").toString());
+        steamFolder = QDir(settings.value("SteamPath").toString()).canonicalPath();
+    }
+#elif defined(__APPLE__)
+    steamFolder = QDir(QDir::home().filePath("Library/Application Support/Steam"));
+#endif
+
+    if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists())
+    {
+        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
+        descLabel = new QLabel("Steam root found in " + steamFolder.filePath(""));
         steamBox->setChecked(true);
     }
     else
     {
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
-        descLabel->setText("Steam not found, verify installation and try again.");
-        steamBox->setChecked(false);
+        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
+        descLabel = new QLabel("Steam not found, verify installation and try again.");
     }
-#endif
     layout->addWidget(platformLabel, 0, 0, 0);
     layout->addWidget(descLabel, 1, 0, 0);
     layout->addWidget(statusLabel, 0, 1, 0);
-#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    platformLabel = new QLabel("<b>Origin</b>");
-    statusLabel = new QLabel();
-    statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
-    layout->addWidget(platformLabel, 2, 0, 0);
-    layout->addWidget(statusLabel, 2, 1, 0);
-#endif
+}
 
-#if defined(_WIN32) || defined (_WIN64)
-    platformLabel = new QLabel("<b>Uplay</b>");
-    statusLabel = new QLabel();
-    statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
-    layout->addWidget(platformLabel, 4, 0, 0);
-    layout->addWidget(statusLabel, 4, 1, 0);
-#endif
+void DRMPage::checkUplayExists()
+{
+    QDir uplayFolder;
+    QDir uplayRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Ubisoft Game Launcher");
+    if (uplayRoot.exists())
+    {
+        std::ifstream uplaySettings(uplayRoot.filePath("settings.yml").toLocal8Bit().constData(), std::ifstream::in);
+        std::string line;
+        if (uplaySettings.is_open())
+        {
+            while (std::getline(uplaySettings, line))
+            {
+                if (line.find("game_installation_path") != std::string::npos)
+                {
+                    std::vector<std::string> strSplit;
+                    boost::split(strSplit, line, boost::is_any_of("\""));
+                    uplayFolder = QDir(QString::fromStdString(strSplit.at(1)));
+                    break;
+                }
+            }
+        }
 
-    setLayout(layout);
+        if (uplayFolder == QDir("."))
+        {
+            QSettings settings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Uplay", QSettings::NativeFormat);
+            if (!settings.value("InstallLocation").isNull())
+            {
+                uplayFolder = QDir(settings.value("InstallLocation").toString());
+            }
+        }
+    }
+
+    if (uplayFolder.filePath("").trimmed() != "" && uplayFolder.exists())
+    {
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        descLabel = new QLabel("Uplay found in " + uplayFolder.filePath(""));
+        uplayBox->setChecked(true);
+    }
+    else
+    {
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
+        descLabel = new QLabel("Uplay not found on the system. Install and try again.");
+    }
+    layout->addWidget(platformLabel, 5, 0, 0);
+    layout->addWidget(descLabel, 6, 0, 0);
+    layout->addWidget(statusLabel, 5, 1, 0);
 }
 
 ResultsPage::ResultsPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)

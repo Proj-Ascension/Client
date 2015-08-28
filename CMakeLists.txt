@@ -159,7 +159,7 @@ if(WITH_TESTS)
             appinfo.vdf
             game)
     add_custom_command(TARGET ProjectAscension POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
         endforeach()
 endif(WITH_TESTS)
 
@@ -202,7 +202,7 @@ if(WIN32)
     )
         add_custom_command(TARGET ProjectAscension POST_BUILD
             # Copy the given dependency into the executable directory.
-            COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/${DEPENDENCY} ${TargetDirectory}
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/${DEPENDENCY} ${TargetDirectory}
             COMMENT "Copying ${DEPENDENCY} into '${TargetDirectory}/'" VERBATIM
         )
     endforeach()

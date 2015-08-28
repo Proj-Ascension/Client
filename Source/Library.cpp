@@ -62,68 +62,6 @@ Library::Library(QSettings* p, QWidget* parent)
     }
 
     refreshGames();
-
-    // For debugging
-    bool loadSteam = true;
-    bool loadOrigin = true;
-    bool loadUplay = true;
-    QDir originRoot;
-#if defined(_WIN32) || defined(_WIN64)
-    originRoot = QDir(qgetenv("APPDATA").append("/Origin"));
-#elif defined(__APPLE__)
-    originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
-#else
-    QMessageBox(QMessageBox::Critical, "Error", "Platform does not support Origin.");
-    return;
-#endif
-
-#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    if (originRoot.exists() && loadOrigin)
-    {
-//        findOriginGames(originRoot);
-    }
-    else
-    {
-        qDebug() << "Origin not found. Possibly not installed.";
-    }
-#endif
-
-    QDir steamRoot;
-#if defined(_WIN32) || defined(_WIN64)
-    QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
-    if (!settings.value("SteamPath").isNull())
-    {
-        steamRoot = QDir(settings.value("SteamPath").toString());
-    }
-#elif defined(__APPLE__)
-    steamRoot = QDir(QDir::home().filePath("Library/Application Support/Steam"));
-#elif defined(__linux__)
-    steamRoot = QDir(QDir::home().filePath(".steam/steam"));
-#else
-    QMessageBox(QMessageBox::Critical, "Error", "Platform doesn't support steam.");
-    return;
-#endif
-
-    if (steamRoot != QDir(".") && loadSteam)
-    {
-//        findSteamGames(steamRoot);
-    }
-    else
-    {
-        qDebug("Steam was not found, probably not installed.");
-    }
-
-#if defined(_WIN32) || defined(_WIN64)
-    QDir uplayRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Ubisoft Game Launcher");
-    if (uplayRoot.exists() && loadUplay)
-    {
-//        findUplayGames(uplayRoot);
-    }
-    else
-    {
-        qDebug("UPlay was not found, probably not installed.");
-    }
-#endif
 }
 
 Library::~Library()
