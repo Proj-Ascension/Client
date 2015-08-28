@@ -5,14 +5,18 @@
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
+#include <thread>
+#include <c++/future>
 
 namespace pt = boost::property_tree;
 
 Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
+    drmPage = new DRMPage();
+    ResultsPage* resultsPage = new ResultsPage(db, *drmPage);
     setPage(pages::INTRO, new IntroPage());
-    setPage(pages::DRM, new DRMPage());
-    setPage(pages::RESULTS, new ResultsPage(db));
+    setPage(pages::DRM, drmPage);
+    setPage(pages::RESULTS, resultsPage);
     setPage(pages::FINAL, new FinalPage());
     setWindowTitle("Project Ascension setup");
 }
@@ -47,6 +51,7 @@ DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
     statusLabel = new QLabel();
     platformLabel->setTextFormat(Qt::TextFormat::RichText);
     checkSteamExists();
+
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
     setTitle(title() += ", Origin");
     platformLabel = new QLabel("<b>Origin</b>");
@@ -101,6 +106,7 @@ void DRMPage::checkOriginExists()
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Origin found in " + originFolder.filePath(""));
         originBox->setChecked(true);
+        originPath = originFolder.filePath("");
     }
     else
     {
@@ -142,6 +148,7 @@ void DRMPage::checkSteamExists()
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Steam root found in " + steamFolder.filePath(""));
         steamBox->setChecked(true);
+        steamPath = steamFolder.filePath("");
     }
     else
     {
@@ -190,6 +197,7 @@ void DRMPage::checkUplayExists()
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Uplay found in " + uplayFolder.filePath(""));
         uplayBox->setChecked(true);
+        uplayPath = uplayFolder.filePath("");
     }
     else
     {
@@ -201,25 +209,34 @@ void DRMPage::checkUplayExists()
     layout->addWidget(statusLabel, 5, 1, 0);
 }
 
-ResultsPage::ResultsPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
+ResultsPage::ResultsPage(Database db, DRMPage& drmPage, QWidget* parent) : QWizardPage(parent), db(db)
 {
     setSubTitle("We found the following on your system.");
+    steamRoot = drmPage.steamPath;
+    originRoot = drmPage.originPath;
+    uplayRoot = drmPage.uplayPath;
 }
 
 void ResultsPage::initializePage()
 {
-    QDir steamRoot;
-#if defined(__linux__)
-    steamRoot = QDir(QDir::homePath() + "/.local/share/Steam/");
-#elif defined(_WIN32) || defined(_WIN64)
-    QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
-    if (!settings.value("SteamPath").isNull())
+    if (field("steamFound").toBool())
     {
-        steamRoot = settings.value("SteamPath").toString();
+        auto t = std::async(&ResultsPage::findSteamGames, this);
+        t.get();
     }
-#endif
-    findSteamGames(steamRoot);
-    setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
+
+    if (field("originFound").toBool())
+    {
+        auto t = std::async(&ResultsPage::findOriginGames, this);
+        t.get();
+    }
+
+    if (field("uplayFound").toBool())
+    {
+        auto t = std::async(&ResultsPage::findUplayGames, this);
+        t.get();
+    }
+    setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
     top_layout = new QGridLayout();
     layout = new QGridLayout();
     scrollArea = new QScrollArea();
@@ -241,7 +258,7 @@ void ResultsPage::initializePage()
     setLayout(top_layout);
 }
 
-void ResultsPage::findSteamGames(QDir steamRoot)
+void ResultsPage::findSteamGames()
 {
     QDir steamAppsDir = steamRoot.filePath("steamapps");
     if (!steamAppsDir.exists())
@@ -269,17 +286,110 @@ void ResultsPage::findSteamGames(QDir steamRoot)
     }
 
     // TODO: Make this prompting better/less obtrusive
-    bool directoryPlural = (steamDirectoryList.size() > 1);
-    int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
-    switch (ret)
-    {
-        case QMessageBox::Yes:
+//    bool directoryPlural = (steamDirectoryList.size() > 1);
+//    int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
+//    switch (ret)
+//    {
+//        case QMessageBox::Yes:
             parseAcf(steamRoot);
-            break;
-        case QMessageBox::No:
-            break;
-        default:
-            break;
+//            break;
+//        case QMessageBox::No:
+//            break;
+//        default:
+//            break;
+//    }
+}
+
+void ResultsPage::findOriginGames()
+{
+    QStringList ignoreList;
+    ignoreList << "Cleanup.exe"
+               << "Touchup.exe"
+               << "DXSETUP.exe"
+               << "vcredist_x86.exe"
+               << "vcredist_x64.exe"
+               << "ActivationUI.exe"
+               << "PatchProgress.exe"
+               << "activation.exe"
+               << "EACoreServer.exe"
+               << "EAProxyInstaller.exe"
+               << "D3D11Install.exe"
+               << "ATISET.EXE"
+               << "DOS4GW.EXE"
+               << "INFO.EXE"
+               << "INSTALL.EXE"
+               << "INTRO.EXE"
+               << "MUNGE.EXE"
+               << "SC2K.EXE"
+               << "UNIVBE.EXE"
+               << "VDETECT.EXE"
+               << "VRF_DLL.EXE"
+               << "WILLTV.EXE";
+    originRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList folderList = originRoot.entryList();
+    QHash<QString, QStringList> masterList;
+    for (auto i : folderList)
+    {
+        // TODO: Populate a widget with this info
+        QDir dir(originRoot.absoluteFilePath(i));
+        dir.setNameFilters(QStringList("*.exe"));
+        dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+        qDebug() << "Looking in: " << dir.filePath("");
+        QStringList test = recursiveFindFiles(dir, ignoreList);
+        masterList.insert(dir.filePath(""), test);
+    }
+
+    QHashIterator<QString, QStringList> masterIter(masterList);
+    while (masterIter.hasNext())
+    {
+        masterIter.next();
+        qDebug() << "Found in: " << masterIter.key();
+        for (auto fileIter : masterIter.value())
+        {
+            qDebug() << fileIter;
+        }
+    }
+}
+
+void ResultsPage::findUplayGames()
+{
+    QStringList ignoreList;
+    ignoreList << "vista_update32.exe"
+               << "vista_update64.exe"
+               << "vcredist_x86.exe"
+               << "vcredist_x86_2008SP1.exe"
+               << "vcredist_x86_sp1.exe"
+               << "firewallGE.exe"
+               << "firewallGE_rem.exe"
+               << "GDFInstall.exe"
+               << "GDFTool.exe"
+               << "DXSETUP.exe"
+               << "uplay_unins.exe"
+               << "dotNetFx40_Client_x86_x64.exe"
+               << "ACBF_cleanup.exe";
+    uplayRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    QStringList folderList = uplayRoot.entryList();
+    QHash<QString, QStringList> masterList;
+    for (auto i : folderList)
+    {
+        // TODO: Populate a widget with this info
+        QDir dir(uplayRoot.absoluteFilePath(i));
+        // dir.setNameFilters(QStringList("*.exe"));
+        dir.setFilter(QDir::Files | QDir::Executable | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+        qDebug() << "Looking in: " << dir.filePath("");
+        QStringList test = recursiveFindFiles(dir, ignoreList);
+        masterList.insert(dir.filePath(""), test);
+    }
+
+    QHashIterator<QString, QStringList> masterIter(masterList);
+    while (masterIter.hasNext())
+    {
+        masterIter.next();
+        qDebug() << "Found in: " << masterIter.key();
+        for (auto fileIter : masterIter.value())
+        {
+            qDebug() << fileIter;
+        }
     }
 }
 
@@ -391,4 +501,33 @@ void ResultsPage::parseAcf(QDir steamRoot)
             }
         }
     }
+}
+
+QStringList ResultsPage::recursiveFindFiles(QDir dir, QStringList ignoreList)
+{
+    QStringList dirList;
+    QDirIterator it(dir, QDirIterator::Subdirectories);
+
+    while (it.hasNext())
+    {
+        QDir cur = it.next();
+        if (!ignoreList.contains(cur.dirName()))
+        {
+            bool found = false;
+            for (auto foundIter : dirList)
+            {
+                if (QDir(foundIter).dirName() == cur.dirName())
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found && cur.dirName() != QDir::currentPath())
+            {
+                dirList.append(cur.filePath(""));
+            }
+        }
+    }
+
+    return dirList;
 }

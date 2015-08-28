@@ -4,13 +4,21 @@
 #include <vector>
 #include "Database.h"
 
+class IntroPage;
+class ResultsPage;
+class DRMPage;
+class FinalPage;
+
+typedef std::vector<std::vector<QString>> GameList;
+
 class Wizard : public QWizard
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     Database db;
     enum pages { INTRO, DRM, RESULTS, FINAL };
     Wizard(QWidget* parent = 0, QString dbPath = "./");
+    DRMPage* drmPage;
 };
 
 class IntroPage : public QWizardPage
@@ -37,7 +45,11 @@ class DRMPage : public QWizardPage
     void checkUplayExists();
     void checkOriginExists();
 
+
 public:
+    QString steamPath;
+    QString originPath;
+    QString uplayPath;
     DRMPage(QWidget* parent = 0);
 };
 
@@ -45,10 +57,7 @@ class ResultsPage : public QWizardPage
 {
     Q_OBJECT
 
-    void findOriginGames(QDir originRoot);
-    void findUplayGames(QDir uplayRoot);
-    void findSteamGames(QDir steamRoot);
-
+    QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void parseAcf(QDir steamRoot);
     QGridLayout* top_layout;
     QGridLayout* layout;
@@ -56,15 +65,22 @@ class ResultsPage : public QWizardPage
     QStringList steamDirectoryList;
     Database db;
 
-    std::vector<std::vector<QString>> steamVector;
-    std::vector<std::vector<QString>> originVector;
-    std::vector<std::vector<QString>> uplayVector;
+    QDir steamRoot;
+    QDir uplayRoot;
+    QDir originRoot;
+
+    GameList steamVector;
+    GameList originVector;
+    GameList uplayVector;
 
 protected:
     void initializePage();
 
 public:
-    ResultsPage(Database db, QWidget* parent = 0);
+    ResultsPage(Database db, DRMPage& drmPage, QWidget* parent = 0);
+    void findOriginGames();
+    void findUplayGames();
+    void findSteamGames();
 };
 
 class FinalPage : public QWizardPage
