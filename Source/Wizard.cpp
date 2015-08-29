@@ -456,7 +456,7 @@ void ResultsPage::parseAcf(QDir steamRoot)
 
             if (nameTest)
             {
-                name = QString::fromStdString(nameTest.value());
+                name = QString::fromStdString(nameTest.get());
             }
             else
             {
@@ -477,7 +477,7 @@ void ResultsPage::parseAcf(QDir steamRoot)
                     idTest = fileTree.get_optional<int>("AppState.appid");
                 }
 
-                id = idTest.value();
+                id = idTest.get();
 
                 try
                 {
