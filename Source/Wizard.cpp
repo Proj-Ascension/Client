@@ -296,7 +296,7 @@ void ResultsPage::findSteamGames()
     }
 
     parseAcf(steamRoot);
-    std::sort(steamVector.begin(), steamVector.end(), [&](Game& g1, Game& g2){return g1.gameName < g2.gameName;});
+    std::sort(steamVector.begin(), steamVector.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName;});
 }
 
 void ResultsPage::findOriginGames()
