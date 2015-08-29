@@ -8,7 +8,7 @@ endif()
 
 # --- BUILD CONFIGURATION ---
 
-project(ProjectAscension)
+project(ProjectAscension C CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -20,7 +20,7 @@ set(SOURCE
     Source/MainPanel.cpp
     Source/Database.cpp
     Source/Wizard.cpp
-	Source/Sidebar.cpp
+    Source/Sidebar.cpp
 )
 
 set(HEADERS
@@ -98,6 +98,7 @@ find_package(Qt5Gui REQUIRED)
 # find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Boost REQUIRED)
+find_package(Threads REQUIRED)
 
 qt5_wrap_ui(FORMS_HEADERS ${FORMS})
 qt5_add_resources(UI_RESOURCES ${RESOURCES})
@@ -131,6 +132,7 @@ target_link_libraries(ProjectAscension
 #	Qt5::WebkitWidgets
     Qt5::Sql
     ${Boost_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 if(WIN32)

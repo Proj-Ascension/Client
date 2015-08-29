@@ -8,7 +8,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
 #include <thread>
-#include <c++/future>
+#include <future>
 
 namespace pt = boost::property_tree;
 
@@ -238,7 +238,7 @@ void ResultsPage::initializePage()
         auto t = std::async(&ResultsPage::findUplayGames, this);
         t.get();
     }
-    
+
     setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
     top_layout = new QGridLayout();
     layout = new QGridLayout();
