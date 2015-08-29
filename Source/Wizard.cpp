@@ -2,9 +2,11 @@
 #include <iostream>
 #include "Wizard.h"
 #include "Libs/SteamVdfParse.hpp"
+#include "Database.h"
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/optional.hpp>
 #include <thread>
 #include <c++/future>
 
@@ -236,6 +238,7 @@ void ResultsPage::initializePage()
         auto t = std::async(&ResultsPage::findUplayGames, this);
         t.get();
     }
+    
     setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
     top_layout = new QGridLayout();
     layout = new QGridLayout();
@@ -243,9 +246,16 @@ void ResultsPage::initializePage()
 
     for (auto i : steamVector)
     {
-        QLabel* name = new QLabel("<b>" + i.at(0) +"</b>");
-        QLabel* exe = new QLabel(i.at(2).remove(steamRoot.filePath("")));
-        exe->setText(exe->text().remove(0, 1));
+        QLabel* name = new QLabel("<b>" + i.gameName +"</b>");
+        QLabel* exe;
+        for (auto dir : steamDirectoryList)
+        {
+            if (i.executablePath.contains(dir))
+            {
+                exe = new QLabel(i.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
+                break;
+            }
+        }
         name->setTextFormat(Qt::TextFormat::RichText);
         layout->addWidget(name);
         layout->addWidget(exe);
@@ -285,19 +295,8 @@ void ResultsPage::findSteamGames()
         }
     }
 
-    // TODO: Make this prompting better/less obtrusive
-//    bool directoryPlural = (steamDirectoryList.size() > 1);
-//    int ret = QMessageBox(QMessageBox::Question, "Found " + QString::number(steamDirectoryList.size()) + " director" + (directoryPlural ? "ies" : "y"), QString::number(steamDirectoryList.size()) + " directories have been found.\n\n" + pathString + "Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
-//    switch (ret)
-//    {
-//        case QMessageBox::Yes:
-            parseAcf(steamRoot);
-//            break;
-//        case QMessageBox::No:
-//            break;
-//        default:
-//            break;
-//    }
+    parseAcf(steamRoot);
+    std::sort(steamVector.begin(), steamVector.end(), [&](Game& g1, Game& g2){return g1.gameName < g2.gameName;});
 }
 
 void ResultsPage::findOriginGames()
@@ -393,6 +392,32 @@ void ResultsPage::findUplayGames()
     }
 }
 
+void ResultsPage::printTree(pt::ptree &pt, int level)
+{
+    if (pt.empty())
+    {
+        std::cerr << "\""<< pt.data()<< "\"";
+    }
+    else
+    {
+        auto indent = [&](int level){ std::string s; for (int i=0; i<level; i++) s += "  "; return s; };
+        if (level) std::cerr << std::endl;
+        std::cerr << indent(level) << "{" << std::endl;
+        for (pt::ptree::iterator pos = pt.begin(); pos != pt.end();)
+        {
+            std::cerr << indent(level+1) << "\"" << pos->first << "\": ";
+            printTree(pos->second, level + 1);
+            ++pos;
+            if (pos != pt.end())
+            {
+                std::cerr << ",";
+            }
+            std::cerr << std::endl;
+        }
+        std::cerr << indent(level) << " }";
+    }
+}
+
 void ResultsPage::parseAcf(QDir steamRoot)
 {
     // TODO: This stuff needs its own thread
@@ -421,35 +446,38 @@ void ResultsPage::parseAcf(QDir steamRoot)
             boost::property_tree::info_parser::read_info(acfDir, fileTree);
 
             QString name;
-            try
+            QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+
+            boost::optional<std::string> nameTest = fileTree.get_optional<std::string>("AppState.name");
+            if (!nameTest)
             {
-                name = QString::fromStdString(fileTree.get<std::string>("AppState.name"));
+                nameTest = fileTree.get_optional<std::string>("AppState.UserConfig.name");
             }
-            catch (std::exception& e)
+
+            if (nameTest)
             {
-                if (e.what() == "No such node")
-                {
-                    name = QString::fromStdString(fileTree.get<std::string>("AppState.UserConfig.name"));
-                }
+                name = QString::fromStdString(nameTest.value());
+            }
+            else
+            {
+                name = QDir(path).dirName();
             }
 
             // TODO: Either add SteamID to db, or add getGameByPath
 
             if (!std::get<0>(db.isExistant(name)))
             {
-                QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
                 QString exe;
                 QString args;
 
                 int id;
-                try
+                boost::optional<int> idTest = fileTree.get_optional<int>("AppState.appID");
+                if (!idTest)
                 {
-                    id = stoi(fileTree.get<std::string>("AppState.appID"));
+                    idTest = fileTree.get_optional<int>("AppState.appid");
                 }
-                catch (std::exception& e)
-                {
-                    id = stoi(fileTree.get<std::string>("AppState.appid"));
-                }
+
+                id = idTest.value();
 
                 try
                 {
@@ -497,7 +525,7 @@ void ResultsPage::parseAcf(QDir steamRoot)
 
 //                db.addGame(name, path, exe, args);
 //                refreshGames();
-                steamVector.push_back(std::vector<QString>{name, path, exe, args});
+                steamVector.push_back(Game{0, name, path, exe, args});
             }
         }
     }

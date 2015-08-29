@@ -125,7 +125,7 @@ Game Database::getGameByName(QString name)
  * \param id ID of the game to find.
  * \return A Game object upon success, 0 upon failure.
 */
-std::tuple<bool, Game> Database::isExistant(unsigned int id)
+std::pair<bool, Game> Database::isExistant(unsigned int id)
 {
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE ID = :id;");
@@ -139,13 +139,11 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
         QString exe = query.value(3).toString();
         QString args = query.value(4).toString();
 
-        Game game = {id, name, path, exe, args};
-        return std::make_tuple(true, game);
+        return std::make_pair(true, Game {id, name, path, exe, args});
     }
     else
     {
-        Game game;
-        return std::make_tuple(false, game);
+        return std::make_pair(false, Game{});
     }
 }
 
@@ -155,7 +153,7 @@ std::tuple<bool, Game> Database::isExistant(unsigned int id)
  * \param name Name of the game to find.
  * \return A Game object upon success, 0 upon failure.
 */
-std::tuple<bool, Game> Database::isExistant(QString name)
+std::pair<bool, Game> Database::isExistant(QString name)
 {
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE GAMENAME = :name;");
@@ -163,18 +161,16 @@ std::tuple<bool, Game> Database::isExistant(QString name)
     query.exec();
     if (query.next())
     {
-        unsigned int id = query.value(0).toInt();
+        unsigned int id = query.value(0).toUInt();
         QString path = query.value(1).toString();
         QString exe = query.value(2).toString();
         QString args = query.value(3).toString();
 
-        Game game = {id, name, path, exe, args};
-        return std::make_tuple(true, game);
+        return std::make_pair(true, Game {id, name, path, exe, args});
     }
     else
     {
-        Game game;
-        return std::make_tuple(false, game);
+        return std::make_pair(false, Game{});
     }
 }
 
@@ -188,7 +184,7 @@ QList<Game> Database::getGames()
     query.exec("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES;");
     while (query.next())
     {
-        unsigned int id = query.value(0).toInt();
+        unsigned int id = query.value(0).toUInt();
         QString name = query.value(1).toString();
         QString path = query.value(2).toString();
         QString exe = query.value(3).toString();
@@ -211,5 +207,5 @@ unsigned int Database::getGameCount()
         return 0;
     }
 
-    return query.value(0).toInt();
+    return query.value(0).toUInt();
 }

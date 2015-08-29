@@ -3,13 +3,14 @@
 #include <QtWidgets>
 #include <vector>
 #include "Database.h"
+#include <boost/property_tree/ptree.hpp>
 
 class IntroPage;
 class ResultsPage;
 class DRMPage;
 class FinalPage;
 
-typedef std::vector<std::vector<QString>> GameList;
+typedef std::vector<Game> GameList;
 
 class Wizard : public QWizard
 {
@@ -72,6 +73,8 @@ class ResultsPage : public QWizardPage
     GameList steamVector;
     GameList originVector;
     GameList uplayVector;
+
+    void printTree(boost::property_tree::ptree& pt, int level);
 
 protected:
     void initializePage();
