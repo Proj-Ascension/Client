@@ -21,6 +21,8 @@ set(SOURCE
     Source/Database.cpp
 	Source/Sidebar.cpp
     Source/homepage.cpp
+    Source/BuddyList.cpp
+    Source/BuddyWidget.cpp
 )
 
 set(HEADERS
@@ -32,11 +34,14 @@ set(HEADERS
 	Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
     Source/homepage.h
+    Source/BuddyList.h
+    Source/BuddyWidget.h
 )
 
 set(FORMS
     Resource/UI/Library.ui
     Resource/UI/homepage.ui
+    Resource/UI/BuddyList.ui
 )
 
 set(RESOURCES

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BuddyList</class>
+ <widget class="QMainWindow" name="BuddyList">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>260</width>
+    <height>570</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton#close{background-image:url(:/SystemMenu/Icons/Close.png)}QPushButton:hover#close{background-image:url(:/SystemMenu/Icons/CloseHover.png)}</string>
+  </property>
+  <widget class="QWidget" name="bListMain">
+   <widget class="QPushButton" name="close">
+    <property name="geometry">
+     <rect>
+      <x>245</x>
+      <y>1</y>
+      <width>14</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
