@@ -1,4 +1,5 @@
 #include "Init.h"
+#include "BuddyList.h"
 
 #include <QIcon>
 

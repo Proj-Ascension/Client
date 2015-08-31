@@ -127,8 +127,10 @@ void MainPanel::init()
     // Stack widgets
     home = new HomePage(p, stack);
     library = new Library(p, stack);
+    community = new Community(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
+    stack->addWidget(community);
     stack->setCurrentWidget(library);
 
     // Set active tab

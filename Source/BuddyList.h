@@ -1,22 +1,19 @@
 #ifndef BUDDYLIST_H
 #define BUDDYLIST_H
 
-#include <QMainWindow>
+#include <QWidget>
 
 namespace Ui {
 class BuddyList;
 }
 
-class BuddyList : public QMainWindow
+class BuddyList : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit BuddyList(QWidget *parent = 0);
     ~BuddyList();
-
-private slots:
-    void on_close_clicked();
 
 private:
     Ui::BuddyList *ui;
