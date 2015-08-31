@@ -20,6 +20,7 @@ set(SOURCE
     Source/MainPanel.cpp
     Source/Database.cpp
 	Source/Sidebar.cpp
+    Source/homepage.cpp
 )
 
 set(HEADERS
@@ -30,10 +31,12 @@ set(HEADERS
     Source/Init.h
 	Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
+    Source/homepage.h
 )
 
 set(FORMS
     Resource/UI/Library.ui
+    Resource/UI/homepage.ui
 )
 
 set(RESOURCES

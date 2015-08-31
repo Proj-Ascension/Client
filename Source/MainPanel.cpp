@@ -125,7 +125,7 @@ void MainPanel::init()
     verticalLayout3->addWidget(stack);
 
     // Stack widgets
-    home = new QWidget(stack);
+    home = new HomePage(p, stack);
     library = new Library(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);

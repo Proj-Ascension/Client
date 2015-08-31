@@ -3,6 +3,7 @@
 #include "TabWidget.h"
 #include "Sidebar.h"
 #include "Library.h"
+#include "homepage.h"
 
 #include <QStackedWidget>
 #include <QApplication>
