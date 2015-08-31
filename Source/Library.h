@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Database.h"
+#include "BuddyList.h"
 
 #include <QWidget>
 #include <QProcess>

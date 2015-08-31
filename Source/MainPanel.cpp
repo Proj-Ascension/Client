@@ -127,8 +127,10 @@ void MainPanel::init()
     // Stack widgets
     home = new HomePage(p, stack);
     library = new Library(p, stack);
+    community = new Community(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
+    stack->addWidget(community);
     stack->setCurrentWidget(library);
 
     // Set active tab
@@ -139,7 +141,7 @@ void MainPanel::init()
     connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
     // connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
     connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
-    // connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
+    connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
     // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
     // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
     // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));

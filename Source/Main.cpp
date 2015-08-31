@@ -1,6 +1,9 @@
 #include "Init.h"
+#include "BuddyList.h"
 
 #include <QIcon>
+
+
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"
