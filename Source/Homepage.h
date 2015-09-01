@@ -5,19 +5,19 @@
 #include <QSettings>
 
 namespace Ui {
-class HomePage;
+class Homepage;
 }
 
-class HomePage : public QWidget
+class Homepage : public QWidget
 {
     Q_OBJECT
 
 public:
-    HomePage(QSettings* p, QWidget* parent = 0);
-    ~HomePage();
+    Homepage(QSettings* p, QWidget* parent = 0);
+    ~Homepage();
 
 private:
-    Ui::HomePage *ui;
+    Ui::Homepage* ui;
 };
 
 #endif // HOMEPAGE_H

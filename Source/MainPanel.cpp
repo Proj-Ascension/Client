@@ -125,7 +125,7 @@ void MainPanel::init()
     verticalLayout3->addWidget(stack);
 
     // Stack widgets
-    home = new HomePage(p, stack);
+    home = new Homepage(p, stack);
     library = new Library(p, stack);
     community = new Community(p, stack);
     stack->addWidget(home);

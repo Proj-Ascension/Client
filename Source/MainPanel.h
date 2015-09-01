@@ -3,7 +3,7 @@
 #include "TabWidget.h"
 #include "Sidebar.h"
 #include "Library.h"
-#include "homepage.h"
+#include "Homepage.h"
 #include "BuddyList.h"
 #include "Community.h"
 

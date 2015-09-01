@@ -20,7 +20,7 @@ set(SOURCE
     Source/MainPanel.cpp
     Source/Database.cpp
     Source/Sidebar.cpp
-    Source/homepage.cpp
+    Source/Homepage.cpp
     Source/BuddyList.cpp
     Source/BuddyWidget.cpp
     Source/Community.cpp
@@ -34,7 +34,7 @@ set(HEADERS
     Source/Init.h
     Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
-    Source/homepage.h
+    Source/Homepage.h
     Source/BuddyList.h
     Source/BuddyWidget.h
     Source/Community.cpp
