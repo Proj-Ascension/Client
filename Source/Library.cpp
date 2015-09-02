@@ -1,6 +1,7 @@
 #include "Library.h"
 #include "ui_Library.h"
 #include "Libs/SteamVdfParse.hpp"
+#include "AscensionDialog.h"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -163,7 +164,7 @@ void Library::on_testLaunch_clicked()
     {
         QMessageBox messageBox;
         messageBox.setText("Error: an application is already running.");
-        messageBox.exec();
+        messageBox.show();
     }
 }
 
@@ -172,6 +173,10 @@ void Library::on_testLaunch_clicked()
 */
 void Library::on_addGame_clicked()
 {
+    AscensionDialog dialog("Popup Modal");
+    dialog.exec();
+
+    return;
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
 
     QString args = QInputDialog::getText(0, "Arguments for " + name, "Args (optional): ");

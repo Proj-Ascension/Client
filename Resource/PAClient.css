@@ -1,11 +1,16 @@
 #mainPanel {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #systemPanel {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+#ascensionDialog {
+    margin: 0;
+    padding: 0;
 }
 
 #centralWidget {
@@ -13,6 +18,10 @@
 }
 
 #mainPanelScrollArea {
+    border: none;
+}
+
+#dialogScrollArea {
     border: none;
 }
 
