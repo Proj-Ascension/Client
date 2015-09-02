@@ -94,7 +94,7 @@ void MainPanel::init()
     // Horizontal layout #2 - window controls
     QHBoxLayout* horizontalLayout2 = new QHBoxLayout;
     horizontalLayout2->setSpacing(0);
-    horizontalLayout2->setMargin(8);
+    horizontalLayout2->setContentsMargins(0, 9, 8, 7);
     verticalLayout3->addLayout(horizontalLayout2);
 
     horizontalLayout2->addStretch();

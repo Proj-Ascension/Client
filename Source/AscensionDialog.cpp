@@ -89,7 +89,7 @@ AscensionDialog::AscensionDialog(QString title)
     // Horizontal layout #3 - window controls
     QHBoxLayout* horizontalLayout3 = new QHBoxLayout;
     horizontalLayout3->setSpacing(0);
-    horizontalLayout3->setMargin(8);
+    horizontalLayout3->setContentsMargins(0, 9, 7, 7);
     horizontalLayout1->addLayout(horizontalLayout3);
 
     horizontalLayout3->addStretch();

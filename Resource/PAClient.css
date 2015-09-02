@@ -33,7 +33,7 @@
 }
 
 #pushButtonMaximize {
-    padding: 0 8px 0 8px;
+    padding: 0 4px 0 5px;
     image: url(:/SystemMenu/Icons/Maximize.png);
 }
 
@@ -42,7 +42,7 @@
 }
 
 #pushButtonMinimize {
-    padding: 0 7px 0 0;
+    padding: 0 4px 0 0;
     image: url(:/SystemMenu/Icons/Minimize.png);
 }
 
@@ -51,7 +51,7 @@
 }
 
 #pushButtonClose {
-    padding: 0 0 0 7px;
+    padding: 0 0 0 5px;
     image: url(:/SystemMenu/Icons/Close.png);
 }
 
