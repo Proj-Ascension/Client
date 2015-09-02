@@ -21,7 +21,7 @@ namespace pt = boost::property_tree;
  * \param stream The stream to convert
  * \return The converted integer
  */
-uint32_t read32_le(std::istream& stream)
+inline uint32_t read32_le(std::istream& stream)
 {
     return static_cast<uint32_t>((stream.get()) | (stream.get() << 8) | (stream.get() << 16) |
                                  (stream.get() << 24));
@@ -31,7 +31,7 @@ uint32_t read32_le(std::istream& stream)
  * \param stream The stream to convert
  * \return The converted integer
  */
-uint64_t read64_le(std::istream& stream)
+inline uint64_t read64_le(std::istream& stream)
 {
     return static_cast<uint64_t>(
         (stream.get()) | (stream.get() << 8) | (stream.get() << 16) | (stream.get() << 24) |
@@ -43,7 +43,7 @@ uint64_t read64_le(std::istream& stream)
  * \param stream The stream to convert
  * \return The converted string
  */
-std::string readString(std::istream& stream)
+inline std::string readString(std::istream& stream)
 {
     std::string str;
     std::getline(stream, str, '\0');
@@ -73,7 +73,7 @@ struct GameHeader
  * \return The parsed property tree
  * \sa parseGame(), parseVdf()
  */
-pt::ptree parseSection(std::istream& input, bool root, std::string name)
+inline pt::ptree parseSection(std::istream& input, bool root, std::string name)
 {
     pt::ptree section; 
 
@@ -148,7 +148,7 @@ pt::ptree parseSection(std::istream& input, bool root, std::string name)
  * \return A GameHeader of the section
  * \sa parseSection(), parseVdf()
  */
-GameHeader parseGame(std::istream& input)
+inline GameHeader parseGame(std::istream& input)
 {
     GameHeader game;
     game.appID = read32_le(input);
@@ -193,7 +193,7 @@ GameHeader parseGame(std::istream& input)
  * \return A full map of each game, with the key being the game's Steam ID
  * \sa parseSection(), parseVdf()
  */
-std::unordered_map<int, GameHeader> parseVdf(std::string location)
+inline std::unordered_map<int, GameHeader> parseVdf(std::string location)
 {
     std::ifstream input(location, std::ifstream::binary);
 
