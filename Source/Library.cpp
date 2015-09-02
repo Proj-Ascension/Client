@@ -585,7 +585,7 @@ void Library::parseAcf(QDir steamRoot)
             }
             catch (std::exception& e)
             {
-                if (e.what() == "No such node")
+                if (!qstrcmp(e.what(), "No such node"))
                 {
                     name = QString::fromStdString(fileTree.get<std::string>("AppState.UserConfig.name"));
                 }
