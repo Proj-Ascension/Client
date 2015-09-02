@@ -14,6 +14,7 @@ AscensionDialog::AscensionDialog(QString title)
     setObjectName("ascensionDialog");
     setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog | Qt::WindowStaysOnTopHint);
     setWindowTitle(title);
+    setWindowModality(Qt::ApplicationModal);
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
@@ -101,8 +102,6 @@ AscensionDialog::AscensionDialog(QString title)
     horizontalLayout3->addWidget(pushButtonClose);
     QObject::connect(pushButtonClose, SIGNAL(clicked()), this, SLOT(pushButtonClose()));
 
-    qDebug() << pushButtonClose->width() << pushButtonClose->height();
-
     // Content
     content = new QWidget(coreWidget);
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -112,7 +111,6 @@ AscensionDialog::AscensionDialog(QString title)
 AscensionDialog::~AscensionDialog()
 {
     delete p;
-    delete content;
 }
 
 void AscensionDialog::pushButtonClose()

@@ -24,7 +24,8 @@ set(SOURCE
     Source/BuddyList.cpp
     Source/BuddyWidget.cpp
     Source/Community.cpp
-    Source/AscensionDialog.cpp)
+    Source/AscensionDialog.cpp
+)
 
 set(HEADERS
     Source/TabWidget.h
