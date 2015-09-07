@@ -3,6 +3,10 @@
 #include <QDialog>
 #include <QSettings>
 
+/** AscensionDialog class.
+ * Class that extends QDialog to provide the custom UI elements for Project Ascension.
+ * Use this instead of QDialog itself.
+ */
 class AscensionDialog : public QDialog
 {
     Q_OBJECT

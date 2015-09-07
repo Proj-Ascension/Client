@@ -8,6 +8,11 @@
 #include <QDebug>
 #include <QButtonGroup>
 
+/** AscensionDialog constructor
+ * Constructs the base UI for Dialog, with the UI elements needed for Project Ascension.
+ * This constructor does not provide any QPushButtons or QLabels for the dialog content.
+ * \param title String to be displayed as the title on the window.
+ */
 AscensionDialog::AscensionDialog(QString title)
     : QDialog(),
       p(new QSettings("palette.ini", QSettings::IniFormat))
@@ -160,6 +165,11 @@ void AscensionDialog::mouseMoveEvent(QMouseEvent* evt)
     }
 }
 
+/** Function to create a AscensionDialog with a basic QLabel showing the message and Cancel and Return buttons.
+ * \param title The title of the dialog
+ * \param message The message to show on the dialog
+ * \return The value of AscensionDialog::exec(), true if accepted, false if rejected.
+ */
 bool AscensionDialog::showConfirmDialog(QString title, QString message) {
     AscensionDialog* dialog = new AscensionDialog(title);
     QWidget* content = dialog->content;
