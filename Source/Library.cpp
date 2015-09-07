@@ -173,8 +173,7 @@ void Library::on_testLaunch_clicked()
 */
 void Library::on_addGame_clicked()
 {
-    AscensionDialog dialog("Popup Modal");
-    dialog.exec();
+    AscensionDialog::showConfirmDialog("Popup Modal", "Lorem ipsum dolar sit amet");
 
     return;
     QString name = QInputDialog::getText(0, "Game Name", "Game Name:");

@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QButtonGroup>
 
 AscensionDialog::AscensionDialog(QString title)
     : QDialog(),
@@ -105,6 +106,19 @@ AscensionDialog::AscensionDialog(QString title)
     // Content
     content = new QWidget(coreWidget);
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    content->setStyleSheet("QPushButton {"
+                           "color: " + p->value("Primary/LightText").toString() + "; "
+                           "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                           "border: none; margin: 0px; padding: 4px 0 4px 0;} "
+                           "QPushButton:hover {"
+                           "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+                           "QPushButton[default='true'] {"
+                           "background-color: " + p->value("Accent/MediumAccent").toString() + ";} "
+                           "QPushButton[default='true']:hover {"
+                           "background-color: " + p->value("Accent/LightAccent").toString() + ";} "
+                           "QLabel {"
+                           "color: " + p->value("Primary/LightText").toString() + ";} ");
+
     verticalLayout3->addWidget(content);
 }
 
@@ -144,4 +158,37 @@ void AscensionDialog::mouseMoveEvent(QMouseEvent* evt)
         move(x() + c_delta.x(), y() + c_delta.y());
         oldWindowPos = evt->globalPos();
     }
+}
+
+bool AscensionDialog::showConfirmDialog(QString title, QString message) {
+    AscensionDialog* dialog = new AscensionDialog(title);
+    QWidget* content = dialog->content;
+
+    QGridLayout* gridLayout = new QGridLayout;
+    content->setLayout(gridLayout);
+
+    QFont font = QFont("SourceSansPro", 9);
+
+    QLabel* label = new QLabel(message, content);
+    label->setFont(font);
+    gridLayout->addWidget(label, 0, 0);
+
+    QHBoxLayout* horizontalLayout = new QHBoxLayout;
+    gridLayout->addLayout(horizontalLayout, 1, 0);
+
+    QPushButton* cancelBtn = new QPushButton("Cancel", content);
+    cancelBtn->setContentsMargins(8, 8, 8, 8);
+    cancelBtn->setFont(font);
+    horizontalLayout->addWidget(cancelBtn);
+
+    QPushButton* confirmBtn = new QPushButton("Confirm", content);
+    confirmBtn->setContentsMargins(8, 8, 8, 8);
+    confirmBtn->setFont(font);
+    confirmBtn->setProperty("default", true);
+    horizontalLayout->addWidget(confirmBtn);
+
+    qDebug() << dialog->exec();
+
+    delete dialog;
+    return true;
 }

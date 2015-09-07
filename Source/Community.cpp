@@ -13,10 +13,10 @@ Community::Community(QSettings* p, QWidget* parent) :
     this->setStyleSheet("QPushButton {"
                         "color: " + p->value("Primary/LightText").toString() + "; "
                         "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                        "border: none; margin: 0px; padding: 0px;} "
+                        "border: none; margin: 0; padding: 0;} "
                         "QPushButton:hover {"
                         "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                        "color: " + p->value("Primary/LightText").toString() + ";");
+                        );
     QFont buttonFont("SourceSansPro", 12);
     ui->buddyButton->setFont(buttonFont);
     ui->buddyButton->setText("Friends");

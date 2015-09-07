@@ -11,6 +11,8 @@ public:
     AscensionDialog(QString title = "Project Ascension");
     ~AscensionDialog();
 
+    static bool showConfirmDialog(QString title, QString message);
+
 public slots:
     void pushButtonClose();
 
