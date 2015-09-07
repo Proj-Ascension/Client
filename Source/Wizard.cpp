@@ -21,6 +21,7 @@ Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "
     setPage(pages::RESULTS, resultsPage);
     setPage(pages::FINAL, new FinalPage());
     setWindowTitle("Project Ascension setup");
+    setFixedSize(QSize(700, 450));
 }
 
 IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
@@ -240,32 +241,92 @@ void ResultsPage::initializePage()
     }
 
     setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
+    setSubTitle("Change the title for each game by clicking the text box and editing.");
+    btnGroup = new QButtonGroup();
+    btnGroup->setExclusive(false);
+    tabWidget = new QTabWidget();
     top_layout = new QGridLayout();
     layout = new QGridLayout();
     scrollArea = new QScrollArea();
+    int row = 0;
 
     for (auto i : steamVector)
     {
-        QLabel* name = new QLabel("<b>" + i.gameName +"</b>");
-        QLabel* exe;
+        QCheckBox* checkBox = new QCheckBox("Executable not found");
+        QLineEdit* name = new QLineEdit(i.gameName);
+        checkBox->setStyleSheet("QLabel { color: red; }");
         for (auto dir : steamDirectoryList)
         {
             if (i.executablePath.contains(dir))
             {
-                exe = new QLabel(i.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
+                checkBox->setStyleSheet("QLabel { color: black; }");
+                checkBox->setText("Executable:  " + i.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
                 break;
             }
         }
-        name->setTextFormat(Qt::TextFormat::RichText);
-        layout->addWidget(name);
-        layout->addWidget(exe);
+        layout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+        row++;
+        layout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+        row++;
+        btnGroup->addButton(checkBox);
     }
 
     QWidget* viewport = new QWidget();
+    QPushButton* selectAllBtn = new QPushButton("Select all");
+    QPushButton* deselectAllBtn = new QPushButton("Deselect all");
+    QPushButton* invertBtn = new QPushButton("Invert selection");
+    connect(selectAllBtn, SIGNAL(clicked()), this, SLOT(selectAll()));
+    connect(deselectAllBtn, SIGNAL(clicked()), this, SLOT(deselectAll()));
+    connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
     viewport->setLayout(layout);
     scrollArea->setWidget(viewport);
-    top_layout->addWidget(scrollArea);
+    tabWidget->addTab(scrollArea, "Steam");
+    QLabel* originLabel = new QLabel("Origin");
+    tabWidget->addTab(originLabel, "Origin");
+    top_layout->addWidget(tabWidget);
+    QHBoxLayout* boxLayout = new QHBoxLayout();
+    boxLayout->addWidget(selectAllBtn);
+    boxLayout->addWidget(deselectAllBtn);
+    boxLayout->addWidget(invertBtn);
+    top_layout->addLayout(boxLayout, 1, 0, 0);
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabSelected()));
     setLayout(top_layout);
+}
+
+void ResultsPage::selectAll()
+{
+    for (auto i : btnGroup->buttons())
+    {
+        i->setChecked(true);
+    }
+}
+
+void ResultsPage::deselectAll()
+{
+    for (auto i : btnGroup->buttons())
+    {
+        i->setChecked(false);
+    }
+}
+
+void ResultsPage::invert()
+{
+    for (auto i : btnGroup->buttons())
+    {
+        i->setChecked(!i->isChecked());
+    }
+}
+
+void ResultsPage::tabSelected()
+{
+    if (tabWidget->currentIndex() >= 1)
+    {
+        setSubTitle("Change the title for each game by clicking the text box and editing. Choose which executable to use from the tree view.");
+    }
+    else
+    {
+        setSubTitle("Change the title for each game by clicking the text box and editing.");
+    }
 }
 
 void ResultsPage::findSteamGames()
@@ -324,6 +385,7 @@ void ResultsPage::findOriginGames()
                << "VDETECT.EXE"
                << "VRF_DLL.EXE"
                << "WILLTV.EXE";
+
     originRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QStringList folderList = originRoot.entryList();
     QHash<QString, QStringList> masterList;

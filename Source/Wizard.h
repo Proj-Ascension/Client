@@ -60,6 +60,8 @@ class ResultsPage : public QWizardPage
 
     QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void parseAcf(QDir steamRoot);
+    QButtonGroup* btnGroup;
+    QTabWidget* tabWidget;
     QGridLayout* top_layout;
     QGridLayout* layout;
     QScrollArea* scrollArea;
@@ -75,6 +77,12 @@ class ResultsPage : public QWizardPage
     GameList uplayVector;
 
     void printTree(boost::property_tree::ptree& pt, int level);
+
+public slots:
+    void tabSelected();
+    void selectAll();
+    void deselectAll();
+    void invert();
 
 protected:
     void initializePage();
