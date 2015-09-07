@@ -357,7 +357,7 @@ void ResultsPage::findSteamGames()
     }
 
     parseAcf(steamRoot);
-    std::sort(steamVector.begin(), steamVector.end(), [&](Game& g1, Game& g2){return g1.gameName < g2.gameName;});
+    std::sort(steamVector.begin(), steamVector.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName;});
 }
 
 void ResultsPage::findOriginGames()
@@ -518,7 +518,7 @@ void ResultsPage::parseAcf(QDir steamRoot)
 
             if (nameTest)
             {
-                name = QString::fromStdString(nameTest.value());
+                name = QString::fromStdString(nameTest.get());
             }
             else
             {
@@ -539,7 +539,7 @@ void ResultsPage::parseAcf(QDir steamRoot)
                     idTest = fileTree.get_optional<int>("AppState.appid");
                 }
 
-                id = idTest.value();
+                id = idTest.get();
 
                 try
                 {
