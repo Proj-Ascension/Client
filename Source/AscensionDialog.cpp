@@ -181,6 +181,8 @@ bool AscensionDialog::showConfirmDialog(QString title, QString message) {
 
     QLabel* label = new QLabel(message, content);
     label->setFont(font);
+    label->setAlignment(Qt::AlignTop);
+    label->setWordWrap(true);
     gridLayout->addWidget(label, 0, 0);
 
     QHBoxLayout* horizontalLayout = new QHBoxLayout;
