@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Database.h"
+#include "BuddyList.h"
 
 #include <QWidget>
 #include <QProcess>
@@ -36,15 +37,9 @@ private:
     Database db;
     Ui::Library* ui;
     QProcess* runningProcess;
-    QList<QString> steamDirectoryList;
 
     bool isProcessRunning() const;
-    QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void runProcess(QString file, QString workingDirectory);
     void runProcessWithArgs(QString file, QString workingDirectory, QString args);
     void refreshGames();
-    void findSteamGames(QDir steamRoot);
-    void findOriginGames(QDir originRoot);
-    void findUplayGames(QDir uplayRoot);
-    void parseAcf(QDir steamRoot);
 };

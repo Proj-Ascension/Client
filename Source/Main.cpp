@@ -1,4 +1,5 @@
 #include "Init.h"
+#include "BuddyList.h"
 
 #include <QApplication>
 #include <QFile>
@@ -6,6 +7,8 @@
 #include <iostream>
 #include "Wizard.h"
 #include <QIcon>
+
+
 
 #ifdef Q_OS_WIN
 #include "BorderlessWindow.h"

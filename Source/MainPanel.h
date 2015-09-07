@@ -3,10 +3,14 @@
 #include "TabWidget.h"
 #include "Sidebar.h"
 #include "Library.h"
+#include "Homepage.h"
+#include "BuddyList.h"
+#include "Community.h"
 
 #include <QStackedWidget>
 #include <QApplication>
 #include <QSettings>
+#include <QWidget>
 
 /** MainPanel class.
 * Class to construct the core content of the launcher window.
@@ -38,6 +42,7 @@ private:
     TabWidget* activeTab;
 
     QWidget* home;
+    QWidget* community;
     Library* library;
 
 private slots:
@@ -75,6 +80,7 @@ private slots:
         if (!(activeTab == sidebar->communityTab))
         {
             activeTab->toggleInactive();
+            stack->setCurrentWidget(community);
             activeTab = sidebar->communityTab;
             activeTab->toggleActive();
         }
