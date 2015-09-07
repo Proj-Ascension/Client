@@ -129,7 +129,7 @@ AscensionDialog::~AscensionDialog()
 
 void AscensionDialog::pushButtonClose()
 {
-    this->close();
+    this->reject();
 }
 
 void AscensionDialog::mousePressEvent(QMouseEvent* evt)
@@ -179,16 +179,17 @@ bool AscensionDialog::showConfirmDialog(QString title, QString message) {
     QPushButton* cancelBtn = new QPushButton("Cancel", content);
     cancelBtn->setContentsMargins(8, 8, 8, 8);
     cancelBtn->setFont(font);
+    connect(cancelBtn, SIGNAL(clicked()), dialog, SLOT(reject()));
     horizontalLayout->addWidget(cancelBtn);
 
     QPushButton* confirmBtn = new QPushButton("Confirm", content);
     confirmBtn->setContentsMargins(8, 8, 8, 8);
     confirmBtn->setFont(font);
     confirmBtn->setProperty("default", true);
+    connect(confirmBtn, SIGNAL(clicked()), dialog, SLOT(accept()));
     horizontalLayout->addWidget(confirmBtn);
 
-    qDebug() << dialog->exec();
-
+    bool accepted = dialog->exec();
     delete dialog;
-    return true;
+    return accepted;
 }
