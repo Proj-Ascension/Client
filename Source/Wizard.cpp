@@ -285,6 +285,7 @@ void ResultsPage::initializePage()
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
     QLabel* originLabel = new QLabel("Origin");
     tabWidget->addTab(originLabel, "Origin");
+#endif
 #if defined(_WIN32) || defined(_WIN64)
     QLabel* uplayLabel = new QLabel("Uplay");
     tabWidget->addTab(originLabel, "Uplay");
