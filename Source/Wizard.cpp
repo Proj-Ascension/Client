@@ -254,6 +254,7 @@ void ResultsPage::initializePage()
     {
         QCheckBox* checkBox = new QCheckBox("Executable not found");
         QLineEdit* name = new QLineEdit(i.gameName);
+        name->setFixedWidth(350);
         checkBox->setStyleSheet("QLabel { color: red; }");
         for (auto dir : steamDirectoryList)
         {
@@ -540,34 +541,47 @@ void ResultsPage::parseAcf(QDir steamRoot)
                 }
 
                 id = idTest.get();
-
                 try
                 {
                     auto game = games.at(id);
                     auto launch = game.pt.get_child("config.launch");
-
-                    // Loop through the 0, 1, and 2 configurations
-                    for (auto pair : launch)
+                    boost::optional<std::string> oslistTest = game.pt.get_optional<std::string>("common.oslist");
+                    if (oslistTest)
                     {
-                        boost::property_tree::ptree section = pair.second;
 
-                        QString oslist = QString::fromStdString(section.get("config.oslist", "windows"));
+                        // Loop through the 0, 1, and 2 configurations
+                        for (auto pair : launch)
+                        {
+                            boost::property_tree::ptree section = pair.second;
+
+                            QString oslist = QString::fromStdString(section.get("config.oslist", "windows"));
 
 #if defined(__linux__)
-                        if (oslist == "linux")
+                            if (oslist == "linux")
 
 #elif defined(_WIN32) || defined(_WIN64)
                             if (oslist == "windows")
 #elif defined(__APPLE__)
-                        if (oslist == "macos")
+                                if (oslist == "macos")
 #endif
-                        {
-                            exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
-                            exe = QString(QDir::cleanPath(exe));
-                            path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
-                            path = QString(QDir::cleanPath(path));
-                            args = QString::fromStdString(section.get("arguments", ""));
+                            {
+                                exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                                exe = QString(QDir::cleanPath(exe));
+                                path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
+                                path = QString(QDir::cleanPath(path));
+                                args = QString::fromStdString(section.get("arguments", ""));
+                                break;
+                            }
                         }
+                    }
+                    else
+                    {
+                        std::cout << name.toLocal8Bit().constData() << std::endl;
+                        exe = QDir(path).filePath(QString::fromStdString(launch.get<std::string>("0.executable")));
+                        exe = QString(QDir::cleanPath(exe));
+                        path = QDir(path).filePath(QString::fromStdString(launch.get("0.workingdir", "")));
+                        path = QString(QDir::cleanPath(path));
+                        args = QString::fromStdString(launch.get("0.arguments", ""));
                     }
                 }
                 catch (const std::out_of_range&)
