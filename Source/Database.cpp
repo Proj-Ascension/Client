@@ -70,9 +70,6 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
 */
 bool Database::addGames(GameList games)
 {
-    QSqlQuery query(db);
-    QString queryString;
-    queryString = "BEGIN TRANSACTION";
     for (auto& game : games)
     {
         addGame(game.gameName, game.gameDirectory, game.executablePath, game.arguments);
