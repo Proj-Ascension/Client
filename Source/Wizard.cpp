@@ -12,17 +12,20 @@
 
 namespace pt = boost::property_tree;
 
+GameList addedVector;
+
 Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
     drmPage = new DRMPage();
-    ResultsPage* resultsPage = new ResultsPage(db, *drmPage);
+    resultsPage = new ResultsPage(db, *drmPage);
+    finalPage = new FinalPage(db);
     setPage(pages::INTRO, new IntroPage());
     setPage(pages::DRM, drmPage);
     setPage(pages::RESULTS, resultsPage);
-    setPage(pages::FINAL, new FinalPage());
+    setPage(pages::FINAL, finalPage);
     setWindowTitle("Project Ascension setup");
     setFixedSize(QSize(700, 450));
-}
+ }
 
 IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
 {
@@ -32,11 +35,6 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
     auto label = new QLabel("Click next to attempt to find Steam, Origin and Uplay games where applicable.");
     layout->addWidget(label);
     setLayout(layout);
-}
-
-FinalPage::FinalPage(QWidget* parent) : QWizardPage(parent)
-{
-    setTitle("Done");
 }
 
 DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
@@ -286,6 +284,7 @@ void ResultsPage::initializePage()
     QLabel* originLabel = new QLabel("Origin");
     tabWidget->addTab(originLabel, "Origin");
 #endif
+
 #if defined(_WIN32) || defined(_WIN64)
     QLabel* uplayLabel = new QLabel("Uplay");
     tabWidget->addTab(originLabel, "Uplay");
@@ -298,6 +297,21 @@ void ResultsPage::initializePage()
     top_layout->addLayout(boxLayout, 1, 0, 0);
     connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabSelected()));
     setLayout(top_layout);
+}
+
+int ResultsPage::nextId() const
+{
+    int offset = 0;
+    for (auto i : btnGroup->buttons())
+    {
+        if(i->isChecked())
+        {
+            std::cout << "Adding " << i->text().toLocal8Bit().constData() << std::endl;
+            addedVector.push_back(steamVector.at(offset));
+        }
+        offset++;
+    }
+    return pages::FINAL;
 }
 
 void ResultsPage::selectAll()
@@ -640,4 +654,18 @@ QStringList ResultsPage::recursiveFindFiles(QDir dir, QStringList ignoreList)
     }
 
     return dirList;
+}
+
+FinalPage::FinalPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
+{
+    setTitle("Done");
+}
+
+void FinalPage::initializePage()
+{
+    for (auto i : addedVector)
+    {
+        db.addGame(i.gameName, i.gameDirectory, i.executablePath, i.arguments);
+    }
+    setSubTitle(QString("Adding ") + QString::number(addedVector.size()) + " games to the database.");
 }

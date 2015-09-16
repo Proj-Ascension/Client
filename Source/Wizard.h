@@ -11,15 +11,17 @@ class DRMPage;
 class FinalPage;
 
 typedef std::vector<Game> GameList;
+enum pages { INTRO, DRM, RESULTS, FINAL };
 
 class Wizard : public QWizard
 {
 Q_OBJECT
 public:
     Database db;
-    enum pages { INTRO, DRM, RESULTS, FINAL };
     Wizard(QWidget* parent = 0, QString dbPath = "./");
     DRMPage* drmPage;
+    ResultsPage* resultsPage;
+    FinalPage* finalPage;
 };
 
 class IntroPage : public QWizardPage
@@ -46,7 +48,6 @@ class DRMPage : public QWizardPage
     void checkUplayExists();
     void checkOriginExists();
 
-
 public:
     QString steamPath;
     QString originPath;
@@ -60,9 +61,9 @@ class ResultsPage : public QWizardPage
 
     QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void parseAcf(QDir steamRoot);
-    QButtonGroup* btnGroup;
     QTabWidget* tabWidget;
     QGridLayout* top_layout;
+    QButtonGroup* btnGroup;
     QGridLayout* layout;
     QScrollArea* scrollArea;
     QStringList steamDirectoryList;
@@ -85,18 +86,24 @@ public slots:
     void invert();
 
 protected:
-    void initializePage();
+    void initializePage() Q_DECL_OVERRIDE;
 
 public:
     ResultsPage(Database db, DRMPage& drmPage, QWidget* parent = 0);
     void findOriginGames();
     void findUplayGames();
     void findSteamGames();
+    int nextId() const Q_DECL_OVERRIDE;
 };
 
 class FinalPage : public QWizardPage
 {
     Q_OBJECT
+    Database db;
+
+protected:
+    void initializePage() Q_DECL_OVERRIDE;
+
 public:
-    FinalPage(QWidget* parent = 0);
+    FinalPage(Database db, QWidget* parent = 0);
 };
