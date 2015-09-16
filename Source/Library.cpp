@@ -5,6 +5,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QDebug>
+#include <QFileSystemWatcher>
 
 /** Library constructor
  * Initialize the library UI and generate an initial list of all the games available.
@@ -44,7 +45,6 @@ Library::Library(QSettings* p, QWidget* parent)
         QMessageBox error;
         error.critical(0, "Error!", "An error occured while trying to load the database.");
         exit(EXIT_FAILURE);
-        return;
     }
 
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
@@ -56,7 +56,9 @@ Library::Library(QSettings* p, QWidget* parent)
         qDebug() << game.id << game.gameName << game.gameDirectory << game.executablePath;
     }
 
-    refreshGames();
+    QFileSystemWatcher* watcher = new QFileSystemWatcher;
+    watcher->addPath(QDir(".").filePath("ascension.db"));
+    connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(refreshGames()));
 }
 
 Library::~Library()

@@ -3,6 +3,7 @@
 #include "Wizard.h"
 #include "Libs/SteamVdfParse.hpp"
 #include "Database.h"
+#include "Library.h"
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
@@ -663,9 +664,6 @@ FinalPage::FinalPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
 
 void FinalPage::initializePage()
 {
-    for (auto i : addedVector)
-    {
-        db.addGame(i.gameName, i.gameDirectory, i.executablePath, i.arguments);
-    }
-    setSubTitle(QString("Adding ") + QString::number(addedVector.size()) + " games to the database.");
+    db.addGames(addedVector);
+    setSubTitle(QString("Added ") + QString::number(addedVector.size()) + " games to the database. Click finish to complete the wizard.");
 }

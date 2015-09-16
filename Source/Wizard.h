@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <vector>
 #include "Database.h"
+#include "Library.h"
 #include <boost/property_tree/ptree.hpp>
 
 class IntroPage;
@@ -10,7 +11,6 @@ class ResultsPage;
 class DRMPage;
 class FinalPage;
 
-typedef std::vector<Game> GameList;
 enum pages { INTRO, DRM, RESULTS, FINAL };
 
 class Wizard : public QWizard

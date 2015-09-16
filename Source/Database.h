@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSqlQuery>
+#include <QtWidgets>
 
 /** Game type.
  * Defines a game type. 
@@ -15,6 +16,8 @@ typedef struct
     QString arguments; /**< Arguments to pas to the executable */
 } Game;
 
+typedef std::vector<Game> GameList;
+
 /** Database class.
  * Wrapper class to manage the internal game database.
  * Also has a simple interface to find games by certain conditions.
@@ -28,6 +31,7 @@ public:
     bool reset();
 
     bool addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments);
+    bool addGames(GameList games);
     bool removeGameById(unsigned int id);
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);

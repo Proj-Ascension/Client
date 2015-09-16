@@ -64,6 +64,21 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
     return query.exec();
 }
 
+/** Add games to the database and repopulate the games list.
+ * \param games GameList of games to add.
+ * \return Success/failure of the operation.
+*/
+bool Database::addGames(GameList games)
+{
+    QSqlQuery query(db);
+    QString queryString;
+    queryString = "BEGIN TRANSACTION";
+    for (auto& game : games)
+    {
+        addGame(game.gameName, game.gameDirectory, game.executablePath, game.arguments);
+    }
+}
+
 /** Remove a game from the database by their ID.
  * \param id ID of the game to remove.
  * \return Success/failure of the operation.

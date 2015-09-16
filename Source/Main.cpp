@@ -24,7 +24,6 @@ int main(int argc, char* argv[])
     QApplication* application = new QApplication(argc, argv);
     Wizard wiz;
 
-
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX
         application->setWindowIcon(QIcon(":/SystemMenu/Icons/Ascension_Icon.ico"));
