@@ -59,6 +59,7 @@ Library::Library(QSettings* p, QWidget* parent)
     QFileSystemWatcher* watcher = new QFileSystemWatcher;
     watcher->addPath(QDir(".").filePath("ascension.db"));
     connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(refreshGames()));
+    refreshGames();
 }
 
 Library::~Library()

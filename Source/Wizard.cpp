@@ -245,8 +245,11 @@ void ResultsPage::initializePage()
     btnGroup->setExclusive(false);
     tabWidget = new QTabWidget();
     top_layout = new QGridLayout();
-    layout = new QGridLayout();
-    scrollArea = new QScrollArea();
+    steamLayout = new QGridLayout();
+    originLayout = new QGridLayout();
+    uplayLayout = new QGridLayout();
+    steamScrollArea = new QScrollArea();
+    originScrollArea = new QScrollArea();
     int row = 0;
 
     for (auto i : steamVector)
@@ -264,32 +267,55 @@ void ResultsPage::initializePage()
                 break;
             }
         }
-        layout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+        steamLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
         row++;
-        layout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+        steamLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
         row++;
         btnGroup->addButton(checkBox);
     }
 
-    QWidget* viewport = new QWidget();
+    for (pt::ptree::value_type& games : originTree.get_child("games"))
+    {
+        boost::optional<std::string> exeTest = games.second.get_optional<std::string>("exes");
+        if (exeTest)
+        {
+            QLineEdit* name = new QLineEdit(QString::fromStdString(games.second.get<std::string>("name")));
+            name->setFixedWidth(350);
+            QCheckBox* checkBox = new QCheckBox();
+            for (auto exe : games.second.get_child("exes"))
+            {
+                checkBox = new QCheckBox("Executable: " + QString::fromStdString(exe.second.data()));
+            }
+            originLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+            row++;
+            originLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+            row++;
+        }
+    }
+
+    steamViewport = new QWidget();
+    originViewport = new QWidget();
     QPushButton* selectAllBtn = new QPushButton("Select all");
     QPushButton* deselectAllBtn = new QPushButton("Deselect all");
     QPushButton* invertBtn = new QPushButton("Invert selection");
     connect(selectAllBtn, SIGNAL(clicked()), this, SLOT(selectAll()));
     connect(deselectAllBtn, SIGNAL(clicked()), this, SLOT(deselectAll()));
     connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
-    viewport->setLayout(layout);
-    scrollArea->setWidget(viewport);
-    tabWidget->addTab(scrollArea, "Steam");
+    steamViewport->setLayout(steamLayout);
+    steamScrollArea->setWidget(steamViewport);
+    tabWidget->addTab(steamScrollArea, "Steam");
+
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    QLabel* originLabel = new QLabel("Origin");
-    tabWidget->addTab(originLabel, "Origin");
+    originViewport->setLayout(originLayout);
+    originScrollArea->setWidget(originViewport);
+    tabWidget->addTab(originScrollArea, "Origin");
 #endif
 
 #if defined(_WIN32) || defined(_WIN64)
     QLabel* uplayLabel = new QLabel("Uplay");
-    tabWidget->addTab(originLabel, "Uplay");
+    tabWidget->addTab(uplayLabel, "Uplay");
 #endif
+
     top_layout->addWidget(tabWidget);
     QHBoxLayout* boxLayout = new QHBoxLayout();
     boxLayout->addWidget(selectAllBtn);
@@ -411,25 +437,25 @@ void ResultsPage::findOriginGames()
     originRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QStringList folderList = originRoot.entryList();
     QHash<QString, QStringList> masterList;
+    int id = 0;
+
     for (auto i : folderList)
     {
-        // TODO: Populate a widget with this info
-        QDir dir(originRoot.absoluteFilePath(i));
-        dir.setNameFilters(QStringList("*.exe"));
-        dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-        qDebug() << "Looking in: " << dir.filePath("");
-        QStringList test = recursiveFindFiles(dir, ignoreList);
-        masterList.insert(dir.filePath(""), test);
-    }
-
-    QHashIterator<QString, QStringList> masterIter(masterList);
-    while (masterIter.hasNext())
-    {
-        masterIter.next();
-        qDebug() << "Found in: " << masterIter.key();
-        for (auto fileIter : masterIter.value())
+        if (i != "DownloadCache")
         {
-            qDebug() << fileIter;
+            pt::ptree& node = originTree.add("games.game", "");
+            QDir dir(originRoot.absoluteFilePath(i));
+            dir.setNameFilters(QStringList("*.exe"));
+            dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+            qDebug() << "Looking in: " << dir.filePath("");
+            QStringList test = recursiveFindFiles(dir, ignoreList);
+            node.put("id", id);
+            node.put("name", dir.dirName().toLocal8Bit().constData());
+            for (auto exe : test)
+            {
+                node.add("exes.exe", exe.toLocal8Bit().constData());
+            }
+            id++;
         }
     }
 }

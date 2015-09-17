@@ -3,8 +3,9 @@
 #include <QtWidgets>
 #include <vector>
 #include "Database.h"
-#include "Library.h"
 #include <boost/property_tree/ptree.hpp>
+
+namespace pt = boost::property_tree;
 
 class IntroPage;
 class ResultsPage;
@@ -61,11 +62,19 @@ class ResultsPage : public QWizardPage
 
     QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
     void parseAcf(QDir steamRoot);
+
+    QWidget* steamViewport;
+    QWidget* originViewport;
+    QWidget* uplayViewport;
     QTabWidget* tabWidget;
     QGridLayout* top_layout;
     QButtonGroup* btnGroup;
-    QGridLayout* layout;
-    QScrollArea* scrollArea;
+    QGridLayout* steamLayout;
+    QGridLayout* originLayout;
+    QGridLayout* uplayLayout;
+    QScrollArea* steamScrollArea;
+    QScrollArea* originScrollArea;
+    QScrollArea* uplayScrollArea;
     QStringList steamDirectoryList;
     Database db;
 
@@ -74,8 +83,8 @@ class ResultsPage : public QWizardPage
     QDir originRoot;
 
     GameList steamVector;
-    GameList originVector;
-    GameList uplayVector;
+    pt::ptree originTree;
+    pt::ptree uplayTree;
 
     void printTree(boost::property_tree::ptree& pt, int level);
 
