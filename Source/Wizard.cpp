@@ -339,6 +339,31 @@ void ResultsPage::initializePage()
             int row = 0;
             int count = uplayTree.get<int>("games.count");
             setTitle(title() + QString::number(count) + QString(" Uplay game") + (count >= 2 ? QString("s."):QString(".")));
+
+            for (pt::ptree::value_type& games : uplayTree.get_child("games"))
+            {
+                boost::optional<std::string> exeTest = games.second.get_optional<std::string>("exes");
+                if (exeTest)
+                {
+                    QButtonGroup* group = new QButtonGroup();
+                    QLineEdit* name = new QLineEdit(QString::fromStdString(games.second.get<std::string>("name")));
+                    name->setFixedWidth(350);
+                    QCheckBox* checkBox = new QCheckBox();
+                    uplayLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+                    row++;
+                    for (auto exe : games.second.get_child("exes"))
+                    {
+                        checkBox = new QCheckBox("Executable: " + QString::fromStdString(exe.second.data()));
+                        group->addButton(checkBox);
+                        uplayLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+                        row++;
+                    }
+                    uplayBtnGroupVector.push_back(group);
+                }
+            }
+            uplayViewport->setLayout(uplayLayout);
+            uplayScrollArea->setWidget(uplayViewport);
+            tabWidget->addTab(uplayScrollArea, "Uplay");
         }
 
         QPushButton* selectAllBtn = new QPushButton("Select all");
@@ -347,11 +372,6 @@ void ResultsPage::initializePage()
         connect(selectAllBtn, SIGNAL(clicked()), this, SLOT(selectAll()));
         connect(deselectAllBtn, SIGNAL(clicked()), this, SLOT(deselectAll()));
         connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
-
-#if defined(_WIN32) || defined(_WIN64)
-        QLabel* uplayLabel = new QLabel("Uplay");
-        tabWidget->addTab(uplayLabel, "Uplay");
-#endif
 
         top_layout->addWidget(tabWidget);
         QHBoxLayout* boxLayout = new QHBoxLayout();
@@ -390,9 +410,9 @@ int ResultsPage::nextId() const
                     boost::split(strSplit, name, boost::is_any_of("/"));
                     name = strSplit.at(1);
 
-                    qDebug() << "Name: " << QString::fromStdString(name);
-                    qDebug() << "Path: " << originRoot.filePath(QString::fromStdString(name));
-                    qDebug() << "Exe: " << path.filePath("");
+                    std::cout << "Adding " << name << std::endl;
+                    unsigned int count = db.getGameCount();
+                    addedVector.push_back({count, QString::fromStdString(name), originRoot.filePath(QString::fromStdString(name)), path.filePath(""), ""});
                 }
             }
         }
@@ -409,9 +429,9 @@ int ResultsPage::nextId() const
                     boost::split(strSplit, name, boost::is_any_of("/"));
                     name = strSplit.at(1);
 
-                    qDebug() << "Name: " << QString::fromStdString(name);
-                    qDebug() << "Path: " << uplayRoot.filePath(QString::fromStdString(name));
-                    qDebug() << "Exe: " << path.filePath("");
+                    std::cout << "Adding " << name << std::endl;
+                    unsigned int count = db.getGameCount();
+                    addedVector.push_back({count, QString::fromStdString(name), uplayRoot.filePath(QString::fromStdString(name)), path.filePath(""), ""});
                 }
             }
         }
@@ -657,7 +677,6 @@ void ResultsPage::parseAcf(QDir steamRoot)
                     }
                     else
                     {
-                        std::cout << name.toLocal8Bit().constData() << std::endl;
                         exe = QDir(path).filePath(QString::fromStdString(launch.get<std::string>("0.executable")));
                         exe = QString(QDir::cleanPath(exe));
                         path = QDir(path).filePath(QString::fromStdString(launch.get("0.workingdir", "")));

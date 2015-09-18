@@ -209,7 +209,7 @@ QList<Game> Database::getGames()
 /** Queries the database to find the number of games.
  * \return Total number of games stored so far.
 */
-unsigned int Database::getGameCount()
+unsigned int Database::getGameCount() const
 {
     QSqlQuery query(db);
     query.exec("SELECT count() FROM GAMES;");

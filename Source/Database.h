@@ -39,7 +39,8 @@ public:
     std::pair<bool, Game> isExistant(unsigned int id);
     std::pair<bool, Game> isExistant(QString name);
     QList<Game> getGames();
-    unsigned int getGameCount();
+    unsigned int getGameCount() const;
+
 private:
     QSqlDatabase db;
 };
