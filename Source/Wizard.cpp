@@ -14,13 +14,14 @@
 namespace pt = boost::property_tree;
 
 GameList addedVector;
+QList<QButtonGroup*> btnGroupVector;
 
 Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
     drmPage = new DRMPage();
     resultsPage = new ResultsPage(db, *drmPage);
     finalPage = new FinalPage(db);
-    setPage(pages::INTRO, new IntroPage());
+//    setPage(pages::INTRO, new IntroPage());
     setPage(pages::DRM, drmPage);
     setPage(pages::RESULTS, resultsPage);
     setPage(pages::FINAL, finalPage);
@@ -221,16 +222,95 @@ ResultsPage::ResultsPage(Database db, DRMPage& drmPage, QWidget* parent) : QWiza
 
 void ResultsPage::initializePage()
 {
+    setTitle("No games found");
+    btnGroup = new QButtonGroup();
+    btnGroup->setExclusive(false);
+    tabWidget = new QTabWidget();
+    top_layout = new QGridLayout();
+    uplayLayout = new QGridLayout();
     if (field("steamFound").toBool())
     {
+        steamLayout = new QGridLayout();
+        steamScrollArea = new QScrollArea();
+        steamViewport = new QWidget();
         auto t = std::async(&ResultsPage::findSteamGames, this);
         t.get();
+        int row = 0;
+        setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
+
+        for (auto i : steamVector)
+        {
+            QCheckBox* checkBox = new QCheckBox("Executable not found");
+            QLineEdit* name = new QLineEdit(i.gameName);
+            name->setFixedWidth(350);
+            checkBox->setStyleSheet("QLabel { color: red; }");
+            for (auto dir : steamDirectoryList)
+            {
+                if (i.executablePath.contains(dir))
+                {
+                    checkBox->setStyleSheet("QLabel { color: black; }");
+                    checkBox->setText("Executable:  " + i.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
+                    break;
+                }
+            }
+            steamLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+            row++;
+            steamLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+            row++;
+            btnGroup->addButton(checkBox);
+        }
+        steamViewport->setLayout(steamLayout);
+        steamScrollArea->setWidget(steamViewport);
+        tabWidget->addTab(steamScrollArea, "Steam");
     }
 
     if (field("originFound").toBool())
     {
+        originScrollArea = new QScrollArea();
+        originViewport = new QWidget();
+        originLayout = new QGridLayout();
         auto t = std::async(&ResultsPage::findOriginGames, this);
         t.get();
+        int row = 0;
+        int count = originTree.get<int>("games.count");
+        if (field("uplayFound").toBool())
+        {
+            setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s and "):QString(" and ")) + QString::number(count) + QString(" Origin game") + (count >= 2 ? QString("s."):QString(".")));
+        }
+        else
+        {
+            setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s, "):QString(", ")) + QString::number(count) + QString(" Origin game") + (count >= 2 ? QString("s."):QString(".")));
+        }
+
+
+        for (pt::ptree::value_type& games : originTree.get_child("games"))
+        {
+            boost::optional<std::string> exeTest = games.second.get_optional<std::string>("exes");
+            if (exeTest)
+            {
+                QButtonGroup* group = new QButtonGroup();
+                QLineEdit* name = new QLineEdit(QString::fromStdString(games.second.get<std::string>("name")));
+                name->setFixedWidth(350);
+                QCheckBox* checkBox = new QCheckBox();
+                originLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+                row++;
+                for (auto exe : games.second.get_child("exes"))
+                {
+                    checkBox = new QCheckBox("Executable: " + QString::fromStdString(exe.second.data()));
+                    group->addButton(checkBox);
+                    originLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+                    row++;
+                }
+                if (group->buttons().size() <= 1)
+                {
+                    group->buttons().at(0)->setChecked(true);
+                }
+                btnGroupVector.push_back(group);
+            }
+        }
+        originViewport->setLayout(originLayout);
+        originScrollArea->setWidget(originViewport);
+        tabWidget->addTab(originScrollArea, "Origin");
     }
 
     if (field("uplayFound").toBool())
@@ -239,77 +319,13 @@ void ResultsPage::initializePage()
         t.get();
     }
 
-    setTitle(QString("We found ") + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
     setSubTitle("Change the title for each game by clicking the text box and editing.");
-    btnGroup = new QButtonGroup();
-    btnGroup->setExclusive(false);
-    tabWidget = new QTabWidget();
-    top_layout = new QGridLayout();
-    steamLayout = new QGridLayout();
-    originLayout = new QGridLayout();
-    uplayLayout = new QGridLayout();
-    steamScrollArea = new QScrollArea();
-    originScrollArea = new QScrollArea();
-    int row = 0;
-
-    for (auto i : steamVector)
-    {
-        QCheckBox* checkBox = new QCheckBox("Executable not found");
-        QLineEdit* name = new QLineEdit(i.gameName);
-        name->setFixedWidth(350);
-        checkBox->setStyleSheet("QLabel { color: red; }");
-        for (auto dir : steamDirectoryList)
-        {
-            if (i.executablePath.contains(dir))
-            {
-                checkBox->setStyleSheet("QLabel { color: black; }");
-                checkBox->setText("Executable:  " + i.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
-                break;
-            }
-        }
-        steamLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
-        row++;
-        steamLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
-        row++;
-        btnGroup->addButton(checkBox);
-    }
-
-    for (pt::ptree::value_type& games : originTree.get_child("games"))
-    {
-        boost::optional<std::string> exeTest = games.second.get_optional<std::string>("exes");
-        if (exeTest)
-        {
-            QLineEdit* name = new QLineEdit(QString::fromStdString(games.second.get<std::string>("name")));
-            name->setFixedWidth(350);
-            QCheckBox* checkBox = new QCheckBox();
-            for (auto exe : games.second.get_child("exes"))
-            {
-                checkBox = new QCheckBox("Executable: " + QString::fromStdString(exe.second.data()));
-            }
-            originLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
-            row++;
-            originLayout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
-            row++;
-        }
-    }
-
-    steamViewport = new QWidget();
-    originViewport = new QWidget();
     QPushButton* selectAllBtn = new QPushButton("Select all");
     QPushButton* deselectAllBtn = new QPushButton("Deselect all");
     QPushButton* invertBtn = new QPushButton("Invert selection");
     connect(selectAllBtn, SIGNAL(clicked()), this, SLOT(selectAll()));
     connect(deselectAllBtn, SIGNAL(clicked()), this, SLOT(deselectAll()));
     connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
-    steamViewport->setLayout(steamLayout);
-    steamScrollArea->setWidget(steamViewport);
-    tabWidget->addTab(steamScrollArea, "Steam");
-
-#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    originViewport->setLayout(originLayout);
-    originScrollArea->setWidget(originViewport);
-    tabWidget->addTab(originScrollArea, "Origin");
-#endif
 
 #if defined(_WIN32) || defined(_WIN64)
     QLabel* uplayLabel = new QLabel("Uplay");
@@ -328,15 +344,34 @@ void ResultsPage::initializePage()
 
 int ResultsPage::nextId() const
 {
-    int offset = 0;
+    int steamOffset = 0;
     for (auto i : btnGroup->buttons())
     {
         if(i->isChecked())
         {
             std::cout << "Adding " << i->text().toLocal8Bit().constData() << std::endl;
-            addedVector.push_back(steamVector.at(offset));
+            addedVector.push_back(steamVector.at(steamOffset));
         }
-        offset++;
+        steamOffset++;
+    }
+    for (auto i : btnGroupVector)
+    {
+        int pass = 0;
+        for (auto group : i->buttons())
+        {
+            if (group->isChecked())
+            {
+                QDir path = group->text().remove("Executable: ");
+                std::string name = QString(QDir::cleanPath(path.filePath("").remove(originRoot.filePath((""))))).toLocal8Bit().constData();
+                std::vector<std::string> strSplit;
+                boost::split(strSplit, name, boost::is_any_of("/"));
+                name = strSplit.at(1);
+
+                qDebug() << "Name: " << QString::fromStdString(name);
+                qDebug() << "Path: " << originRoot.filePath(QString::fromStdString(name));
+                qDebug() << "Exe: " << path.filePath("");
+            }
+        }
     }
     return pages::FINAL;
 }
@@ -437,7 +472,7 @@ void ResultsPage::findOriginGames()
     originRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QStringList folderList = originRoot.entryList();
     QHash<QString, QStringList> masterList;
-    int id = 0;
+    int count = 0;
 
     for (auto i : folderList)
     {
@@ -449,15 +484,15 @@ void ResultsPage::findOriginGames()
             dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
             qDebug() << "Looking in: " << dir.filePath("");
             QStringList test = recursiveFindFiles(dir, ignoreList);
-            node.put("id", id);
             node.put("name", dir.dirName().toLocal8Bit().constData());
             for (auto exe : test)
             {
                 node.add("exes.exe", exe.toLocal8Bit().constData());
             }
-            id++;
+            count++;
         }
     }
+    originTree.add("games.count", count);
 }
 
 void ResultsPage::findUplayGames()
