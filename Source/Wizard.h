@@ -30,6 +30,7 @@ class IntroPage : public QWizardPage
     Q_OBJECT
 public:
     IntroPage(QWidget* parent = 0);
+    int nextId() const Q_DECL_OVERRIDE;
 };
 
 class DRMPage : public QWizardPage
@@ -54,13 +55,14 @@ public:
     QString originPath;
     QString uplayPath;
     DRMPage(QWidget* parent = 0);
+    int nextId() const Q_DECL_OVERRIDE;
 };
 
 class ResultsPage : public QWizardPage
 {
     Q_OBJECT
 
-    QStringList recursiveFindFiles(QDir dir, QStringList ignoreList);
+    QStringList recursiveFindFiles(QDir dir);
     void parseAcf(QDir steamRoot);
 
     QWidget* steamViewport;
