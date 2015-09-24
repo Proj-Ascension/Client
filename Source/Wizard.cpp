@@ -115,11 +115,12 @@ void DRMPage::checkOriginExists()
     else
     {
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
-        descLabel = new QLabel("Origin not found on the system. Install and try again.");
+        descLabel = new QLabel("Origin not found. Verify installation and try again.");
     }
     layout->addWidget(platformLabel, 3, 0, 0);
     layout->addWidget(descLabel, 4, 0, 0);
     layout->addWidget(statusLabel, 3, 1, 0);
+    layout->setRowMinimumHeight(4, 40);
 }
 
 void DRMPage::checkSteamExists()
@@ -150,24 +151,26 @@ void DRMPage::checkSteamExists()
     if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists())
     {
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
-        descLabel = new QLabel("Steam root found in " + steamFolder.filePath(""));
+        descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
         steamBox->setChecked(true);
         steamPath = steamFolder.filePath("");
     }
     else
     {
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
-        descLabel = new QLabel("Steam not found, verify installation and try again.");
+        descLabel = new QLabel("Steam not found. Verify installation and try again.");
     }
     layout->addWidget(platformLabel, 0, 0, 0);
     layout->addWidget(descLabel, 1, 0, 0);
     layout->addWidget(statusLabel, 0, 1, 0);
+    layout->setRowMinimumHeight(1, 40);
 }
 
 void DRMPage::checkUplayExists()
 {
     QDir uplayFolder;
     QDir uplayRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Ubisoft Game Launcher");
+    bool loggedIn = false;
     if (uplayRoot.exists())
     {
         std::ifstream uplaySettings(uplayRoot.filePath("settings.yml").toLocal8Bit().constData(), std::ifstream::in);
@@ -176,6 +179,10 @@ void DRMPage::checkUplayExists()
         {
             while (std::getline(uplaySettings, line))
             {
+                if (line.find("user") != std::string::npos)
+                {
+                    loggedIn = true;
+                }
                 if (line.find("game_installation_path") != std::string::npos)
                 {
                     std::vector<std::string> strSplit;
@@ -186,17 +193,21 @@ void DRMPage::checkUplayExists()
             }
         }
 
-        if (uplayFolder == QDir("."))
+        if (loggedIn)
         {
-            QSettings settings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Uplay", QSettings::NativeFormat);
-            if (!settings.value("InstallLocation").isNull())
+            if (uplayFolder == QDir("."))
             {
-                uplayFolder = QDir(settings.value("InstallLocation").toString());
+                QSettings settings("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Uplay", QSettings::NativeFormat);
+                if (!settings.value("InstallLocation").isNull())
+                {
+                    uplayFolder = QDir(settings.value("InstallLocation").toString());
+                }
             }
         }
+
     }
 
-    if (uplayFolder.filePath("").trimmed() != "" && uplayFolder.exists())
+    if (uplayFolder.filePath("").trimmed() != "" && uplayFolder != QDir(".") && uplayFolder.exists())
     {
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Uplay found in " + uplayFolder.filePath(""));
@@ -206,11 +217,12 @@ void DRMPage::checkUplayExists()
     else
     {
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
-        descLabel = new QLabel("Uplay not found on the system. Install and try again.");
+        descLabel = new QLabel("Uplay not found on the system. Verify installation and try again.");
     }
     layout->addWidget(platformLabel, 5, 0, 0);
     layout->addWidget(descLabel, 6, 0, 0);
     layout->addWidget(statusLabel, 5, 1, 0);
+    layout->setRowMinimumHeight(6, 40);
 }
 
 ResultsPage::ResultsPage(Database db, DRMPage& drmPage, QWidget* parent) : QWizardPage(parent), db(db)
@@ -247,15 +259,15 @@ void ResultsPage::initializePage()
             int row = 0;
             if (field("uplayFound").toBool() && field("originFound").toBool())
             {
-                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s, "):QString(", ")));
+                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(", "):QString("s, ")));
             }
             else if (field("uplayFound").toBool() || field("originFound").toBool())
             {
-                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s and "):QString(" and ")));
+                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(" and "):QString("s and ")));
             }
             else
             {
-                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() >= 2 ? QString("s."):QString(".")));
+                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString("."):QString("s.")));
             }
 
             for (auto i : steamVector)
@@ -295,11 +307,11 @@ void ResultsPage::initializePage()
             int count = originTree.get<int>("games.count");
             if (field("uplayFound").toBool())
             {
-                setTitle(title() + QString::number(count) + QString(" Origin game") + (count >= 2 ? QString("s and "):QString(" and ")));
+                setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString(" and "):QString("s and ")));
             }
             else
             {
-                setTitle(title() + QString::number(count) + QString(" Origin game") + (count >= 2 ? QString("s."):QString(".")));
+                setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString("."):QString("s.")));
             }
 
 
@@ -314,7 +326,7 @@ void ResultsPage::initializePage()
                     QCheckBox* checkBox = new QCheckBox();
                     originLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
                     row++;
-                    for (auto exe : games.second.get_child("exes"))
+                    for (auto& exe : games.second.get_child("exes"))
                     {
                         checkBox = new QCheckBox("Executable: " + QString::fromStdString(exe.second.data()));
                         group->addButton(checkBox);
@@ -338,7 +350,7 @@ void ResultsPage::initializePage()
             t.get();
             int row = 0;
             int count = uplayTree.get<int>("games.count");
-            setTitle(title() + QString::number(count) + QString(" Uplay game") + (count >= 2 ? QString("s."):QString(".")));
+            setTitle(title() + QString::number(count) + QString(" Uplay game") + (count == 1 ? QString("."):QString("s.")));
 
             for (pt::ptree::value_type& games : uplayTree.get_child("games"))
             {
@@ -351,7 +363,7 @@ void ResultsPage::initializePage()
                     QCheckBox* checkBox = new QCheckBox();
                     uplayLayout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
                     row++;
-                    for (auto exe : games.second.get_child("exes"))
+                    for (auto& exe : games.second.get_child("exes"))
                     {
                         checkBox = new QCheckBox("Executable: " + QString::fromStdString(exe.second.data()));
                         group->addButton(checkBox);
@@ -503,7 +515,6 @@ void ResultsPage::findSteamGames()
     }
 
     parseAcf(steamRoot);
-    std::sort(steamVector.begin(), steamVector.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName;});
 }
 
 void ResultsPage::findOriginGames()
@@ -536,21 +547,29 @@ void ResultsPage::findUplayGames()
 {
     uplayRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QStringList folderList = uplayRoot.entryList();
+    QStringList ignoreList;
+    ignoreList << "cache"
+               << "data"
+               << "locales"
+               << "logs";
     int count = 0;
 
     for (auto i : folderList)
     {
-        pt::ptree& node = uplayTree.add("games.game", "");
-        QDir dir(uplayRoot.absoluteFilePath(i));
-        dir.setNameFilters(QStringList("*.exe"));
-        dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-        QStringList test = recursiveFindFiles(dir);
-        node.put("name", dir.dirName().toLocal8Bit().constData());
-        for (auto exe : test)
+        if (!ignoreList.contains(i))
         {
-            node.add("exes.exe", exe.toLocal8Bit().constData());
+            pt::ptree& node = uplayTree.add("games.game", "");
+            QDir dir(uplayRoot.absoluteFilePath(i));
+            dir.setNameFilters(QStringList("*.exe"));
+            dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+            QStringList test = recursiveFindFiles(dir);
+            node.put("name", dir.dirName().toLocal8Bit().constData());
+            for (auto exe : test)
+            {
+                node.add("exes.exe", exe.toLocal8Bit().constData());
+            }
+            count++;
         }
-        count++;
     }
 
     uplayTree.add("games.count", count);
@@ -740,6 +759,7 @@ FinalPage::FinalPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
 
 void FinalPage::initializePage()
 {
+    std::sort(addedVector.begin(), addedVector.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName;});
     db.addGames(addedVector);
     setSubTitle(QString("Added ") + QString::number(addedVector.size()) + " games to the database. Click finish to complete the wizard.");
 }
