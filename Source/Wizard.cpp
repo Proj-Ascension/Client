@@ -1,9 +1,9 @@
-#include <QtWidgets>
-#include <iostream>
 #include "Wizard.h"
 #include "Libs/SteamVdfParse.hpp"
 #include "Database.h"
 #include "Library.h"
+#include <QtWidgets>
+#include <iostream>
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
