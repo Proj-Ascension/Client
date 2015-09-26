@@ -1,8 +1,8 @@
 #pragma once
+#include "Database.h"
 
 #include <QtWidgets>
 #include <vector>
-#include "Database.h"
 #include <boost/property_tree/ptree.hpp>
 
 namespace pt = boost::property_tree;
