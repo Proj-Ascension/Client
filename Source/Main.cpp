@@ -1,11 +1,11 @@
 #include "Init.h"
 #include "BuddyList.h"
+#include "Wizard.h"
 
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
 #include <iostream>
-#include "Wizard.h"
 #include <QIcon>
 
 
