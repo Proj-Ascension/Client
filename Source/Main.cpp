@@ -55,8 +55,10 @@ int main(int argc, char* argv[])
     #endif
 
     // Launch
-    wiz.show();
-    application->exec();
-
+	if (!QFile("ascension.db").exists())
+	{
+		wiz.show();
+	}
+	application->exec();
     return 0;
 }

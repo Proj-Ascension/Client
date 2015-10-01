@@ -11,10 +11,11 @@ namespace Ui {
 */
 class Settings : public QWidget
 {
+	Q_OBJECT
 private:
 	Ui::Settings *ui;
 
-private slots:
+public slots:
 	void on_WizardButton_clicked();
 
 public:
