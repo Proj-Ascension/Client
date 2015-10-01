@@ -1,10 +1,12 @@
 #include "MainPanel.h"
+#include "Settings.h"
 
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QLabel>
+
 
 /** MainPanel constructor
 * Sets base size policy and object name.
@@ -128,9 +130,11 @@ void MainPanel::init()
     home = new Homepage(p, stack);
     library = new Library(p, stack);
     community = new Community(p, stack);
+	settings = new Settings(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
     stack->addWidget(community);
+	stack->addWidget(settings);
     stack->setCurrentWidget(library);
 
     // Set active tab

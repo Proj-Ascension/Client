@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>Settings</class>
+ <widget class="QWidget" name="Settings">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,12 +13,12 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="WizardButton">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>230</y>
-     <width>191</width>
+     <x>10</x>
+     <y>20</y>
+     <width>141</width>
      <height>23</height>
     </rect>
    </property>

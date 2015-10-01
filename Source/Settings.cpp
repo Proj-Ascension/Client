@@ -1,11 +1,14 @@
 #include "Settings.h"
 #include "ui_Settings.h"
-#include <QtWidgets>
+#include "Wizard.h"
 
-Settings::Settings(QWidget* parent) : QWidget(parent),ui(new Ui::Settings)
+#include <QtWidgets>
+#include <QDebug>
+
+Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::Settings)
 {
 		ui->setupUi(this);
-		this->setObjectName("communityUI");
+		this->setObjectName("settingsUI");
 		this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
 			"QPushButton {"
 			"color: " + p->value("Primary/LightText").toString() + "; "
@@ -14,11 +17,17 @@ Settings::Settings(QWidget* parent) : QWidget(parent),ui(new Ui::Settings)
 			"QPushButton:hover {"
 			"background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
 			"color: " + p->value("Primary/LightText").toString() + ";");
-		QFont buttonFont("SourceSansPro", 12);
+		QFont buttonFont("SourceSansPro", 9);
+		ui->WizardButton->setFont(buttonFont);
+		ui->WizardButton->setText("Add Games to Ascension");
+}
+
+void Settings::on_WizardButton_clicked()
+{
 
 }
 
-
 Settings::~Settings()
 {
+	delete ui;
 }

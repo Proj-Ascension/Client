@@ -10,8 +10,11 @@ class Settings : public QWidget
 private:
 	Ui::Settings *ui;
 
+private slots:
+	void on_WizardButton_clicked();
+
 public:
-	Settings(QWidget* parent = 0);
+	explicit Settings(QSettings* p, QWidget* parent = 0);
 	~Settings();
 };
 
