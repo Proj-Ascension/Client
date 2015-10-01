@@ -29,6 +29,7 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
 }
 
 /** Event handler for Wizard Button
+* Runs setup wizard on click
 */
 void Settings::on_WizardButton_clicked()
 {

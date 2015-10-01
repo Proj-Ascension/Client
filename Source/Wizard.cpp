@@ -28,6 +28,12 @@ Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "
     setPage(pages::FINAL, finalPage);
     setWindowTitle("Project Ascension setup");
     setFixedSize(QSize(700, 450));
+	if (!db.init())
+	{
+		QMessageBox error;
+		error.critical(0, "Error!", "An error occured while trying to load the database.");
+		exit(EXIT_FAILURE);
+	}
  }
 
 IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
