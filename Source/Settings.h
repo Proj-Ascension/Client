@@ -1,10 +1,13 @@
 #pragma once
 #include <QtWidgets>
 
+/** Settings UI namespace. */
 namespace Ui {
 	class Settings;
 }
-
+/** Settings class.
+* Class to handle the settings section of the launcher
+*/
 class Settings : public QWidget
 {
 private:

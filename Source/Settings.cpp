@@ -5,6 +5,11 @@
 #include <QtWidgets>
 #include <QDebug>
 
+/** Settings constructor
+* Initialize the settings UI
+* \param p Inherited palette configuration for setting StyleSheets.
+* \param parent Pointer to parent widget.
+*/
 Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::Settings)
 {
 		ui->setupUi(this);
@@ -22,6 +27,8 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
 		ui->WizardButton->setText("Add Games to Ascension");
 }
 
+/** Event handler for Wizard Button
+*/
 void Settings::on_WizardButton_clicked()
 {
 
