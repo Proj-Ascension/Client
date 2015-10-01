@@ -48,6 +48,7 @@ set(FORMS
     Resource/UI/homepage.ui
     Resource/UI/BuddyList.ui
     Resource/UI/Community.ui
+	Resource/UI/Settings.ui
 )
 
 set(RESOURCES

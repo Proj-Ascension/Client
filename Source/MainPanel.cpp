@@ -144,7 +144,7 @@ void MainPanel::init()
     connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
     // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
     // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
-    // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
+    connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
     connect(sidebar->exitTab, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
 
     // Show

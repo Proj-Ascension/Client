@@ -62,6 +62,7 @@ Library::Library(QSettings* p, QWidget* parent)
     refreshGames();
 }
 
+
 Library::~Library()
 {
     delete ui;
