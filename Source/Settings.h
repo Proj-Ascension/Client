@@ -1,5 +1,6 @@
 #pragma once
 #include <QtWidgets>
+#include <QSettings>
 
 /** Settings UI namespace. */
 namespace Ui {
