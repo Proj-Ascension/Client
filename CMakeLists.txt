@@ -26,6 +26,7 @@ set(SOURCE
     Source/BuddyList.cpp
     Source/BuddyWidget.cpp
     Source/Community.cpp
+	Source/Settings.cpp
 )
 
 set(HEADERS
@@ -40,7 +41,8 @@ set(HEADERS
     Source/Homepage.h
     Source/BuddyList.h
     Source/BuddyWidget.h
-    Source/Community.cpp
+    Source/Community.h
+	Source/Settings.h
 )
 
 set(FORMS
