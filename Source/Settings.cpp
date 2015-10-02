@@ -12,23 +12,29 @@
 */
 Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::Settings)
 {
-		ui->setupUi(this);
-		this->setObjectName("settingsUI");
-		this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
-			"QPushButton {"
-			"color: " + p->value("Primary/LightText").toString() + "; "
-			"background-color: " + p->value("Primary/DarkElement").toString() + "; "
-			"border: none; margin: 0px; padding: 0px;} "
-			"QPushButton:hover {"
-			"background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-			"color: " + p->value("Primary/LightText").toString() + ";");
-		QFont buttonFont("SourceSansPro", 9);
-		ui->WizardButton->setFont(buttonFont);
-		ui->WizardButton->setText("Add Games to Ascension");
-		ui->ClearDatabaseButton->setFont(buttonFont);
-		ui->ClearDatabaseButton->setText("Clear Database");
-		connect(ui->WizardButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_WizardButton_clicked()));
-		connect(ui->ClearDatabaseButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_ClearDatabaseButton_clicked()));
+	ui->setupUi(this);
+	this->setObjectName("settingsUI");
+	this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+		"QPushButton {"
+		"color: " + p->value("Primary/LightText").toString() + "; "
+		"background-color: " + p->value("Primary/DarkElement").toString() + "; "
+		"border: none; margin: 0px; padding: 0px;} "
+		"QPushButton:hover {"
+		"background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+		"color: " + p->value("Primary/LightText").toString() + ";");
+	QFont buttonFont("SourceSansPro", 9);
+	ui->WizardButton->setFont(buttonFont);
+	ui->WizardButton->setText("Add Games to Ascension");
+	ui->ClearDatabaseButton->setFont(buttonFont);
+	ui->ClearDatabaseButton->setText("Clear Database");
+	connect(ui->WizardButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_WizardButton_clicked()));
+	connect(ui->ClearDatabaseButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_ClearDatabaseButton_clicked()));
+	if (!db.init())
+	{
+		QMessageBox error;
+		error.critical(0, "Error!", "An error occured while trying to load the database.");
+		exit(EXIT_FAILURE);
+	}
 }
 
 /** Event handler for Wizard Button
