@@ -1,5 +1,6 @@
 #include "MainPanel.h"
 #include "Settings.h"
+#include "News.h"
 
 #include <QMessageBox>
 #include <QGridLayout>
@@ -131,10 +132,12 @@ void MainPanel::init()
     library = new Library(p, stack);
     community = new Community(p, stack);
 	settings = new Settings(p, stack);
+    news = new News(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
     stack->addWidget(community);
 	stack->addWidget(settings);
+    stack->addWidget(news);
     stack->setCurrentWidget(library);
 
     // Set active tab
@@ -146,7 +149,7 @@ void MainPanel::init()
     // connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
     connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
     connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
-    // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
+    connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
     // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
     connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
     connect(sidebar->exitTab, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));

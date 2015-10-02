@@ -45,6 +45,7 @@ private:
     QWidget* community;
     Library* library;
 	QWidget* settings;
+    QWidget* news;
 
 private slots:
     void setHome()
@@ -91,6 +92,7 @@ private slots:
         if (!(activeTab == sidebar->newsTab))
         {
             activeTab->toggleInactive();
+            stack->setCurrentWidget(news);
             activeTab = sidebar->newsTab;
             activeTab->toggleActive();
         }

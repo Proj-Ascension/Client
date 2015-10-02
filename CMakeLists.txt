@@ -27,8 +27,8 @@ set(SOURCE
     Source/BuddyWidget.cpp
     Source/Community.cpp
 	Source/Settings.cpp
+    Source/News.cpp
 )
-
 set(HEADERS
     Source/TabWidget.h
     Source/Library.h
@@ -43,6 +43,7 @@ set(HEADERS
     Source/BuddyWidget.h
     Source/Community.h
 	Source/Settings.h
+    Source/News.h
 )
 
 set(FORMS
@@ -51,6 +52,7 @@ set(FORMS
     Resource/UI/BuddyList.ui
     Resource/UI/Community.ui
 	Resource/UI/Settings.ui
+    Resource/UI/News.ui
 )
 
 set(RESOURCES

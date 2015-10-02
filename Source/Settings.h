@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PROJECTASCENSION_SETTINGS_H
+#define PROJECTASCENSION_SETTINGS_H
+
 #include "Database.h"
 
 #include <QtWidgets>
@@ -27,3 +29,4 @@ public:
 	~Settings();
 };
 
+#endif
