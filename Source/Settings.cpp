@@ -25,7 +25,10 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
 		QFont buttonFont("SourceSansPro", 9);
 		ui->WizardButton->setFont(buttonFont);
 		ui->WizardButton->setText("Add Games to Ascension");
+		ui->ClearDatabaseButton->setFont(buttonFont);
+		ui->ClearDatabaseButton->setText("Clear Database");
 		connect(ui->WizardButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_WizardButton_clicked()));
+		connect(ui->ClearDatabaseButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_ClearDatabaseButton_clicked()));
 }
 
 /** Event handler for Wizard Button
@@ -35,6 +38,21 @@ void Settings::on_WizardButton_clicked()
 {
 	Wizard* wiz = new Wizard();
 	wiz->show();
+}
+
+void Settings::on_ClearDatabaseButton_clicked()
+{
+	int ret = QMessageBox(QMessageBox::Question, "Deleting Database", "Proceeding will delete the database, the database will be non-recoverable. Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
+	switch (ret)
+	{
+	case QMessageBox::Yes:
+		db.reset();
+		break;
+	case QMessageBox::No:
+		break;
+	default:
+		break;
+	}
 }
 
 Settings::~Settings()

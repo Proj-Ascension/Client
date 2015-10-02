@@ -1,4 +1,6 @@
 #pragma once
+#include "Database.h"
+
 #include <QtWidgets>
 #include <QSettings>
 
@@ -14,9 +16,11 @@ class Settings : public QWidget
 	Q_OBJECT
 private:
 	Ui::Settings *ui;
+	Database db;
 
 public slots:
 	void on_WizardButton_clicked();
+	void on_ClearDatabaseButton_clicked();
 
 public:
 	explicit Settings(QSettings* p, QWidget* parent = 0);

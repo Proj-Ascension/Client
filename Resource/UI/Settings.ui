@@ -52,7 +52,7 @@
     <string>Clear Launch Options</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="ClearDatabaseButton">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -62,7 +62,7 @@
     </rect>
    </property>
    <property name="text">
-    <string/>
+    <string>Clear Database</string>
    </property>
   </widget>
  </widget>
