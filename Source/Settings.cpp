@@ -77,7 +77,7 @@ void Settings::on_ResetAccents_clicked()
 {
     QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
 
-    if (!QFile("palette.ini").exists() && palette.isWritable())
+    if (palette.isWritable())
     {
         palette.beginGroup("Primary");
 
@@ -109,7 +109,7 @@ void Settings::on_ResetAccents_clicked()
 void Settings::updateAccent(int accent, QColor color)
 {
     QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
-    if (!QFile("palette.ini").exists() && palette.isWritable())
+    if (palette.isWritable())
     {
         palette.beginGroup("Primary");
         palette.endGroup();
