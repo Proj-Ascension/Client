@@ -59,6 +59,7 @@ Library::Library(QSettings* p, QWidget* parent)
     QFileSystemWatcher* watcher = new QFileSystemWatcher;
     watcher->addPath(QDir(".").filePath("ascension.db"));
     connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(refreshGames()));
+
     refreshGames();
 }
 
@@ -202,11 +203,13 @@ void Library::runProcessWithArgs(QString file, QString workingDirectory, QString
 }
 
 /** Recreate the list of games displayed in the main widget.
+* Sort the list alphabetically by name
 */
 void Library::refreshGames()
 {
     ui->gameListWidget->clear();
     QList<Game> gameList = db.getGames();
+	std::sort(gameList.begin(), gameList.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName; });
     for (auto game : gameList)
     {
         ui->gameListWidget->addItem(game.gameName);
