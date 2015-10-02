@@ -235,7 +235,7 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Username</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="ChangeUsernameButton_2">
@@ -270,7 +270,7 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>************</string>
+     <string/>
     </property>
    </widget>
   </widget>
