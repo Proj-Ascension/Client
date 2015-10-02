@@ -12,6 +12,7 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
 	ui->setupUi(this);
 	this->setObjectName("settingsUI");
 	this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+        "QLabel { color:  #ffffff;}"
 		"QPushButton {"
 		"color: " + p->value("Primary/LightText").toString() + "; "
 		"background-color: " + p->value("Primary/DarkElement").toString() + "; "
@@ -31,7 +32,11 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
     ui->AccentButton_3->setFont(buttonFont);
     ui->AccentButton_3->setStyleSheet("background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
     ui->ResetAccents->setFont(buttonFont);
+    ui->label_2->setStyleSheet("{color: #FFFFFF}");
     ui->ResetAccents->setText("Reset Colors to Default");
+    ui->UserSettingsBox->setStyleSheet("color: #FFFFFF;} ");
+    ui->ClientSettingsBox->setStyleSheet("color: #FFFFFF;} ");
+    ui->StyleSettingsBox->setStyleSheet("color: #FFFFFF;} ");
 	connect(ui->WizardButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_WizardButton_clicked()));
     connect(ui->AccentButton, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_AccentButton_clicked()));
     connect(ui->AccentButton_2, SIGNAL(clicked()), QApplication::instance(), SLOT(Settings::on_AccentButton_2_clicked()));
