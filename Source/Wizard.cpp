@@ -28,6 +28,7 @@ Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "
     setPage(pages::FINAL, finalPage);
     setWindowTitle("Project Ascension setup");
     setFixedSize(QSize(700, 450));
+	addedVector.erase(addedVector.begin(), addedVector.end());
 	if (!db.init())
 	{
 		QMessageBox error;

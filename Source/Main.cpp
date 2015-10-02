@@ -22,7 +22,8 @@ int main(int argc, char* argv[])
 {
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
-    Wizard wiz;
+	bool dbExists = QFile("ascension.db").exists();
+	Wizard* wiz = new Wizard;
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX
@@ -55,9 +56,9 @@ int main(int argc, char* argv[])
     #endif
 
     // Launch
-	if (!QFile("ascension.db").exists())
+	if (!dbExists)
 	{
-		wiz.show();
+		wiz->show();
 	}
 	application->exec();
     return 0;
