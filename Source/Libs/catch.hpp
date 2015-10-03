@@ -4195,7 +4195,7 @@ namespace Catch {
             .describe( "display usage information" )
             .bind( &ConfigData::showHelp );
 
-        cli["-l"]["--list-tests"]
+        cli["-l"]["--list-Tests"]
             .describe( "list all/matching test cases" )
             .bind( &ConfigData::listTests );
 
@@ -4204,7 +4204,7 @@ namespace Catch {
             .bind( &ConfigData::listTags );
 
         cli["-s"]["--success"]
-            .describe( "include successful tests in output" )
+            .describe( "include successful Tests in output" )
             .bind( &ConfigData::showSuccessfulTests );
 
         cli["-b"]["--break"]
@@ -4212,7 +4212,7 @@ namespace Catch {
             .bind( &ConfigData::shouldDebugBreak );
 
         cli["-e"]["--nothrow"]
-            .describe( "skip exception tests" )
+            .describe( "skip exception Tests" )
             .bind( &ConfigData::noThrow );
 
         cli["-i"]["--invisibles"]
@@ -4252,7 +4252,7 @@ namespace Catch {
 //            .placeholder( "level" );
 
         cli[_]
-            .describe( "which test or tests to use" )
+            .describe( "which test or Tests to use" )
             .bind( &addTestOrTags, "test name, pattern or tags" );
 
         cli["-d"]["--durations"]
@@ -5521,11 +5521,11 @@ namespace Catch {
 
             Totals totals;
 
-            context.testGroupStarting( "all tests", 1, 1 ); // deprecated?
+            context.testGroupStarting( "all Tests", 1, 1 ); // deprecated?
 
             TestSpec testSpec = m_config->testSpec();
             if( !testSpec.hasFilters() )
-                testSpec = TestSpecParser( ITagAliasRegistry::get() ).parse( "~[.]" ).testSpec(); // All not hidden tests
+                testSpec = TestSpecParser( ITagAliasRegistry::get() ).parse( "~[.]" ).testSpec(); // All not hidden Tests
 
             std::vector<TestCase> testCases;
             getRegistryHub().getTestCaseRegistry().getFilteredTests( testSpec, *m_config, testCases );
@@ -5552,7 +5552,7 @@ namespace Catch {
                     ++it )
                 m_reporter->skipTest( *it );
 
-            context.testGroupEnded( "all tests", totals, 1, 1 );
+            context.testGroupEnded( "all Tests", totals, 1, 1 );
             return totals;
         }
 
@@ -8299,7 +8299,7 @@ namespace Catch {
             xml.writeAttribute( "name", stats.groupInfo.name );
             xml.writeAttribute( "errors", unexpectedExceptions );
             xml.writeAttribute( "failures", stats.totals.assertions.failed-unexpectedExceptions );
-            xml.writeAttribute( "tests", stats.totals.assertions.total() );
+            xml.writeAttribute( "Tests", stats.totals.assertions.total() );
             xml.writeAttribute( "hostname", "tbd" ); // !TBD
             if( m_config->showDurations() == ShowDurations::Never )
                 xml.writeAttribute( "time", "" );
@@ -8785,10 +8785,10 @@ namespace Catch {
 
         void printTotals( Totals const& totals ) {
             if( totals.testCases.total() == 0 ) {
-                stream << Colour( Colour::Warning ) << "No tests ran\n";
+                stream << Colour( Colour::Warning ) << "No Tests ran\n";
             }
             else if( totals.assertions.total() > 0 && totals.assertions.allPassed() ) {
-                stream << Colour( Colour::ResultSuccess ) << "All tests passed";
+                stream << Colour( Colour::ResultSuccess ) << "All Tests passed";
                 stream << " ("
                         << pluralise( totals.assertions.passed, "assertion" ) << " in "
                         << pluralise( totals.testCases.passed, "test case" ) << ")"
@@ -9117,11 +9117,11 @@ namespace Catch {
         };
 
         // Colour, message variants:
-        // - white: No tests ran.
+        // - white: No Tests ran.
         // -   red: Failed [both/all] N test cases, failed [both/all] M assertions.
         // - white: Passed [both/all] N test cases (no assertions).
-        // -   red: Failed N tests cases, failed M assertions.
-        // - green: Passed [both/all] N tests cases with M assertions.
+        // -   red: Failed N Tests cases, failed M assertions.
+        // - green: Passed [both/all] N Tests cases with M assertions.
 
         std::string bothOrAll( std::size_t count ) const {
             return count == 1 ? "" : count == 2 ? "both " : "all " ;
@@ -9129,7 +9129,7 @@ namespace Catch {
 
         void printTotals( const Totals& totals ) const {
             if( totals.testCases.total() == 0 ) {
-                stream << "No tests ran.";
+                stream << "No Tests ran.";
             }
             else if( totals.testCases.failed == totals.testCases.total() ) {
                 Colour colour( Colour::ResultError );
