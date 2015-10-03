@@ -27,6 +27,7 @@ set(SOURCE
     Source/BuddyWidget.cpp
     Source/Community.cpp
     Source/AddGameWizard.cpp
+	Source/Settings.cpp
 )
 
 set(HEADERS
@@ -43,6 +44,7 @@ set(HEADERS
     Source/BuddyWidget.h
     Source/Community.h
     Source/AddGameWizard.h
+	Source/Settings.h
 )
 
 set(FORMS
@@ -50,6 +52,7 @@ set(FORMS
     Resource/UI/homepage.ui
     Resource/UI/BuddyList.ui
     Resource/UI/Community.ui
+    Resource/UI/Settings.ui
 )
 
 set(RESOURCES

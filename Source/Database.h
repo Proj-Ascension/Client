@@ -31,7 +31,7 @@ public:
     bool reset();
 
     bool addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments);
-    bool addGames(GameList games);
+    void addGames(GameList games);
     bool removeGameById(unsigned int id);
     bool removeGameByName(QString name);
     Game getGameById(unsigned int id);

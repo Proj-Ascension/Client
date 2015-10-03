@@ -5,6 +5,8 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QFile>
+#include <QDir>
+#include <QStandardPaths>
 #include <QDebug>
 
 /** Namespace for entry point initialization functions. */
@@ -12,14 +14,15 @@ namespace entryPoint
 {
 void initSettings(QApplication &application)
 {
-    QSettings config(QSettings::IniFormat, QSettings::UserScope, "ProjectAscension", "config");
-    QSettings palette(QSettings::IniFormat, QSettings::UserScope, "ProjectAscension", "palette");
+    QSettings config(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "config");
+    QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
 
     if (!QFile("config.ini").exists() && config.isWritable())
     {
         // TODO: Set default config settings.
     }
-    if (!QFile("palette.ini").exists() && palette.isWritable())
+
+    if (!QFile(palette.fileName()).exists() && palette.isWritable())
     {
         palette.beginGroup("Primary");
 
