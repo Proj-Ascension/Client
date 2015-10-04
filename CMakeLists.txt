@@ -29,8 +29,6 @@ set(SOURCE
     Source/AddGameWizard.cpp
 	Source/Settings.cpp
     Source/News.cpp
-)
-set(HEADERS
     Source/TabWidget.h
     Source/Library.h
     Source/MainPanel.h

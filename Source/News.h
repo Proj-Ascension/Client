@@ -18,7 +18,7 @@ private:
     Ui::News *ui;
 
 public slots:
-
+    void GetRSSFeed();
 public:
     explicit News(QSettings* p, QWidget* parent = 0);
     ~News();

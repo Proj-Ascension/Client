@@ -24,6 +24,11 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::News)
                                 "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
                                 "color: " + p->value("Primary/LightText").toString() + ";");
     QFont buttonFont("SourceSansPro", 9);
+    ui->RSSList->addItem("Test");
+}
+
+void News::GetRSSFeed(){
+
 }
 
 News::~News()
