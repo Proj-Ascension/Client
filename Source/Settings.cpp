@@ -9,8 +9,8 @@
 */
 Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::Settings)
 {
-	ui->setupUi(this);
-	this->setObjectName("settingsUI");
+    ui->setupUi(this);
+    this->setObjectName("settingsUI");
     this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
             "QLabel { color:  #ffffff;}"
             "QPushButton {"
@@ -22,10 +22,10 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
                                 "color: " + p->value("Primary/LightText").toString() + ";");
 	QFont buttonFont("SourceSansPro", 9);
 	ui->WizardButton->setFont(buttonFont);
-	ui->WizardButton->setText("Add Games to Ascension");
-	ui->ClearDatabaseButton->setFont(buttonFont);
-	ui->ClearDatabaseButton->setText("Clear Database");
-	ui->AccentButton->setFont(buttonFont);
+    ui->WizardButton->setText("Add Games to Ascension");
+    ui->ClearDatabaseButton->setFont(buttonFont);
+    ui->ClearDatabaseButton->setText("Clear Database");
+    ui->AccentButton->setFont(buttonFont);
     ui->AccentButton->setStyleSheet("background-color: " + p->value("Accent/LightAccent").toString() + ";}");
     ui->AccentButton_2->setFont(buttonFont);
     ui->AccentButton_2->setStyleSheet("background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
@@ -125,20 +125,20 @@ void Settings::updateAccent(int accent, QColor color)
 
 void Settings::on_ClearDatabaseButton_clicked()
 {
-	int ret = QMessageBox(QMessageBox::Question, "Deleting Database", "Proceeding will delete the database, the database will be non-recoverable. Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
-	switch (ret)
-	{
-	case QMessageBox::Yes:
-		db.reset();
-		break;
-	case QMessageBox::No:
-		break;
-	default:
-		break;
-	}
+    int ret = QMessageBox(QMessageBox::Question, "Deleting Database", "Proceeding will delete the database, the database will be non-recoverable. Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
+    switch (ret)
+    {
+    case QMessageBox::Yes:
+        db.reset();
+        break;
+    case QMessageBox::No:
+        break;
+    default:
+        break;
+    }
 }
 
 Settings::~Settings()
 {
-	delete ui;
+    delete ui;
 }
