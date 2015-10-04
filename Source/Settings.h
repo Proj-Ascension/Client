@@ -23,7 +23,11 @@ private:
 public slots:
 	void on_WizardButton_clicked();
 	void on_ClearDatabaseButton_clicked();
-
+	void on_AccentButton_clicked();
+    void on_AccentButton_2_clicked();
+    void on_AccentButton_3_clicked();
+    void on_ResetAccents_clicked();
+    void updateAccent(int accent, QColor color);
 public:
 	explicit Settings(QSettings* p, QWidget* parent = 0);
 	~Settings();

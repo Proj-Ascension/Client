@@ -1,4 +1,4 @@
-#include "Wizard.h"
+#include "DRMSetupWizard.h"
 #include "Libs/SteamVdfParse.hpp"
 #include "Database.h"
 #include "Library.h"
@@ -17,7 +17,13 @@ GameList addedVector;
 QList<QButtonGroup*> originBtnGroupVector;
 QList<QButtonGroup*> uplayBtnGroupVector;
 
-Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
+/** DRMSetupWizard constructor
+ * Defines the pages and initializes the database with the path given. Also sets up some window-related properties,
+ * such as title and initial size.
+ * \param parent Parent widget to draw from
+ * \param dbPath Path to the database used
+ */
+DRMSetupWizard::DRMSetupWizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
     drmPage = new DRMPage();
     resultsPage = new ResultsPage(db, *drmPage);
@@ -37,6 +43,10 @@ Wizard::Wizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "
 	}
  }
 
+/** IntroPage constructor
+ * Defines some initial properties for the introduction page.
+ * \param parent Parent widget to draw from
+ */
 IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Finding games");
@@ -47,6 +57,10 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
     setLayout(layout);
 }
 
+/** DRMPage constructor
+ * Defines some initial properties for the DRM page.
+ * \param parent Parent widget to draw from
+ */
 DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Checking for Steam");
@@ -80,6 +94,30 @@ DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
     setLayout(layout);
 }
 
+/** ResultsPage constructor
+ * Defines some initial properties for the results page.
+ */
+ResultsPage::ResultsPage(Database db, DRMPage& drmPage, QWidget* parent) : QWizardPage(parent), db(db)
+{
+    setSubTitle("We found the following on your system.");
+    steamRoot = drmPage.steamPath;
+    originRoot = drmPage.originPath;
+    uplayRoot = drmPage.uplayPath;
+}
+
+/** FinalPage constructor
+ * Defines some initial properties for the final page.
+ */
+FinalPage::FinalPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
+{
+    setTitle("Done");
+}
+
+/** Check if Origin is installed on the current computer, if applicable, and sets some values for later pages to
+ * check on.
+ * \see checkSteamExists()
+ * \see checkUplayExists()
+ */
 void DRMPage::checkOriginExists()
 {
     QDir originRoot;
@@ -130,6 +168,11 @@ void DRMPage::checkOriginExists()
     layout->setRowMinimumHeight(4, 40);
 }
 
+/** Check if Steam is installed on the current computer, if applicable, and sets some values for later pages to
+ * check on.
+ * \see checkOriginExists()
+ * \see checkUplayExists()
+ */
 void DRMPage::checkSteamExists()
 {
     QDir steamFolder;
@@ -173,6 +216,11 @@ void DRMPage::checkSteamExists()
     layout->setRowMinimumHeight(1, 40);
 }
 
+/** Check if Uplay is installed on the current computer, if applicable, and sets some values for later pages to
+ * check on.
+ * \see checkSteamExists()
+ * \see checkOriginExists()
+ */
 void DRMPage::checkUplayExists()
 {
     QDir uplayFolder;
@@ -232,14 +280,13 @@ void DRMPage::checkUplayExists()
     layout->setRowMinimumHeight(6, 40);
 }
 
-ResultsPage::ResultsPage(Database db, DRMPage& drmPage, QWidget* parent) : QWizardPage(parent), db(db)
-{
-    setSubTitle("We found the following on your system.");
-    steamRoot = drmPage.steamPath;
-    originRoot = drmPage.originPath;
-    uplayRoot = drmPage.uplayPath;
-}
-
+/** Initializes the results page. This function is called when the NextButton on the previous page is clicked,
+ * which allows the state of the previous page to be transferred to this one.
+ * The function then runs each respective check*Exists function, and populates the various sections with correct information.
+ * \see checkSteamExists()
+ * \see checkUplayExists()
+ * \see checkOriginExists()
+ */
 void ResultsPage::initializePage()
 {
     setTitle(QString("We found "));
@@ -403,6 +450,10 @@ void ResultsPage::initializePage()
     }
 }
 
+/** Overloads the nextId function to add the selected games from the main results widget to a vector called "addedVector",
+ * which will be added to the main database at a later point.
+ * \see QWizardPage::nextId()
+ */
 int ResultsPage::nextId() const
 {
     if (field("uplayFound").toBool() || field("steamFound").toBool() || field("originFound").toBool())
@@ -458,6 +509,7 @@ int ResultsPage::nextId() const
     return pages::FINAL;
 }
 
+/** Slot to set all buttons to checked */
 void ResultsPage::selectAll()
 {
     for (auto i : btnGroup->buttons())
@@ -466,6 +518,7 @@ void ResultsPage::selectAll()
     }
 }
 
+/** Slot to set all buttons to unchecked */
 void ResultsPage::deselectAll()
 {
     for (auto i : btnGroup->buttons())
@@ -473,7 +526,7 @@ void ResultsPage::deselectAll()
         i->setChecked(false);
     }
 }
-
+/** Slot to set all buttons to the opposite state */
 void ResultsPage::invert()
 {
     for (auto i : btnGroup->buttons())
@@ -482,6 +535,9 @@ void ResultsPage::invert()
     }
 }
 
+/** Slot to update the title based upon the tab. Steam (yet) doesn't generate multiple executables, so the 2nd part
+ * isn't needed.
+ */
 void ResultsPage::tabSelected()
 {
     if (tabWidget->currentIndex() >= 1)
@@ -494,6 +550,12 @@ void ResultsPage::tabSelected()
     }
 }
 
+/** Using steamRoot, which is initialized earlier in the wizard, find the location of every Steam library folder, and
+ * run the parseAcf function on every *.acf file found within the directory. This file gives basic information about the game;
+ * such as directory within steamapps, name, etc.
+ * \see findOriginGames()
+ * \see findUplayGames()
+ */
 void ResultsPage::findSteamGames()
 {
     QDir steamAppsDir = steamRoot.filePath("steamapps");
@@ -524,6 +586,11 @@ void ResultsPage::findSteamGames()
     parseAcf(steamRoot);
 }
 
+/** Using originRoot, which is initialized earlier in the wizard, utilize `recursiveFindFiles()` to find every executable within
+ * each respective directory. Some directories will contain more than one executable, so it's up to the user to select the correct one.
+ * \see findSteamGames()
+ * \see findUplayGames()
+ */
 void ResultsPage::findOriginGames()
 {
     originRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
@@ -550,6 +617,11 @@ void ResultsPage::findOriginGames()
     originTree.add("games.count", count);
 }
 
+/** Using uplayRoot, which is initialized earlier in the wizard, utilize `recursiveFindFiles()` to find every executable within
+ * each respective directory. Some directories will contain more than one executable, so it's up to the user to select the correct one.
+ * \see findSteamGames()
+ * \see findOriginGames()
+ */
 void ResultsPage::findUplayGames()
 {
     uplayRoot.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
@@ -582,6 +654,7 @@ void ResultsPage::findUplayGames()
     uplayTree.add("games.count", count);
 }
 
+/** Debug function to print out a ptree */
 void ResultsPage::printTree(pt::ptree &pt, int level)
 {
     if (pt.empty())
@@ -608,6 +681,11 @@ void ResultsPage::printTree(pt::ptree &pt, int level)
     }
 }
 
+/** For a given steamRoot directory, find every appmanifest file, parse it and then use the retrived id to parse the appinfo.vdf
+ * file to ascertain extended information; such as executables included within the game. This currently only retrieves one exe, more
+ * work will need to go into creating a fast and efficient algorithm to parse multiple games.
+ * \param steamRoot The root directory to user's Steam installation.
+ */
 void ResultsPage::parseAcf(QDir steamRoot)
 {
     // TODO: This stuff needs its own thread
@@ -733,6 +811,10 @@ void ResultsPage::parseAcf(QDir steamRoot)
     }
 }
 
+/** For a given dir, find every file contained within. It's up to the implementer of this function to insure that the
+ * QDir has the relevant filters.
+ * \param dir Directory to search in.
+ */
 QStringList ResultsPage::recursiveFindFiles(QDir dir)
 {
     QStringList dirList;
@@ -759,11 +841,10 @@ QStringList ResultsPage::recursiveFindFiles(QDir dir)
     return dirList;
 }
 
-FinalPage::FinalPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
-{
-    setTitle("Done");
-}
-
+/** Initializes the final page. This function is called when the NextButton on the previous page is clicked,
+ * which allows the state of the previous page to be transferred to this one.
+ * The function then loops through the addedVector and adds the games to the database.
+*/
 void FinalPage::initializePage()
 {
     std::sort(addedVector.begin(), addedVector.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName;});
@@ -771,11 +852,13 @@ void FinalPage::initializePage()
     setSubTitle(QString("Added ") + QString::number(addedVector.size()) + " games to the database. Click finish to complete the wizard.");
 }
 
+/** Overloads the nextId function */
 int IntroPage::nextId() const
 {
     return pages::DRM;
 }
 
+/** Overloads the nextId function */
 int DRMPage::nextId() const
 {
     return pages::RESULTS;

@@ -12,19 +12,32 @@ class ResultsPage;
 class DRMPage;
 class FinalPage;
 
-enum pages { INTRO, DRM, RESULTS, FINAL };
-
-class Wizard : public QWizard
+/** Pages enum, makes state transfer possible */
+enum pages
 {
-Q_OBJECT
+    INTRO, /**< First page the user navigates to */
+    DRM, /**< Page showing the results of whether Steam, Origin and Uplay are installed */
+    RESULTS, /**< Page showing all the found games */
+    FINAL /**< Games are added to the db and a message is displayed to the user */
+};
+
+/** DRMSetupWizard class.
+ * Class to handle overall wizard.
+*/
+class DRMSetupWizard : public QWizard
+{
+    Q_OBJECT
 public:
     Database db;
-    Wizard(QWidget* parent = 0, QString dbPath = "./");
+    DRMSetupWizard(QWidget* parent = 0, QString dbPath = "./");
     DRMPage* drmPage;
     ResultsPage* resultsPage;
     FinalPage* finalPage;
 };
 
+/** IntroPage class.
+ * Class to handle the initial page.
+*/
 class IntroPage : public QWizardPage
 {
     Q_OBJECT
@@ -33,6 +46,9 @@ public:
     int nextId() const Q_DECL_OVERRIDE;
 };
 
+/** DRMPage class.
+ * Class to handle the results of whether Steam, Origin and Uplay have been discovered..
+*/
 class DRMPage : public QWizardPage
 {
     Q_OBJECT
@@ -58,6 +74,9 @@ public:
     int nextId() const Q_DECL_OVERRIDE;
 };
 
+/** ResultsPage class.
+ * Class to handle the results of which games have been found.
+*/
 class ResultsPage : public QWizardPage
 {
     Q_OBJECT
@@ -107,6 +126,9 @@ public:
     int nextId() const Q_DECL_OVERRIDE;
 };
 
+/** FinalPage class.
+ * Class to handle the final page.
+*/
 class FinalPage : public QWizardPage
 {
     Q_OBJECT

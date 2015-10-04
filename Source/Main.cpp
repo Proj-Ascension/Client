@@ -1,6 +1,6 @@
 #include "Init.h"
 #include "BuddyList.h"
-#include "Wizard.h"
+#include "DRMSetupWizard.h"
 
 #include <QApplication>
 #include <QFile>
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
 	bool dbExists = QFile("ascension.db").exists();
-	Wizard* wiz = new Wizard;
+    DRMSetupWizard* wiz = new DRMSetupWizard();
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX

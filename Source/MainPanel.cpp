@@ -29,7 +29,7 @@ MainPanel::MainPanel(QWidget* parent)
 */
 void MainPanel::init()
 {
-    p = new QSettings("palette.ini", QSettings::IniFormat);
+    p = new QSettings(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;

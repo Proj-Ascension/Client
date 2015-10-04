@@ -1,5 +1,6 @@
 #include "Library.h"
 #include "ui_Library.h"
+#include "AddGameWizard.h"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -104,53 +105,8 @@ void Library::on_testLaunch_clicked()
 */
 void Library::on_addGame_clicked()
 {
-    QString name = QInputDialog::getText(0, "Game Name", "Game Name:");
-
-    QString args = QInputDialog::getText(0, "Arguments for " + name, "Args (optional): ");
-
-    if (name.trimmed() == "")
-    {
-        QMessageBox::critical(0, "Error", "You must specify a game name!");
-        return;
-    }
-
-    QFileDialog exeDialog;
-    exeDialog.setWindowTitle("Select Executable");
-    exeDialog.setFileMode(QFileDialog::ExistingFile);
-#if defined(__unix__)
-    exeDialog.setDirectory(QDir::home());
-#elif defined(_WIN32) || defined(_WIN64)
-    exeDialog.setDirectory("C:");
-#endif
-
-    if (exeDialog.exec())
-    {
-        QStringList files = exeDialog.selectedFiles();
-        QString exe = files.at(0);
-#ifdef Q_WS_MACX
-        // Get the binary from the app bundle
-        QDir dir(file + "/Contents/MacOS");
-        // TODO: Change to dir.entryList(QDir::NoDotAndDotDot) to be safe
-        QStringList fileList = dir.entryList();
-        file = dir.absoluteFilePath(fileList.at(2));  // USUALLY this is the executable (after ., ..)
-#endif
-
-        QFileDialog wdDialog;  // Working Directory
-        wdDialog.setWindowTitle("Select Working Directory");
-        wdDialog.setFileMode(QFileDialog::DirectoryOnly);
-        wdDialog.setDirectory(exeDialog.directory().absolutePath());
-
-        if (wdDialog.exec())
-        {
-            QStringList dirs = wdDialog.selectedFiles();
-            QString dir = dirs.at(0);
-
-            qDebug() << "Adding game:" << name << exe << dir << args;
-            db.addGame(name, dir, exe, args);
-
-            refreshGames();
-        }
-    }
+    AddGameWizard* wiz = new AddGameWizard();
+    wiz->show();
 }
 
 /** Event handler for removing a game.
