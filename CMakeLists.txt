@@ -8,7 +8,7 @@ endif()
 
 # --- BUILD CONFIGURATION ---
 
-project(ProjectAscension)
+project(ProjectAscension C CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,11 +19,15 @@ set(SOURCE
     Source/Library.cpp
     Source/MainPanel.cpp
     Source/Database.cpp
+    Source/DRMSetupWizard.cpp
+    Source/Sidebar.cpp
     Source/Sidebar.cpp
     Source/Homepage.cpp
     Source/BuddyList.cpp
     Source/BuddyWidget.cpp
     Source/Community.cpp
+    Source/AddGameWizard.cpp
+	Source/Settings.cpp
 )
 
 set(HEADERS
@@ -34,10 +38,13 @@ set(HEADERS
     Source/Init.h
     Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
+    Source/DRMSetupWizard.h
     Source/Homepage.h
     Source/BuddyList.h
     Source/BuddyWidget.h
-    Source/Community.cpp
+    Source/Community.h
+    Source/AddGameWizard.h
+	Source/Settings.h
 )
 
 set(FORMS
@@ -45,6 +52,7 @@ set(FORMS
     Resource/UI/homepage.ui
     Resource/UI/BuddyList.ui
     Resource/UI/Community.ui
+    Resource/UI/Settings.ui
 )
 
 set(RESOURCES
@@ -107,6 +115,7 @@ find_package(Qt5Gui REQUIRED)
 # find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Boost REQUIRED)
+find_package(Threads REQUIRED)
 
 qt5_wrap_ui(FORMS_HEADERS ${FORMS})
 qt5_add_resources(UI_RESOURCES ${RESOURCES})
@@ -140,6 +149,7 @@ target_link_libraries(ProjectAscension
 #	Qt5::WebkitWidgets
     Qt5::Sql
     ${Boost_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 if(WIN32)
@@ -148,7 +158,7 @@ if(WIN32)
         gdi32.lib
         dwmapi.lib
     )
-    
+
     if(MSVC)
         set(WIN_LINKFLAGS \"${CMAKE_CURRENT_SOURCE_DIR}/Resource/Launcher.res\")
         set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
@@ -168,7 +178,7 @@ if(WITH_TESTS)
             appinfo.vdf
             game)
     add_custom_command(TARGET ProjectAscension POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
         endforeach()
 endif(WITH_TESTS)
 
@@ -202,6 +212,7 @@ if(WIN32)
         Qt5Multimediad.dll
         Qt5MultimediaWidgetsd.dll
 #       Qt5WebChanneld.dll
+        Qt5Svgd.dll
         Qt5OpenGLd.dll
         Qt5PrintSupportd.dll
         icuin${ICU_VER}.dll
@@ -210,7 +221,7 @@ if(WIN32)
     )
         add_custom_command(TARGET ProjectAscension POST_BUILD
             # Copy the given dependency into the executable directory.
-            COMMAND ${CMAKE_COMMAND} -E copy ${Qt5Core_DIR}/../../../bin/${DEPENDENCY} ${TargetDirectory}
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/${DEPENDENCY} ${TargetDirectory}
             COMMENT "Copying ${DEPENDENCY} into '${TargetDirectory}/'" VERBATIM
         )
     endforeach()

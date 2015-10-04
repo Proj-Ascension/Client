@@ -1,10 +1,12 @@
 #include "MainPanel.h"
+#include "Settings.h"
 
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QLabel>
+
 
 /** MainPanel constructor
 * Sets base size policy and object name.
@@ -26,7 +28,7 @@ MainPanel::MainPanel(QWidget* parent)
 */
 void MainPanel::init()
 {
-    p = new QSettings("palette.ini", QSettings::IniFormat);
+    p = new QSettings(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
@@ -128,9 +130,11 @@ void MainPanel::init()
     home = new Homepage(p, stack);
     library = new Library(p, stack);
     community = new Community(p, stack);
+	settings = new Settings(p, stack);
     stack->addWidget(home);
     stack->addWidget(library);
     stack->addWidget(community);
+	stack->addWidget(settings);
     stack->setCurrentWidget(library);
 
     // Set active tab
@@ -144,7 +148,7 @@ void MainPanel::init()
     connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
     // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
     // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
-    // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
+    connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
     connect(sidebar->exitTab, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
 
     // Show
