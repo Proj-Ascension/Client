@@ -11,32 +11,32 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::
 {
     ui->setupUi(this);
     this->setObjectName("settingsUI");
-    this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
-            "QLabel { color:  #ffffff;}"
-            "QPushButton {"
-            "color: " + p->value("Primary/LightText").toString() + "; "
-                                "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                                "border: none; margin: 0px; padding: 0px;} "
-                                "QPushButton:hover {"
-                                "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                                "color: " + p->value("Primary/LightText").toString() + ";");
+    this->setStyleSheet( "QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}"
+                                 "QLabel { color:  #ffffff;}"
+                                 "QPushButton {"
+                                 "color: " + p->value("Primary/LightText").toString() + "; "
+                                 "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                                 "border: none; margin: 0px; padding: 0px;} "
+                                 "QPushButton:hover {"
+                                 "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+                                 "color: " + p->value("Primary/LightText").toString() + ";");
 	QFont buttonFont("SourceSansPro", 9);
 	ui->WizardButton->setFont(buttonFont);
     ui->WizardButton->setText("Add Games to Ascension");
     ui->ClearDatabaseButton->setFont(buttonFont);
     ui->ClearDatabaseButton->setText("Clear Database");
     ui->AccentButton->setFont(buttonFont);
-    ui->AccentButton->setStyleSheet("background-color: " + p->value("Accent/LightAccent").toString() + ";}");
+    ui->AccentButton->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/LightAccent").toString() + ";}");
     ui->AccentButton_2->setFont(buttonFont);
-    ui->AccentButton_2->setStyleSheet("background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
+    ui->AccentButton_2->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
     ui->AccentButton_3->setFont(buttonFont);
-    ui->AccentButton_3->setStyleSheet("background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
+    ui->AccentButton_3->setStyleSheet("QPushButton {background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
     ui->ResetAccents->setFont(buttonFont);
-    ui->label_2->setStyleSheet("{color: #FFFFFF}");
+    //ui->label_2->setStyleSheet("{color: #FFFFFF}");
     ui->ResetAccents->setText("Reset Colors to Default");
-    ui->UserSettingsBox->setStyleSheet("color: #FFFFFF;} ");
-    ui->ClientSettingsBox->setStyleSheet("color: #FFFFFF;} ");
-    ui->StyleSettingsBox->setStyleSheet("color: #FFFFFF;} ");
+    //ui->UserSettingsBox->setStyleSheet("color: #FFFFFF;} ");
+    //ui->ClientSettingsBox->setStyleSheet("color: #FFFFFF;} ");
+    //ui->StyleSettingsBox->setStyleSheet("color: #FFFFFF;} ");
 	if (!db.init())
 	{
 		QMessageBox error;
@@ -100,9 +100,9 @@ void Settings::on_ResetAccents_clicked()
         palette.setValue("DarkAccent", "#6a4a05");
         palette.endGroup();
     }
-    ui->AccentButton->setStyleSheet("background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
-    ui->AccentButton_2->setStyleSheet("background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
-    ui->AccentButton_3->setStyleSheet("background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
+    ui->AccentButton->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
+    ui->AccentButton_2->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
+    ui->AccentButton_3->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
 }
 
 void Settings::updateAccent(int accent, QColor color)
@@ -118,9 +118,9 @@ void Settings::updateAccent(int accent, QColor color)
         if(accent == 3) palette.setValue("DarkAccent", color.name());
         palette.endGroup();
     }
-    if(accent == 1) ui->AccentButton->setStyleSheet("background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
-    if(accent == 2) ui->AccentButton_2->setStyleSheet("background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
-    if(accent == 3) ui->AccentButton_3->setStyleSheet("background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
+    if(accent == 1) ui->AccentButton->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
+    if(accent == 2) ui->AccentButton_2->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
+    if(accent == 3) ui->AccentButton_3->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
 }
 
 void Settings::on_ClearDatabaseButton_clicked()
