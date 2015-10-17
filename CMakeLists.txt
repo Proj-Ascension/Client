@@ -23,9 +23,6 @@ set(SOURCE
     Source/Sidebar.cpp
     Source/Sidebar.cpp
     Source/Homepage.cpp
-    Source/BuddyList.cpp
-    Source/BuddyWidget.cpp
-    Source/Community.cpp
     Source/AddGameWizard.cpp
 	Source/Settings.cpp
     Source/News.cpp
@@ -37,10 +34,6 @@ set(SOURCE
     Source/Sidebar.h
     Source/Libs/SteamVdfParse.hpp
     Source/DRMSetupWizard.h
-    Source/Homepage.h
-    Source/BuddyList.h
-    Source/BuddyWidget.h
-    Source/Community.h
     Source/AddGameWizard.h
 	Source/Settings.h
     Source/News.h
@@ -48,9 +41,6 @@ set(SOURCE
 
 set(FORMS
     Resource/UI/Library.ui
-    Resource/UI/homepage.ui
-    Resource/UI/BuddyList.ui
-    Resource/UI/Community.ui
 	Resource/UI/Settings.ui
     Resource/UI/News.ui
 )

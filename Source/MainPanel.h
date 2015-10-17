@@ -4,8 +4,6 @@
 #include "Sidebar.h"
 #include "Library.h"
 #include "Homepage.h"
-#include "BuddyList.h"
-#include "Community.h"
 
 #include <QStackedWidget>
 #include <QApplication>
