@@ -15,7 +15,7 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent), ui(new Ui::News)
 {
     ui->setupUi(this);
     this->setObjectName("newsUI");
-    this->setStyleSheet("background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+    this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
             "QPushButton {"
             "color: " + p->value("Primary/LightText").toString() + "; "
                                 "background-color: " + p->value("Primary/DarkElement").toString() + "; "
