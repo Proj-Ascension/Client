@@ -1,5 +1,4 @@
-#ifndef PROJECTASCENSION_NEWS_H
-#define PROJECTASCENSION_NEWS_H
+#pragma once
 
 #include <QtWidgets>
 #include <QSettings>
@@ -23,6 +22,3 @@ public:
     explicit News(QSettings* p, QWidget* parent = 0);
     ~News();
 };
-
-
-#endif //PROJECTASCENSION_NEWS_H

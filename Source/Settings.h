@@ -1,6 +1,4 @@
-#ifndef PROJECTASCENSION_SETTINGS_H
-#define PROJECTASCENSION_SETTINGS_H
-
+#pragma once
 #include "Database.h"
 
 #include <QtWidgets>
@@ -32,5 +30,3 @@ public:
     explicit Settings(QSettings* p, QWidget* parent = 0);
     ~Settings();
 };
-
-#endif

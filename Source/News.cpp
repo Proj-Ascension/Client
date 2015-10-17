@@ -1,3 +1,4 @@
+
 #include "News.h"
 #include "ui_News.h"
 
