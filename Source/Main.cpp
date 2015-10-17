@@ -1,5 +1,4 @@
 #include "Init.h"
-#include "BuddyList.h"
 #include "DRMSetupWizard.h"
 
 #include <QApplication>
