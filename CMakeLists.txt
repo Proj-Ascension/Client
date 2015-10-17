@@ -22,7 +22,6 @@ set(SOURCE
     Source/DRMSetupWizard.cpp
     Source/Sidebar.cpp
     Source/Sidebar.cpp
-    Source/Homepage.cpp
     Source/AddGameWizard.cpp
 	Source/Settings.cpp
     Source/News.cpp

@@ -128,11 +128,9 @@ void MainPanel::init()
     verticalLayout3->addWidget(stack);
 
     // Stack widgets
-    home = new Homepage(p, stack);
     library = new Library(p, stack);
 	settings = new Settings(p, stack);
     news = new News(p, stack);
-    stack->addWidget(home);
     stack->addWidget(library);
 	stack->addWidget(settings);
     stack->addWidget(news);
@@ -143,7 +141,7 @@ void MainPanel::init()
     activeTab->toggleActive();
 
     // Connect signals
-    connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
+    //connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
     // connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
     connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
     //connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
