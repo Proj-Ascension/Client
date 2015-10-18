@@ -10,7 +10,7 @@
 * \param parent Pointer to parent widget.
 */
 
-Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui::Settings)
+Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
 {
     QFont buttonFont("SourceSansPro", 9);
     QVBoxLayout* vertlayout = new QVBoxLayout(this);
