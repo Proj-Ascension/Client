@@ -40,7 +40,6 @@ set(SOURCE
 
 set(FORMS
     Resource/UI/Library.ui
-	Resource/UI/Settings.ui
     Resource/UI/News.ui
 )
 
