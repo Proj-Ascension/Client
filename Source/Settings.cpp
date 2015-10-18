@@ -22,7 +22,7 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
                                 "QPushButton:hover {"
                                 "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
                                 "QGroupBox { color: " + p->value("Primary/LightText").toString() + ";}");
-    QGroupBox* userSettingsBox = new QGroupBox();
+    QGroupBox* userSettingsBox = new QGroupBox(this);
     vertlayout->addWidget(userSettingsBox);
     userSettingsBox->setTitle("User Settings");
 
@@ -31,18 +31,18 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
 
     //Horizontal Layout
     //Client Settings
-    QGroupBox* clientSettingsBox = new QGroupBox();
+    QGroupBox* clientSettingsBox = new QGroupBox(this);
     horlayout->addWidget(clientSettingsBox);
-    QVBoxLayout* clientBoxLayout = new QVBoxLayout();
+    QVBoxLayout* clientBoxLayout = new QVBoxLayout(this);
     clientSettingsBox->setLayout(clientBoxLayout);
     clientSettingsBox->setTitle("Client Settings");
 
-    QPushButton* wizardButton = new QPushButton();
+    QPushButton* wizardButton = new QPushButton(this);
     wizardButton->setFont(buttonFont);
     wizardButton->setText("Add Games to Ascension");
     clientBoxLayout->addWidget(wizardButton);
 
-    QPushButton* clearDatabaseButton = new QPushButton();
+    QPushButton* clearDatabaseButton = new QPushButton(this);
     clearDatabaseButton->setFont(buttonFont);
     clearDatabaseButton->setText("Clear Database");
     clientBoxLayout->addWidget(clearDatabaseButton);
@@ -51,25 +51,25 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
     horlayout->addSpacing(10);
 
     //Style Settings
-    QGroupBox* styleSettingsBox = new QGroupBox();
+    QGroupBox* styleSettingsBox = new QGroupBox(this);
     horlayout->addWidget(styleSettingsBox);
-    QVBoxLayout* styleBoxLayout = new QVBoxLayout();
+    QVBoxLayout* styleBoxLayout = new QVBoxLayout(this);
     styleSettingsBox->setLayout(styleBoxLayout);
     styleSettingsBox->setTitle("Style Settings");
 
-    accentButton = new QPushButton();
+    accentButton = new QPushButton(this);
     accentButton->setFont(buttonFont);
     accentButton->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/LightAccent").toString() + ";""}");
     accentButton->setText("Set Light Accent");
-    accentButton_2 = new QPushButton();
+    accentButton_2 = new QPushButton(this);
     accentButton_2->setFont(buttonFont);
     accentButton_2->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
     accentButton_2->setText("Set Medium Accent");
-    accentButton_3 = new QPushButton();
+    accentButton_3 = new QPushButton(this);
     accentButton_3->setFont(buttonFont);
     accentButton_3->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
     accentButton_3->setText("Set Dark Accent");
-    QPushButton* resetAccents = new QPushButton();
+    QPushButton* resetAccents = new QPushButton(this);
     resetAccents->setFont(buttonFont);
     resetAccents->setText("Reset Colors to Default");
 
@@ -82,7 +82,7 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
 
     horlayout->addSpacing(10);
 
-    QGroupBox* testSettingsBox = new QGroupBox();
+    QGroupBox* testSettingsBox = new QGroupBox(this);
     horlayout->addWidget(testSettingsBox);
 
     userSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
