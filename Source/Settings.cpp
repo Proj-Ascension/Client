@@ -12,7 +12,7 @@
 
 Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui::Settings)
 {
-   QFont buttonFont("SourceSansPro", 9);
+    QFont buttonFont("SourceSansPro", 9);
     QVBoxLayout* vertlayout = new QVBoxLayout(this);
     this->setLayout(vertlayout);
     this->setStyleSheet("QPushButton {"

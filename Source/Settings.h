@@ -24,8 +24,8 @@ private:
     QPushButton* textColourButton_3;
 
 public slots:
-	void rerunGameWizard();
-	void clearDatabase();
+    void rerunGameWizard();
+    void clearDatabase();
     void setLightAccent();
     void setMediumAccent();
     void setDarkAccent();
