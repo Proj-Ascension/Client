@@ -21,13 +21,13 @@ private:
     QPushButton* accentButton_3;
 
 public slots:
-	void on_WizardButton_clicked();
-	void on_ClearDatabaseButton_clicked();
-    void on_accentButton_clicked();
-    void on_accentButton_2_clicked();
-    void on_accentButton_3_clicked();
-    void on_resetAccents_clicked();
-    void updateaccent(int accent, QColor color);
+	void rerunGameWizard();
+	void clearDatabase();
+    void setLightAccent();
+    void setMediumAccent();
+    void setDarkAccent();
+    void resetAccents();
+    void updateAccent(int accent, QColor color);
 public:
     explicit Settings(QSettings* p, QWidget* parent = 0);
     ~Settings();
