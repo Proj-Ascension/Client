@@ -16,9 +16,12 @@ class Settings : public QWidget
     Q_OBJECT
 private:
     Database db;
-    QPushButton* accentButton;
+    QPushButton* accentButton_1;
     QPushButton* accentButton_2;
     QPushButton* accentButton_3;
+    QPushButton* textColourButton_1;
+    QPushButton* textColourButton_2;
+    QPushButton* textColourButton_3;
 
 public slots:
 	void rerunGameWizard();
