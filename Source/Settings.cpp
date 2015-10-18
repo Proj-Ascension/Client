@@ -29,6 +29,7 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
     QHBoxLayout* horlayout = new QHBoxLayout(this);
     vertlayout->addLayout(horlayout);
 
+    //Horizontal Layout
     //Client Settings
     QGroupBox* clientSettingsBox = new QGroupBox();
     horlayout->addWidget(clientSettingsBox);
@@ -46,6 +47,8 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
     clearDatabaseButton->setText("Clear Database");
     clientBoxLayout->addWidget(clearDatabaseButton);
     //End Client Settings
+
+    horlayout->addSpacing(10);
 
     //Style Settings
     QGroupBox* styleSettingsBox = new QGroupBox();
@@ -77,6 +80,8 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
     styleBoxLayout->addWidget(resetAccents);
     //End Style Settings
 
+    horlayout->addSpacing(10);
+
     QGroupBox* testSettingsBox = new QGroupBox();
     horlayout->addWidget(testSettingsBox);
 
@@ -84,6 +89,8 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent) //,ui(new Ui
     clientSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
     styleSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
     testSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
+
+    //End Horizontal Layout
 
     connect(wizardButton, SIGNAL(clicked()), this, SLOT(rerunGameWizard()));
     connect(clearDatabaseButton, SIGNAL(clicked()), this, SLOT(clearDatabase()));
