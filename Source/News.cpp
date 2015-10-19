@@ -1,13 +1,11 @@
-
 #include "News.h"
 #include "ui_News.h"
+#include "NewsFeedWidget.h"
 
 #include <QtWidgets>
 #include <QDebug>
 #include <QSettings>
 #include <iostream>
-
-class rssAddress;
 
 /** Settings constructor
 * Initialize the news UI
@@ -19,6 +17,8 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent)
     QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
 
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+            "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
+            "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
             "QPushButton {"
             "color: " + p->value("Primary/LightText").toString() + "; "
                                 "background-color: " + p->value("Primary/DarkElement").toString() + "; "
@@ -27,52 +27,38 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent)
                                 "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
                                 "color: " + p->value("Primary/LightText").toString() + ";");
     QFont buttonFont("SourceSansPro", 9);
-    RSSList = new QListWidget(this);
-    RSSList->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
-    RSSListLabel = new QLabel();
-    RSSListLabel->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
-
     QHBoxLayout* addRSSLayout = new QHBoxLayout();
     rssAddress = new QLineEdit();
     addRSSLayout->addWidget(rssAddress);
     QPushButton* setRSS = new QPushButton();
-    setRSS->setText("Set RSS");
+    setRSS->setText("Add RSS");
     addRSSLayout->addWidget(setRSS);
-
-    QHBoxLayout* horLayout = new QHBoxLayout();
-    QVBoxLayout* rssVertLayout = new QVBoxLayout();
-    horLayout->addLayout(rssVertLayout);
-    rssVertLayout->addWidget(RSSListLabel);
-    rssVertLayout->addWidget(RSSList);
-
+    horLayout = new QHBoxLayout();
     newsTabLayout->addLayout(addRSSLayout);
     newsTabLayout->addLayout(horLayout);
-
-
+    loadFeeds();
     connect(setRSS, SIGNAL(clicked()), this, SLOT(setRSSFeed()));
 }
 
 void News::setRSSFeed()
 {
     QString url = rssAddress->text();
-    GetRSSFeed(url);
+    getRSSFeed(url);
 }
 
-void News::GetRSSFeed(QString url)
+void News::getRSSFeed(QString url)
 {
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     reply = manager.get(request);
     connect(reply, SIGNAL(finished()),this, SLOT(onRSSReturned()));
-    qDebug() << "TestRSS";
 }
 
 void News::onRSSReturned()
 {
-    RSSList->clear();
+    NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
-    qDebug() << data;
     while(!xml.atEnd())
     {
         if(xml.isStartElement()) {
@@ -80,25 +66,65 @@ void News::onRSSReturned()
             {
                 xml.readNext();
                 if (xml.name() == "title") {
-                    RSSListLabel->setText(xml.readElementText());
+                    QString title = xml.readElementText();
+                    newsFeedWidget->setRSSTitle(title);
+                    saveFeeds(title, rssAddress->text());
                 }
             }
             if (xml.name() == "item")
             {
                 xml.readNext();
-                RSSList->addItem(xml.readElementText());
+                newsFeedWidget->addRSSItem(xml.readElementText());
             }
         }
         xml.readNext();
     }
     xml.clear();
-    qDebug() << "Reply";
-    qDebug() << data;
+    horLayout->addWidget(newsFeedWidget);
+
 }
 
-void News::parseXml()
+void News::saveFeeds(QString title, QString url)
 {
+    QFile file(QCoreApplication::applicationDirPath() + "/rssFeeds.xml");
+    bool feedsExist = file.exists();
+    if(feedsExist)
+    {
+        file.open(QIODevice::Append);
+    }
+    else
+    {
+        file.open(QIODevice::WriteOnly);
+    }
+    QXmlStreamWriter xmlWriter(&file);
+    if(!feedsExist) xmlWriter.writeStartDocument();
+    xmlWriter.writeStartElement("item");
+        xmlWriter.writeTextElement("title", title);
+        xmlWriter.writeTextElement("url", url);
+        xmlWriter.writeEndElement();
+    xmlWriter.writeEndDocument();
+    file.close();
+}
 
+void News::loadFeeds()
+{
+    QFile file(QCoreApplication::applicationDirPath() + "/rssFeeds.xml");
+    if(file.exists())
+    {
+        file.open(QIODevice::ReadOnly);
+        QXmlStreamReader xmlReader(&file);
+        qDebug() << file.readAll();
+        while(!xmlReader.isEndDocument())
+        {
+            //if (xmlReader.name() == "item")
+            //{
+                qDebug() << xmlReader.name();
+            //}
+            xmlReader.readNext();
+        }
+        file.close();
+        xmlReader.clear();
+    }
 }
 
 News::~News()

@@ -20,12 +20,15 @@ private:
     QListWidget* RSSList;
     QLabel* RSSListLabel;
     QLineEdit* rssAddress;
+    QHBoxLayout* horLayout = new QHBoxLayout();
+    void getRSSFeed(QString url);
+    void saveFeeds(QString title, QString url);
+    void loadFeeds();
 
 public slots:
-    void GetRSSFeed(QString url);
-    void parseXml();
-    void onRSSReturned();
     void setRSSFeed();
+    void onRSSReturned();
+
 public:
     explicit News(QSettings* p, QWidget* parent = 0);
     ~News();

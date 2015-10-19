@@ -25,6 +25,7 @@ set(SOURCE
     Source/AddGameWizard.cpp
 	Source/Settings.cpp
     Source/News.cpp
+    Source/NewsFeedWidget.cpp
     Source/TabWidget.h
     Source/Library.h
     Source/MainPanel.h
@@ -36,6 +37,7 @@ set(SOURCE
     Source/AddGameWizard.h
 	Source/Settings.h
     Source/News.h
+    Source/NewsFeedWidget.h
 )
 
 set(FORMS
@@ -83,7 +85,7 @@ elseif(UNIX)
     set(SOURCE ${SOURCE}
         Source/UnixWindow.cpp
         Source/UnixPanel.cpp
-    )
+            Source/NewsFeedWidget.cpp Source/NewsFeedWidget.h)
 
     set(HEADERS ${HEADERS}
         Source/UnixWindow.h
