@@ -40,7 +40,6 @@ set(SOURCE
 
 set(FORMS
     Resource/UI/Library.ui
-    Resource/UI/News.ui
 )
 
 set(RESOURCES
@@ -98,7 +97,7 @@ endif()
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
-# find_package(Qt5Network REQUIRED)
+find_package(Qt5Network REQUIRED)
 # find_package(Qt5WebKit REQUIRED)
 # find_package(Qt5WebKitWidgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
@@ -113,7 +112,7 @@ include_directories(
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
-#   ${Qt5Network_INCLUDE_DIRS}
+   ${Qt5Network_INCLUDE_DIRS}
 #   ${Qt5WebKit_INCLUDE_DIRS}
 #   ${Qt5WebKitWidgets_INCLUDE_DIRS}
     ${Qt5Sql_INCLUDE_DIRS}
@@ -132,7 +131,7 @@ target_link_libraries(ProjectAscension
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
-#	Qt5::Network
+	Qt5::Network
 #	Qt5::WebKit
 #	Qt5::WebkitWidgets
     Qt5::Sql
@@ -189,7 +188,7 @@ if(WIN32)
         Qt5Widgetsd.dll
         Qt5Guid.dll
         Qt5Cored.dll
-#       Qt5Networkd.dll
+        Qt5Networkd.dll
 #       Qt5WebKitd.dll
 #       Qt5WebKitWidgetsd.dll
         Qt5Sqld.dll
