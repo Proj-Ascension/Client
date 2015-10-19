@@ -195,6 +195,33 @@ void DRMPage::checkSteamExists()
     {
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
+        QDir steamAppsDir = steamFolder.filePath("steamapps");
+        if (!steamAppsDir.exists())
+        {
+            steamAppsDir = steamFolder.filePath("SteamApps");
+        }
+        pt::ptree libraryFolders;
+        pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
+        steamDirectoryList.append(steamFolder.filePath(""));
+        QString pathString = "";
+
+        for (auto kv : libraryFolders.get_child("LibraryFolders"))
+        {
+            if (std::isdigit(static_cast<int>(*kv.first.data())))
+            {
+                std::string path = kv.second.data();
+                QDir dir(QString::fromStdString(path));
+                if (dir.exists())
+                {
+                    steamDirectoryList.append(dir.filePath(""));
+                    pathString += dir.filePath("");
+                    pathString += "\n";
+                }
+            }
+        }
+
+        descLabel->setText(descLabel->text() + "\n\nLibrary folders:\n" + pathString);
+
         steamBox->setChecked(true);
         steamPath = steamFolder.filePath("");
     }

@@ -12,8 +12,8 @@ namespace entryPoint
 {
 void initSettings(QApplication &application)
 {
-    QSettings config(QSettings::IniFormat, QSettings::UserScope, "ProjectAscension", "config");
-    QSettings palette(QSettings::IniFormat, QSettings::UserScope, "ProjectAscension", "palette");
+    QSettings config(QString("config.ini"), QSettings::IniFormat);
+    QSettings palette(QString("palette.ini"), QSettings::IniFormat);
 
     if (!QFile("config.ini").exists() && config.isWritable())
     {

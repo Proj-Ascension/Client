@@ -68,7 +68,7 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
  * \param games GameList of games to add.
  * \return Success/failure of the operation.
 */
-bool Database::addGames(GameList games)
+void Database::addGames(GameList games)
 {
     for (auto& game : games)
     {
