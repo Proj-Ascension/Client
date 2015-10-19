@@ -114,14 +114,9 @@ void News::loadFeeds()
         file.open(QIODevice::ReadOnly);
         QXmlStreamReader xmlReader(&file);
         qDebug() << file.readAll();
-        while(!xmlReader.isEndDocument())
+        /*while(!xmlReader.isEndDocument())
         {
-            //if (xmlReader.name() == "item")
-            //{
-                qDebug() << xmlReader.name();
-            //}
-            xmlReader.readNext();
-        }
+        }*/
         file.close();
         xmlReader.clear();
     }
