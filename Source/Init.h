@@ -5,6 +5,8 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QFile>
+#include <QDir>
+#include <QStandardPaths>
 #include <QDebug>
 
 /** Namespace for entry point initialization functions. */
@@ -19,7 +21,8 @@ void initSettings(QApplication &application)
     {
         // TODO: Set default config settings.
     }
-    if (!QFile("palette.ini").exists() && palette.isWritable())
+
+    if (!QFile(palette.fileName()).exists() && palette.isWritable())
     {
         palette.beginGroup("Primary");
 

@@ -34,6 +34,13 @@ DRMSetupWizard::DRMSetupWizard(QWidget* parent, QString dbPath) : QWizard(parent
     setPage(pages::FINAL, finalPage);
     setWindowTitle("Project Ascension setup");
     setFixedSize(QSize(700, 450));
+	addedVector.erase(addedVector.begin(), addedVector.end());
+	if (!db.init())
+	{
+		QMessageBox error;
+		error.critical(0, "Error!", "An error occured while trying to load the database.");
+		exit(EXIT_FAILURE);
+	}
  }
 
 /** IntroPage constructor

@@ -22,7 +22,8 @@ int main(int argc, char* argv[])
 {
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
-    DRMSetupWizard wiz;
+	bool dbExists = QFile("ascension.db").exists();
+    DRMSetupWizard* wiz = new DRMSetupWizard();
 
     #ifndef Q_OS_WIN
         // dynamic loading of the icon under Linux/UNIX
@@ -55,8 +56,10 @@ int main(int argc, char* argv[])
     #endif
 
     // Launch
-    wiz.show();
-    application->exec();
-
+	if (!dbExists)
+	{
+		wiz->show();
+	}
+	application->exec();
     return 0;
 }
