@@ -16,7 +16,8 @@ class rssAddress;
 */
 News::News(QSettings* p, QWidget* parent) : QWidget(parent)
 {
-    QHBoxLayout* horLayout = new QHBoxLayout(this);
+    QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
+
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
             "QPushButton {"
             "color: " + p->value("Primary/LightText").toString() + "; "
@@ -27,23 +28,28 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent)
                                 "color: " + p->value("Primary/LightText").toString() + ";");
     QFont buttonFont("SourceSansPro", 9);
     RSSList = new QListWidget(this);
+    RSSList->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
     RSSListLabel = new QLabel();
     RSSListLabel->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
-    QVBoxLayout* rssVertLayout = new QVBoxLayout();
-    rssVertLayout->addWidget(RSSListLabel);
-    rssVertLayout->addWidget(RSSList);
+
+    QHBoxLayout* addRSSLayout = new QHBoxLayout();
     rssAddress = new QLineEdit();
-    horLayout->addWidget(rssAddress);
-    horLayout->addLayout(rssVertLayout);
-    /*QListWidget* RSSList2 = new QListWidget(this);
-    horLayout->addWidget(RSSList2);
-    QListWidget* RSSList3 = new QListWidget(this);
-    horLayout->addWidget(RSSList3);*/
+    addRSSLayout->addWidget(rssAddress);
     QPushButton* setRSS = new QPushButton();
     setRSS->setText("Set RSS");
-    horLayout->addWidget(setRSS);
-    connect(setRSS, SIGNAL(clicked()), this, SLOT(setRSSFeed()));
+    addRSSLayout->addWidget(setRSS);
 
+    QHBoxLayout* horLayout = new QHBoxLayout();
+    QVBoxLayout* rssVertLayout = new QVBoxLayout();
+    horLayout->addLayout(rssVertLayout);
+    rssVertLayout->addWidget(RSSListLabel);
+    rssVertLayout->addWidget(RSSList);
+
+    newsTabLayout->addLayout(addRSSLayout);
+    newsTabLayout->addLayout(horLayout);
+
+
+    connect(setRSS, SIGNAL(clicked()), this, SLOT(setRSSFeed()));
 }
 
 void News::setRSSFeed()
@@ -63,6 +69,7 @@ void News::GetRSSFeed(QString url)
 
 void News::onRSSReturned()
 {
+    RSSList->clear();
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
     qDebug() << data;
