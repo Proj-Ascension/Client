@@ -15,12 +15,14 @@ Q_OBJECT
 private:
     QListWidget* rssList;
     QLabel* feedTitle;
-
+    QPushButton* deleteWidget;
+    QSettings* rss;
 public slots:
-
+    void onListItemClicked(QListWidgetItem* item);
+    void deleteRSSWidget();
 
 public:
-    void addRSSItem(QString title);
+    void addRSSItem(QString title, QString url);
     void setRSSTitle(QString feedTitle);
     explicit NewsFeedWidget(QWidget* parent = 0);
     ~NewsFeedWidget();

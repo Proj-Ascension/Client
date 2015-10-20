@@ -61,7 +61,6 @@ void News::setRSSFeed()
 void News::getRSSFeed(QString url)
 {
     qDebug() << "Getting RSS feed of:" << url;
-
     QNetworkRequest request(url);
     manager->get(request);
 }
@@ -81,20 +80,30 @@ void News::onRSSReturned(QNetworkReply* reply)
                 {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    rss->beginGroup("feeds");
+                    //rss->beginGroup("feeds");
                     if (!rss->contains(title))
                     {
                         qDebug() << title;
-                        saveFeeds(title, rssAddress->text());
+                        saveFeeds(title, reply->url().toString());
                     }
-                    rss->endGroup();
                 }
             }
             if (xml.name() == "item")
             {
+                QString url;
+                QString title;
                 xml.readNext();
-                newsFeedWidget->addRSSItem(xml.readElementText());
+                if(xml.name() == "title")title = xml.readElementText();
+                xml.readNext();
+                if(xml.name() == "link")url = xml.readElementText();
+                newsFeedWidget->addRSSItem(title, url);
             }
+            /*if(xml.name() == "link")
+            {
+                //xml.readNext();
+                qDebug() << xml.readElementText();
+                //newsFeedWidget->addRSSItem(xml.readElementText());
+            }*/
         }
         xml.readNext();
     }
@@ -108,18 +117,18 @@ void News::saveFeeds(QString title, QString url)
     qDebug() << "Saving rss feed" << title << url;
     if (rss->isWritable())
     {
-        rss->beginGroup("feeds");
+        //rss->beginGroup("feeds");
         rss->setValue(title, url);
-        rss->endGroup();
     }
+    qDebug() << rss->allKeys();
 }
 
 void News::loadFeeds()
 {
     QStringList childKeys = rss->allKeys();
-    foreach (const QString& childKey, childKeys)
+    for (int i = 0; i < childKeys.length(); i++)
     {
-        QString url = rss->value(childKey).toString();
+        QString url = rss->value(childKeys.value(i)).toString();
         getRSSFeed(url);
     }
 }
