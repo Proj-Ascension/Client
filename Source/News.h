@@ -13,13 +13,13 @@ class News : public QWidget
 {
     Q_OBJECT
 
-public slots:
-    void setRSSFeed();
-    void onRSSReturned(QNetworkReply* reply);
-
 public:
     explicit News(QSettings* p, QWidget* parent = 0);
     ~News();
+
+public slots:
+    void setRSSFeed();
+    void onRSSReturned(QNetworkReply* reply);
 
 private:
     QHBoxLayout* hNewsLayout;
