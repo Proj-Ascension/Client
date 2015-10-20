@@ -150,7 +150,7 @@ void DRMPage::checkOriginExists()
         }
     }
 
-    if (originFolder.filePath("").trimmed() != "" && originFolder.exists())
+    if (originFolder.filePath("").trimmed() != "" && originFolder.exists() && originFolder != QDir("."))
     {
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Origin found in " + originFolder.filePath(""));
@@ -198,7 +198,7 @@ void DRMPage::checkSteamExists()
     steamFolder = QDir(QDir::home().filePath("Library/Application Support/Steam"));
 #endif
 
-    if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists())
+    if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
     {
         statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
         descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
