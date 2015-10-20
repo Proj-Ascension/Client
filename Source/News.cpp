@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <iostream>
+#include <thread>
 
 /** Settings constructor
 * Initialize the news UI
@@ -15,7 +16,7 @@
 News::News(QSettings* p, QWidget* parent) : QWidget(parent)
 {
     QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
-
+    rss = new QSettings(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss");
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
             "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
             "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
@@ -48,9 +49,10 @@ void News::setRSSFeed()
 
 void News::getRSSFeed(QString url)
 {
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
     QNetworkRequest request;
     request.setUrl(QUrl(url));
-    reply = manager.get(request);
+    reply = manager->get(request);
     connect(reply, SIGNAL(finished()),this, SLOT(onRSSReturned()));
 }
 
@@ -59,6 +61,7 @@ void News::onRSSReturned()
     NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
+    qDebug() << data;
     while(!xml.atEnd())
     {
         if(xml.isStartElement()) {
@@ -68,7 +71,7 @@ void News::onRSSReturned()
                 if (xml.name() == "title") {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    //saveFeeds(title, rssAddress->text());
+                    //if(!rss->contains(title))saveFeeds(title, rssAddress->text());;
                 }
             }
             if (xml.name() == "item")
@@ -81,54 +84,30 @@ void News::onRSSReturned()
     }
     xml.clear();
     horLayout->addWidget(newsFeedWidget);
-
 }
 
 void News::saveFeeds(QString title, QString url)
 {
-    QFile file(QCoreApplication::applicationDirPath() + "/rssFeeds.xml");
-    bool feedsExist = file.exists();
-    if(feedsExist)
+    if (rss->isWritable())
     {
-        file.open(QIODevice::Append);
+        rss->beginGroup("feeds");
+        rss->setValue(title, url);
+        rss->endGroup();
     }
-    else
-    {
-        file.open(QIODevice::WriteOnly);
-    }
-    QXmlStreamWriter xmlWriter(&file);
-    if(!feedsExist) xmlWriter.writeStartDocument();
-    xmlWriter.writeStartElement("item");
-        xmlWriter.writeTextElement("title", title);
-        xmlWriter.writeTextElement("url", url);
-        xmlWriter.writeEndElement();
-    xmlWriter.writeEndDocument();
-    file.close();
 }
 
 void News::loadFeeds()
 {
-    QFile file(QCoreApplication::applicationDirPath() + "/rssFeeds.xml");
-    if(file.exists())
+    QStringList urls;
+    QStringList childKeys = rss->allKeys();
+    foreach (const QString &childKey, childKeys)
     {
-        file.open(QIODevice::ReadOnly);
-        QXmlStreamReader xmlReader(&file);
-        //qDebug() << file.readAll();
-        while(!xmlReader.atEnd())
-        {
-            if(xmlReader.isStartElement())
-            {
-                if(xmlReader.name() == "url")
-                {
-                    QString url = xmlReader.readElementText();
-                    qDebug() << url;
-                    getRSSFeed(url);
-                }
-            }
-            xmlReader.readNext();
-        }
-        file.close();
-        xmlReader.clear();
+        urls << rss->value(childKey).toString();
+    }
+    foreach(const QString &url, urls)
+    {
+        qDebug() << url;
+        getRSSFeed(url);
     }
 }
 

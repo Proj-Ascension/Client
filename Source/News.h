@@ -11,11 +11,12 @@
 */
 class News : public QWidget
 {
+
     Q_OBJECT
 private:
     int connectionId;
     QXmlStreamReader xml;
-    QNetworkAccessManager manager;
+    //QNetworkAccessManager* manager;
     QNetworkReply* reply;
     QListWidget* RSSList;
     QLabel* RSSListLabel;
@@ -24,6 +25,7 @@ private:
     void getRSSFeed(QString url);
     void saveFeeds(QString title, QString url);
     void loadFeeds();
+    QSettings* rss;
 
 public slots:
     void setRSSFeed();
