@@ -1,5 +1,4 @@
 #include "News.h"
-#include "ui_News.h"
 #include "NewsFeedWidget.h"
 
 #include <QtWidgets>
@@ -15,30 +14,42 @@
 */
 News::News(QSettings* p, QWidget* parent) : QWidget(parent)
 {
-    QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
-    rss = new QSettings(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss");
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
-            "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
-            "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
-            "QPushButton {"
-            "color: " + p->value("Primary/LightText").toString() + "; "
-                                "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                                "border: none; margin: 0px; padding: 0px;} "
-                                "QPushButton:hover {"
-                                "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                                "color: " + p->value("Primary/LightText").toString() + ";");
+                        "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
+                        "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
+                        "QPushButton {"
+                        "color: " + p->value("Primary/LightText").toString() + "; "
+                        "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                        "border: none; margin: 0px; padding: 0px;} "
+                        "QPushButton:hover {"
+                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+                        "color: " + p->value("Primary/LightText").toString() + ";");
     QFont buttonFont("SourceSansPro", 9);
+
+    rss = new QSettings(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss", this);
+    manager = new QNetworkAccessManager(this);
+
+    QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
+
     QHBoxLayout* addRSSLayout = new QHBoxLayout();
-    rssAddress = new QLineEdit();
+    rssAddress = new QLineEdit(this);
     addRSSLayout->addWidget(rssAddress);
     QPushButton* setRSS = new QPushButton();
     setRSS->setText("Add RSS");
     addRSSLayout->addWidget(setRSS);
-    horLayout = new QHBoxLayout();
     newsTabLayout->addLayout(addRSSLayout);
-    newsTabLayout->addLayout(horLayout);
+
+    hNewsLayout = new QHBoxLayout();
+    newsTabLayout->addLayout(hNewsLayout);
+
     loadFeeds();
+
     connect(setRSS, SIGNAL(clicked()), this, SLOT(setRSSFeed()));
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onRSSReturned(QNetworkReply*)));
+}
+
+News::~News()
+{
 }
 
 void News::setRSSFeed()
@@ -49,28 +60,34 @@ void News::setRSSFeed()
 
 void News::getRSSFeed(QString url)
 {
-    QNetworkRequest request;
-    request.setUrl(QUrl(url));
-    reply = manager.get(request);
-    connect(reply, SIGNAL(finished()),this, SLOT(onRSSReturned()));
+    qDebug() << "Getting RSS feed of:" << url;
+
+    QNetworkRequest request(url);
+    manager->get(request);
 }
 
-void News::onRSSReturned()
+void News::onRSSReturned(QNetworkReply* reply)
 {
     NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
-    qDebug() << data;
-    while(!xml.atEnd())
+    while (!xml.atEnd())
     {
-        if(xml.isStartElement()) {
+        if (xml.isStartElement()) {
             if (xml.name() == "channel")
             {
                 xml.readNext();
-                if (xml.name() == "title") {
+                if (xml.name() == "title")
+                {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    if(!rss->contains(title))saveFeeds(title, rssAddress->text());;
+                    rss->beginGroup("feeds");
+                    if (!rss->contains(title))
+                    {
+                        qDebug() << title;
+                        saveFeeds(title, rssAddress->text());
+                    }
+                    rss->endGroup();
                 }
             }
             if (xml.name() == "item")
@@ -82,12 +99,13 @@ void News::onRSSReturned()
         xml.readNext();
     }
     xml.clear();
-    horLayout->addWidget(newsFeedWidget);
+    hNewsLayout->addWidget(newsFeedWidget);
     reply->close();
 }
 
 void News::saveFeeds(QString title, QString url)
 {
+    qDebug() << "Saving rss feed" << title << url;
     if (rss->isWritable())
     {
         rss->beginGroup("feeds");
@@ -98,19 +116,10 @@ void News::saveFeeds(QString title, QString url)
 
 void News::loadFeeds()
 {
-    QStringList urls;
     QStringList childKeys = rss->allKeys();
-    foreach (const QString &childKey, childKeys)
+    foreach (const QString& childKey, childKeys)
     {
-        urls << rss->value(childKey).toString();
-    }
-    foreach(const QString &url, urls)
-    {
-        qDebug() << url;
+        QString url = rss->value(childKey).toString();
         getRSSFeed(url);
     }
-}
-
-News::~News()
-{
 }
