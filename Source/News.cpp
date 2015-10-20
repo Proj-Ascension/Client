@@ -49,10 +49,9 @@ void News::setRSSFeed()
 
 void News::getRSSFeed(QString url)
 {
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
     QNetworkRequest request;
     request.setUrl(QUrl(url));
-    reply = manager->get(request);
+    reply = manager.get(request);
     connect(reply, SIGNAL(finished()),this, SLOT(onRSSReturned()));
 }
 
@@ -71,7 +70,7 @@ void News::onRSSReturned()
                 if (xml.name() == "title") {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    //if(!rss->contains(title))saveFeeds(title, rssAddress->text());;
+                    if(!rss->contains(title))saveFeeds(title, rssAddress->text());;
                 }
             }
             if (xml.name() == "item")
@@ -84,6 +83,7 @@ void News::onRSSReturned()
     }
     xml.clear();
     horLayout->addWidget(newsFeedWidget);
+    reply->close();
 }
 
 void News::saveFeeds(QString title, QString url)

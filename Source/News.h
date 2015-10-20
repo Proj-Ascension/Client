@@ -16,7 +16,7 @@ class News : public QWidget
 private:
     int connectionId;
     QXmlStreamReader xml;
-    //QNetworkAccessManager* manager;
+    QNetworkAccessManager manager;
     QNetworkReply* reply;
     QListWidget* RSSList;
     QLabel* RSSListLabel;
