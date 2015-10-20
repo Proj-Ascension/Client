@@ -20,7 +20,7 @@ void initSettings(QApplication &application)
     QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");*/
 
     QSettings config(QString("config.ini"), QSettings::IniFormat);
-    QSettings rss(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss");
+    QSettings rss(QString("rss.ini"), QSettings::IniFormat);
     QSettings palette(QString("palette.ini"), QSettings::IniFormat);
 
     if (!QFile("config.ini").exists() && config.isWritable())

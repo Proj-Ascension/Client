@@ -17,6 +17,7 @@ private:
     QLabel* feedTitle;
     QPushButton* deleteWidget;
     QSettings* rss;
+
 public slots:
     void onListItemClicked(QListWidgetItem* item);
     void deleteRSSWidget();

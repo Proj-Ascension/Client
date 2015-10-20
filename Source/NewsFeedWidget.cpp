@@ -12,7 +12,7 @@
 */
 NewsFeedWidget::NewsFeedWidget(QWidget* parent) : QWidget(parent)
 {
-    rss = new QSettings(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss", this);
+    rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
     QVBoxLayout* newRSSVertLayout = new QVBoxLayout(this);
     QHBoxLayout* titleAndRemove = new QHBoxLayout();
     feedTitle = new QLabel();
@@ -22,7 +22,6 @@ NewsFeedWidget::NewsFeedWidget(QWidget* parent) : QWidget(parent)
     deleteWidget->setMaximumWidth(50);
     titleAndRemove->addWidget(feedTitle);
     titleAndRemove->addWidget(deleteWidget);
-    //newRSSVertLayout->addWidget(feedTitle);
     newRSSVertLayout->addLayout(titleAndRemove);
     newRSSVertLayout->addWidget(rssList);
     connect(deleteWidget, SIGNAL(clicked()), this, SLOT(deleteRSSWidget()));
