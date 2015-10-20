@@ -61,6 +61,7 @@ class DRMPage : public QWizardPage
     QLabel* statusLabel;
     QLabel* platformLabel;
     QLabel* descLabel;
+    QStringList steamDirectoryList;
 
     void checkSteamExists();
     void checkUplayExists();

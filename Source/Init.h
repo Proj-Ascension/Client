@@ -14,9 +14,14 @@ namespace entryPoint
 {
 void initSettings(QApplication &application)
 {
-    QSettings config(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "config");
+
+   /* QSettings config(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "config");
     QSettings rss(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss");
-    QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
+    QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");*/
+
+    QSettings config(QString("config.ini"), QSettings::IniFormat);
+    QSettings rss(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss");
+    QSettings palette(QString("palette.ini"), QSettings::IniFormat);
 
     if (!QFile("config.ini").exists() && config.isWritable())
     {
