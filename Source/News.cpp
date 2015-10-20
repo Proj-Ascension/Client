@@ -68,13 +68,12 @@ void News::getRSSFeed(QString url)
 
 void News::onRSSReturned(QNetworkReply* reply)
 {
-    qDebug() << "RSS feed of:" << reply->url() << "has finished";
     NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
-    while(!xml.atEnd())
+    while (!xml.atEnd())
     {
-        if(xml.isStartElement()) {
+        if (xml.isStartElement()) {
             if (xml.name() == "channel")
             {
                 xml.readNext();
@@ -82,12 +81,13 @@ void News::onRSSReturned(QNetworkReply* reply)
                 {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    qDebug() << title;
-                    if(!rss->contains(title))
+                    rss->beginGroup("feeds");
+                    if (!rss->contains(title))
                     {
                         qDebug() << title;
                         saveFeeds(title, rssAddress->text());
                     }
+                    rss->endGroup();
                 }
             }
             if (xml.name() == "item")
