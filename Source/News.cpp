@@ -68,7 +68,7 @@ void News::onRSSReturned()
                 if (xml.name() == "title") {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    saveFeeds(title, rssAddress->text());
+                    //saveFeeds(title, rssAddress->text());
                 }
             }
             if (xml.name() == "item")
@@ -113,10 +113,20 @@ void News::loadFeeds()
     {
         file.open(QIODevice::ReadOnly);
         QXmlStreamReader xmlReader(&file);
-        qDebug() << file.readAll();
-        /*while(!xmlReader.isEndDocument())
+        //qDebug() << file.readAll();
+        while(!xmlReader.atEnd())
         {
-        }*/
+            if(xmlReader.isStartElement())
+            {
+                if(xmlReader.name() == "url")
+                {
+                    QString url = xmlReader.readElementText();
+                    qDebug() << url;
+                    getRSSFeed(url);
+                }
+            }
+            xmlReader.readNext();
+        }
         file.close();
         xmlReader.clear();
     }
