@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include <QDebug>
 #include <QSettings>
+
 #include <iostream>
 #include <thread>
 

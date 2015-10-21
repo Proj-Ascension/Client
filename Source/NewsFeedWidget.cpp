@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <QDebug>
 #include <QSettings>
+
 #include <iostream>
 
 /** Settings constructor
