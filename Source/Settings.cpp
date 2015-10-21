@@ -1,9 +1,6 @@
 #include "Settings.h"
 #include "DRMSetupWizard.h"
 
-#include <QLayout>
-#include <QGroupBox>
-
 /** Settings constructor
 * Initialize the settings UI
 * \param p Inherited palette configuration for setting StyleSheets.

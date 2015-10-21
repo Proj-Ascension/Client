@@ -1,7 +1,6 @@
 #pragma once
 #include "Database.h"
 
-#include <QtWidgets>
 #include <QSettings>
 
 /** Settings UI namespace. */
