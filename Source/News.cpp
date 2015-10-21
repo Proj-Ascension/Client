@@ -1,13 +1,6 @@
 #include "News.h"
 #include "NewsFeedWidget.h"
 
-#include <QtWidgets>
-#include <QDebug>
-#include <QSettings>
-
-#include <iostream>
-#include <thread>
-
 /** Settings constructor
 * Initialize the news UI
 * \param p Inherited palette configuration for setting StyleSheets.
@@ -33,12 +26,14 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent)
     QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
 
     QHBoxLayout* addRSSLayout = new QHBoxLayout();
+    newsTabLayout->addLayout(addRSSLayout);
+
     rssAddress = new QLineEdit(this);
     addRSSLayout->addWidget(rssAddress);
+
     QPushButton* setRSS = new QPushButton();
     setRSS->setText("Add RSS");
     addRSSLayout->addWidget(setRSS);
-    newsTabLayout->addLayout(addRSSLayout);
 
     hNewsLayout = new QHBoxLayout();
     newsTabLayout->addLayout(hNewsLayout);

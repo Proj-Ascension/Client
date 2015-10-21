@@ -1,8 +1,9 @@
 #pragma once
 
-#include <QtWidgets>
 #include <QSettings>
 #include <QtNetwork>
+#include <QtWidgets/qboxlayout.h>
+#include <QtWidgets/qlineedit.h>
 
 
 /** News UI namespace. */
