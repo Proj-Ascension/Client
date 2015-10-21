@@ -86,11 +86,13 @@ elseif(UNIX)
     set(SOURCE ${SOURCE}
         Source/UnixWindow.cpp
         Source/UnixPanel.cpp
-            Source/NewsFeedWidget.cpp Source/NewsFeedWidget.h)
+        Source/NewsFeedWidget.cpp
+    )
 
     set(HEADERS ${HEADERS}
         Source/UnixWindow.h
         Source/UnixPanel.h
+        Source/NewsFeedWidget.h
     )
 else()
     # Suspend the configuration process if the target OS isn't recognized.
