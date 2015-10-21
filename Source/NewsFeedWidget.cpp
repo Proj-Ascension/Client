@@ -1,5 +1,9 @@
 #include "NewsFeedWidget.h"
 
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QDesktopServices>
+
 /** Settings constructor
 * Initialize the news UI
 * \param p Inherited palette configuration for setting StyleSheets.

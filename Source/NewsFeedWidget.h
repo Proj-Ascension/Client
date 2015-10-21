@@ -1,9 +1,10 @@
 #pragma once
 
-#include <QtWidgets>
 #include <QSettings>
 #include <QtNetwork>
-
+#include <QListWidget>
+#include <QLabel>
+#include <QPushButton>
 
 /** News UI namespace. */
 /** News class.

@@ -2,8 +2,8 @@
 
 #include <QSettings>
 #include <QtNetwork>
-#include <QtWidgets/qboxlayout.h>
-#include <QtWidgets/qlineedit.h>
+#include <QBoxLayout>
+#include <QLineEdit>
 
 
 /** News UI namespace. */
