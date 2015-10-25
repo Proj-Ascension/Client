@@ -5,23 +5,35 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QFile>
+#include <QDir>
+#include <QStandardPaths>
+#include <QDebug>
 
 /** Namespace for entry point initialization functions. */
 namespace entryPoint
 {
 void initSettings(QApplication &application)
 {
-    QString configFile = "config.ini", paletteFile = "palette.ini";
-    QSettings config(configFile, QSettings::IniFormat), palette(paletteFile, QSettings::IniFormat);
 
-    config.setPath(QSettings::IniFormat, QSettings::UserScope, application.applicationDirPath());
-    palette.setPath(QSettings::IniFormat, QSettings::UserScope, application.applicationDirPath());
+   /* QSettings config(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "config");
+    QSettings rss(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "rss");
+    QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");*/
 
-    if (!QFile(configFile).exists() && config.isWritable())
+    QSettings config(QString("config.ini"), QSettings::IniFormat);
+    QSettings rss(QString("rss.ini"), QSettings::IniFormat);
+    QSettings palette(QString("palette.ini"), QSettings::IniFormat);
+
+    if (!QFile("config.ini").exists() && config.isWritable())
     {
         // TODO: Set default config settings.
     }
-    if (!QFile(paletteFile).exists() && palette.isWritable())
+
+    if (!QFile("rss.ini").exists() && rss.isWritable())
+    {
+        // TODO: Set default rss
+    }
+
+    if (!QFile(palette.fileName()).exists() && palette.isWritable())
     {
         palette.beginGroup("Primary");
 

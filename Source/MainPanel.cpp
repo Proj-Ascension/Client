@@ -1,10 +1,13 @@
 #include "MainPanel.h"
+#include "Settings.h"
+#include "News.h"
 
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QLabel>
+
 
 /** MainPanel constructor
 * Sets base size policy and object name.
@@ -26,7 +29,7 @@ MainPanel::MainPanel(QWidget* parent)
 */
 void MainPanel::init()
 {
-    p = new QSettings("palette.ini", QSettings::IniFormat);
+    p = new QSettings(QString("palette.ini"), QSettings::IniFormat);
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
@@ -125,12 +128,12 @@ void MainPanel::init()
     verticalLayout3->addWidget(stack);
 
     // Stack widgets
-    home = new Homepage(p, stack);
     library = new Library(p, stack);
-    community = new Community(p, stack);
-    stack->addWidget(home);
+	settings = new Settings(p, stack);
+    news = new News(p, stack);
     stack->addWidget(library);
-    stack->addWidget(community);
+	stack->addWidget(settings);
+    stack->addWidget(news);
     stack->setCurrentWidget(library);
 
     // Set active tab
@@ -138,13 +141,13 @@ void MainPanel::init()
     activeTab->toggleActive();
 
     // Connect signals
-    connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
+    //connect(sidebar->homeTab, SIGNAL(clicked()), this, SLOT(setHome()));
     // connect(sidebar->storeTab, SIGNAL(clicked()), this, SLOT(setStore()));
     connect(sidebar->gamesTab, SIGNAL(clicked()), this, SLOT(setGames()));
-    connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
-    // connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
+    //connect(sidebar->communityTab, SIGNAL(clicked()), this, SLOT(setCommunity()));
+    connect(sidebar->newsTab, SIGNAL(clicked()), this, SLOT(setNews()));
     // connect(sidebar->downloadsTab, SIGNAL(clicked()), this, SLOT(setDownloads()));
-    // connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
+    connect(sidebar->settingsTab, SIGNAL(clicked()), this, SLOT(setSettings()));
     connect(sidebar->exitTab, SIGNAL(clicked()), QApplication::instance(), SLOT(quit()));
 
     // Show

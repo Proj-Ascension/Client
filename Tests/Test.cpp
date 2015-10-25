@@ -5,7 +5,7 @@
 #include <QDir>
 #include <QFile>
 
-inline bool operator==(Game g1, Game g2) 
+inline bool operator==(Game g1, Game g2)
 {
     return g1.id == g2.id && g1.gameName == g2.gameName && g1.gameDirectory == g2.gameDirectory && g1.executablePath == g2.executablePath && g1.arguments == g2.arguments;
 }

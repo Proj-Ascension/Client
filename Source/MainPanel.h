@@ -4,8 +4,6 @@
 #include "Sidebar.h"
 #include "Library.h"
 #include "Homepage.h"
-#include "BuddyList.h"
-#include "Community.h"
 
 #include <QStackedWidget>
 #include <QApplication>
@@ -44,6 +42,8 @@ private:
     QWidget* home;
     QWidget* community;
     Library* library;
+	QWidget* settings;
+    QWidget* news;
 
 private slots:
     void setHome()
@@ -90,6 +90,7 @@ private slots:
         if (!(activeTab == sidebar->newsTab))
         {
             activeTab->toggleInactive();
+            stack->setCurrentWidget(news);
             activeTab = sidebar->newsTab;
             activeTab->toggleActive();
         }
@@ -108,6 +109,7 @@ private slots:
         if (!(activeTab == sidebar->settingsTab))
         {
             activeTab->toggleInactive();
+			stack->setCurrentWidget(settings);
             activeTab = sidebar->settingsTab;
             activeTab->toggleActive();
         }
