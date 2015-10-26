@@ -1,5 +1,7 @@
 #pragma once
+
 #include "../../database.h"
+
 #include <QWizard>
 #include <QtWidgets>
 

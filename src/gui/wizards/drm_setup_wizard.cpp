@@ -2,12 +2,15 @@
 #include "../../libs/steam_vdf_parse.hpp"
 #include "../../database.h"
 #include "../stack/library.h"
+
 #include <QtWidgets>
-#include <iostream>
+
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
+
+#include <iostream>
 #include <thread>
 #include <future>
 

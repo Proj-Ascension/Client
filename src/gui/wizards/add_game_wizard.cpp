@@ -1,7 +1,8 @@
 #include "add_game_wizard.h"
+#include "../../database.h"
+
 #include <QDebug>
 #include <QString>
-#include "../../database.h"
 
 /** AddGameWizard constructor
  * Defines the pages and initializes the database with the path given. Also sets up some window-related properties,

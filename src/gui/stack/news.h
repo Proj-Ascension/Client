@@ -5,7 +5,6 @@
 #include <QBoxLayout>
 #include <QLineEdit>
 
-
 /** News UI namespace. */
 /** News class.
 * Class to handle the settings section of the launcher
