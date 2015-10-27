@@ -1,6 +1,6 @@
-#include "Test.h"
-#include "../Source/Database.h"
-#include "../Source/Libs/SteamVdfParse.hpp"
+#include "test.h"
+#include "../src/dtabase.h"
+#include "../src/libs/steam_vdf_parse.hpp"
 #include <QList>
 #include <QDir>
 #include <QFile>
