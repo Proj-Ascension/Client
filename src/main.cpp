@@ -4,10 +4,9 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
-#include <iostream>
 #include <QIcon>
 
-
+#include <iostream>
 
 #ifdef Q_OS_WIN
 #include "gui/borderless/borderless_window.h"

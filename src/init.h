@@ -1,5 +1,3 @@
-#pragma once
-
 #include <QApplication>
 #include <QFontDatabase>
 #include <QSettings>
@@ -9,9 +7,6 @@
 #include <QStandardPaths>
 #include <QDebug>
 
-/** Namespace for entry point initialization functions. */
-namespace entryPoint
-{
 void initSettings(QApplication &application)
 {
 
@@ -128,5 +123,4 @@ void initFonts(QApplication &application)
             }
         }
     }
-}
 }

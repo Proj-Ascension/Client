@@ -6,12 +6,12 @@ set(SOURCE_CORE
 )
 
 set(LIBS
-	src/libs/catch.hpp
-	src/libs/steam_vdf_parse.hpp
+    src/libs/catch.hpp
+    src/libs/steam_vdf_parse.hpp
 )
 
 set(GUI_CORE
-	src/gui/main_panel.cpp
+    src/gui/main_panel.cpp
     src/gui/main_panel.h
     src/gui/sidebar.cpp
     src/gui/sidebar.h
@@ -20,7 +20,7 @@ set(GUI_CORE
 )
 
 set(GUI_STACK
-	src/gui/stack/library.cpp
+    src/gui/stack/library.cpp
     src/gui/stack/library.h
     src/gui/stack/news.cpp
     src/gui/stack/news.h
@@ -38,7 +38,7 @@ set(GUI_WIZARDS
 )
 
 set(FORMS
-	res/gui/library.ui
+    res/gui/library.ui
 )
 
 set(RESOURCES
@@ -49,59 +49,59 @@ set(RESOURCES
 )
 
 if(WIN32)
-	set(GUI_CORE ${GUI_CORE}
-		src/gui/win_window.cpp
+    set(GUI_CORE ${GUI_CORE}
+        src/gui/win_window.cpp
         src/gui/win_window.h
         src/gui/win_panel.cpp
         src/gui/win_panel.h
-	)
+    )
 
-	set(GUI_BORDERLESS
-		src/gui/borderless/borderless_window.cpp
+    set(GUI_BORDERLESS
+        src/gui/borderless/borderless_window.cpp
         src/gui/borderless/borderless_window.h
         src/gui/borderless/qwinhost.cpp
         src/gui/borderless/qwinhost.h
         src/gui/borderless/qwinwidget.cpp
         src/gui/borderless/qwinwidget.h
-	)
-	
-	if(MSVC)
-		source_group("src\\" FILES ${SOURCE_CORE})
-		source_group("src\\libs\\" FILES ${LIBS})
-		source_group("src\\gui\\" FILES ${GUI_CORE})
-		source_group("src\\gui\\borderless\\" FILES ${GUI_BORDERLESS})
-		source_group("src\\gui\\stack\\" FILES ${GUI_STACK})
-		source_group("src\\gui\\wizards\\" FILES ${GUI_WIZARDS})
-	endif()
+    )
+
+    if(MSVC)
+        source_group("src\\" FILES ${SOURCE_CORE})
+        source_group("src\\libs\\" FILES ${LIBS})
+        source_group("src\\gui\\" FILES ${GUI_CORE})
+        source_group("src\\gui\\borderless\\" FILES ${GUI_BORDERLESS})
+        source_group("src\\gui\\stack\\" FILES ${GUI_STACK})
+        source_group("src\\gui\\wizards\\" FILES ${GUI_WIZARDS})
+    endif()
 elseif(UNIX)
-	set(GUI_CORE ${GUI_CORE}
-	    src/gui/unix_window.cpp
+    set(GUI_CORE ${GUI_CORE}
+        src/gui/unix_window.cpp
         src/gui/unix_window.h
         src/gui/unix_panel.cpp
         src/gui/unix_panel.h
-	)
-	
-	set(GUI_BORDERLESS "")
+    )
+
+    set(GUI_BORDERLESS "")
 else()
     # Suspend the configuration process if the target OS isn't recognized.
     MESSAGE(FATAL_ERROR "Target OS not recognized or supported, aborting CMake process.")
 endif()
 
 set(SOURCE
-	${SOURCE_CORE}
-	${LIBS}
-	${GUI_CORE}
-	${GUI_STACK}
-	${GUI_WIZARDS}
-	${GUI_BORDERLESS}
-	ProjectAscension.cmake
+    ${SOURCE_CORE}
+    ${LIBS}
+    ${GUI_CORE}
+    ${GUI_STACK}
+    ${GUI_WIZARDS}
+    ${GUI_BORDERLESS}
+    ProjectAscension.cmake
 )
 
 include_directories(
-	src
-	src/libs
-	src/gui
-	src/gui/borderless
-	src/gui/stack
-	src/gui/wizards
+    src
+    src/libs
+    src/gui
+    src/gui/borderless
+    src/gui/stack
+    src/gui/wizards
 )
