@@ -36,8 +36,8 @@ int main(int argc, char* argv[])
         application->setStyleSheet(styleSheet);
     }
 
-    entryPoint::initSettings(*application);
-    entryPoint::initFonts(*application);
+    initSettings(*application);
+    initFonts(*application);
 
     #ifdef Q_OS_WIN
         // Background color

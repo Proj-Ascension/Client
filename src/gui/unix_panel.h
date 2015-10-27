@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MainPanel.h"
+#include "main_panel.h"
 
 class UnixWindow;
 

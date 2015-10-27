@@ -1,5 +1,5 @@
 #include "test.h"
-#include "../src/dtabase.h"
+#include "../src/database.h"
 #include "../src/libs/steam_vdf_parse.hpp"
 #include <QList>
 #include <QDir>

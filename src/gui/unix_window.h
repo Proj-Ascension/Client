@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UnixPanel.h"
+#include "unix_panel.h"
 
 class UnixWindow : public QWidget
 {

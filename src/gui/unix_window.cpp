@@ -1,4 +1,4 @@
-#include "UnixWindow.h"
+#include "unix_window.h"
 
 #include <QApplication>
 #include <QDesktopWidget>

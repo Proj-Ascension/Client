@@ -1,5 +1,5 @@
-#include "UnixPanel.h"
-#include "UnixWindow.h"
+#include "unix_panel.h"
+#include "unix_window.h"
 
 UnixPanel::UnixPanel(UnixWindow* panel)
     : MainPanel((QWidget*) panel),
