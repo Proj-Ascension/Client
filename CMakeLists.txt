@@ -204,15 +204,13 @@ if(WIN32)
         Qt5Sqld.dll
         Qt5Svgd.dll
         Qt5OpenGLd.dll
-        if (_cmp)
-	        Qt5Widgets.dll
-	        Qt5Gui.dll
-	        Qt5Core.dll
-	        Qt5Network.dll
-	        Qt5Sql.dll
-	        Qt5Svg.dll
-	        Qt5OpenGL.dll
-        endif()
+        Qt5Widgets.dll
+        Qt5Gui.dll
+        Qt5Core.dll
+        Qt5Network.dll
+        Qt5Sql.dll
+        Qt5Svg.dll
+        Qt5OpenGL.dll
         icuin${ICU_VER}.dll
         icuuc${ICU_VER}.dll
         icudt${ICU_VER}.dll
