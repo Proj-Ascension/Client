@@ -188,25 +188,21 @@ if(WIN32)
     else()
         set(ICU_VER 54)
     endif()
+    
+    if (COMPARE EQUAL $(CMAKE_BUILD_TYPE) "Release")
+    	set(DEP_CHAR "")
+    else()
+    	set(DEP_CHAR "d")
+    endif()
 
     foreach(DEPENDENCY
-        Qt5Widgetsd.dll
-        Qt5Guid.dll
-        Qt5Cored.dll
-        Qt5Networkd.dll
-#       Qt5WebKitd.dll
-#       Qt5WebKitWidgetsd.dll
-        Qt5Sqld.dll
-        Qt5Sensorsd.dll
-        Qt5Positioningd.dll
-        Qt5Quickd.dll
-        Qt5Qmld.dll
-        Qt5Multimediad.dll
-        Qt5MultimediaWidgetsd.dll
-#       Qt5WebChanneld.dll
-        Qt5Svgd.dll
-        Qt5OpenGLd.dll
-        Qt5PrintSupportd.dll
+        Qt5Widgets$(DEP_CHAR).dll
+        Qt5Gui$(DEP_CHAR).dll
+        Qt5Core$(DEP_CHAR).dll
+        Qt5Network$(DEP_CHAR).dll
+        Qt5Sql$(DEP_CHAR).dll
+        Qt5Svg$(DEP_CHAR).dll
+        Qt5OpenGL$(DEP_CHAR).dll
         icuin${ICU_VER}.dll
         icuuc${ICU_VER}.dll
         icudt${ICU_VER}.dll
