@@ -98,7 +98,7 @@ if(WITH_TESTS)
             appinfo.vdf
             game)
     add_custom_command(TARGET ProjectAscension POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
         endforeach()
 endif(WITH_TESTS)
 
@@ -116,6 +116,13 @@ if(WIN32)
     else()
         set(ICU_VER 54)
     endif()
+    
+    string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" Release _cmp)
+    if (_cmp)
+    	set(DEP_CHAR "")
+    else()
+    	set(DEP_CHAR "d")
+    endif()
 
     foreach(DEPENDENCY
         Qt5Widgetsd.dll
@@ -123,15 +130,15 @@ if(WIN32)
         Qt5Cored.dll
         Qt5Networkd.dll
         Qt5Sqld.dll
-        Qt5Sensorsd.dll
-        Qt5Positioningd.dll
-        Qt5Quickd.dll
-        Qt5Qmld.dll
-        Qt5Multimediad.dll
-        Qt5MultimediaWidgetsd.dll
         Qt5Svgd.dll
         Qt5OpenGLd.dll
-        Qt5PrintSupportd.dll
+        Qt5Widgets.dll
+        Qt5Gui.dll
+        Qt5Core.dll
+        Qt5Network.dll
+        Qt5Sql.dll
+        Qt5Svg.dll
+        Qt5OpenGL.dll
         icuin${ICU_VER}.dll
         icuuc${ICU_VER}.dll
         icudt${ICU_VER}.dll
