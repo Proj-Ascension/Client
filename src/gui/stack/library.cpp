@@ -1,5 +1,5 @@
 #include "library.h"
-#include "ui_Library.h"
+#include "ui_library.h"
 #include "../wizards/add_game_wizard.h"
 
 #include <QFileDialog>
