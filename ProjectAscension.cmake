@@ -31,6 +31,8 @@ set(GUI_STACK
 )
 
 set(GUI_WIZARDS
+    src/gui/wizards/drm_type.cpp
+    src/gui/wizards/drm_type.h
     src/gui/wizards/add_game_wizard.cpp
     src/gui/wizards/add_game_wizard.h
     src/gui/wizards/drm_setup_wizard.cpp
