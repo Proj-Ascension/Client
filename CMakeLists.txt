@@ -98,7 +98,7 @@ if(WITH_TESTS)
             appinfo.vdf
             game)
     add_custom_command(TARGET ProjectAscension POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/Tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
         endforeach()
 endif(WITH_TESTS)
 
