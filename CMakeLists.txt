@@ -189,7 +189,7 @@ if(WIN32)
         set(ICU_VER 54)
     endif()
     
-    if (COMPARE EQUAL $(CMAKE_BUILD_TYPE) "Release")
+    if ($(CMAKE_BUILD_TYPE) EQUALS "Release")
     	set(DEP_CHAR "")
     else()
     	set(DEP_CHAR "d")
