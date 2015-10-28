@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/system_menu">
+        <file>icons/close.png</file>
+        <file>icons/close_hover.png</file>
+        <file>icons/maximize.png</file>
+        <file>icons/maximize_hover.png</file>
+        <file>icons/minimize.png</file>
+        <file>icons/minimize_hover.png</file>
+        <file>icons/restore.png</file>
+        <file>icons/restore_hover.png</file>
+        <file>icons/ascension.png</file>
+        <file>icons/ascension_small.png</file>
+        <file>icons/ascension_icon.ico</file>
+        <file>icons/tick.svg</file>
+        <file>icons/cross.svg</file>
+        <file>icons/dots.svg</file>
+        <file>icons/status_online.png</file>
+        <file>icons/home_icon.png</file>
+        <file>icons/store_icon.png</file>
+        <file>icons/games_icon.png</file>
+        <file>icons/community_icon.png</file>
+        <file>icons/news_icon.png</file>
+        <file>icons/downloads_icon.png</file>
+        <file>icons/settings_icon.png</file>
+        <file>icons/exit_icon.png</file>
+    </qresource>
+</RCC>

@@ -6,7 +6,8 @@ Thanks for your interest in contributing to Project Ascension! We have a few gui
 
 ## Official Coding Style
 
-- Directories (folders), classes (as well as their source and header files), structs, and enumerators should be all formatted in PascalCase.
+- Directories / source and header files should be formatted in lower casing with underscore separation.
+- Classes, structs, and enumerators should be all formatted in PascalCase.
 - Functions, methods, and variables should be formatted in mixedCase.
     - Constant variables should be prepended with `c_`: `c_someValue`
     - Global variables (avoid) should be prepended with `g_`: `g_logCounter`

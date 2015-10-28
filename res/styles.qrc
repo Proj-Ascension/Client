@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/styles">
+        <file>pa_client.css</file>
+    </qresource>
+</RCC>
