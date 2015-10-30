@@ -10,6 +10,17 @@ set(LIBS
     src/libs/steam_vdf_parse.hpp
 )
 
+set(DRM
+    src/drm/drm_type.cpp
+    src/drm/drm_type.h
+    src/drm/steam_drm.cpp
+    src/drm/steam_drm.h
+    src/drm/origin_drm.cpp
+    src/drm/origin_drm.h
+    src/drm/uplay_drm.cpp
+    src/drm/uplay_drm.h
+)
+
 set(GUI_CORE
     src/gui/main_panel.cpp
     src/gui/main_panel.h
@@ -31,8 +42,6 @@ set(GUI_STACK
 )
 
 set(GUI_WIZARDS
-    src/gui/wizards/drm_type.cpp
-    src/gui/wizards/drm_type.h
     src/gui/wizards/add_game_wizard.cpp
     src/gui/wizards/add_game_wizard.h
     src/gui/wizards/drm_setup_wizard.cpp
@@ -92,6 +101,7 @@ endif()
 set(SOURCE
     ${SOURCE_CORE}
     ${LIBS}
+    ${DRM}
     ${GUI_CORE}
     ${GUI_STACK}
     ${GUI_WIZARDS}
@@ -101,6 +111,7 @@ set(SOURCE
 
 include_directories(
     src
+    src/drm
     src/libs
     src/gui
     src/gui/borderless
