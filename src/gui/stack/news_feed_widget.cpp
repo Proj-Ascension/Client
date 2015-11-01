@@ -18,19 +18,24 @@ NewsFeedWidget::NewsFeedWidget(QWidget* parent) : QWidget(parent)
     QHBoxLayout* titleAndRemove = new QHBoxLayout();
     newRSSVertLayout->addLayout(titleAndRemove);
 
-    feedTitle = new QLabel();
+    feedTitle = new QLabel(this);
     titleAndRemove->addWidget(feedTitle);
 
-    deleteWidget = new QPushButton();
+    deleteWidget = new QPushButton(this);
     deleteWidget->setText("X");
     deleteWidget->setMaximumWidth(50);
     titleAndRemove->addWidget(deleteWidget);
 
-    rssList = new QListWidget();
+    rssList = new QListWidget(this);
     newRSSVertLayout->addWidget(rssList);
 
     connect(deleteWidget, SIGNAL(clicked()), this, SLOT(deleteRSSWidget()));
     connect(rssList, SIGNAL(itemClicked(QListWidgetItem*)),this, SLOT(onListItemClicked(QListWidgetItem*)));
+}
+
+NewsFeedWidget::~NewsFeedWidget()
+{
+
 }
 
 void NewsFeedWidget::addRSSItem(QString title, QString url)
@@ -55,9 +60,4 @@ void NewsFeedWidget::deleteRSSWidget()
 {
     rss->remove(feedTitle->text());
     delete this;
-}
-
-NewsFeedWidget::~NewsFeedWidget()
-{
-
 }
