@@ -19,3 +19,8 @@ void DRMType::setRootDir(const QDir& rootDir)
 {
     this->rootDir = rootDir;
 }
+
+QWidget* DRMType::createPane()
+{
+    return new QWidget();
+}

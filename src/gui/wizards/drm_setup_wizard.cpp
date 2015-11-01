@@ -1,20 +1,17 @@
 #include "drm_setup_wizard.h"
 #include "../../libs/steam_vdf_parse.hpp"
+#include "../../drm/steam_drm.h"
+#include "../../drm/origin_drm.h"
+#include "../../drm/uplay_drm.h"
 #include "../../database.h"
 #include "../stack/library.h"
 
 #include <QtWidgets>
 
-#include <boost/property_tree/info_parser.hpp>
-#include <boost/property_tree/xml_parser.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/optional.hpp>
 
 #include <iostream>
 #include <thread>
 #include <future>
-
-namespace pt = boost::property_tree;
 
 GameList addedVector;
 QList<QButtonGroup*> originBtnGroupVector;
@@ -67,18 +64,30 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
 DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Checking for Steam");
-    steamBox = new QCheckBox();
-    originBox = new QCheckBox();
-    uplayBox = new QCheckBox();
-    registerField("steamFound", steamBox);
-    registerField("uplayFound", uplayBox);
-    registerField("originFound", originBox);
     layout = new QGridLayout();
     platformLabel = new QLabel("<b>Steam</b>");
     descLabel = new QLabel();
     statusLabel = new QLabel();
     platformLabel->setTextFormat(Qt::TextFormat::RichText);
-    checkSteamExists();
+    SteamDRM steam;
+    steam.checkSteamExists();
+    if(steam.getIsInstalled())
+    {
+        QDir steamFolder = steam.getRootDir();
+        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
+        originBox->setChecked(true);
+        originPath = steamFolder.filePath("");
+    }
+    else
+    {
+        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
+        descLabel = new QLabel("Steam not found. Verify installation and try again.");
+    }
+    layout->addWidget(platformLabel, 0, 0, 0);
+    layout->addWidget(descLabel, 1, 0, 0);
+    layout->addWidget(statusLabel, 0, 1, 0);
+    layout->setRowMinimumHeight(1, 40);
 
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
     setTitle(title() += ", Origin");
@@ -155,10 +164,6 @@ void DRMPage::checkOriginExists()
 
     if (originFolder.filePath("").trimmed() != "" && originFolder.exists() && originFolder != QDir("."))
     {
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
-        descLabel = new QLabel("Origin found in " + originFolder.filePath(""));
-        originBox->setChecked(true);
-        originPath = originFolder.filePath("");
     }
     else
     {
@@ -201,49 +206,7 @@ void DRMPage::checkSteamExists()
     steamFolder = QDir(QDir::home().filePath("Library/Application Support/Steam"));
 #endif
 
-    if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
-    {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
-        descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
-        QDir steamAppsDir = steamFolder.filePath("steamapps");
-        if (!steamAppsDir.exists())
-        {
-            steamAppsDir = steamFolder.filePath("SteamApps");
-        }
-        pt::ptree libraryFolders;
-        pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
-        steamDirectoryList.append(steamFolder.filePath(""));
-        QString pathString = "";
 
-        for (auto kv : libraryFolders.get_child("LibraryFolders"))
-        {
-            if (std::isdigit(static_cast<int>(*kv.first.data())))
-            {
-                std::string path = kv.second.data();
-                QDir dir(QString::fromStdString(path));
-                if (dir.exists())
-                {
-                    steamDirectoryList.append(dir.filePath(""));
-                    pathString += dir.filePath("");
-                    pathString += "\n";
-                }
-            }
-        }
-
-        descLabel->setText(descLabel->text() + "\n\nLibrary folders:\n" + pathString);
-
-        steamBox->setChecked(true);
-        steamPath = steamFolder.filePath("");
-    }
-    else
-    {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
-        descLabel = new QLabel("Steam not found. Verify installation and try again.");
-    }
-    layout->addWidget(platformLabel, 0, 0, 0);
-    layout->addWidget(descLabel, 1, 0, 0);
-    layout->addWidget(statusLabel, 0, 1, 0);
-    layout->setRowMinimumHeight(1, 40);
 }
 
 /** Check if Uplay is installed on the current computer, if applicable, and sets some values for later pages to
