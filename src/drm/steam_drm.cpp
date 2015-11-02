@@ -26,11 +26,44 @@ void SteamDRM::checkSteamExists()
     QSettings settings("HKEY_CURRENT_USER\\Software\\Valve\\Steam", QSettings::NativeFormat);
     if (!settings.value("SteamPath").isNull())
     {
-        QDir steamTest = QDir(settings.value("SteamPath").toString()).canonicalPath();
-        if (steamTest.filePath("").trimmed() != "" && steamTest.exists() && steamTest != QDir("."))
+        QDir steamFolder = QDir(settings.value("SteamPath").toString()).canonicalPath();
+        if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
         {
-            this->setRootDir(steamTest);
+            this->setRootDir(steamFolder);
             this->setIsInstalled();
+            statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+            descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
+            QDir steamAppsDir = steamFolder.filePath("steamapps");
+            if (!steamAppsDir.exists())
+            {
+                steamAppsDir = steamFolder.filePath("SteamApps");
+            }
+            pt::ptree libraryFolders;
+            pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
+            steamDirectoryList.push_back(steamFolder.filePath(""));
+            QString pathString = "";
+
+            for (auto& kv : libraryFolders.get_child("LibraryFolders"))
+            {
+                if (std::isdigit(static_cast<int>(*kv.first.data())))
+                {
+                    std::string path = kv.second.data();
+                    QDir dir(QString::fromStdString(path));
+                    if (dir.exists())
+                    {
+                        steamDirectoryList.push_back(dir.filePath(""));
+                        pathString += dir.filePath("");
+                        pathString += "\n";
+                    }
+                }
+            }
+
+            descLabel->setText(descLabel->text() + "\n\nLibrary folders:\n" + pathString);
+        }
+        else
+        {
+            statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
+            descLabel = new QLabel("Steam not found. Verify installation and try again.");
         }
     }
 #elif defined(__APPLE__)
@@ -38,48 +71,4 @@ void SteamDRM::checkSteamExists()
 #endif
 }
 
-QWidget* SteamDRM::createPane()
-{
-    QDir steamFolder = this->getRootDir();
-    if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
-    {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Tick.svg"));
-        descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
-        QDir steamAppsDir = steamFolder.filePath("steamapps");
-        if (!steamAppsDir.exists())
-        {
-            steamAppsDir = steamFolder.filePath("SteamApps");
-        }
-        pt::ptree libraryFolders;
-        pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
-        steamDirectoryList.push_back(steamFolder.filePath(""));
-        QString pathString = "";
-
-        for (auto& kv : libraryFolders.get_child("LibraryFolders"))
-        {
-            if (std::isdigit(static_cast<int>(*kv.first.data())))
-            {
-                std::string path = kv.second.data();
-                QDir dir(QString::fromStdString(path));
-                if (dir.exists())
-                {
-                    steamDirectoryList.push_back(dir.filePath(""));
-                    pathString += dir.filePath("");
-                    pathString += "\n";
-                }
-            }
-        }
-
-        descLabel->setText(descLabel->text() + "\n\nLibrary folders:\n" + pathString);
-    }
-    else
-    {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
-        descLabel = new QLabel("Steam not found. Verify installation and try again.");
-    }
-//    layout->addWidget(platformLabel, 0, 0, 0);
-//    layout->addWidget(descLabel, 1, 0, 0);
-//    layout->addWidget(statusLabel, 0, 1, 0);
-//    layout->setRowMinimumHeight(1, 40);
-    return new QWidget;
-}
+SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}

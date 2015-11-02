@@ -24,3 +24,26 @@ QWidget* DRMType::createPane()
 {
     return new QWidget();
 }
+
+QLabel *DRMType::getStatusLabel()
+{
+    return this->statusLabel;
+}
+
+QLabel *DRMType::getDescLabel()
+{
+    return this->descLabel;
+}
+
+QLabel *DRMType::getPlatformLabel()
+{
+    return this->platformLabel;
+}
+
+DRMType::DRMType(QString platformString)
+{
+        this->platformLabel = new QLabel(platformString);
+        platformLabel->setTextFormat(Qt::TextFormat::RichText);
+        this->descLabel = new QLabel();
+        this->statusLabel = new QLabel();
+}

@@ -56,7 +56,6 @@ class DRMPage : public QWizardPage
     QGridLayout* layout;
 
     QCheckBox* steamBox;
-    QCheckBox* originBox;
     QCheckBox* uplayBox;
 
     QLabel* statusLabel;

@@ -8,6 +8,7 @@ class SteamDRM : public DRMType
 
 public:
     void checkSteamExists();
-    QWidget * createPane();
+    using DRMType::DRMType;
+    SteamDRM();
 };
 

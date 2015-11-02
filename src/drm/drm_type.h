@@ -28,5 +28,10 @@ public:
     bool getIsInstalled();
     void setIsInstalled();
 
+    QLabel* getStatusLabel();
+    QLabel* getDescLabel();
+    QLabel* getPlatformLabel();
+
     virtual QWidget* createPane();
+    DRMType(QString platformString);
 };
