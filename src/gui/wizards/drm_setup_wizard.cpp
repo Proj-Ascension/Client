@@ -25,11 +25,35 @@ QList<QButtonGroup*> uplayBtnGroupVector;
  */
 DRMSetupWizard::DRMSetupWizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
-    drmPage = new DRMPage();
-    resultsPage = new ResultsPage(db, *drmPage);
+    std::map<std::string, DRMType> drmMap;
+    SteamDRM steam;
+    steam.checkSteamExists();
+    if (steam.getIsInstalled())
+    {
+        drmMap.insert(std::make_pair("Steam", SteamDRM()));
+    }
+
+#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
+    OriginDRM origin;
+    origin.checkOriginExists();
+    if (origin.getIsInstalled())
+    {
+        drmMap.insert(std::make_pair("Origin", OriginDRM()));
+    }
+#endif
+
+#if defined(_WIN32) || defined (_WIN64)
+    UplayDRM uplay;
+    uplay.checkUplayExists();
+    if (uplay.getIsInstalled())
+    {
+        drmMap.insert(std::make_pair("Uplay", UplayDRM()));
+    }
+#endif
+    resultsPage = new ResultsPage(db);
     finalPage = new FinalPage(db);
     setPage(pages::INTRO, new IntroPage());
-    setPage(pages::DRM, drmPage);
+    setPage(pages::DRM, new DRMPage(drmMap));
     setPage(pages::RESULTS, resultsPage);
     setPage(pages::FINAL, finalPage);
     setWindowTitle("Project Ascension setup");
@@ -61,35 +85,33 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
  * Defines some initial properties for the DRM page.
  * \param parent Parent widget to draw from
  */
-DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
+DRMPage::DRMPage(std::map<std::string, DRMType> drmMap, QWidget *parent) : QWizardPage(parent)
 {
     setTitle("Found installed candidates");
     layout = new QGridLayout();
-    SteamDRM steam;
-    steam.checkSteamExists();
 
-    layout->addWidget(steam.getPlatformLabel(), 0, 0, 0);
-    layout->addWidget(steam.getDescLabel(), 1, 0, 0);
-    layout->addWidget(steam.getStatusLabel(), 0, 1, 0);
-    layout->setRowMinimumHeight(1, 40);
-
-#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    OriginDRM origin;
-    origin.checkOriginExists();
-    layout->addWidget(origin.getPlatformLabel(), 3, 0, 0);
-    layout->addWidget(origin.getDescLabel(), 4, 0, 0);
-    layout->addWidget(origin.getStatusLabel(), 3, 1, 0);
-    layout->setRowMinimumHeight(4, 40);
-#endif
-
-#if defined(_WIN32) || defined (_WIN64)
-    UplayDRM uplay;
-    uplay.checkUplayExists();
-    layout->addWidget(uplay.getPlatformLabel(), 5, 0, 0);
-    layout->addWidget(uplay.getDescLabel(), 6, 0, 0);
-    layout->addWidget(uplay.getStatusLabel(), 5, 1, 0);
-    layout->setRowMinimumHeight(6, 40);
-#endif
+//    layout->addWidget(steam.getPlatformLabel(), 0, 0, 0);
+//    layout->addWidget(steam.getDescLabel(), 1, 0, 0);
+//    layout->addWidget(steam.getStatusLabel(), 0, 1, 0);
+//    layout->setRowMinimumHeight(1, 40);
+//
+//#if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
+//    layout->addWidget(origin.getPlatformLabel(), 3, 0, 0);
+//    layout->addWidget(origin.getDescLabel(), 4, 0, 0);
+//    layout->addWidget(origin.getStatusLabel(), 3, 1, 0);
+//    layout->setRowMinimumHeight(4, 40);
+//#endif
+//
+//#if defined(_WIN32) || defined (_WIN64)
+//    layout->addWidget(uplay.getPlatformLabel(), 5, 0, 0);
+//    layout->addWidget(uplay.getDescLabel(), 6, 0, 0);
+//    layout->addWidget(uplay.getStatusLabel(), 5, 1, 0);
+//    layout->setRowMinimumHeight(6, 40);
+//#endif
+    for (auto& drm : drmMap)
+    {
+        std::cout << drm.first;
+    }
 
     setLayout(layout);
 }
@@ -97,12 +119,9 @@ DRMPage::DRMPage(QWidget* parent) : QWizardPage(parent)
 /** ResultsPage constructor
  * Defines some initial properties for the results page.
  */
-ResultsPage::ResultsPage(Database db, DRMPage& drmPage, QWidget* parent) : QWizardPage(parent), db(db)
+ResultsPage::ResultsPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
 {
     setSubTitle("We found the following on your system.");
-    steamRoot = drmPage.steamPath;
-    originRoot = drmPage.originPath;
-    uplayRoot = drmPage.uplayPath;
 }
 
 /** FinalPage constructor

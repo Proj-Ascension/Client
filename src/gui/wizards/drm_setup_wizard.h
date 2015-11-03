@@ -1,7 +1,7 @@
 #pragma once
 #include "../../database.h"
+#include <src/drm/drm_type.h>
 
-#include <QtWidgets>
 #include <boost/property_tree/ptree.hpp>
 
 #include <vector>
@@ -71,7 +71,7 @@ public:
     QString steamPath;
     QString originPath;
     QString uplayPath;
-    DRMPage(QWidget* parent = 0);
+    DRMPage(std::map<std::string, DRMType> drmMap, QWidget *parent = 0);
     int nextId() const Q_DECL_OVERRIDE;
 };
 
@@ -120,7 +120,7 @@ protected:
     void initializePage() Q_DECL_OVERRIDE;
 
 public:
-    ResultsPage(Database db, DRMPage& drmPage, QWidget* parent = 0);
+    ResultsPage(Database db, QWidget* parent = 0);
     void findOriginGames();
     void findUplayGames();
     void findSteamGames();

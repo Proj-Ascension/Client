@@ -2,22 +2,22 @@
 
 bool DRMType::getIsInstalled()
 {
-    return this->isInstalled;
+    return isInstalled;
 }
 
 void DRMType::setIsInstalled()
 {
-    this->isInstalled = true;
+    isInstalled = true;
 }
 
 QDir DRMType::getRootDir()
 {
-    return this->rootDir;
+    return rootDir;
 }
 
-void DRMType::setRootDir(const QDir& rootDir)
+void DRMType::setRootDir(const QDir& rootdir)
 {
-    this->rootDir = rootDir;
+    rootDir = rootdir;
 }
 
 QWidget* DRMType::createPane()
@@ -27,23 +27,25 @@ QWidget* DRMType::createPane()
 
 QLabel *DRMType::getStatusLabel()
 {
-    return this->statusLabel;
+    return statusLabel;
 }
 
 QLabel *DRMType::getDescLabel()
 {
-    return this->descLabel;
+    return descLabel;
 }
 
 QLabel *DRMType::getPlatformLabel()
 {
-    return this->platformLabel;
+    return platformLabel;
 }
 
 DRMType::DRMType(QString platformString)
 {
-        this->platformLabel = new QLabel(platformString);
-        platformLabel->setTextFormat(Qt::TextFormat::RichText);
-        this->descLabel = new QLabel();
-        this->statusLabel = new QLabel();
+    isInstalled = false;
+    rootDir = (".");
+    platformLabel = new QLabel(platformString);
+    platformLabel->setTextFormat(Qt::TextFormat::RichText);
+    descLabel = new QLabel();
+    statusLabel = new QLabel();
 }

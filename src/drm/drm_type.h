@@ -14,7 +14,7 @@ namespace pt = boost::property_tree;
 class DRMType
 {
     QDir rootDir;
-    bool isInstalled = false;
+    bool isInstalled;
 
 protected:
     QLabel* statusLabel;
@@ -23,9 +23,9 @@ protected:
 
 public:
     QDir getRootDir();
-    void setRootDir(const QDir&);
+    void setRootDir(const QDir &);
 
-    bool getIsInstalled();
+    bool DRMType::getIsInstalled();
     void setIsInstalled();
 
     QLabel* getStatusLabel();
