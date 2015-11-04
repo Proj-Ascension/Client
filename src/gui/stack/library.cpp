@@ -1,5 +1,4 @@
 #include "library.h"
-#include "ui_library.h"
 #include "../wizards/add_game_wizard.h"
 
 #include <QFileDialog>
@@ -15,31 +14,70 @@
 */
 Library::Library(QSettings* p, QWidget* parent)
     : QWidget(parent),
-      ui(new Ui::Library),
       runningProcess(new QProcess(this))
 {
-    ui->setupUi(this);
     this->setObjectName("libraryUI");
-    this->setStyleSheet("#leftSidebar {"
-                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
-                        "#content {"
-                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
-                        "QPushButton {"
-                        "color: " + p->value("Primary/LightText").toString() + "; "
-                        "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                        "border: none; margin: 0px; padding: 0px;} "
-                        "QPushButton:hover {"
-                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                        "QListWidget {"
-                        "background-color: " + p->value("Primary/TertiaryBase").toString() + "; "
-                        "color: " + p->value("Primary/LightText").toString() + ";}");
+
+    this->setStyleSheet("QPushButton {"
+                                "color: " + p->value("Primary/LightText").toString() + "; "
+                                "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                                "border: none; margin: 0px; padding: 0px;} "
+                                "QPushButton:hover {"
+                                "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} ");
+
     QFont buttonFont("SourceSansPro", 12);
-    ui->addGame->setFont(buttonFont);
-    ui->addGame->setText("Add Game");
-    ui->removeGame->setFont(buttonFont);
-    ui->removeGame->setText("Remove Game");
-    ui->testLaunch->setFont(buttonFont);
-    ui->testLaunch->setText("Launch Game");
+
+    // Main Library Layout
+    QHBoxLayout* mainHLayout = new QHBoxLayout(this);
+    mainHLayout->setMargin(0);
+
+    // Library Sidebar Widget
+    QWidget* sidebar = new QWidget(this);
+    sidebar->setObjectName("librarySidebar");
+    sidebar->setMinimumSize(210, 0);
+    sidebar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    sidebar->setStyleSheet("#librarySidebar { background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
+    mainHLayout->addWidget(sidebar);
+
+    // Sidebar Vertical Layout
+    QVBoxLayout* sidebarVLayout = new QVBoxLayout(sidebar);
+
+    // Sidebar List Widget
+    sidebarGameList = new QListWidget(sidebar);
+    sidebarGameList->setObjectName("sidebarGameList");
+    sidebarGameList->setStyleSheet("background-color: " + p->value("Primary/TertiaryBase").toString() + "; "
+                                   "color: " + p->value("Primary/LightText").toString() + ";");
+    sidebarGameList->setFont(QFont("SourceSansPro", 9));
+    sidebarVLayout->addWidget(sidebarGameList);
+
+    // Sidebar Horizontal Button Layout
+    QHBoxLayout* sidebarButtonHLayout = new QHBoxLayout(sidebar);
+    sidebarVLayout->addLayout(sidebarButtonHLayout);
+
+    // Add Game
+    QPushButton* addGame = new QPushButton("Add Game", sidebar);
+    addGame->setFont(buttonFont);
+    sidebarButtonHLayout->addWidget(addGame);
+
+    // Remove Game
+    QPushButton* removeGame = new QPushButton("Remove Game", sidebar);
+    removeGame->setFont(buttonFont);
+    sidebarButtonHLayout->addWidget(removeGame);
+
+    // Main Content Widget
+    QWidget* content = new QWidget(this);
+    content->setObjectName("libraryContent");
+    content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    content->setStyleSheet("#libraryContent {background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
+    mainHLayout->addWidget(content);
+
+    // Main Content Grid Layout
+    QGridLayout* contentGrid = new QGridLayout(content);
+
+    // Launch Game Button
+    QPushButton* launchGame = new QPushButton("Launch Game", content);
+    launchGame->setFont(buttonFont);
+    contentGrid->addWidget(launchGame, 0, 0);
 
     if (!db.init())
     {
@@ -47,6 +85,10 @@ Library::Library(QSettings* p, QWidget* parent)
         error.critical(0, "Error!", "An error occured while trying to load the database.");
         exit(EXIT_FAILURE);
     }
+
+    connect(addGame, SIGNAL(clicked()), this, SLOT(onAddGameClicked()));
+    connect(removeGame, SIGNAL(clicked()), this, SLOT(onRemoveGameClicked()));
+    connect(launchGame, SIGNAL(clicked()), this, SLOT(onLaunchGameClicked()));
 
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
@@ -67,18 +109,38 @@ Library::Library(QSettings* p, QWidget* parent)
 
 Library::~Library()
 {
-    delete ui;
     delete runningProcess;
+}
+
+/** Event handler for adding a game.
+ * Prompts the user for various paths, and adds the final game to the database.
+*/
+void Library::onAddGameClicked()
+{
+    AddGameWizard* wiz = new AddGameWizard();
+    wiz->show();
+}
+
+/** Event handler for removing a game.
+*/
+void Library::onRemoveGameClicked()
+{
+    auto selection = sidebarGameList->currentItem();
+    if (selection != nullptr)
+    {
+        db.removeGameByName(selection->text());
+        refreshGames();
+    }
 }
 
 /** Event handler for launching a game.
  * Populates a message box on failure, or runs the games upon success.
 */
-void Library::on_testLaunch_clicked()
+void Library::onLaunchGameClicked()
 {
     if (!isProcessRunning())
     {
-        auto selection = ui->gameListWidget->currentItem();
+        auto selection = sidebarGameList->currentItem();
         if (selection != nullptr)
         {
             Game game = db.getGameByName(selection->text());
@@ -97,27 +159,6 @@ void Library::on_testLaunch_clicked()
         QMessageBox messageBox;
         messageBox.setText("Error: an application is already running.");
         messageBox.exec();
-    }
-}
-
-/** Event handler for adding a game.
- * Prompts the user for various paths, and adds the final game to the database.
-*/
-void Library::on_addGame_clicked()
-{
-    AddGameWizard* wiz = new AddGameWizard();
-    wiz->show();
-}
-
-/** Event handler for removing a game.
-*/
-void Library::on_removeGame_clicked()
-{
-    auto selection = ui->gameListWidget->currentItem();
-    if (selection != nullptr)
-    {
-        db.removeGameByName(selection->text());
-        refreshGames();
     }
 }
 
@@ -163,12 +204,12 @@ void Library::runProcessWithArgs(QString file, QString workingDirectory, QString
 */
 void Library::refreshGames()
 {
-    ui->gameListWidget->clear();
+    sidebarGameList->clear();
     QList<Game> gameList = db.getGames();
-	std::sort(gameList.begin(), gameList.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName; });
+    std::sort(gameList.begin(), gameList.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName; });
     for (auto game : gameList)
     {
-        ui->gameListWidget->addItem(game.gameName);
+        sidebarGameList->addItem(game.gameName);
     }
 }
 

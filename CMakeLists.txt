@@ -59,14 +59,14 @@ include_directories(
 add_executable(ProjectAscension
     ${GUI_TYPE}
     ${SOURCE}
-	${FORMS_HEADERS}
-	${UI_RESOURCES}
+    ${FORMS_HEADERS}
+    ${UI_RESOURCES}
 )
 target_link_libraries(ProjectAscension
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
-	Qt5::Network
+    Qt5::Network
     Qt5::Sql
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
