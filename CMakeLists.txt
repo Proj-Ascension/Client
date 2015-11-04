@@ -106,47 +106,14 @@ endif(WITH_TESTS)
 # Only necessary on Windows.
 
 if(WIN32)
-    cmake_policy(SET CMP0026 OLD)
-
-    get_target_property(BuildLocation ProjectAscension LOCATION)
-    get_filename_component(TargetDirectory ${BuildLocation} PATH)
-
-    if (EXISTS ${Qt5Core_DIR}/../../../bin/icuin53.dll)
-        set(ICU_VER 53)
-    else()
-        set(ICU_VER 54)
-    endif()
+    find_program(WINDEPLOY windeployqt PATHS ${Qt5Core_DIR}/../../../bin NO_DEFAULT_PATH)
     
-    string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" Release _cmp)
-    if (_cmp)
-    	set(DEP_CHAR "")
-    else()
-    	set(DEP_CHAR "d")
-    endif()
-
-    foreach(DEPENDENCY
-        Qt5Widgetsd.dll
-        Qt5Guid.dll
-        Qt5Cored.dll
-        Qt5Networkd.dll
-        Qt5Sqld.dll
-        Qt5Svgd.dll
-        Qt5OpenGLd.dll
-        Qt5Widgets.dll
-        Qt5Gui.dll
-        Qt5Core.dll
-        Qt5Network.dll
-        Qt5Sql.dll
-        Qt5Svg.dll
-        Qt5OpenGL.dll
-        icuin${ICU_VER}.dll
-        icuuc${ICU_VER}.dll
-        icudt${ICU_VER}.dll
-    )
+    if (WINDEPLOY)
         add_custom_command(TARGET ProjectAscension POST_BUILD
-            # Copy the given dependency into the executable directory.
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/${DEPENDENCY} ${TargetDirectory}
-            COMMENT "Copying ${DEPENDENCY} into '${TargetDirectory}/'" VERBATIM
-        )
-    endforeach()
+            # Call windeployqt to copy necessary dependencies into the executable path.
+            COMMAND CMD /C "SET PATH=%PATH%;${QT_DIR}/bin && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations $<TARGET_FILE:ProjectAscension>"
+        ) 
+    else()
+        message(WARNING "Unable to find Qt Windows deployment tool at ${Qt5Core_DIR}/../../../bin, no runtime dependencies will be copied.")
+    endif()
 endif()

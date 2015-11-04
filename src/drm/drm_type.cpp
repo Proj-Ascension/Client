@@ -20,11 +20,6 @@ void DRMType::setRootDir(const QDir& rootdir)
     rootDir = rootdir;
 }
 
-QWidget* DRMType::createPane()
-{
-    return new QWidget();
-}
-
 QLabel *DRMType::getStatusLabel()
 {
     return statusLabel;
@@ -40,8 +35,18 @@ QLabel *DRMType::getPlatformLabel()
     return platformLabel;
 }
 
+QButtonGroup* DRMType::getButtonGroup()
+{
+    return buttonGroup;
+}
+
 DRMType::DRMType(QString platformString)
 {
+    layout = new QGridLayout();
+    scrollArea = new QScrollArea();
+    viewport = new QWidget();
+    buttonGroup = new QButtonGroup();
+    buttonGroup->setExclusive(false);
     isInstalled = false;
     rootDir = (".");
     platformLabel = new QLabel(platformString);

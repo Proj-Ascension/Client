@@ -47,7 +47,7 @@ TEST_CASE ("VDF Parser", "[vdf]")
     REQUIRE (SteamVdfParse::read64_le(game) == uint64_t(8589935831));
     game.seekg(0, std::ios::beg);
     SteamVdfParse::GameHeader gameTest = SteamVdfParse::parseGame(game);
-    
+
     REQUIRE (gameTest.appID == 208050);
     REQUIRE (gameTest.size == 1239);
     REQUIRE (gameTest.infoState == 2);
