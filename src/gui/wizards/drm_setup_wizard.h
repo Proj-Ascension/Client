@@ -63,10 +63,6 @@ class DRMPage : public QWizardPage
     QLabel* descLabel;
     QStringList steamDirectoryList;
 
-    void checkSteamExists();
-    void checkUplayExists();
-    void checkOriginExists();
-
 public:
     QString steamPath;
     QString originPath;
@@ -84,6 +80,7 @@ class ResultsPage : public QWizardPage
 
     QStringList recursiveFindFiles(QDir dir);
     void parseAcf(QDir steamRoot);
+    std::map<std::string, DRMType> drmMap;
 
     QWidget* steamViewport;
     QWidget* originViewport;
@@ -120,7 +117,7 @@ protected:
     void initializePage() Q_DECL_OVERRIDE;
 
 public:
-    ResultsPage(Database db, QWidget* parent = 0);
+    ResultsPage(std::map<std::string, DRMType> drmMap, Database db, QWidget* parent = 0);
     void findOriginGames();
     void findUplayGames();
     void findSteamGames();

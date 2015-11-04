@@ -25,7 +25,7 @@ public:
     QDir getRootDir();
     void setRootDir(const QDir &);
 
-    bool DRMType::getIsInstalled();
+    bool getIsInstalled();
     void setIsInstalled();
 
     QLabel* getStatusLabel();

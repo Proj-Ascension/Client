@@ -1,4 +1,5 @@
 #include "origin_drm.h"
+#include <QStandardPaths>
 
 void OriginDRM::checkOriginExists()
 {
