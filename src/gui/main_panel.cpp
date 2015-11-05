@@ -129,10 +129,10 @@ void MainPanel::init()
 
     // Stack widgets
     library = new Library(p, stack);
-	settings = new Settings(p, stack);
+    settings = new Settings(p, stack);
     news = new News(p, stack);
     stack->addWidget(library);
-	stack->addWidget(settings);
+    stack->addWidget(settings);
     stack->addWidget(news);
     stack->setCurrentWidget(library);
 

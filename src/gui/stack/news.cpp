@@ -20,7 +20,7 @@ News::News(QSettings* p, QWidget* parent) : QWidget(parent)
                         "color: " + p->value("Primary/LightText").toString() + ";");
     QFont buttonFont("SourceSansPro", 9);
 
-    rss = new QSettings (QString("rss.ini"), QSettings::IniFormat);
+    rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
     manager = new QNetworkAccessManager(this);
 
     QVBoxLayout* newsTabLayout = new QVBoxLayout(this);
