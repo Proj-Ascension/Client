@@ -34,7 +34,6 @@ void SteamDRM::checkExists()
 
     if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
     {
-        qDebug() << steamFolder;
         this->setRootDir(steamFolder);
         this->setIsInstalled();
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
@@ -99,7 +98,6 @@ QWidget* SteamDRM::createPane()
 void SteamDRM::findGames()
 {
     QDir steamAppsDir = rootDir.filePath("steamapps");
-    qDebug() << rootDir;
     if (!steamAppsDir.exists())
     {
         steamAppsDir = rootDir.filePath("SteamApps");
@@ -212,9 +210,9 @@ void SteamDRM::parseAcf()
 #endif
                             {
                                 exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
-                                exe = QString(QDir::cleanPath(exe));
+//                                exe = QString(QDir::cleanPath(exe));
                                 path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
-                                path = QString(QDir::cleanPath(path));
+//                                path = QString(QDir::cleanPath(path));
                                 args = QString::fromStdString(section.get("arguments", ""));
                                 break;
                             }
@@ -223,9 +221,9 @@ void SteamDRM::parseAcf()
                     else
                     {
                         exe = QDir(path).filePath(QString::fromStdString(launch.get<std::string>("0.executable")));
-                        exe = QString(QDir::cleanPath(exe));
+//                        exe = QString(QDir::cleanPath(exe));
                         path = QDir(path).filePath(QString::fromStdString(launch.get("0.workingdir", "")));
-                        path = QString(QDir::cleanPath(path));
+//                        path = QString(QDir::cleanPath(path));
                         args = QString::fromStdString(launch.get("0.arguments", ""));
                     }
                 }

@@ -137,7 +137,7 @@ void ResultsPage::initializePage()
     bool uplayFound = drmMap.find(std::string("Uplay"))->second->getIsInstalled();
 
     qDebug() << steamFound << originFound << uplayFound;
-    if (uplayFound && steamFound && originFound)
+    if (!uplayFound && !steamFound && !originFound)
     {
         setTitle(title() + "no games.");
         setSubTitle("Install Steam, Origin and/or Uplay to find games with this wizard, or check current installation(s).");
@@ -154,7 +154,7 @@ void ResultsPage::initializePage()
             steamLayout = new QGridLayout();
             steamScrollArea = new QScrollArea();
             steamViewport = new QWidget();
-            auto t = std::async(std::launch::async, [&]{ steam->findGames(); });
+            auto t = std::async(std::launch::async, &SteamDRM::findGames, steam);
             t.get();
             int row = 0;
             if (uplayFound && originFound)
