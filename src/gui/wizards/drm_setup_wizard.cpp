@@ -25,27 +25,27 @@ QList<QButtonGroup*> uplayBtnGroupVector;
  */
 DRMSetupWizard::DRMSetupWizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
 {
-    std::map<std::string, DRMType> drmMap;
-    SteamDRM steam;
-    steam.checkExists();
-    if (steam.getIsInstalled())
+    std::map<std::string, DRMType*> drmMap;
+    SteamDRM* steam = new SteamDRM;
+    steam->checkExists();
+    if (steam->getIsInstalled())
     {
         drmMap.insert(std::make_pair(std::string("Steam"), steam));
     }
 
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    OriginDRM origin;
-    origin.checkOriginExists();
-    if (origin.getIsInstalled())
+    OriginDRM* origin = new OriginDRM;
+    origin->checkOriginExists();
+    if (origin->getIsInstalled())
     {
         drmMap.insert(std::make_pair("Origin", origin));
     }
 #endif
 
 #if defined(_WIN32) || defined (_WIN64)
-    UplayDRM uplay;
-    uplay.checkUplayExists();
-    if (uplay.getIsInstalled())
+    UplayDRM* uplay = new UplayDRM;
+    uplay->checkUplayExists();
+    if (uplay->getIsInstalled())
     {
         drmMap.insert(std::make_pair("Uplay", uplay));
     }
@@ -84,7 +84,7 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
  * Defines some initial properties for the DRM page.
  * \param parent Parent widget to draw from
  */
-DRMPage::DRMPage(std::map<std::string, DRMType> drmMap, QWidget *parent) : QWizardPage(parent)
+DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWizardPage(parent)
 {
     setTitle("Found installed candidates");
     layout = new QGridLayout();
@@ -92,9 +92,9 @@ DRMPage::DRMPage(std::map<std::string, DRMType> drmMap, QWidget *parent) : QWiza
     static int count = 0;
     for (auto& drm : drmMap)
     {
-        layout->addWidget(drm.second.getPlatformLabel(), count, 0, 0);
-        layout->addWidget(drm.second.getDescLabel(), count+1, 0, 0);
-        layout->addWidget(drm.second.getStatusLabel(), count, 0, 0);
+        layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
+        layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
+        layout->addWidget(drm.second->getStatusLabel(), count, 0, 0);
         count += 3;
     }
 
@@ -104,7 +104,7 @@ DRMPage::DRMPage(std::map<std::string, DRMType> drmMap, QWidget *parent) : QWiza
 /** ResultsPage constructor
  * Defines some initial properties for the results page.
  */
-ResultsPage::ResultsPage(std::map<std::string, DRMType> drmMap, Database db, QWidget* parent) : QWizardPage(parent), db(db), drmMap(drmMap)
+ResultsPage::ResultsPage(std::map<std::string, DRMType*> drmMap, Database db, QWidget* parent) : QWizardPage(parent), db(db), drmMap(drmMap)
 {
     setSubTitle("We found the following on your system.");
 }
@@ -124,9 +124,17 @@ FinalPage::FinalPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
 void ResultsPage::initializePage()
 {
     setTitle(QString("We found "));
-    bool steamFound = this->drmMap.find(std::string("Steam"))->second.getIsInstalled();
-    bool originFound = this->drmMap.find(std::string("Origin"))->second.getIsInstalled();
-    bool uplayFound = this->drmMap.find(std::string("Uplay"))->second.getIsInstalled();
+    SteamDRM* steam = static_cast<SteamDRM*>(drmMap.find(std::string("Steam"))->second);
+    OriginDRM* origin = static_cast<OriginDRM*>(drmMap.find(std::string("Origin"))->second);
+    UplayDRM* uplay = static_cast<UplayDRM*>(drmMap.find(std::string("Uplay"))->second);
+
+//    bool steamFound = steam->getIsInstalled();
+//    bool originFound = origin->getIsInstalled();
+//    bool uplayFound = uplay->getIsInstalled();
+
+    bool steamFound = drmMap.find(std::string("Steam"))->second->getIsInstalled();
+    bool originFound = drmMap.find(std::string("Origin"))->second->getIsInstalled();
+    bool uplayFound = drmMap.find(std::string("Uplay"))->second->getIsInstalled();
 
     qDebug() << steamFound << originFound << uplayFound;
     if (uplayFound && steamFound && originFound)
@@ -146,7 +154,7 @@ void ResultsPage::initializePage()
             steamLayout = new QGridLayout();
             steamScrollArea = new QScrollArea();
             steamViewport = new QWidget();
-            auto t = std::async(&ResultsPage::findSteamGames, this);
+            auto t = std::async(std::launch::async, [&]{ steam->findGames(); });
             t.get();
             int row = 0;
             if (uplayFound && originFound)

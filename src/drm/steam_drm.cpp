@@ -2,6 +2,7 @@
 #include <src/libs/steam_vdf_parse.hpp>
 #include <QSettings>
 #include <QProcess>
+#include <src/database.h>
 
 /** Check if Steam is installed on the current computer, if applicable, and sets some values for later pages to
  * check on.
@@ -33,6 +34,7 @@ void SteamDRM::checkExists()
 
     if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
     {
+        qDebug() << steamFolder;
         this->setRootDir(steamFolder);
         this->setIsInstalled();
         statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
@@ -44,7 +46,7 @@ void SteamDRM::checkExists()
         }
         pt::ptree libraryFolders;
         pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
-        steamDirectoryList.push_back(steamFolder.filePath(""));
+        steamDirectoryList.append(steamFolder.filePath(""));
         QString pathString = "";
 
         for (auto& kv : libraryFolders.get_child("LibraryFolders"))
@@ -55,7 +57,7 @@ void SteamDRM::checkExists()
                 QDir dir(QString::fromStdString(path));
                 if (dir.exists())
                 {
-                    steamDirectoryList.push_back(dir.filePath(""));
+                    steamDirectoryList.append(dir.filePath(""));
                     pathString += dir.filePath("");
                     pathString += "\n";
                 }
@@ -76,12 +78,28 @@ void SteamDRM::checkExists()
 
 QWidget* SteamDRM::createPane()
 {
-	return new QWidget();
+    for (auto& game : steamVector)
+    {
+        QCheckBox* checkBox = new QCheckBox("Executable not found");
+        QLineEdit* name = new QLineEdit(game.gameName);
+
+        name->setFixedWidth(350);
+        checkBox->setStyleSheet("QLabel { color: red; }");
+        for (auto& dir : steamDirectoryList)
+        {
+            if (game.executablePath.contains(dir))
+            {
+                checkBox->setStyleSheet("QLabel { color: black; }");
+                checkBox->setText("Executable: " + game.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
+            }
+        }
+    }
 }
 
 void SteamDRM::findGames()
 {
     QDir steamAppsDir = rootDir.filePath("steamapps");
+    qDebug() << rootDir;
     if (!steamAppsDir.exists())
     {
         steamAppsDir = rootDir.filePath("SteamApps");
@@ -89,7 +107,7 @@ void SteamDRM::findGames()
     pt::ptree libraryFolders;
     pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
     steamDirectoryList.push_back(rootDir.filePath(""));
-    QString pathString = "" + steamDirectoryList.at(0).filePath("") + "\n";
+    QString pathString = "" + steamDirectoryList.at(0) + "\n";
 
     for (auto& kv : libraryFolders.get_child("LibraryFolders"))
     {

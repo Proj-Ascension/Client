@@ -5,7 +5,7 @@
 
 class SteamDRM : public DRMType
 {
-    std::vector<QDir> steamDirectoryList;
+    QStringList steamDirectoryList;
 	std::vector<Game> steamVector;
     void parseAcf();
 
