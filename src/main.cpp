@@ -18,9 +18,11 @@
 
 int main(int argc, char* argv[])
 {
+    QCoreApplication::addLibraryPath("./");
+
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
-	bool dbExists = QFile("ascension.db").exists();
+    bool dbExists = QFile("ascension.db").exists();
     DRMSetupWizard* wiz = new DRMSetupWizard();
 
     #ifndef Q_OS_WIN
@@ -54,10 +56,11 @@ int main(int argc, char* argv[])
     #endif
 
     // Launch
-	if (!dbExists)
-	{
-		wiz->show();
-	}
-	application->exec();
+    if (!dbExists)
+    {
+        wiz->show();
+    }
+
+    application->exec();
     return 0;
 }

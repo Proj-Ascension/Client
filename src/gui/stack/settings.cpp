@@ -143,8 +143,8 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
 */
 void Settings::rerunGameWizard()
 {
-	DRMSetupWizard* wiz = new DRMSetupWizard();
-	wiz->show();
+    DRMSetupWizard* wiz = new DRMSetupWizard();
+    wiz->show();
 }
 
 void Settings::setLightAccent()

@@ -59,14 +59,14 @@ include_directories(
 add_executable(ProjectAscension
     ${GUI_TYPE}
     ${SOURCE}
-	${FORMS_HEADERS}
-	${UI_RESOURCES}
+    ${FORMS_HEADERS}
+    ${UI_RESOURCES}
 )
 target_link_libraries(ProjectAscension
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
-	Qt5::Network
+    Qt5::Network
     Qt5::Sql
     ${Boost_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
@@ -97,8 +97,8 @@ if(WITH_TESTS)
     foreach(FILE
             appinfo.vdf
             game)
-    add_custom_command(TARGET ProjectAscension POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
+    add_custom_command(TARGET test_runner POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
         endforeach()
 endif(WITH_TESTS)
 
@@ -107,12 +107,20 @@ endif(WITH_TESTS)
 
 if(WIN32)
     find_program(WINDEPLOY windeployqt PATHS ${Qt5Core_DIR}/../../../bin NO_DEFAULT_PATH)
-    
+	if (ICU_DIR)
+		foreach(FILE
+			icuin56.dll
+			icuuc56.dll
+			icudt56.dll)
+			add_custom_command(TARGET ProjectAscension PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${ICU_DIR}/${FILE} ${Qt5Core_DIR}/../../../bin)
+		endforeach()
+	endif()
+
     if (WINDEPLOY)
         add_custom_command(TARGET ProjectAscension POST_BUILD
             # Call windeployqt to copy necessary dependencies into the executable path.
-            COMMAND CMD /C "SET PATH=%PATH%;${QT_DIR}/bin && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations $<TARGET_FILE:ProjectAscension>"
-        ) 
+            COMMAND CMD /C "SET PATH=%PATH%;${Qt5Core_DIR}/../../../bin;${Qt5Core_DIR}/../../../plugins/platforms && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations $<TARGET_FILE:ProjectAscension>"
+        )
     else()
         message(WARNING "Unable to find Qt Windows deployment tool at ${Qt5Core_DIR}/../../../bin, no runtime dependencies will be copied.")
     endif()

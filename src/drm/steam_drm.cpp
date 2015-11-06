@@ -93,6 +93,8 @@ QWidget* SteamDRM::createPane()
             }
         }
     }
+
+	return new QWidget();
 }
 
 void SteamDRM::findGames()

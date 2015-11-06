@@ -48,10 +48,6 @@ set(GUI_WIZARDS
     src/gui/wizards/drm_setup_wizard.h
 )
 
-set(FORMS
-    res/gui/library.ui
-)
-
 set(RESOURCES
     res/icons.qrc
     res/fonts.qrc

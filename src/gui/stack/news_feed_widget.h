@@ -13,19 +13,20 @@
 class NewsFeedWidget : public QWidget
 {
 Q_OBJECT
-private:
-    QListWidget* rssList;
-    QLabel* feedTitle;
-    QPushButton* deleteWidget;
-    QSettings* rss;
+public:
+    explicit NewsFeedWidget(QWidget* parent = 0);
+    ~NewsFeedWidget();
+
+    void addRSSItem(QString title, QString url);
+    void setRSSTitle(QString feedTitle);
 
 public slots:
     void onListItemClicked(QListWidgetItem* item);
     void deleteRSSWidget();
 
-public:
-    void addRSSItem(QString title, QString url);
-    void setRSSTitle(QString feedTitle);
-    explicit NewsFeedWidget(QWidget* parent = 0);
-    ~NewsFeedWidget();
+private:
+    QListWidget* rssList;
+    QLabel* feedTitle;
+    QPushButton* deleteWidget;
+    QSettings* rss;
 };
