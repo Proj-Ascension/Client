@@ -1,6 +1,6 @@
 #include "main_panel.h"
-#include "stack/settings.h"
-#include "stack/news.h"
+#include <src/gui/stack/settings.h>
+#include <src/gui/stack/news.h>
 
 #include <QMessageBox>
 #include <QGridLayout>

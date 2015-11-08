@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../../database.h"
+#include <src/database.h>
 
 #include <QWizard>
 #include <QtWidgets>
@@ -24,7 +23,7 @@ public:
 */
 class InitPage : public QWizardPage
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     InitPage(QWidget* parent = 0);
 };
@@ -34,9 +33,13 @@ public:
  */
 class InfoPage : public QWizardPage
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     InfoPage(QWidget* parent = 0);
+private:
+    QLineEdit* dirEdit;
+    QLineEdit* exeEdit;
+    void selectPath(QLineEdit* lineEdit, QFileDialog::FileMode fileMode);
 };
 
 /** LastPage class
@@ -44,9 +47,9 @@ public:
  */
 class LastPage : public QWizardPage
 {
-Q_OBJECT
-protected:
-    void initializePage() Q_DECL_OVERRIDE;
+    Q_OBJECT
 public:
     LastPage( QWidget* parent = 0);
+protected:
+    void initializePage() Q_DECL_OVERRIDE;
 };

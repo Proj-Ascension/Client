@@ -45,12 +45,13 @@ public:
 class DRMPage : public QWizardPage
 {
     Q_OBJECT
-    QGridLayout* layout;
-    std::map<std::string, DRMType*> drmMap;
-
 public:
     DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent = 0);
     int nextId() const Q_DECL_OVERRIDE;
+
+private:
+    QGridLayout* layout;
+    std::map<std::string, DRMType*> drmMap;
 };
 
 /** ResultsPage class.
@@ -59,6 +60,20 @@ public:
 class ResultsPage : public QWizardPage
 {
     Q_OBJECT
+public:
+    ResultsPage(std::map<std::string, DRMType*> drmMap, QWidget* parent = 0);
+    int nextId() const Q_DECL_OVERRIDE;
+
+public slots:
+    void tabSelected();
+    void selectAll();
+    void deselectAll();
+    void invert();
+
+protected:
+    void initializePage() Q_DECL_OVERRIDE;
+
+private:
     QTabWidget* tabWidget;
     QGridLayout* topLayout;
     SteamDRM* steam;
@@ -70,20 +85,6 @@ class ResultsPage : public QWizardPage
     QPushButton* invertBtn;
 
     DRMType* getCurrentDRM();
-    void runWithProgress(DRMType* drmType);
-
-public slots:
-    void tabSelected();
-    void selectAll();
-    void deselectAll();
-    void invert();
-
-protected:
-    void initializePage() Q_DECL_OVERRIDE;
-
-public:
-    ResultsPage(std::map<std::string, DRMType*> drmMap, QWidget* parent = 0);
-    int nextId() const Q_DECL_OVERRIDE;
 };
 
 /** FinalPage class.
@@ -93,9 +94,9 @@ class FinalPage : public QWizardPage
 {
     Q_OBJECT
 
-protected:
-    void initializePage() Q_DECL_OVERRIDE;
-
 public:
     FinalPage(QWidget* parent = 0);
+    
+protected:
+    void initializePage() Q_DECL_OVERRIDE;
 };
