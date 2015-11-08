@@ -51,7 +51,7 @@ Library::Library(QSettings* p, QWidget* parent)
     sidebarVLayout->addWidget(sidebarGameList);
 
     // Sidebar Horizontal Button Layout
-    QHBoxLayout* sidebarButtonHLayout = new QHBoxLayout(sidebar);
+    QHBoxLayout* sidebarButtonHLayout = new QHBoxLayout();
     sidebarVLayout->addLayout(sidebarButtonHLayout);
 
     // Add Game
