@@ -26,7 +26,7 @@ class Database
 {
 public:
     Database();
-    Database(QString name);
+    static Database& getInstance();
     bool init();
     bool reset();
 
@@ -43,4 +43,6 @@ public:
 
 private:
     QSqlDatabase db;
+    Database(Database const&) = delete;
+    void operator=(Database const&) = delete;
 };

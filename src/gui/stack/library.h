@@ -28,7 +28,6 @@ private slots:
 
 private:
     QListWidget* sidebarGameList;
-    Database db;
     QProcess* runningProcess;
 
     bool isProcessRunning() const;

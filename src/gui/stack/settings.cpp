@@ -130,7 +130,7 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
     connect(accentButton_3, SIGNAL(clicked()), this, SLOT(setDarkAccent()));
     connect(resetAccents, SIGNAL(clicked()), this, SLOT(resetAccents()));
 
-    if (!db.init())
+    if (!Database::getInstance().init())
     {
         QMessageBox error;
         error.critical(0, "Error!", "An error occured while trying to load the database.");
@@ -222,7 +222,7 @@ void Settings::clearDatabase()
     switch (ret)
     {
     case QMessageBox::Yes:
-        db.reset();
+        Database::getInstance().reset();
         break;
     case QMessageBox::No:
         break;

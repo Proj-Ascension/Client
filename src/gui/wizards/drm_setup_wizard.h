@@ -1,6 +1,6 @@
 #pragma once
-#include "../../database.h"
-#include <src/drm/drm_type.h>
+#include <src/database.h>
+#include <src/drm/drm_all.h>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -8,10 +8,6 @@
 
 namespace pt = boost::property_tree;
 
-class IntroPage;
-class ResultsPage;
-class DRMPage;
-class FinalPage;
 
 /** Pages enum, makes state transfer possible */
 enum pages
@@ -29,11 +25,7 @@ class DRMSetupWizard : public QWizard
 {
     Q_OBJECT
 public:
-    Database db;
-    DRMSetupWizard(QWidget* parent = 0, QString dbPath = "./");
-    DRMPage* drmPage;
-    ResultsPage* resultsPage;
-    FinalPage* finalPage;
+    DRMSetupWizard(QWidget* parent = 0);
 };
 
 /** IntroPage class.
@@ -54,19 +46,9 @@ class DRMPage : public QWizardPage
 {
     Q_OBJECT
     QGridLayout* layout;
-
-    QCheckBox* steamBox;
-    QCheckBox* uplayBox;
-
-    QLabel* statusLabel;
-    QLabel* platformLabel;
-    QLabel* descLabel;
-    QStringList steamDirectoryList;
+    std::map<std::string, DRMType*> drmMap;
 
 public:
-    QString steamPath;
-    QString originPath;
-    QString uplayPath;
     DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent = 0);
     int nextId() const Q_DECL_OVERRIDE;
 };
@@ -77,35 +59,17 @@ public:
 class ResultsPage : public QWizardPage
 {
     Q_OBJECT
-
-    QStringList recursiveFindFiles(QDir dir);
-    void parseAcf(QDir steamRoot);
-    std::map<std::string, DRMType*> drmMap;
-
-    QWidget* steamViewport;
-    QWidget* originViewport;
-    QWidget* uplayViewport;
     QTabWidget* tabWidget;
-    QGridLayout* top_layout;
-    QButtonGroup* btnGroup;
-    QGridLayout* steamLayout;
-    QGridLayout* originLayout;
-    QGridLayout* uplayLayout;
-    QScrollArea* steamScrollArea;
-    QScrollArea* originScrollArea;
-    QScrollArea* uplayScrollArea;
-    QStringList steamDirectoryList;
-    Database db;
+    QGridLayout* topLayout;
+    SteamDRM* steam;
+    OriginDRM* origin;
+    UplayDRM* uplay;
 
-    QDir steamRoot;
-    QDir uplayRoot;
-    QDir originRoot;
+    QPushButton* selectAllBtn;
+    QPushButton* deselectAllBtn;
+    QPushButton* invertBtn;
 
-    GameList steamVector;
-    pt::ptree originTree;
-    pt::ptree uplayTree;
-
-    void printTree(boost::property_tree::ptree& pt, int level);
+    DRMType* getCurrentDRM();
 
 public slots:
     void tabSelected();
@@ -117,10 +81,7 @@ protected:
     void initializePage() Q_DECL_OVERRIDE;
 
 public:
-    ResultsPage(std::map<std::string, DRMType*> drmMap, Database db, QWidget* parent = 0);
-    void findOriginGames();
-    void findUplayGames();
-    void findSteamGames();
+    ResultsPage(std::map<std::string, DRMType*> drmMap, QWidget* parent = 0);
     int nextId() const Q_DECL_OVERRIDE;
 };
 
@@ -130,11 +91,10 @@ public:
 class FinalPage : public QWizardPage
 {
     Q_OBJECT
-    Database db;
 
 protected:
     void initializePage() Q_DECL_OVERRIDE;
 
 public:
-    FinalPage(Database db, QWidget* parent = 0);
+    FinalPage(QWidget* parent = 0);
 };

@@ -16,8 +16,7 @@ class AddGameWizard : public QWizard
 {
     Q_OBJECT
 public:
-    Database db;
-    AddGameWizard(QWidget* parent = 0, QString dbPath = "./");
+    AddGameWizard(QWidget* parent = 0);
 };
 
 /** InitPage class.
@@ -46,9 +45,8 @@ public:
 class LastPage : public QWizardPage
 {
 Q_OBJECT
-    Database db;
 protected:
     void initializePage() Q_DECL_OVERRIDE;
 public:
-    LastPage(Database db, QWidget* parent = 0);
+    LastPage( QWidget* parent = 0);
 };

@@ -15,22 +15,22 @@ QDir DRMType::getRootDir()
     return rootDir;
 }
 
-void DRMType::setRootDir(const QDir& rootdir)
+void DRMType::setRootDir(const QDir &rootdir)
 {
     rootDir = rootdir;
 }
 
-QLabel *DRMType::getStatusLabel()
+QLabel* DRMType::getStatusLabel()
 {
     return statusLabel;
 }
 
-QLabel *DRMType::getDescLabel()
+QLabel* DRMType::getDescLabel()
 {
     return descLabel;
 }
 
-QLabel *DRMType::getPlatformLabel()
+QLabel* DRMType::getPlatformLabel()
 {
     return platformLabel;
 }

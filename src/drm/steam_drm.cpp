@@ -2,7 +2,10 @@
 #include <src/libs/steam_vdf_parse.hpp>
 #include <QSettings>
 #include <QProcess>
+#include <QtConcurrent/QtConcurrent>
 #include <src/database.h>
+#include <QLineEdit>
+#include <QCheckBox>
 
 /** Check if Steam is installed on the current computer, if applicable, and sets some values for later pages to
  * check on.
@@ -77,6 +80,7 @@ void SteamDRM::checkExists()
 
 QWidget* SteamDRM::createPane()
 {
+    int row = 0;
     for (auto& game : steamVector)
     {
         QCheckBox* checkBox = new QCheckBox("Executable not found");
@@ -92,9 +96,16 @@ QWidget* SteamDRM::createPane()
                 checkBox->setText("Executable: " + game.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
             }
         }
+        layout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+        row++;
+        layout->addWidget(checkBox, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
+        row++;
+        buttonGroup->addButton(checkBox);
     }
+    viewport->setLayout(layout);
+    scrollArea->setWidget(viewport);
 
-	return new QWidget();
+	return scrollArea;
 }
 
 void SteamDRM::findGames()
@@ -123,12 +134,25 @@ void SteamDRM::findGames()
             }
         }
     }
+    QProgressDialog dialog;
+    dialog.setCancelButtonText("Cancel");
 
-    parseAcf();
+    QFutureWatcher<void> futureWatcher;
+    dialog.setLabelText("Parsing " + rootDir.filePath("appcache/appinfo.vdf"));
+    QObject::connect(&futureWatcher, SIGNAL(finished()), &dialog, SLOT(reset()));
+    QObject::connect(&dialog, SIGNAL(canceled()), &futureWatcher, SLOT(cancel()));
+    QObject::connect(&futureWatcher, SIGNAL(progressRangeChanged(int,int)), &dialog, SLOT(setRange(int,int)));
+    QObject::connect(&futureWatcher, SIGNAL(progressValueChanged(int)), &dialog, SLOT(setValue(int)));
+
+    futureWatcher.setFuture(QtConcurrent::run(this, &SteamDRM::parseAcf));
+    dialog.exec();
+    futureWatcher.waitForFinished();
+    qDebug() << steamVector.size();
 }
 
 void SteamDRM::parseAcf()
 {
+    steamVector.erase(steamVector.begin(), steamVector.end());
     QString vdfPath = rootDir.filePath("appcache/appinfo.vdf");
     qDebug() << "Parsing Steam vdf, located at:" << vdfPath;
     auto games = SteamVdfParse::parseVdf(vdfPath.toLocal8Bit().constData());
@@ -173,8 +197,7 @@ void SteamDRM::parseAcf()
 
             // TODO: Either add SteamID to db, or add getGameByPath
 
-            //if (!std::get<0>(db.isExistant(name)))
-			if (true)
+            if (!std::get<0>(Database::getInstance().isExistant(name)))
             {
                 QString exe;
                 QString args;
@@ -212,9 +235,7 @@ void SteamDRM::parseAcf()
 #endif
                             {
                                 exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
-//                                exe = QString(QDir::cleanPath(exe));
                                 path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
-//                                path = QString(QDir::cleanPath(path));
                                 args = QString::fromStdString(section.get("arguments", ""));
                                 break;
                             }
@@ -223,9 +244,7 @@ void SteamDRM::parseAcf()
                     else
                     {
                         exe = QDir(path).filePath(QString::fromStdString(launch.get<std::string>("0.executable")));
-//                        exe = QString(QDir::cleanPath(exe));
                         path = QDir(path).filePath(QString::fromStdString(launch.get("0.workingdir", "")));
-//                        path = QString(QDir::cleanPath(path));
                         args = QString::fromStdString(launch.get("0.arguments", ""));
                     }
                 }
@@ -249,4 +268,15 @@ void SteamDRM::parseAcf()
         }
     }
 }
+
+std::vector<Game> SteamDRM::getGames()
+{
+    return steamVector;
+}
+
 SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}
+
+QButtonGroup* SteamDRM::getButtonGroup()
+{
+    return buttonGroup;
+}

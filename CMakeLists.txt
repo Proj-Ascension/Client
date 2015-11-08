@@ -107,19 +107,11 @@ endif(WITH_TESTS)
 
 if(WIN32)
     find_program(WINDEPLOY windeployqt PATHS ${Qt5Core_DIR}/../../../bin NO_DEFAULT_PATH)
-	if (ICU_DIR)
-		foreach(FILE
-			icuin56.dll
-			icuuc56.dll
-			icudt56.dll)
-			add_custom_command(TARGET ProjectAscension PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${ICU_DIR}/${FILE} ${Qt5Core_DIR}/../../../bin)
-		endforeach()
-	endif()
 
     if (WINDEPLOY)
         add_custom_command(TARGET ProjectAscension POST_BUILD
             # Call windeployqt to copy necessary dependencies into the executable path.
-            COMMAND CMD /C "SET PATH=%PATH%;${Qt5Core_DIR}/../../../bin;${Qt5Core_DIR}/../../../plugins/platforms && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations $<TARGET_FILE:ProjectAscension>"
+            COMMAND CMD /C "SET PATH=%PATH%;${Qt5Core_DIR}/../../../bin && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations  $<TARGET_FILE:ProjectAscension>"
         )
     else()
         message(WARNING "Unable to find Qt Windows deployment tool at ${Qt5Core_DIR}/../../../bin, no runtime dependencies will be copied.")

@@ -79,7 +79,7 @@ Library::Library(QSettings* p, QWidget* parent)
     launchGame->setFont(buttonFont);
     contentGrid->addWidget(launchGame, 0, 0);
 
-    if (!db.init())
+    if (!Database::getInstance().init())
     {
         QMessageBox error;
         error.critical(0, "Error!", "An error occured while trying to load the database.");
@@ -93,7 +93,7 @@ Library::Library(QSettings* p, QWidget* parent)
     connect(runningProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(finished(int, QProcess::ExitStatus)));
     connect(runningProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(onLaunchError(QProcess::ProcessError)));
 
-    QList<Game> games = db.getGames();
+    QList<Game> games = Database::getInstance().getGames();
     for (auto game : games)
     {
         qDebug() << game.id << game.gameName << game.gameDirectory << game.executablePath;
@@ -128,7 +128,7 @@ void Library::onRemoveGameClicked()
     auto selection = sidebarGameList->currentItem();
     if (selection != nullptr)
     {
-        db.removeGameByName(selection->text());
+        Database::getInstance().removeGameByName(selection->text());
         refreshGames();
     }
 }
@@ -143,7 +143,7 @@ void Library::onLaunchGameClicked()
         auto selection = sidebarGameList->currentItem();
         if (selection != nullptr)
         {
-            Game game = db.getGameByName(selection->text());
+            Game game = Database::getInstance().getGameByName(selection->text());
             if (game.arguments.trimmed() == "")
             {
                 runProcess(game.executablePath, game.gameDirectory);
@@ -205,7 +205,7 @@ void Library::runProcessWithArgs(QString file, QString workingDirectory, QString
 void Library::refreshGames()
 {
     sidebarGameList->clear();
-    QList<Game> gameList = db.getGames();
+    QList<Game> gameList = Database::getInstance().getGames();
     std::sort(gameList.begin(), gameList.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName; });
     for (auto game : gameList)
     {

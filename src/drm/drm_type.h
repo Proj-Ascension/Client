@@ -1,4 +1,5 @@
 #pragma once
+#include <src/util.hpp>
 
 #include <QDir>
 #include <QWidget>
@@ -13,6 +14,7 @@
 #include <boost/optional.hpp>
 
 namespace pt = boost::property_tree;
+using namespace Util;
 
 class DRMType
 {
@@ -40,7 +42,7 @@ public:
     QLabel* getDescLabel();
     QLabel* getPlatformLabel();
 
-    QButtonGroup* getButtonGroup();
+    virtual QButtonGroup* getButtonGroup();
 
     DRMType(QString platformString);
 };

@@ -8,6 +8,7 @@ set(SOURCE_CORE
 set(LIBS
     src/libs/catch.hpp
     src/libs/steam_vdf_parse.hpp
+    src/util.hpp
 )
 
 set(DRM

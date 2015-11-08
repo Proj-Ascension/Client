@@ -14,13 +14,6 @@ Database::Database()
     db.setDatabaseName("ascension.db");
 }
 
-Database::Database(QString path)
-    : db(QSqlDatabase::addDatabase("QSQLITE"))
-{
-    db.setHostName("localhost");
-    db.setDatabaseName(path);
-}
-
 /** Initialize the actual database, if it hasn't been done already.
  * \return Success/failure of the operation.
 */
@@ -219,4 +212,10 @@ unsigned int Database::getGameCount() const
     }
 
     return query.value(0).toUInt();
+}
+
+Database &Database::getInstance()
+{
+    static Database instance;
+    return instance;
 }
