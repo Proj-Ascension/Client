@@ -26,7 +26,9 @@ class Database
 {
 public:
     Database();
+    Database(QString name);
     static Database& getInstance();
+    static Database& getInstance(QString name);
     bool init();
     bool reset();
 

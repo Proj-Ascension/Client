@@ -14,6 +14,18 @@ Database::Database()
     db.setDatabaseName("ascension.db");
 }
 
+/** Database constructor
+ * Constructs the local database.
+ * Currently no interface to handle remote databases, just creates one in the
+ * current working directory.
+ */
+Database::Database(QString name)
+    : db(QSqlDatabase::addDatabase("QSQLITE"))
+{
+    db.setHostName("localhost");
+    db.setDatabaseName(name);
+}
+
 /** Initialize the actual database, if it hasn't been done already.
  * \return Success/failure of the operation.
 */
@@ -217,5 +229,11 @@ unsigned int Database::getGameCount() const
 Database &Database::getInstance()
 {
     static Database instance;
+    return instance;
+}
+
+Database& Database::getInstance(QString name)
+{
+    static Database instance(name);
     return instance;
 }
