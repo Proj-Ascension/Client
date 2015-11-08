@@ -130,9 +130,9 @@ void ResultsPage::initializePage()
         topLayout = new QGridLayout(this);
         if (steamFound)
         {
-//            auto t = std::async(std::launch::async, &SteamDRM::findGames, steam);
+//            auto t = std::async(std::launch::async, &SteamDRM::findSteamGames, steam);
 //            t.get();
-            steam->findGames();
+            steam->findSteamGames();
             GameList steamVector = steam->getGames();
             if (uplayFound && originFound)
             {
@@ -151,7 +151,7 @@ void ResultsPage::initializePage()
 
         if (originFound)
         {
-//            auto t = std::async(std::launch::async, &OriginDRM::findGames, origin);
+//            auto t = std::async(std::launch::async, &OriginDRM::findSteamGames, origin);
 //            t.get();
             origin->findGames();
             pt::ptree originTree = origin->getGames();
@@ -170,7 +170,7 @@ void ResultsPage::initializePage()
 
         if (uplayFound)
         {
-//            auto t = std::async(std::launch::async, &UplayDRM::findGames, uplay);
+//            auto t = std::async(std::launch::async, &UplayDRM::findSteamGames, uplay);
 //            t.get();
             uplay->findGames();
             pt::ptree uplayTree = uplay->getGames();

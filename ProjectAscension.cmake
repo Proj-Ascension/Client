@@ -12,6 +12,7 @@ set(LIBS
 )
 
 set(DRM
+	src/drm/drm_all.h
     src/drm/drm_type.cpp
     src/drm/drm_type.h
     src/drm/steam_drm.cpp
@@ -80,6 +81,7 @@ if(WIN32)
         source_group("src\\gui\\borderless\\" FILES ${GUI_BORDERLESS})
         source_group("src\\gui\\stack\\" FILES ${GUI_STACK})
         source_group("src\\gui\\wizards\\" FILES ${GUI_WIZARDS})
+		source_group("src\\drm\\" FILES ${DRM})
     endif()
 elseif(UNIX)
     set(GUI_CORE ${GUI_CORE}

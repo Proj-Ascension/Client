@@ -108,7 +108,7 @@ QWidget* SteamDRM::createPane()
 	return scrollArea;
 }
 
-void SteamDRM::findGames()
+void SteamDRM::findSteamGames()
 {
     QDir steamAppsDir = rootDir.filePath("steamapps");
     if (!steamAppsDir.exists())
@@ -134,6 +134,7 @@ void SteamDRM::findGames()
             }
         }
     }
+    steamDirectoryList.removeDuplicates();
     QProgressDialog dialog;
     dialog.setCancelButtonText("Cancel");
 
