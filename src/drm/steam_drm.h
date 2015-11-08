@@ -8,7 +8,6 @@ class SteamDRM : public DRMType
     QStringList steamDirectoryList;
 	std::vector<Game> steamVector;
     void parseAcf();
-    QProgressDialog dialog;
 
 public:
     using DRMType::DRMType;
@@ -16,7 +15,7 @@ public:
     void findSteamGames();
     std::vector<Game> getGames();
     QButtonGroup* getButtonGroup();
-    QWidget* createPane();
+    QWidget* createPane(QWidget* parent = 0);
     SteamDRM();
 };
 

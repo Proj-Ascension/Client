@@ -146,7 +146,7 @@ void ResultsPage::initializePage()
             {
                 setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString("."):QString("s.")));
             }
-            tabWidget->addTab(steam->createPane(), "Steam");
+            tabWidget->addTab(steam->createPane(this), "Steam");
         }
 
         if (originFound)
@@ -165,7 +165,7 @@ void ResultsPage::initializePage()
                 setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString("."):QString("s.")));
             }
 
-            tabWidget->addTab(origin->createPane(), "Origin");
+            tabWidget->addTab(origin->createPane(this), "Origin");
         }
 
         if (uplayFound)
@@ -177,7 +177,7 @@ void ResultsPage::initializePage()
             int count = uplayTree.get<int>("games.count");
             setTitle(title() + QString::number(count) + QString(" Uplay game") + (count == 1 ? QString(".") : QString("s.")));
 
-            tabWidget->addTab(uplay->createPane(), "Uplay");
+            tabWidget->addTab(uplay->createPane(this), "Uplay");
         }
 
         selectAllBtn = new QPushButton("Select all");

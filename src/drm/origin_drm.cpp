@@ -81,8 +81,11 @@ pt::ptree OriginDRM::getGames()
     return originTree;
 }
 
-QWidget* OriginDRM::createPane()
+QWidget* OriginDRM::createPane(QWidget* parent)
 {
+	viewport = new QWidget(parent);
+	scrollArea = new QScrollArea(parent);
+	layout = new QGridLayout(parent);
     int row = 0;
     for (pt::ptree::value_type& games : originTree.get_child("games"))
     {

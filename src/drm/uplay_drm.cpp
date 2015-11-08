@@ -62,8 +62,11 @@ void UplayDRM::checkUplayExists()
     }
 }
 
-QWidget* UplayDRM::createPane()
+QWidget* UplayDRM::createPane(QWidget* parent)
 {
+	viewport = new QWidget(parent);
+	scrollArea = new QScrollArea(parent);
+	layout = new QGridLayout(parent);
     int row = 0;
     for (pt::ptree::value_type& games : uplayTree.get_child("games"))
     {

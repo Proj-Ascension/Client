@@ -10,7 +10,7 @@ class OriginDRM : public DRMType
 public:
     void checkOriginExists();
     using DRMType::DRMType;
-    QWidget* createPane();
+    QWidget* createPane(QWidget* parent);
     void findGames();
     pt::ptree getGames();
     QList<QButtonGroup*> getButtonGroupVector();

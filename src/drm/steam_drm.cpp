@@ -78,8 +78,12 @@ void SteamDRM::checkExists()
     }
 }
 
-QWidget* SteamDRM::createPane()
+QWidget* SteamDRM::createPane(QWidget* parent)
 {
+	viewport = new QWidget(parent);
+	scrollArea = new QScrollArea(parent);
+	layout = new QGridLayout(parent);
+
     int row = 0;
     for (auto& game : steamVector)
     {
@@ -135,7 +139,7 @@ void SteamDRM::findSteamGames()
         }
     }
     steamDirectoryList.removeDuplicates();
-    QProgressDialog dialog;
+	QProgressDialog dialog;
     dialog.setCancelButtonText("Cancel");
 
     QFutureWatcher<void> futureWatcher;
