@@ -43,6 +43,6 @@ public:
     QLabel* getPlatformLabel();
 
     virtual QButtonGroup* getButtonGroup();
-
+    virtual void findGames() = 0;
     DRMType(QString platformString);
 };

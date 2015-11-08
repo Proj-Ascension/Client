@@ -7,6 +7,9 @@
 namespace pt = boost::property_tree;
 namespace Util
 {
+
+    /** Debug function to print out a ptree */
+
     inline void printTree(pt::ptree &pt, int level)
     {
         if (pt.empty())
@@ -32,7 +35,10 @@ namespace Util
             std::cerr << indent(level) << " }";
         }
     }
-
+    /** For a given dir, find every file contained within. It's up to the implementer of this function to insure that the
+     * QDir has the relevant filters.
+     * \param dir Directory to search in.
+     */
     inline QStringList recursiveFindFiles(QDir dir)
     {
         QStringList dirList;

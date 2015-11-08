@@ -1,7 +1,9 @@
 #include "drm_setup_wizard.h"
-#include "../../libs/steam_vdf_parse.hpp"
-#include "../../database.h"
-#include "../stack/library.h"
+#include <src/libs/steam_vdf_parse.hpp>
+#include <src/database.h>
+#include <src/gui/stack/library.h>
+
+#include <QtConcurrent/QtConcurrent>
 
 #include <iostream>
 #include <thread>
@@ -128,11 +130,20 @@ void ResultsPage::initializePage()
         setSubTitle("Change the title for each game by clicking the text box and editing.");
         tabWidget = new QTabWidget(this);
         topLayout = new QGridLayout(this);
+        QProgressDialog dialog;
+        dialog.setCancelButtonText("Cancel");
+        dialog.setRange(0, 3);
+        dialog.setWindowTitle("Project Ascension");
+        dialog.setLabelText("Working");
+        dialog.setWindowModality(Qt::WindowModal);
+        dialog.show();
+        dialog.setValue(0);
+
+        QApplication::processEvents();
         if (steamFound)
         {
-//            auto t = std::async(std::launch::async, &SteamDRM::findSteamGames, steam);
-//            t.get();
-            steam->findSteamGames();
+            auto t = std::async(std::launch::async, &SteamDRM::findGames, steam);
+            t.get();
             GameList steamVector = steam->getGames();
             if (uplayFound && originFound)
             {
@@ -148,12 +159,13 @@ void ResultsPage::initializePage()
             }
             tabWidget->addTab(steam->createPane(this), "Steam");
         }
+        dialog.setValue(1);
+        QApplication::processEvents();
 
         if (originFound)
         {
-//            auto t = std::async(std::launch::async, &OriginDRM::findSteamGames, origin);
-//            t.get();
-            origin->findGames();
+            auto t = std::async(std::launch::async, &OriginDRM::findGames, origin);
+            t.get();
             pt::ptree originTree = origin->getGames();
             int count = originTree.get<int>("games.count");
             if (uplayFound)
@@ -167,18 +179,24 @@ void ResultsPage::initializePage()
 
             tabWidget->addTab(origin->createPane(this), "Origin");
         }
+        dialog.setValue(2);
+        QApplication::processEvents();
 
         if (uplayFound)
         {
-//            auto t = std::async(std::launch::async, &UplayDRM::findSteamGames, uplay);
-//            t.get();
-            uplay->findGames();
+            auto t = std::async(std::launch::async, &UplayDRM::findGames, uplay);
+            t.get();
             pt::ptree uplayTree = uplay->getGames();
             int count = uplayTree.get<int>("games.count");
             setTitle(title() + QString::number(count) + QString(" Uplay game") + (count == 1 ? QString(".") : QString("s.")));
 
             tabWidget->addTab(uplay->createPane(this), "Uplay");
         }
+        dialog.setValue(3);
+        QApplication::processEvents();
+
+        dialog.close();
+
 
         selectAllBtn = new QPushButton("Select all");
         deselectAllBtn = new QPushButton("Deselect all");
@@ -268,7 +286,6 @@ DRMType* ResultsPage::getCurrentDRM()
         case 2:
             return uplay;
         default:
-			return new DRMType("undefined");
             break;
     }
 }
@@ -319,40 +336,6 @@ void ResultsPage::tabSelected()
         invertBtn->hide();
     }
 }
-
-/** Using steamRoot, which is initialized earlier in the wizard, find the location of every Steam library folder, and
- * run the parseAcf function on every *.acf file found within the directory. This file gives basic information about the game;
- * such as directory within steamapps, name, etc.
- * \see findOriginGames()
- * \see findUplayGames()
- */
-
-/** Using originRoot, which is initialized earlier in the wizard, utilize `recursiveFindFiles()` to find every executable within
- * each respective directory. Some directories will contain more than one executable, so it's up to the user to select the correct one.
- * \see findSteamGames()
- * \see findUplayGames()
- */
-
-
-/** Using uplayRoot, which is initialized earlier in the wizard, utilize `recursiveFindFiles()` to find every executable within
- * each respective directory. Some directories will contain more than one executable, so it's up to the user to select the correct one.
- * \see findSteamGames()
- * \see findOriginGames()
- */
-
-/** Debug function to print out a ptree */
-
-
-/** For a given steamRoot directory, find every appmanifest file, parse it and then use the retrived id to parse the appinfo.vdf
- * file to ascertain extended information; such as executables included within the game. This currently only retrieves one exe, more
- * work will need to go into creating a fast and efficient algorithm to parse multiple games.
- * \param steamRoot The root directory to user's Steam installation.
- */
-
-/** For a given dir, find every file contained within. It's up to the implementer of this function to insure that the
- * QDir has the relevant filters.
- * \param dir Directory to search in.
- */
 
 /** Initializes the final page. This function is called when the NextButton on the previous page is clicked,
  * which allows the state of the previous page to be transferred to this one.

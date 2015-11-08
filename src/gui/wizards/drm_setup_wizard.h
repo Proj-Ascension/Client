@@ -70,6 +70,7 @@ class ResultsPage : public QWizardPage
     QPushButton* invertBtn;
 
     DRMType* getCurrentDRM();
+    void runWithProgress(DRMType* drmType);
 
 public slots:
     void tabSelected();

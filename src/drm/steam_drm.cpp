@@ -82,7 +82,6 @@ QWidget* SteamDRM::createPane(QWidget* parent)
 {
 	viewport = new QWidget(parent);
 	scrollArea = new QScrollArea(parent);
-	layout = new QGridLayout(parent);
 
     int row = 0;
     for (auto& game : steamVector)
@@ -112,7 +111,11 @@ QWidget* SteamDRM::createPane(QWidget* parent)
 	return scrollArea;
 }
 
-void SteamDRM::findSteamGames()
+/** Using rootDir, which is initialized earlier in the wizard, find the location of every Steam library folder, and
+ * run the parseAcf function on every *.acf file found within the directory. This file gives basic information about the game;
+ * such as directory within steamapps, name, etc.
+ */
+void SteamDRM::findGames()
 {
     QDir steamAppsDir = rootDir.filePath("steamapps");
     if (!steamAppsDir.exists())
@@ -139,22 +142,14 @@ void SteamDRM::findSteamGames()
         }
     }
     steamDirectoryList.removeDuplicates();
-	QProgressDialog dialog;
-    dialog.setCancelButtonText("Cancel");
-
-    QFutureWatcher<void> futureWatcher;
-    dialog.setLabelText("Parsing " + rootDir.filePath("appcache/appinfo.vdf"));
-    QObject::connect(&futureWatcher, SIGNAL(finished()), &dialog, SLOT(reset()));
-    QObject::connect(&dialog, SIGNAL(canceled()), &futureWatcher, SLOT(cancel()));
-    QObject::connect(&futureWatcher, SIGNAL(progressRangeChanged(int,int)), &dialog, SLOT(setRange(int,int)));
-    QObject::connect(&futureWatcher, SIGNAL(progressValueChanged(int)), &dialog, SLOT(setValue(int)));
-
-    futureWatcher.setFuture(QtConcurrent::run(this, &SteamDRM::parseAcf));
-    dialog.exec();
-    futureWatcher.waitForFinished();
-    qDebug() << steamVector.size();
+    parseAcf();
 }
 
+/** For a given steamRoot directory, find every appmanifest file, parse it and then use the retrived id to parse the appinfo.vdf
+ * file to ascertain extended information; such as executables included within the game. This currently only retrieves one exe, more
+ * work will need to go into creating a fast and efficient algorithm to parse multiple games.
+ * \param steamRoot The root directory to user's Steam installation.
+ */
 void SteamDRM::parseAcf()
 {
     steamVector.erase(steamVector.begin(), steamVector.end());

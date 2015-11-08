@@ -12,7 +12,7 @@ class SteamDRM : public DRMType
 public:
     using DRMType::DRMType;
     void checkExists();
-    void findSteamGames();
+    void findGames();
     std::vector<Game> getGames();
     QButtonGroup* getButtonGroup();
     QWidget* createPane(QWidget* parent = 0);

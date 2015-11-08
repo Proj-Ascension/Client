@@ -66,7 +66,7 @@ QWidget* UplayDRM::createPane(QWidget* parent)
 {
 	viewport = new QWidget(parent);
 	scrollArea = new QScrollArea(parent);
-	layout = new QGridLayout(parent);
+
     int row = 0;
     for (pt::ptree::value_type& games : uplayTree.get_child("games"))
     {
@@ -95,6 +95,11 @@ QWidget* UplayDRM::createPane(QWidget* parent)
     return scrollArea;
 }
 
+/** Using rootDir, which is initialized earlier in the wizard, utilize `recursiveFindFiles()` to find every executable within
+ * each respective directory. Some directories will contain more than one executable, so it's up to the user to select the correct one.
+ * \see findGames()
+ * \see findOriginGames()
+ */
 void UplayDRM::findGames()
 {
     rootDir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks);
