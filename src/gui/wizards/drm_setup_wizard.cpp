@@ -21,29 +21,21 @@ DRMSetupWizard::DRMSetupWizard(QWidget* parent) : QWizard(parent)
 {
     std::map<std::string, DRMType*> drmMap;
     SteamDRM* steam = new SteamDRM;
+    OriginDRM* origin = new OriginDRM;
+    UplayDRM* uplay = new UplayDRM;
     steam->checkExists();
-    if (steam->getIsInstalled())
-    {
-        drmMap.insert(std::make_pair(std::string("Steam"), steam));
-    }
 
 #if defined(_WIN32) || defined(_WIN64) || defined(__APPLE__)
-    OriginDRM* origin = new OriginDRM;
     origin->checkOriginExists();
-    if (origin->getIsInstalled())
-    {
-        drmMap.insert(std::make_pair("Origin", origin));
-    }
 #endif
 
 #if defined(_WIN32) || defined (_WIN64)
-    UplayDRM* uplay = new UplayDRM;
     uplay->checkUplayExists();
-    if (uplay->getIsInstalled())
-    {
-        drmMap.insert(std::make_pair("Uplay", uplay));
-    }
 #endif
+
+    drmMap.insert(std::make_pair("Steam", steam));
+    drmMap.insert(std::make_pair("Origin", origin));
+    drmMap.insert(std::make_pair("Uplay", uplay));
 
     setPage(pages::INTRO, new IntroPage(this));
     setPage(pages::DRM, new DRMPage(drmMap, this));
@@ -80,10 +72,13 @@ DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWiz
     static int count = 0;
     for (auto& drm : drmMap)
     {
-        layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
-        layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
-        layout->addWidget(drm.second->getStatusLabel(), count, 0, 0);
-        count += 3;
+        if (drm.second->getIsInstalled())
+        {
+            layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
+            layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
+            layout->addWidget(drm.second->getStatusLabel(), count, 0, 0);
+            count += 3;
+        }
     }
 
     setLayout(layout);
@@ -135,11 +130,11 @@ void ResultsPage::initializePage()
         dialog.setRange(0, 3);
         dialog.setWindowTitle("Project Ascension");
         dialog.setLabelText("Working");
-        dialog.setWindowModality(Qt::WindowModal);
+        dialog.setWindowModality(Qt::NonModal);
         dialog.show();
         dialog.setValue(0);
-
         QApplication::processEvents();
+
         if (steamFound)
         {
             auto t = std::async(std::launch::async, &SteamDRM::findGames, steam);
