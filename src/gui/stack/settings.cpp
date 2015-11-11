@@ -200,6 +200,11 @@ void Settings::resetAccents()
 
 void Settings::updateAccent(int accent, QColor color)
 {
+    if (!color.isValid())
+    {
+        return;
+    }
+
     QSettings palette(QSettings::IniFormat, QSettings::UserScope, "Project Ascension", "palette");
     if (palette.isWritable())
     {
