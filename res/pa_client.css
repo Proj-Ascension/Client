@@ -1,18 +1,22 @@
 #mainPanel {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #systemPanel {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #centralWidget {
-    background: #22262F; /* Window background color */
+    /*background: #22262F; !* Window background color *!*/
 }
 
 #mainPanelScrollArea {
+    border: none;
+}
+
+#dialogScrollArea {
     border: none;
 }
 
@@ -24,7 +28,6 @@
 }
 
 #pushButtonMaximize {
-    padding: 0 8px 0 8px;
     image: url(:/system_menu/icons/maximize.png);
 }
 
@@ -33,7 +36,6 @@
 }
 
 #pushButtonMinimize {
-    padding: 0 7px 0 0;
     image: url(:/system_menu/icons/minimize.png);
 }
 
@@ -42,7 +44,6 @@
 }
 
 #pushButtonClose {
-    padding: 0 0 0 7px;
     image: url(:/system_menu/icons/close.png);
 }
 

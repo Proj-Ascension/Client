@@ -18,7 +18,7 @@ AscensionDialog::AscensionDialog(QString title)
       p(new QSettings("palette.ini", QSettings::IniFormat))
 {
     setObjectName("ascensionDialog");
-    setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog | Qt::WindowStaysOnTopHint);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Dialog | Qt::WindowStaysOnTopHint);
     setWindowTitle(title);
     setWindowModality(Qt::ApplicationModal);
 
@@ -70,7 +70,7 @@ AscensionDialog::AscensionDialog(QString title)
     // Vertical layout #3
     QVBoxLayout* verticalLayout3 = new QVBoxLayout;
     verticalLayout3->setSpacing(0);
-    verticalLayout3->setContentsMargins(0, 0, 0, 0);
+    verticalLayout3->setMargin(0);
     verticalLayout3->setAlignment(Qt::AlignHCenter);
     mainPanelBackdrop->setLayout(verticalLayout3);
 
