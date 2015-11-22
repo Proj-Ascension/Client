@@ -1,0 +1,163 @@
+#include "sidebar.h"
+#include "tab_widget.h"
+
+#include <QPainter>
+#include <QStyleOption>
+#include <QLayout>
+#include <QLabel>
+
+/** MainPanel constructor
+* Constructs the sidebar by depth - back to front.
+* \param p Inherited palette configuration for setting StyleSheets.
+* \param parent Pointer to parent widget.
+*/
+Sidebar::Sidebar(QSettings* p, QWidget* parent) : QWidget(parent)
+{
+    setObjectName("sidebar");
+
+    setMinimumWidth(224);
+    setMaximumWidth(224);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    setStyleSheet("Sidebar#sidebar {background-image: url(:/elements/sidebar.png);}");
+
+    // Main layout
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+    mainLayout->setSpacing(0);
+    mainLayout->setMargin(0);
+    setLayout(mainLayout);
+
+    // Upper layout
+    QVBoxLayout* upperLayout = new QVBoxLayout;
+    upperLayout->setSpacing(5);
+    upperLayout->setMargin(18);
+    mainLayout->addLayout(upperLayout);
+
+    // User dropdown label
+    QWidget* userDropdown = new QWidget(this);
+    userDropdown->setObjectName("userDropdown");
+    userDropdown->setMinimumWidth(188);
+    userDropdown->setMinimumHeight(58);
+    userDropdown->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    userDropdown->setStyleSheet("QWidget#userDropdown {background-color: " + 
+                                p->value("Primary/DarkElement").toString() + ";}");
+    upperLayout->addWidget(userDropdown);
+
+    // User dropdown layout
+    QVBoxLayout* dropdownLayout = new QVBoxLayout;
+    dropdownLayout->setSpacing(8);
+    dropdownLayout->setMargin(8);
+    userDropdown->setLayout(dropdownLayout);
+
+    // Dropdown title
+    QLabel* dropdownTitle = new QLabel(userDropdown);
+    dropdownTitle->setObjectName("dropdownTitle");
+    dropdownTitle->setStyleSheet("color: " + p->value("Primary/LightText").toString() + ";");
+    dropdownTitle->setFont(QFont("SourceSansPro", 12, QFont::DemiBold));
+    dropdownTitle->setText("Project Ascension");
+    dropdownLayout->addWidget(dropdownTitle);
+
+    // Username layout
+    QHBoxLayout* usernameLayout = new QHBoxLayout;
+    usernameLayout->setSpacing(4);
+    usernameLayout->setMargin(0);
+    usernameLayout->setAlignment(Qt::AlignVCenter);
+    dropdownLayout->addLayout(usernameLayout);
+
+    // Status label
+    QLabel* statusLabel = new QLabel(userDropdown);
+    statusLabel->setObjectName("statusLabel");
+    statusLabel->setMinimumSize(QSize(10, 10));
+    statusLabel->setMaximumSize(QSize(10, 10));
+    statusLabel->setPixmap(QPixmap(":/system_menu/icons/status_online.png"));
+    statusLabel->setScaledContents(true);
+    usernameLayout->addWidget(statusLabel);
+
+    // Username label
+    QLabel* usernameLabel = new QLabel(userDropdown);
+    usernameLabel->setObjectName("usernameLabel");
+    usernameLabel->setStyleSheet("color: " + p->value("Primary/SubText").toString() + ";");
+    usernameLabel->setFont(QFont("SourceSansPro", 10, QFont::DemiBold));
+    usernameLabel->setText("username");
+    usernameLayout->addWidget(usernameLabel);
+
+    // Tabs
+    // Home tab
+    QPixmap homePixmap(":/system_menu/icons/home_icon.png");
+    homeTab = new TabWidget(homePixmap, "homeTab", "Home", p, this);
+    upperLayout->addWidget(homeTab);
+
+    // Store tab
+    QPixmap storePixmap(":/system_menu/icons/store_icon.png");
+    storeTab = new TabWidget(storePixmap, "storeTab", "Store", p, this);
+    upperLayout->addWidget(storeTab);
+
+    // Games tab
+    QPixmap gamesPixmap(":/system_menu/icons/games_icon.png");
+    gamesTab = new TabWidget(gamesPixmap, "gamesTab", "Games", p, this);
+    upperLayout->addWidget(gamesTab);
+
+    // Community tab
+    QPixmap communityPixmap(":/system_menu/icons/community_icon.png");
+    communityTab = new TabWidget(communityPixmap, "communityTab", "Community", p, this);
+    upperLayout->addWidget(communityTab);
+
+    // News tab
+    QPixmap newsPixmap(":/system_menu/icons/news_icon.png");
+    newsTab = new TabWidget(newsPixmap, "newsTab", "News", p, this);
+    upperLayout->addWidget(newsTab);
+    upperLayout->addStretch();
+
+    // Downloads tab
+    QPixmap downloadsPixmap(":/system_menu/icons/downloads_icon.png");
+    downloadsTab = new TabWidget(downloadsPixmap, "downloadsTab", "Downloads", p, this);
+    upperLayout->addWidget(downloadsTab);
+
+    // Settings tab
+    QPixmap settingsPixmap(":/system_menu/icons/settings_icon.png");
+    settingsTab = new TabWidget(settingsPixmap, "settingsTab", "Settings", p, this);
+    upperLayout->addWidget(settingsTab);
+
+    // Exit tab
+    QPixmap exitPixmap(":/system_menu/icons/exit_icon.png");
+    exitTab = new TabWidget(exitPixmap, "exitTab", "Exit", p, this);
+    upperLayout->addWidget(exitTab);
+
+    // Info box
+    QWidget* infoBox = new QWidget(this);
+    infoBox->setObjectName("infoBox");
+    infoBox->setMinimumHeight(58);
+    infoBox->setMaximumHeight(58);
+    infoBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    infoBox->setStyleSheet("QWidget#infoBox "
+                           "{background-color: " + p->value("Primary/TertiaryBase").toString() +
+                           ";border-top: 2px solid " + p->value("Accent/DarkAccent").toString() + ";}");
+    mainLayout->addWidget(infoBox);
+
+    show();
+}
+
+/** Overridden size hint.
+* Ensures visibility of the sidebar at app launch.
+* \return Constant QSize representing the preferred sidebar size.
+*/
+QSize Sidebar::sizeHint() const
+{
+    return QSize(224, 224);
+}
+
+/** Overridden paint event.
+* Necessary for displaying stylesheets correctly.
+* \param event The QPaintEvent trigger.
+*/
+void Sidebar::paintEvent(QPaintEvent* event)
+{
+    // Default paint event
+    QWidget::paintEvent(event);
+
+    // Style-aware drawing
+    QStyleOption option;
+    QPainter p(this);
+    option.init(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
+}
+

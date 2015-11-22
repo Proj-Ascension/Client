@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/Elements">
-        <file alias="Sidebar.png">Elements/Sidebar.png</file>
-    </qresource>
-</RCC>
