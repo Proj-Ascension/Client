@@ -240,13 +240,13 @@ LRESULT CALLBACK BorderlessWindow::WndProc(HWND hWnd, UINT message, WPARAM wPara
         if (wp.showCmd == SW_MAXIMIZE)
         {
             QPushButton* pushButtonMaximize = mainPanel->findChild<QPushButton*>("pushButtonMaximize");
-            pushButtonMaximize->setStyleSheet("#pushButtonMaximize {image: url(:/system_menu/icons/restore.png);} #pushButtonMaximize:hover { image: url(:/system_menu/icons/restore_hover.png); }");
+            pushButtonMaximize->setStyleSheet("#pushButtonMaximize {image: url(:/window_controls/restore_normal.png);} #pushButtonMaximize:hover { image: url(:/window_controls/restore_hover.png);} #pushButtonMaximize:pressed { image: url(:/window_controls/restore_pressed.png);}");
             mainPanel->setGeometry(8, 8, winrect.right - 16, winrect.bottom - 16);
         }
         else
         {
             QPushButton* pushButtonMaximize = mainPanel->findChild<QPushButton*>("pushButtonMaximize");
-            pushButtonMaximize->setStyleSheet("#pushButtonMaximize {image: url(:/system_menu/icons/maximize.png);} #pushButtonMaximize:hover { image: url(:/system_menu/icons/maximize_hover.png); }");
+            pushButtonMaximize->setStyleSheet("#pushButtonMaximize {image: url(:/window_controls/maximize_normal.png);} #pushButtonMaximize:hover { image: url(:/window_controls/maximize_hover.png);} #pushButtonMaximize:pressed { image: url(:/window_controls/maximize_pressed.png); }");
             mainPanel->setGeometry(0, 0, winrect.right, winrect.bottom);
         }
         break;
