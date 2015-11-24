@@ -9,16 +9,9 @@
 
 Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
 {
-    QFont buttonFont("SourceSansPro", 9);
     QVBoxLayout* vertlayout = new QVBoxLayout(this);
     this->setLayout(vertlayout);
-    this->setStyleSheet("QPushButton {"
-                                "color: " + p->value("Primary/LightText").toString() + "; "
-                                "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                                "border: none;}"
-                                "QPushButton:hover {"
-                                "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                                "QGroupBox { color: " + p->value("Primary/LightText").toString() + ";}");
+    this->setStyleSheet("QGroupBox {color: " + p->value("Primary/LightText").toString() + ";}");
     QGroupBox* userSettingsBox = new QGroupBox(this);
     vertlayout->addWidget(userSettingsBox);
     userSettingsBox->setTitle("User Settings");
@@ -38,12 +31,10 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
     clientBoxLayout->setSpacing(5);
 
     QPushButton* wizardButton = new QPushButton(this);
-    wizardButton->setFont(buttonFont);
     wizardButton->setText("Add Games to Ascension");
     clientBoxLayout->addWidget(wizardButton);
 
     QPushButton* clearDatabaseButton = new QPushButton(this);
-    clearDatabaseButton->setFont(buttonFont);
     clearDatabaseButton->setText("Clear Database");
     clientBoxLayout->addWidget(clearDatabaseButton);
     //End Client Settings
@@ -63,15 +54,12 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
     accentLabel->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
 
     accentButton_1 = new QPushButton(this);
-    accentButton_1->setFont(buttonFont);
     accentButton_1->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/LightAccent").toString() + ";""}");
     accentButton_1->setText("Set Light Accent");
     accentButton_2 = new QPushButton(this);
-    accentButton_2->setFont(buttonFont);
     accentButton_2->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
     accentButton_2->setText("Set Medium Accent");
     accentButton_3 = new QPushButton(this);
-    accentButton_3->setFont(buttonFont);
     accentButton_3->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
     accentButton_3->setText("Set Dark Accent");
 
@@ -80,17 +68,13 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
     textLabel->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
 
     textColourButton_1 = new QPushButton(this);
-    textColourButton_1->setFont(buttonFont);
     textColourButton_1->setText("Set Light Text Colour");
     textColourButton_2 = new QPushButton(this);
-    textColourButton_2->setFont(buttonFont);
     textColourButton_2->setText("Set Dark Text Colour");
     textColourButton_3 = new QPushButton(this);
-    textColourButton_3->setFont(buttonFont);
     textColourButton_3->setText("Set Sub Text Colour");
 
     QPushButton* resetAccents = new QPushButton(this);
-    resetAccents->setFont(buttonFont);
     resetAccents->setText("Reset Colors to Default");
     styleBoxLayout->addWidget(textLabel);
 
