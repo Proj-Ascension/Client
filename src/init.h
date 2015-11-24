@@ -132,6 +132,6 @@ QString getConfigurableStyle() {
            "margin: 0; padding: 0;"
            "border-style: none;}"
            "QPushButton:hover {background-color: " + p.value("Primary/InactiveSelection").toString() + ";}"
-           "QPushButton:default {background-color: " + p.value("Accent/MediumAccent").toString() + ";}"
-           "QPushButton:default:hover {background-color: " + p.value("Accent/LightAccent").toString() + ";}";
+           "QPushButton[default='true'] {background-color: " + p.value("Accent/MediumAccent").toString() + ";}"
+           "QPushButton[default='true']:hover {background-color: " + p.value("Accent/LightAccent").toString() + ";}";
 }
