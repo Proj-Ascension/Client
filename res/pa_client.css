@@ -18,6 +18,7 @@
 
 /* System buttons */
 #pushButtonMaximize, #pushButtonMinimize, #pushButtonClose {
+    background-color: transparent;
     border: none;
     width: 14px;
     height: 14px;

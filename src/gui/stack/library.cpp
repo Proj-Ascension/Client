@@ -18,15 +18,6 @@ Library::Library(QSettings* p, QWidget* parent)
 {
     this->setObjectName("libraryUI");
 
-    this->setStyleSheet("QPushButton {"
-                                "color: " + p->value("Primary/LightText").toString() + "; "
-                                "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                                "border: none; margin: 0px; padding: 0px;} "
-                                "QPushButton:hover {"
-                                "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} ");
-
-    QFont buttonFont("SourceSansPro", 12);
-
     // Main Library Layout
     QHBoxLayout* mainHLayout = new QHBoxLayout(this);
     mainHLayout->setMargin(0);
@@ -56,12 +47,10 @@ Library::Library(QSettings* p, QWidget* parent)
 
     // Add Game
     QPushButton* addGame = new QPushButton("Add Game", sidebar);
-    addGame->setFont(buttonFont);
     sidebarButtonHLayout->addWidget(addGame);
 
     // Remove Game
     QPushButton* removeGame = new QPushButton("Remove Game", sidebar);
-    removeGame->setFont(buttonFont);
     sidebarButtonHLayout->addWidget(removeGame);
 
     // Main Content Widget
@@ -76,7 +65,6 @@ Library::Library(QSettings* p, QWidget* parent)
 
     // Launch Game Button
     QPushButton* launchGame = new QPushButton("Launch Game", content);
-    launchGame->setFont(buttonFont);
     contentGrid->addWidget(launchGame, 0, 0);
 
     if (!db.init())
