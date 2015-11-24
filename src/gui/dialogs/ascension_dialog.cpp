@@ -13,8 +13,8 @@
  * This constructor does not provide any QPushButtons or QLabels for the dialog content.
  * \param title String to be displayed as the title on the window.
  */
-AscensionDialog::AscensionDialog(QString title)
-    : QDialog(),
+AscensionDialog::AscensionDialog(QString title, QWidget* parent)
+    : QDialog(parent),
       p(new QSettings("palette.ini", QSettings::IniFormat))
 {
     setObjectName("ascensionDialog");
@@ -111,18 +111,6 @@ AscensionDialog::AscensionDialog(QString title)
     // Content
     content = new QWidget(coreWidget);
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    content->setStyleSheet("QPushButton {"
-                           "color: " + p->value("Primary/LightText").toString() + "; "
-                           "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                           "border: none; margin: 0px; padding: 4px 0 4px 0;} "
-                           "QPushButton:hover {"
-                           "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                           "QPushButton[default='true'] {"
-                           "background-color: " + p->value("Accent/MediumAccent").toString() + ";} "
-                           "QPushButton[default='true']:hover {"
-                           "background-color: " + p->value("Accent/LightAccent").toString() + ";} "
-                           "QLabel {"
-                           "color: " + p->value("Primary/LightText").toString() + ";} ");
 
     verticalLayout3->addWidget(content);
 }
@@ -170,17 +158,14 @@ void AscensionDialog::mouseMoveEvent(QMouseEvent* evt)
  * \param message The message to show on the dialog
  * \return The value of AscensionDialog::exec(), true if accepted, false if rejected.
  */
-bool AscensionDialog::showConfirmDialog(QString title, QString message) {
-    AscensionDialog* dialog = new AscensionDialog(title);
+bool AscensionDialog::showConfirmDialog(QString title, QString message, QWidget* parent) {
+    AscensionDialog* dialog = new AscensionDialog(title, parent);
     QWidget* content = dialog->content;
 
     QGridLayout* gridLayout = new QGridLayout;
     content->setLayout(gridLayout);
 
-    QFont font = QFont("SourceSansPro", 9);
-
     QLabel* label = new QLabel(message, content);
-    label->setFont(font);
     label->setAlignment(Qt::AlignTop);
     label->setWordWrap(true);
     gridLayout->addWidget(label, 0, 0);
@@ -190,13 +175,11 @@ bool AscensionDialog::showConfirmDialog(QString title, QString message) {
 
     QPushButton* cancelBtn = new QPushButton("Cancel", content);
     cancelBtn->setContentsMargins(8, 8, 8, 8);
-    cancelBtn->setFont(font);
     connect(cancelBtn, SIGNAL(clicked()), dialog, SLOT(reject()));
     horizontalLayout->addWidget(cancelBtn);
 
     QPushButton* confirmBtn = new QPushButton("Confirm", content);
     confirmBtn->setContentsMargins(8, 8, 8, 8);
-    confirmBtn->setFont(font);
     confirmBtn->setProperty("default", true);
     connect(confirmBtn, SIGNAL(clicked()), dialog, SLOT(accept()));
     horizontalLayout->addWidget(confirmBtn);

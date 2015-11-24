@@ -12,10 +12,10 @@ class AscensionDialog : public QDialog
     Q_OBJECT
 
 public:
-    AscensionDialog(QString title = "Project Ascension");
+    AscensionDialog(QString title = "Project Ascension", QWidget* parent = 0);
     ~AscensionDialog();
 
-    static bool showConfirmDialog(QString title, QString message);
+    static bool showConfirmDialog(QString title, QString message, QWidget* parent = 0);
 
 public slots:
     void pushButtonClose();

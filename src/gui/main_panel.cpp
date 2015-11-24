@@ -29,7 +29,7 @@ MainPanel::MainPanel(QWidget* parent)
 */
 void MainPanel::init()
 {
-    p = new QSettings(QString("palette.ini"), QSettings::IniFormat);
+    p = new QSettings(QString("palette.ini"), QSettings::IniFormat, this);
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
