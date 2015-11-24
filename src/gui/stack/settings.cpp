@@ -9,109 +9,99 @@
 
 Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
 {
+    this->setStyleSheet("QGroupBox {color: " + p->value("Primary/LightText").toString() + ";"
+                        "background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
+
+    // Main Vertical Layout
     QVBoxLayout* vertlayout = new QVBoxLayout(this);
-    this->setLayout(vertlayout);
-    this->setStyleSheet("QGroupBox {color: " + p->value("Primary/LightText").toString() + ";}");
+
+    // User Settings Group Box
     QGroupBox* userSettingsBox = new QGroupBox(this);
     vertlayout->addWidget(userSettingsBox);
     userSettingsBox->setTitle("User Settings");
 
+    // Client and Style Horizontal Layout
     QHBoxLayout* horlayout = new QHBoxLayout();
     vertlayout->addLayout(horlayout);
 
-    //Horizontal Layout
-    //Client Settings
+    // Client Settings
     QGroupBox* clientSettingsBox = new QGroupBox(this);
-
-    horlayout->addWidget(clientSettingsBox);
-    QVBoxLayout* clientBoxLayout = new QVBoxLayout(clientSettingsBox);
-    clientSettingsBox->setLayout(clientBoxLayout);
     clientSettingsBox->setTitle("Client Settings");
+    horlayout->addWidget(clientSettingsBox);
+
+    // Client Settings - Vertical Layout
+    QVBoxLayout* clientBoxLayout = new QVBoxLayout(clientSettingsBox);
     clientBoxLayout->setMargin(50);
     clientBoxLayout->setSpacing(5);
+    clientSettingsBox->setLayout(clientBoxLayout);
 
-    QPushButton* wizardButton = new QPushButton(this);
+    QPushButton* wizardButton = new QPushButton(clientSettingsBox);
     wizardButton->setText("Add Games to Ascension");
     clientBoxLayout->addWidget(wizardButton);
+    connect(wizardButton, SIGNAL(clicked()), this, SLOT(rerunGameWizard()));
 
-    QPushButton* clearDatabaseButton = new QPushButton(this);
+    QPushButton* clearDatabaseButton = new QPushButton(clientSettingsBox);
     clearDatabaseButton->setText("Clear Database");
     clientBoxLayout->addWidget(clearDatabaseButton);
-    //End Client Settings
+    connect(clearDatabaseButton, SIGNAL(clicked()), this, SLOT(clearDatabase()));
 
     horlayout->addSpacing(10);
 
-    //Style Settings
+    // Style Settings
     QGroupBox* styleSettingsBox = new QGroupBox(this);
-    horlayout->addWidget(styleSettingsBox);
-    QVBoxLayout* styleBoxLayout = new QVBoxLayout(styleSettingsBox);
-    styleSettingsBox->setLayout(styleBoxLayout);
     styleSettingsBox->setTitle("Style Settings");
-    styleBoxLayout->setMargin(50);
+    horlayout->addWidget(styleSettingsBox);
 
-    QLabel* accentLabel = new QLabel(this);
+    // Style Settings - Vertical Layout
+    QVBoxLayout* styleBoxLayout = new QVBoxLayout(styleSettingsBox);
+    styleBoxLayout->setMargin(50);
+    styleSettingsBox->setLayout(styleBoxLayout);
+
+    QLabel* accentLabel = new QLabel(styleSettingsBox);
     accentLabel->setText("Accent Settings:");
     accentLabel->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
+    styleBoxLayout->addWidget(accentLabel);
 
-    accentButton_1 = new QPushButton(this);
-    accentButton_1->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/LightAccent").toString() + ";""}");
+    accentButton_1 = new QPushButton(styleSettingsBox);
+    accentButton_1->setStyleSheet("QPushButton {background-color: " + p->value("Accent/LightAccent").toString() + ";}");
     accentButton_1->setText("Set Light Accent");
-    accentButton_2 = new QPushButton(this);
-    accentButton_2->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
-    accentButton_2->setText("Set Medium Accent");
-    accentButton_3 = new QPushButton(this);
-    accentButton_3->setStyleSheet("QPushButton{ background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
-    accentButton_3->setText("Set Dark Accent");
+    styleBoxLayout->addWidget(accentButton_1);
 
-    QLabel* textLabel = new QLabel(this);
+    accentButton_2 = new QPushButton(styleSettingsBox);
+    accentButton_2->setStyleSheet("QPushButton {background-color: " + p->value("Accent/MediumAccent").toString() + ";}");
+    accentButton_2->setText("Set Medium Accent");
+    styleBoxLayout->addWidget(accentButton_2);
+
+    accentButton_3 = new QPushButton(styleSettingsBox);
+    accentButton_3->setStyleSheet("QPushButton {background-color: " + p->value("Accent/DarkAccent").toString() + ";}");
+    accentButton_3->setText("Set Dark Accent");
+    styleBoxLayout->addWidget(accentButton_3);
+
+    QLabel* textLabel = new QLabel(styleSettingsBox);
     textLabel->setText("Text Settings:");
     textLabel->setStyleSheet("color: " + p->value("Primary/LightText").toString() + "; ");
-
-    textColourButton_1 = new QPushButton(this);
-    textColourButton_1->setText("Set Light Text Colour");
-    textColourButton_2 = new QPushButton(this);
-    textColourButton_2->setText("Set Dark Text Colour");
-    textColourButton_3 = new QPushButton(this);
-    textColourButton_3->setText("Set Sub Text Colour");
-
-    QPushButton* resetAccents = new QPushButton(this);
-    resetAccents->setText("Reset Colors to Default");
     styleBoxLayout->addWidget(textLabel);
 
-    //Add text colour buttons
+    textColourButton_1 = new QPushButton(styleSettingsBox);
+    textColourButton_1->setText("Set Light Text Colour");
     styleBoxLayout->addWidget(textColourButton_1);
-    styleBoxLayout->addWidget(textColourButton_2);
-    styleBoxLayout->addWidget(textColourButton_3);
-    //End Add text colour buttons
-    styleBoxLayout->addWidget(accentLabel);
-    //Add Accent Buttons
-    styleBoxLayout->addWidget(accentButton_1);
-    styleBoxLayout->addWidget(accentButton_2);
-    styleBoxLayout->addWidget(accentButton_3);
-    styleBoxLayout->addWidget(resetAccents);
-    //End Add Accent Buttons
-
-    //End Style Settings
-
-    horlayout->addSpacing(10);
-
-    //Empty Group Box
-    QGroupBox* testSettingsBox = new QGroupBox(this);
-    horlayout->addWidget(testSettingsBox);
-    //End Empty Group Box
-
-    userSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
-    clientSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
-    styleSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
-    testSettingsBox->setStyleSheet("QGroupBox{ background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
-
-    //End Horizontal Layout
-
-    connect(wizardButton, SIGNAL(clicked()), this, SLOT(rerunGameWizard()));
-    connect(clearDatabaseButton, SIGNAL(clicked()), this, SLOT(clearDatabase()));
     connect(accentButton_1, SIGNAL(clicked()), this, SLOT(setLightAccent()));
+
+    textColourButton_2 = new QPushButton(styleSettingsBox);
+    textColourButton_2->setText("Set Dark Text Colour");
+    styleBoxLayout->addWidget(textColourButton_2);
     connect(accentButton_2, SIGNAL(clicked()), this, SLOT(setMediumAccent()));
+
+    textColourButton_3 = new QPushButton(styleSettingsBox);
+    textColourButton_3->setText("Set Sub Text Colour");
+    styleBoxLayout->addWidget(textColourButton_3);
     connect(accentButton_3, SIGNAL(clicked()), this, SLOT(setDarkAccent()));
+
+    styleBoxLayout->addSpacing(10);
+
+    QPushButton* resetAccents = new QPushButton(styleSettingsBox);
+    resetAccents->setText("Reset Colors to Default");
+    styleBoxLayout->addWidget(resetAccents);
     connect(resetAccents, SIGNAL(clicked()), this, SLOT(resetAccents()));
 
     if (!db.init())
@@ -120,6 +110,10 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
         error.critical(0, "Error!", "An error occured while trying to load the database.");
         exit(EXIT_FAILURE);
     }
+}
+
+Settings::~Settings()
+{
 }
 
 /** Event handler for Wizard Button
@@ -134,19 +128,19 @@ void Settings::rerunGameWizard()
 void Settings::setLightAccent()
 {
     QColor color = QColorDialog::getColor(Qt::white);
-    updateAccent(1,color);
+    updateAccent(1, color);
 }
 
 void Settings::setMediumAccent()
 {
     QColor color = QColorDialog::getColor(Qt::white);
-    updateAccent(2,color);
+    updateAccent(2, color);
 }
 
 void Settings::setDarkAccent()
 {
     QColor color = QColorDialog::getColor(Qt::white);
-    updateAccent(3,color);
+    updateAccent(3, color);
 }
 
 void Settings::resetAccents()
@@ -177,9 +171,10 @@ void Settings::resetAccents()
         palette.setValue("DarkAccent", "#6a4a05");
         palette.endGroup();
     }
-    accentButton_1->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
-    accentButton_2->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
-    accentButton_3->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
+
+    accentButton_1->setStyleSheet("QPushButton {background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
+    accentButton_2->setStyleSheet("QPushButton {background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
+    accentButton_3->setStyleSheet("QPushButton {background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
 }
 
 void Settings::updateAccent(int accent, QColor color)
@@ -195,14 +190,14 @@ void Settings::updateAccent(int accent, QColor color)
         palette.beginGroup("Primary");
         palette.endGroup();
         palette.beginGroup("Accent");
-        if(accent == 1) palette.setValue("LightAccent", color.name());
-        if(accent == 2) palette.setValue("MediumAccent", color.name());
-        if(accent == 3) palette.setValue("DarkAccent", color.name());
+        if (accent == 1) palette.setValue("LightAccent", color.name());
+        if (accent == 2) palette.setValue("MediumAccent", color.name());
+        if (accent == 3) palette.setValue("DarkAccent", color.name());
         palette.endGroup();
     }
-    if(accent == 1) accentButton_1->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
-    if(accent == 2) accentButton_2->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
-    if(accent == 3) accentButton_3->setStyleSheet("QPushButton{ background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
+    if (accent == 1) accentButton_1->setStyleSheet("QPushButton {background-color: " + palette.value("Accent/LightAccent").toString() + ";}");
+    if (accent == 2) accentButton_2->setStyleSheet("QPushButton {background-color: " + palette.value("Accent/MediumAccent").toString() + ";}");
+    if (accent == 3) accentButton_3->setStyleSheet("QPushButton {background-color: " + palette.value("Accent/DarkAccent").toString() + ";}");
 }
 
 void Settings::clearDatabase()
@@ -220,6 +215,3 @@ void Settings::clearDatabase()
     }
 }
 
-Settings::~Settings()
-{
-}
