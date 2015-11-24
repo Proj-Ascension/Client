@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     if (stylesheet.open(QFile::ReadOnly))
     {
         QString styleSheet = stylesheet.readAll();
-        application->setStyleSheet(styleSheet);
+        application->setStyleSheet(styleSheet + getConfigurableStyle());
     }
 
     initSettings(*application);
