@@ -6,7 +6,7 @@
 * \param p Inherited palette configuration for setting StyleSheets.
 * \param parent Pointer to parent widget.
 */
-News::News(QSettings* p, QWidget* parent) : QWidget(parent)
+News::News(QSettings* p, QWidget* parent) : p(p), QWidget(parent)
 {
     this->setStyleSheet("QListWidget {background-color: " + p->value("Primary/SecondaryBase").toString() + ";}"
                         "QListWidget {color: " + p->value("Primary/LightText").toString() + ";}");
@@ -54,7 +54,7 @@ void News::getRSSFeed(QString url)
 
 void News::onRSSReturned(QNetworkReply* reply)
 {
-    NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(this);
+    NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(p, this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
     while (!xml.atEnd())

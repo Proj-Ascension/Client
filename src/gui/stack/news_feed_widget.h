@@ -14,7 +14,7 @@ class NewsFeedWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit NewsFeedWidget(QWidget* parent = 0);
+    explicit NewsFeedWidget(QSettings* p, QWidget* parent = 0);
     ~NewsFeedWidget();
 
     void addRSSItem(QString title, QString url);

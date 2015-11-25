@@ -9,7 +9,7 @@
 * \param p Inherited palette configuration for setting StyleSheets.
 * \param parent Pointer to parent widget.
 */
-NewsFeedWidget::NewsFeedWidget(QWidget* parent) : QWidget(parent)
+NewsFeedWidget::NewsFeedWidget(QSettings* p, QWidget* parent) : QWidget(parent)
 {
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
 
@@ -22,7 +22,11 @@ NewsFeedWidget::NewsFeedWidget(QWidget* parent) : QWidget(parent)
     titleAndRemove->addWidget(feedTitle);
 
     deleteWidget = new QPushButton(this);
-    deleteWidget->setText("X");
+    deleteWidget->setObjectName("pushButtonClose");
+    deleteWidget->setStyleSheet("QPushButton {background-color:" + p->value("Primary/DarkElement").toString() + ";"
+                                "color:" + p->value("Primary/LightText").toString() + ";"
+                                "padding: 4px; border-radius: 1px;}"
+                                "QPushButton:hover {background-color:" + p->value("Primary/InactiveSelection").toString() + ";}");
     deleteWidget->setMaximumWidth(50);
     titleAndRemove->addWidget(deleteWidget);
 

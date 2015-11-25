@@ -26,6 +26,7 @@ private:
     QLineEdit* rssAddress;
     QNetworkAccessManager* manager;
     QSettings* rss;
+    QSettings* p;
 
     void getRSSFeed(QString url);
     void saveFeeds(QString title, QString url);
