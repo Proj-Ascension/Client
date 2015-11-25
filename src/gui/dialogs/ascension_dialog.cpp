@@ -18,9 +18,12 @@ AscensionDialog::AscensionDialog(QString title, QWidget* parent)
       p(new QSettings("palette.ini", QSettings::IniFormat))
 {
     setObjectName("ascensionDialog");
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Dialog | Qt::WindowStaysOnTopHint);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::Dialog);
     setWindowTitle(title);
     setWindowModality(Qt::ApplicationModal);
+
+    setStyleSheet("QLabel {font: SourceSansPro 9;"
+                  "color: " + p->value("Primary/SubText").toString() + ";}");
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
@@ -55,8 +58,8 @@ AscensionDialog::AscensionDialog(QString title, QWidget* parent)
     accentBorder->setObjectName("accentBorder");
     accentBorder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     accentBorder->setMaximumHeight(3);
-    accentBorder->setStyleSheet("border-top: 2px solid " + p->value("Accent/MediumAccent").toString() +
-                                ";border-bottom: 1px solid" + p->value("Accent/DarkAccent").toString() + ";");
+    accentBorder->setStyleSheet("border-top: 2px solid " + p->value("Accent/MediumAccent").toString() + ";"
+                                "border-bottom: 1px solid" + p->value("Accent/DarkAccent").toString() + ";");
     accentBorder->adjustSize();
     verticalLayout1->addWidget(accentBorder);
 
@@ -77,26 +80,25 @@ AscensionDialog::AscensionDialog(QString title, QWidget* parent)
     // Horizontal layout #1 - Top bar
     QHBoxLayout* horizontalLayout1 = new QHBoxLayout;
     horizontalLayout1->setSpacing(0);
-    horizontalLayout1->setMargin(0);
+    horizontalLayout1->setContentsMargins(12, 12, 12, 12);
     verticalLayout3->addLayout(horizontalLayout1);
 
     // Horizontal layout #2 - Dialog Title
     QHBoxLayout* horizontalLayout2 = new QHBoxLayout;
     horizontalLayout2->setSpacing(0);
-    horizontalLayout2->setContentsMargins(12, 2, 0, 0);
+    horizontalLayout2->setMargin(0);
     horizontalLayout2->setAlignment(Qt::AlignLeft);
     horizontalLayout1->addLayout(horizontalLayout2);
 
     // Title Label
     QLabel* label = new QLabel(title, coreWidget);
-    label->setStyleSheet("color: " + p->value("Primary/SubText").toString() + ";");
-    label->setFont(QFont("SourceSansPro", 9, QFont::DemiBold));
+    label->setStyleSheet("font-weight: 600;");
     horizontalLayout2->addWidget(label);
 
     // Horizontal layout #3 - window controls
     QHBoxLayout* horizontalLayout3 = new QHBoxLayout;
     horizontalLayout3->setSpacing(0);
-    horizontalLayout3->setContentsMargins(0, 9, 7, 7);
+    horizontalLayout3->setMargin(0);
     horizontalLayout1->addLayout(horizontalLayout3);
 
     horizontalLayout3->addStretch();
@@ -110,6 +112,7 @@ AscensionDialog::AscensionDialog(QString title, QWidget* parent)
 
     // Content
     content = new QWidget(coreWidget);
+    content->setContentsMargins(12, 0, 12, 0);
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     verticalLayout3->addWidget(content);
@@ -162,16 +165,18 @@ bool AscensionDialog::showConfirmDialog(QString title, QString message, QWidget*
     AscensionDialog* dialog = new AscensionDialog(title, parent);
     QWidget* content = dialog->content;
 
-    QGridLayout* gridLayout = new QGridLayout;
-    content->setLayout(gridLayout);
+    QVBoxLayout* vertLayout = new QVBoxLayout;
+    content->setLayout(vertLayout);
 
     QLabel* label = new QLabel(message, content);
     label->setAlignment(Qt::AlignTop);
     label->setWordWrap(true);
-    gridLayout->addWidget(label, 0, 0);
+    vertLayout->addWidget(label);
+
+    vertLayout->addSpacing(12);
 
     QHBoxLayout* horizontalLayout = new QHBoxLayout;
-    gridLayout->addLayout(horizontalLayout, 1, 0);
+    vertLayout->addLayout(horizontalLayout);
 
     QPushButton* cancelBtn = new QPushButton("Cancel", content);
     cancelBtn->setContentsMargins(8, 8, 8, 8);

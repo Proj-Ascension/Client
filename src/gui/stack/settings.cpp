@@ -1,3 +1,4 @@
+#include <src/gui/dialogs/ascension_dialog.h>
 #include "settings.h"
 #include "../wizards/drm_setup_wizard.h"
 
@@ -202,16 +203,10 @@ void Settings::updateAccent(int accent, QColor color)
 
 void Settings::clearDatabase()
 {
-    int ret = QMessageBox(QMessageBox::Question, "Deleting Database", "Proceeding will delete the database, the database will be non-recoverable. Proceed?", QMessageBox::Yes | QMessageBox::No).exec();
-    switch (ret)
+    bool ret = AscensionDialog::showConfirmDialog("Deleting Database", "Proceeding will delete the database, the database will be non-recoverable.\nProceed?");
+    if (ret)
     {
-    case QMessageBox::Yes:
         db.reset();
-        break;
-    case QMessageBox::No:
-        break;
-    default:
-        break;
     }
 }
 
