@@ -1,51 +1,63 @@
 #mainPanel {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #systemPanel {
-    margin: 0px;
-    padding: 0px;
-}
-
-#centralWidget {
-    background: #22262F; /* Window background color */
+    margin: 0;
+    padding: 0;
 }
 
 #mainPanelScrollArea {
     border: none;
 }
 
+#dialogScrollArea {
+    border: none;
+}
+
 /* System buttons */
 #pushButtonMaximize, #pushButtonMinimize, #pushButtonClose {
+    background-color: transparent;
     border: none;
-    width: 14px;
-    height: 14px;
+    padding: 0;
+    border-radius: 0;
+    width: 12px;
+    height: 12px;
 }
 
 #pushButtonMaximize {
-    padding: 0 8px 0 8px;
-    image: url(:/system_menu/icons/maximize.png);
+    image: url(:/window_controls/maximize_normal.png);
 }
 
 #pushButtonMaximize:hover {
-    image: url(:/system_menu/icons/maximize_hover.png);
+    image: url(:/window_controls/maximize_hover.png);
+}
+
+#pushButtonMaximize:pressed {
+    image: url(:/window_controls/maximize_pressed.png);
 }
 
 #pushButtonMinimize {
-    padding: 0 7px 0 0;
-    image: url(:/system_menu/icons/minimize.png);
+    image: url(:/window_controls/minimize_normal.png);
 }
 
 #pushButtonMinimize:hover {
-    image: url(:/system_menu/icons/minimize_hover.png);
+    image: url(:/window_controls/minimize_hover.png);
+}
+
+#pushButtonMinimize:pressed {
+    image: url(:/window_controls/minimize_pressed.png);
 }
 
 #pushButtonClose {
-    padding: 0 0 0 7px;
-    image: url(:/system_menu/icons/close.png);
+    image: url(:/window_controls/close_normal.png);
 }
 
 #pushButtonClose:hover {
-    image: url(:/system_menu/icons/close_hover.png);
+    image: url(:/window_controls/close_hover.png);
+}
+
+#pushButtonClose:pressed {
+    image: url(:/window_controls/close_pressed.png);
 }

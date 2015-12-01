@@ -6,19 +6,10 @@
 * \param p Inherited palette configuration for setting StyleSheets.
 * \param parent Pointer to parent widget.
 */
-News::News(QSettings* p, QWidget* parent) : QWidget(parent)
+News::News(QSettings* p, QWidget* parent) : p(p), QWidget(parent)
 {
-    this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
-                        "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
-                        "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
-                        "QPushButton {"
-                        "color: " + p->value("Primary/LightText").toString() + "; "
-                        "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                        "border: none; margin: 0px; padding: 0px;} "
-                        "QPushButton:hover {"
-                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
-                        "color: " + p->value("Primary/LightText").toString() + ";");
-    QFont buttonFont("SourceSansPro", 9);
+    this->setStyleSheet("QListWidget {background-color: " + p->value("Primary/SecondaryBase").toString() + ";}"
+                        "QListWidget {color: " + p->value("Primary/LightText").toString() + ";}");
 
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
     manager = new QNetworkAccessManager(this);
@@ -63,7 +54,7 @@ void News::getRSSFeed(QString url)
 
 void News::onRSSReturned(QNetworkReply* reply)
 {
-    NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(this);
+    NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(p, this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
     while (!xml.atEnd())
