@@ -5,6 +5,7 @@
 
 OriginDRM::OriginDRM() : DRMType("<b>Origin</b>"){}
 
+/** Check if Origin exists or not and set various class variables accordingly. */
 void OriginDRM::checkOriginExists()
 {
     QDir originRoot;
@@ -80,15 +81,19 @@ void OriginDRM::findGames()
 
 }
 
+/** Getter for the originTree */
 pt::ptree OriginDRM::getGames()
 {
     return originTree;
 }
 
+/** Create the wizard tab for Origin 
+ * \param parent Parent of the widget
+ * */
 QWidget* OriginDRM::createPane(QWidget* parent)
 {
-	viewport = new QWidget(parent);
-	scrollArea = new QScrollArea(parent);
+    viewport = new QWidget(parent);
+    scrollArea = new QScrollArea(parent);
 
     int row = 0;
     for (pt::ptree::value_type& games : originTree.get_child("games"))
@@ -118,6 +123,7 @@ QWidget* OriginDRM::createPane(QWidget* parent)
     return scrollArea;
 }
 
+/** Getter for buttonGroupVector */
 QList<QButtonGroup*> OriginDRM::getButtonGroupVector()
 {
     return buttonGroupVector;

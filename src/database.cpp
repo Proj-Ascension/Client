@@ -226,12 +226,14 @@ unsigned int Database::getGameCount() const
     return query.value(0).toUInt();
 }
 
+/** Get the current instance, else create it */
 Database &Database::getInstance()
 {
     static Database instance;
     return instance;
 }
 
+/** Get the current instance, else create it with a path */
 Database& Database::getInstance(QString name)
 {
     static Database instance(name);

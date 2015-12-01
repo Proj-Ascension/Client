@@ -25,8 +25,6 @@ typedef std::vector<Game> GameList;
 class Database
 {
 public:
-    Database();
-    Database(QString name);
     static Database& getInstance();
     static Database& getInstance(QString name);
     bool init();
@@ -44,6 +42,8 @@ public:
     unsigned int getGameCount() const;
 
 private:
+    Database();
+    Database(QString name);
     QSqlDatabase db;
     Database(Database const&) = delete;
     void operator=(Database const&) = delete;

@@ -5,8 +5,14 @@
 #include <QCheckBox>
 
 
+/** UplayDRM constructor
+ * Sets the DRM string.
+*/
 UplayDRM::UplayDRM() : DRMType("<b>Uplay</b>"){}
 
+/** Check if Uplay exists on the filesystem or not and adjust the various class
+ * variables accordingly.
+ */
 void UplayDRM::checkUplayExists()
 {
     QDir uplayFolder;
@@ -62,10 +68,13 @@ void UplayDRM::checkUplayExists()
     }
 }
 
+/** Create the wizard tab for Uplay 
+ * \param parent Parent of the widget
+ */
 QWidget* UplayDRM::createPane(QWidget* parent)
 {
-	viewport = new QWidget(parent);
-	scrollArea = new QScrollArea(parent);
+    viewport = new QWidget(parent);
+    scrollArea = new QScrollArea(parent);
 
     int row = 0;
     for (pt::ptree::value_type& games : uplayTree.get_child("games"))
@@ -132,11 +141,13 @@ void UplayDRM::findGames()
     uplayTree.add("games.count", count);
 }
 
+/** Getter for uplayTree */
 pt::ptree UplayDRM::getGames()
 {
     return uplayTree;
 }
 
+/** Getter for buttonGroupVector */
 QList<QButtonGroup*> UplayDRM::getButtonGroupVector()
 {
     return buttonGroupVector;

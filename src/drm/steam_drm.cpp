@@ -7,6 +7,8 @@
 #include <QLineEdit>
 #include <QCheckBox>
 
+SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}
+
 /** Check if Steam is installed on the current computer, if applicable, and sets some values for later pages to
  * check on.
  */
@@ -78,10 +80,13 @@ void SteamDRM::checkExists()
     }
 }
 
+/** Create the wizard tab for Steam
+ * \param parent Parent of the widget
+ */
 QWidget* SteamDRM::createPane(QWidget* parent)
 {
-	viewport = new QWidget(parent);
-	scrollArea = new QScrollArea(parent);
+    viewport = new QWidget(parent);
+    scrollArea = new QScrollArea(parent);
 
     int row = 0;
     for (auto& game : steamVector)
@@ -269,13 +274,13 @@ void SteamDRM::parseAcf()
     }
 }
 
+/** Getter for steamVector */
 std::vector<Game> SteamDRM::getGames()
 {
     return steamVector;
 }
 
-SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}
-
+/** Getter for buttonGroup */
 QButtonGroup* SteamDRM::getButtonGroup()
 {
     return buttonGroup;

@@ -12,7 +12,7 @@ public:
     using DRMType::DRMType;
     void findGames();
     pt::ptree getGames();
-	QWidget* createPane(QWidget* parent);
+    QWidget* createPane(QWidget* parent);
     QList<QButtonGroup*> getButtonGroupVector();
     UplayDRM();
 };
