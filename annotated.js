@@ -2,6 +2,7 @@ var annotated =
 [
     [ "SteamVdfParse", "db/d3c/namespace_steam_vdf_parse.html", "db/d3c/namespace_steam_vdf_parse" ],
     [ "AddGameWizard", "d5/d20/class_add_game_wizard.html", "d5/d20/class_add_game_wizard" ],
+    [ "AscensionDialog", "d1/d10/class_ascension_dialog.html", "d1/d10/class_ascension_dialog" ],
     [ "BorderlessWindow", "d2/d4b/class_borderless_window.html", "d2/d4b/class_borderless_window" ],
     [ "Database", "dc/d83/class_database.html", "dc/d83/class_database" ],
     [ "DRMPage", "d8/d67/class_d_r_m_page.html", "d8/d67/class_d_r_m_page" ],
