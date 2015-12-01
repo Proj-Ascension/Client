@@ -129,13 +129,6 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
     connect(accentButton_2, SIGNAL(clicked()), this, SLOT(setMediumAccent()));
     connect(accentButton_3, SIGNAL(clicked()), this, SLOT(setDarkAccent()));
     connect(resetAccents, SIGNAL(clicked()), this, SLOT(resetAccents()));
-
-    if (!Database::getInstance().init())
-    {
-        QMessageBox error;
-        error.critical(0, "Error!", "An error occured while trying to load the database.");
-        exit(EXIT_FAILURE);
-    }
 }
 
 /** Event handler for Wizard Button
