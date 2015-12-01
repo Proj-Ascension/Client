@@ -31,7 +31,6 @@ void initSettings(QApplication &application)
     if (!QFile(palette.fileName()).exists() && palette.isWritable())
     {
         palette.beginGroup("Primary");
-
         palette.setValue("ActiveElement", "#FFFFFF");
         palette.setValue("InactiveSelection", "#686868");
         palette.setValue("HoverSelection", "#ADADAD");
@@ -46,7 +45,6 @@ void initSettings(QApplication &application)
         palette.endGroup();
 
         palette.beginGroup("Accent");
-
         palette.setValue("LightAccent", "#E58F12");
         palette.setValue("MediumAccent", "#895f06");
         palette.setValue("DarkAccent", "#6a4a05");
@@ -123,4 +121,17 @@ void initFonts(QApplication &application)
             }
         }
     }
+}
+
+QString getConfigurableStyle() {
+    QSettings p(QString("palette.ini"), QSettings::IniFormat);
+    return "QPushButton {"
+           "color: " + p.value("Primary/LightText").toString() + ";"
+           "background-color: " + p.value("Primary/DarkElement").toString() + ";"
+           "font: SourceSansPro 9;"
+           "margin: 0; padding: 4px;"
+           "border-style: none; border-radius: 1px; }"
+           "QPushButton:hover {background-color: " + p.value("Primary/InactiveSelection").toString() + ";}"
+           "QPushButton[default='true'] {background-color: " + p.value("Accent/MediumAccent").toString() + ";}"
+           "QPushButton[default='true']:hover {background-color: " + p.value("Accent/LightAccent").toString() + ";}";
 }

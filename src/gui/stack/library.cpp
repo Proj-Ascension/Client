@@ -1,5 +1,6 @@
 #include "library.h"
 #include "../wizards/add_game_wizard.h"
+#include "../dialogs/ascension_dialog.h"
 
 #include <QFileDialog>
 #include <QInputDialog>
@@ -17,15 +18,6 @@ Library::Library(QSettings* p, QWidget* parent)
       runningProcess(new QProcess(this))
 {
     this->setObjectName("libraryUI");
-
-    this->setStyleSheet("QPushButton {"
-                                "color: " + p->value("Primary/LightText").toString() + "; "
-                                "background-color: " + p->value("Primary/DarkElement").toString() + "; "
-                                "border: none; margin: 0px; padding: 0px;} "
-                                "QPushButton:hover {"
-                                "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} ");
-
-    QFont buttonFont("SourceSansPro", 12);
 
     // Main Library Layout
     QHBoxLayout* mainHLayout = new QHBoxLayout(this);
@@ -56,12 +48,10 @@ Library::Library(QSettings* p, QWidget* parent)
 
     // Add Game
     QPushButton* addGame = new QPushButton("Add Game", sidebar);
-    addGame->setFont(buttonFont);
     sidebarButtonHLayout->addWidget(addGame);
 
     // Remove Game
     QPushButton* removeGame = new QPushButton("Remove Game", sidebar);
-    removeGame->setFont(buttonFont);
     sidebarButtonHLayout->addWidget(removeGame);
 
     // Main Content Widget
@@ -76,7 +66,6 @@ Library::Library(QSettings* p, QWidget* parent)
 
     // Launch Game Button
     QPushButton* launchGame = new QPushButton("Launch Game", content);
-    launchGame->setFont(buttonFont);
     contentGrid->addWidget(launchGame, 0, 0);
 
     if (!db.init())
@@ -156,9 +145,7 @@ void Library::onLaunchGameClicked()
     }
     else
     {
-        QMessageBox messageBox;
-        messageBox.setText("Error: an application is already running.");
-        messageBox.exec();
+        AscensionDialog::showConfirmDialog("Error", "An application is already running!");
     }
 }
 
@@ -221,7 +208,7 @@ void Library::finished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     if (exitCode != 0)
     {
-        QMessageBox(QMessageBox::Warning, "Warning", "The game finished, but it claims to have encountered an error").exec();
+        AscensionDialog::showConfirmDialog("Warning", "The game finished, but it claims to have encountered an error!");
     }
 }
 
@@ -233,10 +220,10 @@ void Library::onLaunchError(QProcess::ProcessError error)
     switch (error)
     {
         case QProcess::FailedToStart:
-            QMessageBox(QMessageBox::Critical, "Error", "Could not start the game. Please double check that you are using the correct file to launch it.").exec();
+            AscensionDialog::showConfirmDialog("Error", "Could not start the game. Please double check that you are using the correct file to launch it.");
             break;
         case QProcess::Crashed:
-            QMessageBox(QMessageBox::Warning, "Crash!", "The launched game has crashed").exec();
+            AscensionDialog::showConfirmDialog("Crash", "The launched game has crashed!");
             break;
         default:
             // Other cases are errors unrelated to startup, so let's not handle them
