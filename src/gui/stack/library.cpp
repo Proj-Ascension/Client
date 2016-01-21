@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QFileSystemWatcher>
+#include <src/database.h>
 
 /** Library constructor
  * Initialize the library UI and generate an initial list of all the games available.

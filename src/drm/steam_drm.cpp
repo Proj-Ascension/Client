@@ -102,7 +102,7 @@ QWidget* SteamDRM::createPane(QWidget* parent)
             if (game.executablePath.contains(dir))
             {
                 checkBox->setStyleSheet("QLabel { color: black; }");
-                checkBox->setText("Executable: " + game.executablePath.remove(QDir(dir).filePath("SteamApps/common")).remove(0, 1));
+                checkBox->setText("Executable: " + game.executablePath);
             }
         }
         layout->addWidget(name, row, 0, Qt::AlignVCenter | Qt::AlignLeft);
