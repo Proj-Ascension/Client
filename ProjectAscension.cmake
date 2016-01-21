@@ -32,6 +32,11 @@ set(GUI_CORE
     src/gui/tab_widget.h
 )
 
+set(GUI_DIALOGS
+    src/gui/dialogs/ascension_dialog.cpp
+    src/gui/dialogs/ascension_dialog.h
+)
+
 set(GUI_STACK
     src/gui/stack/library.cpp
     src/gui/stack/library.h
@@ -102,6 +107,7 @@ set(SOURCE
     ${LIBS}
     ${DRM}
     ${GUI_CORE}
+    ${GUI_DIALOGS}
     ${GUI_STACK}
     ${GUI_WIZARDS}
     ${GUI_BORDERLESS}
@@ -113,6 +119,7 @@ include_directories(
     src/drm
     src/libs
     src/gui
+    src/gui/dialogs
     src/gui/borderless
     src/gui/stack
     src/gui/wizards

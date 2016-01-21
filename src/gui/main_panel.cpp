@@ -29,7 +29,7 @@ MainPanel::MainPanel(QWidget* parent)
 */
 void MainPanel::init()
 {
-    p = new QSettings(QString("palette.ini"), QSettings::IniFormat);
+    p = new QSettings(QString("palette.ini"), QSettings::IniFormat, this);
 
     // Main panel layout
     QGridLayout* mainGridLayout = new QGridLayout;
@@ -96,8 +96,8 @@ void MainPanel::init()
 
     // Horizontal layout #2 - window controls
     QHBoxLayout* horizontalLayout2 = new QHBoxLayout;
-    horizontalLayout2->setSpacing(0);
-    horizontalLayout2->setMargin(8);
+    horizontalLayout2->setSpacing(12);
+    horizontalLayout2->setContentsMargins(0, 12, 12, 12);
     verticalLayout3->addLayout(horizontalLayout2);
 
     horizontalLayout2->addStretch();
