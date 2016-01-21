@@ -197,7 +197,7 @@ void Settings::updateAccent(int accent, QColor color)
 void Settings::clearDatabase()
 {
     bool ret = AscensionDialog::showConfirmDialog("Deleting Database", "Proceeding will delete the database, the database will be non-recoverable.\nProceed?");
-    if (ret)
+    switch (ret)
     {
     case QMessageBox::Yes:
         Database::getInstance().reset();
