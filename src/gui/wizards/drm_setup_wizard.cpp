@@ -290,9 +290,10 @@ DRMType* ResultsPage::getCurrentDRM()
         case 2:
             return uplay;
         default:
-            break;
+            return nullptr;
     }
 }
+
 /** Slot to set all buttons to checked */
 void ResultsPage::selectAll()
 {
