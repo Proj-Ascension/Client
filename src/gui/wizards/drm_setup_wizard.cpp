@@ -217,7 +217,7 @@ void ResultsPage::initializePage()
  */
 int ResultsPage::nextId() const
 {
-    if (steam->getIsInstalled() && origin->getIsInstalled() && uplay->getIsInstalled())
+    if (steam->getIsInstalled())
     {
         int steamOffset = 0;
         for (auto i : steam->getButtonGroup()->buttons())
@@ -229,6 +229,9 @@ int ResultsPage::nextId() const
             }
             steamOffset++;
         }
+    }
+    if (origin->getIsInstalled())
+    {
         for (auto i : origin->getButtonGroupVector())
         {
             for (auto group : i->buttons())
@@ -236,17 +239,23 @@ int ResultsPage::nextId() const
                 if (group->isChecked())
                 {
                     QDir path = group->text().remove("Executable: ");
-                    std::string name = QString(QDir::cleanPath(path.filePath("").remove(origin->getRootDir().filePath((""))))).toLocal8Bit().constData();
+                    std::string name = QString(QDir::cleanPath(
+                        path.filePath("").remove(origin->getRootDir().filePath((""))))).toLocal8Bit().constData();
                     std::vector<std::string> strSplit;
                     boost::split(strSplit, name, boost::is_any_of("/"));
                     name = strSplit.at(1);
 
                     std::cout << "Adding " << name << std::endl;
                     unsigned int count = Database::getInstance().getGameCount();
-                    addedVector.push_back({count, QString::fromStdString(name), origin->getRootDir().filePath(QString::fromStdString(name)), path.filePath(""), ""});
+                    addedVector.push_back({count, QString::fromStdString(name),
+                                           origin->getRootDir().filePath(QString::fromStdString(name)),
+                                           path.filePath(""), ""});
                 }
             }
         }
+    }
+    if (uplay->getIsInstalled())
+    {
         for (auto i : uplay->getButtonGroupVector())
         {
 
