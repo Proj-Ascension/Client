@@ -1,8 +1,5 @@
 #include "borderless_window.h"
 
-#include <QDesktopWidget>
-#include <QPushButton>
-
 #include <tchar.h>
 #include <dwmapi.h>
 #include <windowsx.h>

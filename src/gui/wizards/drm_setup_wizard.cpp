@@ -1,11 +1,6 @@
 #include "drm_setup_wizard.h"
 #include <src/libs/steam_vdf_parse.hpp>
-#include <src/database.h>
-#include <src/gui/stack/library.h>
 
-#include <QtConcurrent/QtConcurrent>
-
-#include <iostream>
 #include <thread>
 #include <future>
 

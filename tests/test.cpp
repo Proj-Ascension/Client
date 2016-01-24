@@ -1,9 +1,6 @@
 #include "test.h"
 #include "../src/database.h"
 #include "../src/libs/steam_vdf_parse.hpp"
-#include <QList>
-#include <QDir>
-#include <QFile>
 
 inline bool operator==(Game g1, Game g2)
 {

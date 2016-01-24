@@ -1,7 +1,6 @@
 #include "origin_drm.h"
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QStandardPaths>
 
 OriginDRM::OriginDRM() : DRMType("<b>Origin</b>"){}
 

@@ -1,8 +1,4 @@
 #include "add_game_wizard.h"
-#include "../../database.h"
-
-#include <QDebug>
-#include <QString>
 
 /** AddGameWizard constructor
  * Defines the pages and initializes the database with the path given. Also sets up some window-related properties,
@@ -56,8 +52,8 @@ InfoPage::InfoPage(QWidget* parent) : QWizardPage(parent)
     registerField("exeEdit*", exeEdit);
     registerField("argsEdit", argsEdit);
 
-    connect(dirEditPicker, &QPushButton::clicked, [&]() { selectPath(this->dirEdit, QFileDialog::Directory);});
-    connect(exeEditPicker, &QPushButton::clicked, [&]() { selectPath(this->exeEdit, QFileDialog::ExistingFile);});
+    QObject::connect(dirEditPicker, &QPushButton::clicked, [&]() { selectPath(this->dirEdit, QFileDialog::Directory);});
+    QObject::connect(exeEditPicker, &QPushButton::clicked, [&]() { selectPath(this->exeEdit, QFileDialog::ExistingFile);});
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(nameLabel, 0, 0);

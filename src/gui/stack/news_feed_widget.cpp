@@ -1,7 +1,6 @@
 #include "news_feed_widget.h"
 
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QDesktopServices>
 
 /** Settings constructor

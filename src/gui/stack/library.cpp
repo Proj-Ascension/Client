@@ -2,13 +2,6 @@
 #include "../wizards/add_game_wizard.h"
 #include "../dialogs/ascension_dialog.h"
 
-#include <QFileDialog>
-#include <QInputDialog>
-#include <QMessageBox>
-#include <QDebug>
-#include <QFileSystemWatcher>
-#include <src/database.h>
-
 /** Library constructor
  * Initialize the library UI and generate an initial list of all the games available.
  * \param p Inherited palette configuration for setting StyleSheets.

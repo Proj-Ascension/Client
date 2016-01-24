@@ -1,12 +1,5 @@
 #include "steam_drm.h"
 #include <src/libs/steam_vdf_parse.hpp>
-#include <src/database.h>
-
-#include <QSettings>
-#include <QProcess>
-#include <QtConcurrent/QtConcurrent>
-#include <QLineEdit>
-#include <QCheckBox>
 
 SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}
 

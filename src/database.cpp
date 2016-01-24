@@ -1,7 +1,5 @@
 #include "database.h"
 
-#include <QDebug>
-
 /** Database constructor
  * Constructs the local database.
  * Currently no interface to handle remote databases, just creates one in the

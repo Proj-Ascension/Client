@@ -2,12 +2,6 @@
 #include <src/gui/stack/settings.h>
 #include <src/gui/stack/news.h>
 
-#include <QMessageBox>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QScrollArea>
-#include <QLabel>
-
 
 /** MainPanel constructor
 * Sets base size policy and object name.
