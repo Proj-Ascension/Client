@@ -8,6 +8,7 @@
 */
 News::News(QSettings* p, QWidget* parent) : QWidget(parent)
 {
+
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
                         "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
                         "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
@@ -56,9 +57,13 @@ void News::setRSSFeed()
 
 void News::getRSSFeed(QString url)
 {
-    qDebug() << "Getting RSS feed of:" << url;
-    QNetworkRequest request(url);
-    manager->get(request);
+    if(!(std::find(urls.begin(), urls.end(), url) != urls.end()))
+    {
+        qDebug() << "Getting RSS feed of:" << url;
+        QNetworkRequest request(url.trimmed());
+        manager->get(request);
+        urls.push_back(url);
+    }
 }
 
 void News::onRSSReturned(QNetworkReply* reply)
@@ -76,7 +81,6 @@ void News::onRSSReturned(QNetworkReply* reply)
                 {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    //rss->beginGroup("feeds");
                     if (!rss->contains(title))
                     {
                         qDebug() << title;
@@ -94,12 +98,6 @@ void News::onRSSReturned(QNetworkReply* reply)
                 if(xml.name() == "link")url = xml.readElementText();
                 newsFeedWidget->addRSSItem(title, url);
             }
-            /*if(xml.name() == "link")
-            {
-                //xml.readNext();
-                qDebug() << xml.readElementText();
-                //newsFeedWidget->addRSSItem(xml.readElementText());
-            }*/
         }
         xml.readNext();
     }
@@ -113,7 +111,6 @@ void News::saveFeeds(QString title, QString url)
     qDebug() << "Saving rss feed" << title << url;
     if (rss->isWritable())
     {
-        //rss->beginGroup("feeds");
         rss->setValue(title, url);
     }
     qDebug() << rss->allKeys();
@@ -126,5 +123,6 @@ void News::loadFeeds()
     {
         QString url = rss->value(childKeys.value(i)).toString();
         getRSSFeed(url);
+        urls.push_back(url);
     }
 }

@@ -1,8 +1,8 @@
 #include "NewsFeedWidget.h"
 
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QDesktopServices>
+
 
 /** Settings constructor
 * Initialize the news UI
@@ -14,7 +14,6 @@ NewsFeedWidget::NewsFeedWidget(QWidget* parent) : QWidget(parent)
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
 
     QVBoxLayout* newRSSVertLayout = new QVBoxLayout(this);
-
     QHBoxLayout* titleAndRemove = new QHBoxLayout();
     newRSSVertLayout->addLayout(titleAndRemove);
 

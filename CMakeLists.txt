@@ -117,7 +117,7 @@ include_directories(
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
-   ${Qt5Network_INCLUDE_DIRS}
+    ${Qt5Network_INCLUDE_DIRS}
 #   ${Qt5WebKit_INCLUDE_DIRS}
 #   ${Qt5WebKitWidgets_INCLUDE_DIRS}
     ${Qt5Sql_INCLUDE_DIRS}
