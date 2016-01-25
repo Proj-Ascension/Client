@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['winpanel',['WinPanel',['../d6/d55/class_win_panel.html',1,'']]],
-  ['winwindow',['WinWindow',['../d8/db8/class_win_window.html',1,'']]]
+  ['unixpanel',['UnixPanel',['../de/d68/class_unix_panel.html',1,'']]],
+  ['unixwindow',['UnixWindow',['../d2/d2b/class_unix_window.html',1,'']]],
+  ['uplaydrm',['UplayDRM',['../db/d75/class_uplay_d_r_m.html',1,'']]]
 ];

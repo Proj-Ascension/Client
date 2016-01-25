@@ -107,6 +107,7 @@ $(document).ready(function(){initNavTree('dc/d83/class_database.html','../../');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../d0/d3b/class_database-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Database Class Reference</div>  </div>
@@ -120,12 +121,6 @@ $(document).ready(function(){initNavTree('dc/d83/class_database.html','../../');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4703c80e6969d33565ea340f768fdadf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d83/class_database.html#a4703c80e6969d33565ea340f768fdadf">Database</a> ()</td></tr>
-<tr class="memdesc:a4703c80e6969d33565ea340f768fdadf"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../dc/d83/class_database.html" title="Database class. ">Database</a> constructor Constructs the local database.  <a href="#a4703c80e6969d33565ea340f768fdadf">More...</a><br/></td></tr>
-<tr class="separator:a4703c80e6969d33565ea340f768fdadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9f6de56a252d6a2b637ad07908c706f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9f6de56a252d6a2b637ad07908c706f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Database</b> (QString name)</td></tr>
-<tr class="separator:ab9f6de56a252d6a2b637ad07908c706f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c8d83dd74fe50ae3c261479235c702a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d83/class_database.html#a7c8d83dd74fe50ae3c261479235c702a">init</a> ()</td></tr>
 <tr class="memdesc:a7c8d83dd74fe50ae3c261479235c702a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the actual database, if it hasn't been done already.  <a href="#a7c8d83dd74fe50ae3c261479235c702a">More...</a><br/></td></tr>
 <tr class="separator:a7c8d83dd74fe50ae3c261479235c702a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,30 +157,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7951029b2169460d090b7e6bad2ef030"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d83/class_database.html#a7951029b2169460d090b7e6bad2ef030">getGameCount</a> () const </td></tr>
 <tr class="memdesc:a7951029b2169460d090b7e6bad2ef030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queries the database to find the number of games.  <a href="#a7951029b2169460d090b7e6bad2ef030">More...</a><br/></td></tr>
 <tr class="separator:a7951029b2169460d090b7e6bad2ef030"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aa04e547554cc34fa4b6c5a9390021eab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa04e547554cc34fa4b6c5a9390021eab"></a>
+static <a class="el" href="../../dc/d83/class_database.html">Database</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d83/class_database.html#aa04e547554cc34fa4b6c5a9390021eab">getInstance</a> ()</td></tr>
+<tr class="memdesc:aa04e547554cc34fa4b6c5a9390021eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current instance, else create it. <br/></td></tr>
+<tr class="separator:aa04e547554cc34fa4b6c5a9390021eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2fc7b62d4cbf777eb148439cc9dfc8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb2fc7b62d4cbf777eb148439cc9dfc8"></a>
+static <a class="el" href="../../dc/d83/class_database.html">Database</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d83/class_database.html#acb2fc7b62d4cbf777eb148439cc9dfc8">getInstance</a> (QString name)</td></tr>
+<tr class="memdesc:acb2fc7b62d4cbf777eb148439cc9dfc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current instance, else create it with a path. <br/></td></tr>
+<tr class="separator:acb2fc7b62d4cbf777eb148439cc9dfc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="../../dc/d83/class_database.html" title="Database class. ">Database</a> class. </p>
 <p>Wrapper class to manage the internal game database. Also has a simple interface to find games by certain conditions. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a4703c80e6969d33565ea340f768fdadf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Database::Database </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p><a class="el" href="../../dc/d83/class_database.html" title="Database class. ">Database</a> constructor Constructs the local database. </p>
-<p>Currently no interface to handle remote databases, just creates one in the current working directory. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ade517bf453e5563aced153157a28ac02"></a>
 <div class="memitem">
 <div class="memproto">
@@ -493,7 +480,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../dc/d83/class_database.html">Database</a></li>
-    <li class="footer">Generated on Tue Dec 1 2015 22:48:16 for Project Ascension by
+    <li class="footer">Generated on Mon Jan 25 2016 06:14:10 for Project Ascension by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

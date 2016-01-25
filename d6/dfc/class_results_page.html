@@ -154,19 +154,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../.
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad973e062d8a7965a856969ec01b3ebae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad973e062d8a7965a856969ec01b3ebae"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfc/class_results_page.html#ad973e062d8a7965a856969ec01b3ebae">ResultsPage</a> (<a class="el" href="../../dc/d83/class_database.html">Database</a> db, <a class="el" href="../../d8/d67/class_d_r_m_page.html">DRMPage</a> &amp;drmPage, QWidget *parent=0)</td></tr>
-<tr class="memdesc:ad973e062d8a7965a856969ec01b3ebae"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d6/dfc/class_results_page.html" title="ResultsPage class. ">ResultsPage</a> constructor Defines some initial properties for the results page. <br/></td></tr>
-<tr class="separator:ad973e062d8a7965a856969ec01b3ebae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2a5dce180e18b6dacbfbe53a2681100"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfc/class_results_page.html#ad2a5dce180e18b6dacbfbe53a2681100">findOriginGames</a> ()</td></tr>
-<tr class="memdesc:ad2a5dce180e18b6dacbfbe53a2681100"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using originRoot, which is initialized earlier in the wizard, utilize <code>recursiveFindFiles()</code> to find every executable within each respective directory.  <a href="#ad2a5dce180e18b6dacbfbe53a2681100">More...</a><br/></td></tr>
-<tr class="separator:ad2a5dce180e18b6dacbfbe53a2681100"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a246d369ee485e493c2525ea7e2ce0bf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfc/class_results_page.html#a246d369ee485e493c2525ea7e2ce0bf6">findUplayGames</a> ()</td></tr>
-<tr class="memdesc:a246d369ee485e493c2525ea7e2ce0bf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using uplayRoot, which is initialized earlier in the wizard, utilize <code>recursiveFindFiles()</code> to find every executable within each respective directory.  <a href="#a246d369ee485e493c2525ea7e2ce0bf6">More...</a><br/></td></tr>
-<tr class="separator:a246d369ee485e493c2525ea7e2ce0bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91347cd782f80e6d0bfa53314368e6ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfc/class_results_page.html#a91347cd782f80e6d0bfa53314368e6ae">findSteamGames</a> ()</td></tr>
-<tr class="memdesc:a91347cd782f80e6d0bfa53314368e6ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Using steamRoot, which is initialized earlier in the wizard, find the location of every Steam library folder, and run the parseAcf function on every *.acf file found within the directory.  <a href="#a91347cd782f80e6d0bfa53314368e6ae">More...</a><br/></td></tr>
-<tr class="separator:a91347cd782f80e6d0bfa53314368e6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e85ebfa42c59561e8409a5e49596134"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e85ebfa42c59561e8409a5e49596134"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfc/class_results_page.html#a3e85ebfa42c59561e8409a5e49596134">ResultsPage</a> (std::map&lt; std::string, <a class="el" href="../../d0/dbc/class_d_r_m_type.html">DRMType</a> * &gt; drmMap, QWidget *parent=0)</td></tr>
+<tr class="memdesc:a3e85ebfa42c59561e8409a5e49596134"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d6/dfc/class_results_page.html" title="ResultsPage class. ">ResultsPage</a> constructor Defines some initial properties for the results page. <br/></td></tr>
+<tr class="separator:a3e85ebfa42c59561e8409a5e49596134"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b89c85a9a8bb6f289fac550512e3130"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfc/class_results_page.html#a4b89c85a9a8bb6f289fac550512e3130">nextId</a> () const Q_DECL_OVERRIDE</td></tr>
 <tr class="memdesc:a4b89c85a9a8bb6f289fac550512e3130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloads the nextId function to add the selected games from the main results widget to a vector called "addedVector", which will be added to the main database at a later point.  <a href="#a4b89c85a9a8bb6f289fac550512e3130">More...</a><br/></td></tr>
 <tr class="separator:a4b89c85a9a8bb6f289fac550512e3130"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,69 +172,6 @@ Protected Member Functions</h2></td></tr>
 <div class="textblock"><p><a class="el" href="../../d6/dfc/class_results_page.html" title="ResultsPage class. ">ResultsPage</a> class. </p>
 <p>Class to handle the results of which games have been found. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ad2a5dce180e18b6dacbfbe53a2681100"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ResultsPage::findOriginGames </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Using originRoot, which is initialized earlier in the wizard, utilize <code>recursiveFindFiles()</code> to find every executable within each respective directory. </p>
-<p>Some directories will contain more than one executable, so it's up to the user to select the correct one. </p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="../../d6/dfc/class_results_page.html#a91347cd782f80e6d0bfa53314368e6ae" title="Using steamRoot, which is initialized earlier in the wizard, find the location of every Steam library...">findSteamGames()</a> </dd>
-<dd>
-<a class="el" href="../../d6/dfc/class_results_page.html#a246d369ee485e493c2525ea7e2ce0bf6" title="Using uplayRoot, which is initialized earlier in the wizard, utilize recursiveFindFiles() to find eve...">findUplayGames()</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a91347cd782f80e6d0bfa53314368e6ae"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ResultsPage::findSteamGames </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Using steamRoot, which is initialized earlier in the wizard, find the location of every Steam library folder, and run the parseAcf function on every *.acf file found within the directory. </p>
-<p>This file gives basic information about the game; such as directory within steamapps, name, etc. </p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="../../d6/dfc/class_results_page.html#ad2a5dce180e18b6dacbfbe53a2681100" title="Using originRoot, which is initialized earlier in the wizard, utilize recursiveFindFiles() to find ev...">findOriginGames()</a> </dd>
-<dd>
-<a class="el" href="../../d6/dfc/class_results_page.html#a246d369ee485e493c2525ea7e2ce0bf6" title="Using uplayRoot, which is initialized earlier in the wizard, utilize recursiveFindFiles() to find eve...">findUplayGames()</a> </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a246d369ee485e493c2525ea7e2ce0bf6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ResultsPage::findUplayGames </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Using uplayRoot, which is initialized earlier in the wizard, utilize <code>recursiveFindFiles()</code> to find every executable within each respective directory. </p>
-<p>Some directories will contain more than one executable, so it's up to the user to select the correct one. </p>
-<dl class="section see"><dt>See Also</dt><dd><a class="el" href="../../d6/dfc/class_results_page.html#a91347cd782f80e6d0bfa53314368e6ae" title="Using steamRoot, which is initialized earlier in the wizard, find the location of every Steam library...">findSteamGames()</a> </dd>
-<dd>
-<a class="el" href="../../d6/dfc/class_results_page.html#ad2a5dce180e18b6dacbfbe53a2681100" title="Using originRoot, which is initialized earlier in the wizard, utilize recursiveFindFiles() to find ev...">findOriginGames()</a> </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a53e1bbff2baf5d76efa863127feab663"></a>
 <div class="memitem">
 <div class="memproto">
@@ -267,11 +195,6 @@ Protected Member Functions</h2></td></tr>
 
 <p>Initializes the results page. </p>
 <p>This function is called when the NextButton on the previous page is clicked, which allows the state of the previous page to be transferred to this one. The function then runs each respective check*Exists function, and populates the various sections with correct information. </p>
-<dl class="section see"><dt>See Also</dt><dd>checkSteamExists() </dd>
-<dd>
-checkUplayExists() </dd>
-<dd>
-checkOriginExists() </dd></dl>
 
 </div>
 </div>
@@ -329,7 +252,7 @@ checkOriginExists() </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../d6/dfc/class_results_page.html">ResultsPage</a></li>
-    <li class="footer">Generated on Tue Dec 1 2015 22:48:17 for Project Ascension by
+    <li class="footer">Generated on Mon Jan 25 2016 06:14:10 for Project Ascension by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

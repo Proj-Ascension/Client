@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('dd/d08/library_8h_source.html','../../
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;../../database.h&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;src/database.h&gt;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QWidget&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;QProcess&gt;</span></div>
@@ -133,15 +133,13 @@ $(document).ready(function(){initNavTree('dd/d08/library_8h_source.html','../../
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    QListWidget* sidebarGameList;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="../../dc/d83/class_database.html">Database</a> db;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    QProcess* runningProcess;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">bool</span> isProcessRunning() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> runProcess(QString file, QString workingDirectory);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordtype">void</span> runProcessWithArgs(QString file, QString workingDirectory, QString args);</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
-<div class="ttc" id="class_library_html_abfe3da1e38e18b7c9870b269ee45f188"><div class="ttname"><a href="../../d7/d55/class_library.html#abfe3da1e38e18b7c9870b269ee45f188">Library::Library</a></div><div class="ttdeci">Library(QSettings *p, QWidget *parent=0)</div><div class="ttdoc">Library constructor Initialize the library UI and generate an initial list of all the games available...</div><div class="ttdef"><b>Definition:</b> library.cpp:16</div></div>
-<div class="ttc" id="class_database_html"><div class="ttname"><a href="../../dc/d83/class_database.html">Database</a></div><div class="ttdoc">Database class. </div><div class="ttdef"><b>Definition:</b> database.h:25</div></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    QProcess* runningProcess;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">bool</span> isProcessRunning() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">void</span> runProcess(QString file, QString workingDirectory);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> runProcessWithArgs(QString file, QString workingDirectory, QString args);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;};</div>
+<div class="ttc" id="class_library_html_abfe3da1e38e18b7c9870b269ee45f188"><div class="ttname"><a href="../../d7/d55/class_library.html#abfe3da1e38e18b7c9870b269ee45f188">Library::Library</a></div><div class="ttdeci">Library(QSettings *p, QWidget *parent=0)</div><div class="ttdoc">Library constructor Initialize the library UI and generate an initial list of all the games available...</div><div class="ttdef"><b>Definition:</b> library.cpp:10</div></div>
 <div class="ttc" id="class_library_html"><div class="ttname"><a href="../../d7/d55/class_library.html">Library</a></div><div class="ttdoc">Library class. </div><div class="ttdef"><b>Definition:</b> library.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -149,7 +147,7 @@ $(document).ready(function(){initNavTree('dd/d08/library_8h_source.html','../../
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a class="el" href="../../dir_dab90288a9ff0b2b958d1ac75b947ee2.html">stack</a></li><li class="navelem"><b>library.h</b></li>
-    <li class="footer">Generated on Tue Dec 1 2015 22:48:16 for Project Ascension by
+    <li class="footer">Generated on Mon Jan 25 2016 06:14:10 for Project Ascension by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

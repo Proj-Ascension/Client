@@ -107,64 +107,64 @@ $(document).ready(function(){initNavTree('db/d94/add__game__wizard_8h_source.htm
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;../../database.h&quot;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QWizard&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;QtWidgets&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">class </span><a class="code" href="../../d1/df5/class_init_page.html">InitPage</a>;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">class </span><a class="code" href="../../d8/d44/class_info_page.html">InfoPage</a>;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span><a class="code" href="../../d0/d42/class_last_page.html">LastPage</a>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="../../d5/d20/class_add_game_wizard.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d5/d20/class_add_game_wizard.html">AddGameWizard</a> : <span class="keyword">public</span> QWizard</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    Q_OBJECT</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="../../dc/d83/class_database.html">Database</a> db;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="../../d5/d20/class_add_game_wizard.html#ac2399aa54675e746f88c354e970ec479">AddGameWizard</a>(QWidget* parent = 0, QString dbPath = <span class="stringliteral">&quot;./&quot;</span>);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;};</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="../../d1/df5/class_init_page.html">   26</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d1/df5/class_init_page.html">InitPage</a> : <span class="keyword">public</span> QWizardPage</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;Q_OBJECT</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="../../d1/df5/class_init_page.html#ac1645a4ff1decb6b4973342c6f52cc8e">InitPage</a>(QWidget* parent = 0);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;};</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="../../d8/d44/class_info_page.html">   36</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d8/d44/class_info_page.html">InfoPage</a> : <span class="keyword">public</span> QWizardPage</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;Q_OBJECT</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="../../d8/d44/class_info_page.html#a1227d84b049fe7352874194eb17d041c">InfoPage</a>(QWidget* parent = 0);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="../../d0/d42/class_last_page.html">   46</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d0/d42/class_last_page.html">LastPage</a> : <span class="keyword">public</span> QWizardPage</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;Q_OBJECT</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="../../dc/d83/class_database.html">Database</a> db;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d0/d42/class_last_page.html#a1dff924481806ed90ce21c2153e3898e">initializePage</a>() Q_DECL_OVERRIDE;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="../../d0/d42/class_last_page.html#afe215be6054574643680d3d92675076f">LastPage</a>(<a class="code" href="../../dc/d83/class_database.html">Database</a> db, QWidget* parent = 0);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;};</div>
-<div class="ttc" id="class_add_game_wizard_html_ac2399aa54675e746f88c354e970ec479"><div class="ttname"><a href="../../d5/d20/class_add_game_wizard.html#ac2399aa54675e746f88c354e970ec479">AddGameWizard::AddGameWizard</a></div><div class="ttdeci">AddGameWizard(QWidget *parent=0, QString dbPath=&quot;./&quot;)</div><div class="ttdoc">AddGameWizard constructor Defines the pages and initializes the database with the path given...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:13</div></div>
-<div class="ttc" id="class_info_page_html_a1227d84b049fe7352874194eb17d041c"><div class="ttname"><a href="../../d8/d44/class_info_page.html#a1227d84b049fe7352874194eb17d041c">InfoPage::InfoPage</a></div><div class="ttdeci">InfoPage(QWidget *parent=0)</div><div class="ttdoc">InfoPage constructor Defines some initial properties for the page in which the user will input the ga...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:40</div></div>
-<div class="ttc" id="class_info_page_html"><div class="ttname"><a href="../../d8/d44/class_info_page.html">InfoPage</a></div><div class="ttdoc">InfoPage class Class to handle the page in which the user will input the information about the game t...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:36</div></div>
-<div class="ttc" id="class_last_page_html"><div class="ttname"><a href="../../d0/d42/class_last_page.html">LastPage</a></div><div class="ttdoc">LastPage class Class to handle the last page. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:46</div></div>
-<div class="ttc" id="class_database_html"><div class="ttname"><a href="../../dc/d83/class_database.html">Database</a></div><div class="ttdoc">Database class. </div><div class="ttdef"><b>Definition:</b> database.h:25</div></div>
-<div class="ttc" id="class_init_page_html_ac1645a4ff1decb6b4973342c6f52cc8e"><div class="ttname"><a href="../../d1/df5/class_init_page.html#ac1645a4ff1decb6b4973342c6f52cc8e">InitPage::InitPage</a></div><div class="ttdeci">InitPage(QWidget *parent=0)</div><div class="ttdoc">InitPage constructor Defines some initial properties for the initial page. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:26</div></div>
-<div class="ttc" id="class_last_page_html_a1dff924481806ed90ce21c2153e3898e"><div class="ttname"><a href="../../d0/d42/class_last_page.html#a1dff924481806ed90ce21c2153e3898e">LastPage::initializePage</a></div><div class="ttdeci">void initializePage() Q_DECL_OVERRIDE</div><div class="ttdoc">Initializes the last page. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:84</div></div>
-<div class="ttc" id="class_init_page_html"><div class="ttname"><a href="../../d1/df5/class_init_page.html">InitPage</a></div><div class="ttdoc">InitPage class. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:26</div></div>
-<div class="ttc" id="class_add_game_wizard_html"><div class="ttname"><a href="../../d5/d20/class_add_game_wizard.html">AddGameWizard</a></div><div class="ttdoc">AddGameWizard class. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:15</div></div>
-<div class="ttc" id="class_last_page_html_afe215be6054574643680d3d92675076f"><div class="ttname"><a href="../../d0/d42/class_last_page.html#afe215be6054574643680d3d92675076f">LastPage::LastPage</a></div><div class="ttdeci">LastPage(Database db, QWidget *parent=0)</div><div class="ttdoc">InfoPage constructor Defines some initial properties for the page in which the user will input the ga...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:75</div></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;src/database.h&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QWizard&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QtWidgets&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">class </span><a class="code" href="../../d1/df5/class_init_page.html">InitPage</a>;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">class </span><a class="code" href="../../d8/d44/class_info_page.html">InfoPage</a>;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">class </span><a class="code" href="../../d0/d42/class_last_page.html">LastPage</a>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="../../d5/d20/class_add_game_wizard.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d5/d20/class_add_game_wizard.html">AddGameWizard</a> : <span class="keyword">public</span> QWizard</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="../../d5/d20/class_add_game_wizard.html#a17c5fe86fd33fa8d7138660c4ffa52ca">AddGameWizard</a>(QWidget* parent = 0);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;};</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="../../d1/df5/class_init_page.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d1/df5/class_init_page.html">InitPage</a> : <span class="keyword">public</span> QWizardPage</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="../../d1/df5/class_init_page.html#ac1645a4ff1decb6b4973342c6f52cc8e">InitPage</a>(QWidget* parent = 0);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;};</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="../../d8/d44/class_info_page.html">   34</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d8/d44/class_info_page.html">InfoPage</a> : <span class="keyword">public</span> QWizardPage</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../d8/d44/class_info_page.html#a1227d84b049fe7352874194eb17d041c">InfoPage</a>(QWidget* parent = 0);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    QLineEdit* dirEdit;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    QLineEdit* exeEdit;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">void</span> selectPath(QLineEdit* lineEdit, QFileDialog::FileMode fileMode);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="../../d0/d42/class_last_page.html">   48</a></span>&#160;<span class="keyword">class </span><a class="code" href="../../d0/d42/class_last_page.html">LastPage</a> : <span class="keyword">public</span> QWizardPage</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="../../d0/d42/class_last_page.html#ac492eab1ac92b53430c6ec60265594ff">LastPage</a>( QWidget* parent = 0);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d0/d42/class_last_page.html#a1dff924481806ed90ce21c2153e3898e">initializePage</a>() Q_DECL_OVERRIDE;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
+<div class="ttc" id="class_add_game_wizard_html_a17c5fe86fd33fa8d7138660c4ffa52ca"><div class="ttname"><a href="../../d5/d20/class_add_game_wizard.html#a17c5fe86fd33fa8d7138660c4ffa52ca">AddGameWizard::AddGameWizard</a></div><div class="ttdeci">AddGameWizard(QWidget *parent=0)</div><div class="ttdoc">AddGameWizard constructor Defines the pages and initializes the database with the path given...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:9</div></div>
+<div class="ttc" id="class_info_page_html_a1227d84b049fe7352874194eb17d041c"><div class="ttname"><a href="../../d8/d44/class_info_page.html#a1227d84b049fe7352874194eb17d041c">InfoPage::InfoPage</a></div><div class="ttdeci">InfoPage(QWidget *parent=0)</div><div class="ttdoc">InfoPage constructor Defines some initial properties for the page in which the user will input the ga...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:36</div></div>
+<div class="ttc" id="class_info_page_html"><div class="ttname"><a href="../../d8/d44/class_info_page.html">InfoPage</a></div><div class="ttdoc">InfoPage class Class to handle the page in which the user will input the information about the game t...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:34</div></div>
+<div class="ttc" id="class_last_page_html"><div class="ttname"><a href="../../d0/d42/class_last_page.html">LastPage</a></div><div class="ttdoc">LastPage class Class to handle the last page. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:48</div></div>
+<div class="ttc" id="class_init_page_html_ac1645a4ff1decb6b4973342c6f52cc8e"><div class="ttname"><a href="../../d1/df5/class_init_page.html#ac1645a4ff1decb6b4973342c6f52cc8e">InitPage::InitPage</a></div><div class="ttdeci">InitPage(QWidget *parent=0)</div><div class="ttdoc">InitPage constructor Defines some initial properties for the initial page. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:22</div></div>
+<div class="ttc" id="class_last_page_html_a1dff924481806ed90ce21c2153e3898e"><div class="ttname"><a href="../../d0/d42/class_last_page.html#a1dff924481806ed90ce21c2153e3898e">LastPage::initializePage</a></div><div class="ttdeci">void initializePage() Q_DECL_OVERRIDE</div><div class="ttdoc">Initializes the last page. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:102</div></div>
+<div class="ttc" id="class_init_page_html"><div class="ttname"><a href="../../d1/df5/class_init_page.html">InitPage</a></div><div class="ttdoc">InitPage class. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:24</div></div>
+<div class="ttc" id="class_add_game_wizard_html"><div class="ttname"><a href="../../d5/d20/class_add_game_wizard.html">AddGameWizard</a></div><div class="ttdoc">AddGameWizard class. </div><div class="ttdef"><b>Definition:</b> add_game_wizard.h:14</div></div>
+<div class="ttc" id="class_last_page_html_ac492eab1ac92b53430c6ec60265594ff"><div class="ttname"><a href="../../d0/d42/class_last_page.html#ac492eab1ac92b53430c6ec60265594ff">LastPage::LastPage</a></div><div class="ttdeci">LastPage(QWidget *parent=0)</div><div class="ttdoc">LastPage constructor Defines some initial properties for the page in which the user will input the ga...</div><div class="ttdef"><b>Definition:</b> add_game_wizard.cpp:93</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="../../dir_99d0482cf009f9d97a0877749b817f19.html">gui</a></li><li class="navelem"><a class="el" href="../../dir_3351ccde1c8e76c94b2646e58f977f32.html">wizards</a></li><li class="navelem"><b>add_game_wizard.h</b></li>
-    <li class="footer">Generated on Tue Dec 1 2015 22:48:16 for Project Ascension by
+    <li class="footer">Generated on Mon Jan 25 2016 06:14:10 for Project Ascension by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

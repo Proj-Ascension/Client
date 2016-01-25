@@ -1,7 +1,18 @@
 var searchData=
 [
-  ['tabselected',['tabSelected',['../d6/dfc/class_results_page.html#a86c5a589b72b4bd229c8f9eb4bc84534',1,'ResultsPage']]],
-  ['tabwidget',['TabWidget',['../d6/dc8/class_tab_widget.html',1,'TabWidget'],['../d6/dc8/class_tab_widget.html#a4d9761222b2af9b1f010fa9a1c06950d',1,'TabWidget::TabWidget()']]],
-  ['toggleactive',['toggleActive',['../d6/dc8/class_tab_widget.html#ac5ebab9aab84a8521cf8169b3f4599eb',1,'TabWidget']]],
-  ['toggleinactive',['toggleInactive',['../d6/dc8/class_tab_widget.html#a15f634c55c675b48c16b997eb7eb4b0f',1,'TabWidget']]]
+  ['selectall',['selectAll',['../d6/dfc/class_results_page.html#a3e025707664d7a1a5bfd0885b3b31522',1,'ResultsPage']]],
+  ['setisinstalled',['setIsInstalled',['../d0/dbc/class_d_r_m_type.html#ab4bd7a27de5775c3f737652ae2a849ec',1,'DRMType']]],
+  ['setrootdir',['setRootDir',['../d0/dbc/class_d_r_m_type.html#a6542e2b161cd9a04dcd76779eb4491f2',1,'DRMType']]],
+  ['settings',['Settings',['../db/d2b/class_settings.html',1,'Settings'],['../db/d2b/class_settings.html#a507031406e2bc9b590a9a2122bb8a06e',1,'Settings::Settings()']]],
+  ['setwindow',['setWindow',['../d5/d3a/class_q_win_host.html#a17e77544073a8519511974e16c6d6352',1,'QWinHost']]],
+  ['sha',['sha',['../d8/dba/struct_steam_vdf_parse_1_1_game_header.html#a09165aa83be7649ab247574b167ee4bd',1,'SteamVdfParse::GameHeader']]],
+  ['show',['show',['../d5/d79/class_q_win_widget.html#abe3eb378cf71209867cd9a861bb869b6',1,'QWinWidget']]],
+  ['showcentered',['showCentered',['../d5/d79/class_q_win_widget.html#a8755f6fb78e9f752005282f3f147fae5',1,'QWinWidget']]],
+  ['showconfirmdialog',['showConfirmDialog',['../d1/d10/class_ascension_dialog.html#a0a589ee802f252ccc431761f4d186aa5',1,'AscensionDialog']]],
+  ['showevent',['showEvent',['../d5/d3a/class_q_win_host.html#acd60caddf9784733c4a8ae011708f8cd',1,'QWinHost']]],
+  ['sidebar',['Sidebar',['../df/d42/class_sidebar.html',1,'Sidebar'],['../df/d42/class_sidebar.html#a10391c9e70310c851112adbc5f01257a',1,'Sidebar::Sidebar()']]],
+  ['size',['size',['../d8/dba/struct_steam_vdf_parse_1_1_game_header.html#a513456912c7a339b10c51a32b82f777e',1,'SteamVdfParse::GameHeader']]],
+  ['sizehint',['sizeHint',['../df/d42/class_sidebar.html#ad0ad5d51c1d4469fcbec8c79d5992c94',1,'Sidebar']]],
+  ['steamdrm',['SteamDRM',['../d7/d28/class_steam_d_r_m.html',1,'']]],
+  ['steamvdfparse',['SteamVdfParse',['../db/d3c/namespace_steam_vdf_parse.html',1,'']]]
 ];

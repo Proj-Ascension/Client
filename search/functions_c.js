@@ -8,5 +8,5 @@ var searchData=
   ['rerungamewizard',['rerunGameWizard',['../db/d2b/class_settings.html#a99921cb6a917189a96acb5ab7ee19855',1,'Settings']]],
   ['reset',['reset',['../dc/d83/class_database.html#aec44429a48d0b909cad5edee2539bccf',1,'Database']]],
   ['resizeevent',['resizeEvent',['../d5/d3a/class_q_win_host.html#a79a704d8045d57c8e35f82346fa1cd4f',1,'QWinHost']]],
-  ['resultspage',['ResultsPage',['../d6/dfc/class_results_page.html#ad973e062d8a7965a856969ec01b3ebae',1,'ResultsPage']]]
+  ['resultspage',['ResultsPage',['../d6/dfc/class_results_page.html#a3e85ebfa42c59561e8409a5e49596134',1,'ResultsPage']]]
 ];

@@ -99,6 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
       <li><a href="#index_t"><span>t</span></a></li>
+      <li><a href="#index_u"><span>u</span></a></li>
       <li><a href="#index_w"><span>w</span></a></li>
       <li class="current"><a href="#index_~"><span>~</span></a></li>
     </ul>
@@ -146,7 +147,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="dc/d83/class_database.html#af780b78b83cf0c6e170e3ca21141acfc">Database</a>
 </li>
 <li>AddGameWizard()
-: <a class="el" href="d5/d20/class_add_game_wizard.html#ac2399aa54675e746f88c354e970ec479">AddGameWizard</a>
+: <a class="el" href="d5/d20/class_add_game_wizard.html#a17c5fe86fd33fa8d7138660c4ffa52ca">AddGameWizard</a>
 </li>
 <li>appID
 : <a class="el" href="d8/dba/struct_steam_vdf_parse_1_1_game_header.html#a7613bc8e6ff00f0254ade2fe6945d2c5">SteamVdfParse::GameHeader</a>
@@ -167,8 +168,22 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>changeNumber
 : <a class="el" href="d8/dba/struct_steam_vdf_parse_1_1_game_header.html#a3a1a0a2d2388ac860dcbc1a6347c6ba1">SteamVdfParse::GameHeader</a>
 </li>
+<li>checkExists()
+: <a class="el" href="d7/d28/class_steam_d_r_m.html#a75713ed2fa73018942961fe4283a3926">SteamDRM</a>
+</li>
+<li>checkOriginExists()
+: <a class="el" href="d4/d89/class_origin_d_r_m.html#aac1ed3bda06984335f0a994780472740">OriginDRM</a>
+</li>
+<li>checkUplayExists()
+: <a class="el" href="db/d75/class_uplay_d_r_m.html#a7eba9299efeceec76473c55e08b50f84">UplayDRM</a>
+</li>
 <li>childEvent()
 : <a class="el" href="d5/d79/class_q_win_widget.html#af1c998de27b8d59338ab1ad5e7f520aa">QWinWidget</a>
+</li>
+<li>createPane()
+: <a class="el" href="d4/d89/class_origin_d_r_m.html#aab6cba88679c078e815e43edad11df66">OriginDRM</a>
+, <a class="el" href="d7/d28/class_steam_d_r_m.html#a2ea6ab127f70a00bc0802844770a0fb4">SteamDRM</a>
+, <a class="el" href="db/d75/class_uplay_d_r_m.html#a2686095142042098f1972ab02e4a4f93">UplayDRM</a>
 </li>
 <li>createWindow()
 : <a class="el" href="d5/d3a/class_q_win_host.html#aeeb6eee6a696030ac3a8bef01c3600db">QWinHost</a>
@@ -177,17 +192,17 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
-<li>Database()
-: <a class="el" href="dc/d83/class_database.html#a4703c80e6969d33565ea340f768fdadf">Database</a>
-</li>
 <li>deselectAll()
 : <a class="el" href="d6/dfc/class_results_page.html#ac1cb09f124d3a899e635e603824c9ed0">ResultsPage</a>
 </li>
 <li>DRMPage()
-: <a class="el" href="d8/d67/class_d_r_m_page.html#a86f6bcd03f8f8048e36b1b5b96000e2a">DRMPage</a>
+: <a class="el" href="d8/d67/class_d_r_m_page.html#a1fcb0bd8782e26bb113e001a7fb98e06">DRMPage</a>
 </li>
 <li>DRMSetupWizard()
-: <a class="el" href="da/dfa/class_d_r_m_setup_wizard.html#a432b7cbe80a995c5816e32ef869f0fe9">DRMSetupWizard</a>
+: <a class="el" href="da/dfa/class_d_r_m_setup_wizard.html#a1ff24a86408d15ccdb77b48f6f6e1cce">DRMSetupWizard</a>
+</li>
+<li>DRMType()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#a7ae7846cb09f04492cccb034a263b660">DRMType</a>
 </li>
 </ul>
 
@@ -210,16 +225,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
 <li>FinalPage()
-: <a class="el" href="da/d80/class_final_page.html#a79a96f876ce2d89ce6183897c50a13cf">FinalPage</a>
+: <a class="el" href="da/d80/class_final_page.html#a552369a03e907c56030b85c2eb6431cc">FinalPage</a>
 </li>
-<li>findOriginGames()
-: <a class="el" href="d6/dfc/class_results_page.html#ad2a5dce180e18b6dacbfbe53a2681100">ResultsPage</a>
-</li>
-<li>findSteamGames()
-: <a class="el" href="d6/dfc/class_results_page.html#a91347cd782f80e6d0bfa53314368e6ae">ResultsPage</a>
-</li>
-<li>findUplayGames()
-: <a class="el" href="d6/dfc/class_results_page.html#a246d369ee485e493c2525ea7e2ce0bf6">ResultsPage</a>
+<li>findGames()
+: <a class="el" href="d4/d89/class_origin_d_r_m.html#a891f75583499dd45c2637e7e5ec843cc">OriginDRM</a>
+, <a class="el" href="d7/d28/class_steam_d_r_m.html#a958aa596c075b707d53966f214e7460d">SteamDRM</a>
+, <a class="el" href="db/d75/class_uplay_d_r_m.html#a4df696cf1ded1d2374b0395a1dc9aac6">UplayDRM</a>
 </li>
 <li>focusInEvent()
 : <a class="el" href="d5/d3a/class_q_win_host.html#ab87386e8ac02fd1863540010ea81166c">QWinHost</a>
@@ -238,6 +249,17 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>gameName
 : <a class="el" href="dd/db8/struct_game.html#a2dc75f118e0b9b79715efb8fa7881dc2">Game</a>
 </li>
+<li>getButtonGroup()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#a580c1fe83d8cba72f3dd49b890c40587">DRMType</a>
+, <a class="el" href="d7/d28/class_steam_d_r_m.html#a9c8ce2fbaf520226e0ad4dddb5265289">SteamDRM</a>
+</li>
+<li>getButtonGroupVector()
+: <a class="el" href="d4/d89/class_origin_d_r_m.html#a23ee60d9e2fd871732f117cf2e05eae5">OriginDRM</a>
+, <a class="el" href="db/d75/class_uplay_d_r_m.html#ac9863da7064bec10fbe965e3cb0f1560">UplayDRM</a>
+</li>
+<li>getDescLabel()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#acae4c5352ebcc981278b28d914a83977">DRMType</a>
+</li>
 <li>getGameById()
 : <a class="el" href="dc/d83/class_database.html#af4fd31e1db1e8611cb916c3dc1013099">Database</a>
 </li>
@@ -249,6 +271,24 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>getGames()
 : <a class="el" href="dc/d83/class_database.html#a55b96f4463d01abb466546fa1058a44f">Database</a>
+, <a class="el" href="d4/d89/class_origin_d_r_m.html#a5ab18fa0ad4fd71df2ac0ab460a89792">OriginDRM</a>
+, <a class="el" href="d7/d28/class_steam_d_r_m.html#aa7368042dfaab626f1f52ed52aea0de1">SteamDRM</a>
+, <a class="el" href="db/d75/class_uplay_d_r_m.html#a9fb75ecba732ecfe600e968c4e943fb6">UplayDRM</a>
+</li>
+<li>getInstance()
+: <a class="el" href="dc/d83/class_database.html#aa04e547554cc34fa4b6c5a9390021eab">Database</a>
+</li>
+<li>getIsInstalled()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#a48a0e1f7d649a8e101b11c61e4db88f4">DRMType</a>
+</li>
+<li>getPlatformLabel()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#a49498a1623744301e1312017c490a22e">DRMType</a>
+</li>
+<li>getRootDir()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#a76a281a4d29245ba35432f183d5da978">DRMType</a>
+</li>
+<li>getStatusLabel()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#abf73844df27556756c1f4bbf68bf6f46">DRMType</a>
 </li>
 </ul>
 
@@ -282,14 +322,14 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="d6/dfc/class_results_page.html#a2aac8db5fa7334c6cee18f68fdaa585f">ResultsPage</a>
 </li>
 <li>isExistant()
-: <a class="el" href="dc/d83/class_database.html#a7a0d78f1152ffe49cd711403c5306120">Database</a>
+: <a class="el" href="dc/d83/class_database.html#a3a371b6396ecc4d6bb8b9e77c6257b51">Database</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_l"></a>- l -</h3><ul>
 <li>LastPage()
-: <a class="el" href="d0/d42/class_last_page.html#afe215be6054574643680d3d92675076f">LastPage</a>
+: <a class="el" href="d0/d42/class_last_page.html#ac492eab1ac92b53430c6ec60265594ff">LastPage</a>
 </li>
 <li>lastUpdated
 : <a class="el" href="d8/dba/struct_steam_vdf_parse_1_1_game_header.html#a3fb02dd72caa19267e8ecbcb5a1ce75f">SteamVdfParse::GameHeader</a>
@@ -369,7 +409,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="d5/d3a/class_q_win_host.html#a79a704d8045d57c8e35f82346fa1cd4f">QWinHost</a>
 </li>
 <li>ResultsPage()
-: <a class="el" href="d6/dfc/class_results_page.html#ad973e062d8a7965a856969ec01b3ebae">ResultsPage</a>
+: <a class="el" href="d6/dfc/class_results_page.html#a3e85ebfa42c59561e8409a5e49596134">ResultsPage</a>
 </li>
 </ul>
 
@@ -377,6 +417,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
 <li>selectAll()
 : <a class="el" href="d6/dfc/class_results_page.html#a3e025707664d7a1a5bfd0885b3b31522">ResultsPage</a>
+</li>
+<li>setIsInstalled()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#ab4bd7a27de5775c3f737652ae2a849ec">DRMType</a>
+</li>
+<li>setRootDir()
+: <a class="el" href="d0/dbc/class_d_r_m_type.html#a6542e2b161cd9a04dcd76779eb4491f2">DRMType</a>
 </li>
 <li>Settings()
 : <a class="el" href="db/d2b/class_settings.html#a507031406e2bc9b590a9a2122bb8a06e">Settings</a>
@@ -427,6 +473,13 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </ul>
 
 
+<h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
+<li>UplayDRM()
+: <a class="el" href="db/d75/class_uplay_d_r_m.html#a9c2dd6b36cee7e9df89b64a3ebad3c37">UplayDRM</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
 <li>window()
 : <a class="el" href="d5/d3a/class_q_win_host.html#a9246c64c622a9e3519d1fba78b4c823b">QWinHost</a>
@@ -451,7 +504,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Dec 1 2015 22:48:17 for Project Ascension by
+    <li class="footer">Generated on Mon Jan 25 2016 06:14:11 for Project Ascension by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>
