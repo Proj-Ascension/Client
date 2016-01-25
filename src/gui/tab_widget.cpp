@@ -3,7 +3,6 @@
 #include <QLayout>
 #include <QPainter>
 #include <QStyleOption>
-#include <QDebug>
 
 /** TabWidget constructor
 * Initialize the layout of the tab, as well as colorization settings.

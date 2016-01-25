@@ -1,8 +1,4 @@
 #include "add_game_wizard.h"
-#include "../../database.h"
-
-#include <QDebug>
-#include <QString>
 
 /** AddGameWizard constructor
  * Defines the pages and initializes the database with the path given. Also sets up some window-related properties,
@@ -10,11 +6,11 @@
  * \param parent Parent widget to draw from
  * \param dbPath Path to the database used
  */
-AddGameWizard::AddGameWizard(QWidget* parent, QString dbPath) : QWizard(parent), db(dbPath + "ascension.db")
+AddGameWizard::AddGameWizard(QWidget* parent) : QWizard(parent)
 {
-    addPage(new InitPage());
-    addPage(new InfoPage());
-    addPage(new LastPage(db));
+    addPage(new InitPage(this));
+    addPage(new InfoPage(this));
+    addPage(new LastPage(this));
 
     setWindowTitle("Add game wizard");
 }
@@ -28,7 +24,7 @@ InitPage::InitPage(QWidget* parent) : QWizardPage(parent)
     setTitle("Intro");
     QLabel* label = new QLabel("This wizard will help you easily add games to your database.");
     label->setWordWrap(true);
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(label);
     setLayout(layout);
 }
@@ -40,39 +36,61 @@ InitPage::InitPage(QWidget* parent) : QWizardPage(parent)
 InfoPage::InfoPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Input game details.");
-    QLineEdit* nameEdit = new QLineEdit();
-    QLineEdit* dirEdit = new QLineEdit();
-    QLineEdit* exeEdit = new QLineEdit();
-    QLineEdit* argsEdit = new QLineEdit();
-
+    QLineEdit* nameEdit = new QLineEdit(this);
+    dirEdit = new QLineEdit(this);
+    exeEdit = new QLineEdit(this);
+    QLineEdit* argsEdit = new QLineEdit(this);
     QLabel* nameLabel = new QLabel("Name: ");
     QLabel* dirLabel = new QLabel("Directory: ");
     QLabel* exeLabel = new QLabel("Executable: ");
     QLabel* argsLabel = new QLabel("Arguments (optional): ");
+    QPushButton* dirEditPicker = new QPushButton(this);
+    QPushButton* exeEditPicker = new QPushButton(this);
 
     registerField("nameEdit*", nameEdit);
     registerField("dirEdit*", dirEdit);
     registerField("exeEdit*", exeEdit);
     registerField("argsEdit", argsEdit);
 
-    QGridLayout* layout = new QGridLayout();
+    QObject::connect(dirEditPicker, &QPushButton::clicked, [&]() { selectPath(this->dirEdit, QFileDialog::Directory);});
+    QObject::connect(exeEditPicker, &QPushButton::clicked, [&]() { selectPath(this->exeEdit, QFileDialog::ExistingFile);});
+
+    QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(nameLabel, 0, 0);
     layout->addWidget(nameEdit, 0, 1);
     layout->addWidget(dirLabel, 1, 0);
     layout->addWidget(dirEdit, 1, 1);
+    layout->addWidget(dirEditPicker, 1, 2);
     layout->addWidget(exeLabel, 2, 0);
     layout->addWidget(exeEdit, 2, 1);
+    layout->addWidget(exeEditPicker, 2, 2);
     layout->addWidget(argsLabel, 3, 0);
     layout->addWidget(argsEdit, 3, 1);
 
     setLayout(layout);
 }
 
-/** InfoPage constructor
+/** selectPath function
+ * Use values selected from the user's filesystem for the lineEdit passed.
+ * \param lineEdit Widget to store the path in
+ * \param fileMode File mode to use
+ */
+void InfoPage::selectPath(QLineEdit* lineEdit, QFileDialog::FileMode fileMode)
+{
+    QFileDialog dialog(this);
+    dialog.setFileMode(fileMode);
+
+    if (dialog.exec())
+    {
+        lineEdit->setText(dialog.selectedFiles().at(0));
+    }
+}
+
+/** LastPage constructor
  * Defines some initial properties for the page in which the user will input the game's information.
  * \param parent Parent widget to draw from
  */
-LastPage::LastPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
+LastPage::LastPage(QWidget* parent) : QWizardPage(parent)
 {
     setTitle("Done");
 }
@@ -83,24 +101,19 @@ LastPage::LastPage(Database db, QWidget* parent) : QWizardPage(parent), db(db)
 */
 void LastPage::initializePage()
 {
-    db.init();
-    QLabel* label = new QLabel();
-    qDebug() << field("nameEdit").toString();
-    qDebug() << field("dirEdit").toString();
-    qDebug() << field("exeEdit").toString();
-    qDebug() << field("argsEdit").toString();
+    QLabel* label = new QLabel(this);
 
-    if (!std::get<0>(db.isExistant(field("nameEdit").toString())))
+    if (!std::get<0>(Database::getInstance().isExistant(field("nameEdit").toString())))
     {
         label->setText("Game added successfully.");
-        db.addGame(field("nameEdit").toString(),field("dirEdit").toString(), field("exeEdit").toString(),field("argsEdit").toString());
+        Database::getInstance().addGame(field("nameEdit").toString(),field("dirEdit").toString(), field("exeEdit").toString(),field("argsEdit").toString());
     }
     else
     {
         label->setText("Game already exists.");
     }
     label->setWordWrap(true);
-    QVBoxLayout* layout = new QVBoxLayout;
+    QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(label);
     setLayout(layout);
 }

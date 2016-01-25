@@ -1,7 +1,5 @@
 #include "database.h"
 
-#include <QDebug>
-
 /** Database constructor
  * Constructs the local database.
  * Currently no interface to handle remote databases, just creates one in the
@@ -14,11 +12,16 @@ Database::Database()
     db.setDatabaseName("ascension.db");
 }
 
-Database::Database(QString path)
+/** Database constructor
+ * Constructs the local database.
+ * Currently no interface to handle remote databases, just creates one in the
+ * current working directory.
+ */
+Database::Database(QString name)
     : db(QSqlDatabase::addDatabase("QSQLITE"))
 {
     db.setHostName("localhost");
-    db.setDatabaseName(path);
+    db.setDatabaseName(name);
 }
 
 /** Initialize the actual database, if it hasn't been done already.
@@ -219,4 +222,18 @@ unsigned int Database::getGameCount() const
     }
 
     return query.value(0).toUInt();
+}
+
+/** Get the current instance, else create it */
+Database &Database::getInstance()
+{
+    static Database instance;
+    return instance;
+}
+
+/** Get the current instance, else create it with a path */
+Database& Database::getInstance(QString name)
+{
+    static Database instance(name);
+    return instance;
 }

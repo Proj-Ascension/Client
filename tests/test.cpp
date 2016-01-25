@@ -1,9 +1,6 @@
 #include "test.h"
 #include "../src/database.h"
 #include "../src/libs/steam_vdf_parse.hpp"
-#include <QList>
-#include <QDir>
-#include <QFile>
 
 inline bool operator==(Game g1, Game g2)
 {
@@ -18,24 +15,23 @@ TEST_CASE ("Database", "[db]")
         std::cout << "Removing" << std::endl;
         file.remove();
     }
-    Database db("ascensionTest.db");
     Game testGame = {1, QString("Test Game"), QString("."), QString("test.exe"), QString("args")};
     Game hl3 = {2, QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")};
     QList<Game> list;
     list << testGame
          << hl3;
 
-    REQUIRE (db.init() == true);
-    REQUIRE (db.addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args")) == true);
-    REQUIRE (db.addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")) == true);
-    REQUIRE (db.getGameCount() == 2);
-    REQUIRE (db.getGameById(1) == testGame);
-    REQUIRE (db.getGames() == list);
-    REQUIRE (db.removeGameById(1) == true);
-    REQUIRE (db.removeGameById(1) == false);
-    REQUIRE (db.removeGameByName("Half-Life 3") == true);
-    REQUIRE (db.removeGameByName("Test Game") == false);
-    REQUIRE (db.reset() == true);
+    REQUIRE (Database::getInstance("ascensionTest.db").init() == true);
+    REQUIRE (Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args")) == true);
+    REQUIRE (Database::getInstance("ascensionTest.db").addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")) == true);
+    REQUIRE (Database::getInstance("ascensionTest.db").getGameCount() == 2);
+    REQUIRE (Database::getInstance("ascensionTest.db").getGameById(1) == testGame);
+    REQUIRE (Database::getInstance("ascensionTest.db").getGames() == list);
+    REQUIRE (Database::getInstance("ascensionTest.db").removeGameById(1) == true);
+    REQUIRE (Database::getInstance("ascensionTest.db").removeGameById(1) == false);
+    REQUIRE (Database::getInstance("ascensionTest.db").removeGameByName("Half-Life 3") == true);
+    REQUIRE (Database::getInstance("ascensionTest.db").removeGameByName("Test Game") == false);
+    REQUIRE (Database::getInstance("ascensionTest.db").reset() == true);
     file.remove();
 }
 
@@ -47,7 +43,7 @@ TEST_CASE ("VDF Parser", "[vdf]")
     REQUIRE (SteamVdfParse::read64_le(game) == uint64_t(8589935831));
     game.seekg(0, std::ios::beg);
     SteamVdfParse::GameHeader gameTest = SteamVdfParse::parseGame(game);
-    
+
     REQUIRE (gameTest.appID == 208050);
     REQUIRE (gameTest.size == 1239);
     REQUIRE (gameTest.infoState == 2);

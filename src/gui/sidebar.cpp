@@ -1,10 +1,8 @@
 #include "sidebar.h"
-#include "tab_widget.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QLayout>
-#include <QLabel>
 
 /** MainPanel constructor
 * Constructs the sidebar by depth - back to front.

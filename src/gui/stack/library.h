@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../database.h"
+#include <src/database.h>
 
 #include <QWidget>
 #include <QProcess>
@@ -28,7 +28,6 @@ private slots:
 
 private:
     QListWidget* sidebarGameList;
-    Database db;
     QProcess* runningProcess;
 
     bool isProcessRunning() const;
