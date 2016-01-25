@@ -8,6 +8,19 @@ set(SOURCE_CORE
 set(LIBS
     src/libs/catch.hpp
     src/libs/steam_vdf_parse.hpp
+    src/util.hpp
+)
+
+set(DRM
+	src/drm/drm_all.h
+    src/drm/drm_type.cpp
+    src/drm/drm_type.h
+    src/drm/steam_drm.cpp
+    src/drm/steam_drm.h
+    src/drm/origin_drm.cpp
+    src/drm/origin_drm.h
+    src/drm/uplay_drm.cpp
+    src/drm/uplay_drm.h
 )
 
 set(GUI_CORE
@@ -73,6 +86,7 @@ if(WIN32)
         source_group("src\\gui\\borderless\\" FILES ${GUI_BORDERLESS})
         source_group("src\\gui\\stack\\" FILES ${GUI_STACK})
         source_group("src\\gui\\wizards\\" FILES ${GUI_WIZARDS})
+		source_group("src\\drm\\" FILES ${DRM})
     endif()
 elseif(UNIX)
     set(GUI_CORE ${GUI_CORE}
@@ -91,6 +105,7 @@ endif()
 set(SOURCE
     ${SOURCE_CORE}
     ${LIBS}
+    ${DRM}
     ${GUI_CORE}
     ${GUI_DIALOGS}
     ${GUI_STACK}
@@ -101,6 +116,7 @@ set(SOURCE
 
 include_directories(
     src
+    src/drm
     src/libs
     src/gui
     src/gui/dialogs

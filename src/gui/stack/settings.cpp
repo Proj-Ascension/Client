@@ -104,13 +104,6 @@ Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
     resetAccents->setText("Reset Colors to Default");
     styleBoxLayout->addWidget(resetAccents);
     connect(resetAccents, SIGNAL(clicked()), this, SLOT(resetAccents()));
-
-    if (!db.init())
-    {
-        QMessageBox error;
-        error.critical(0, "Error!", "An error occured while trying to load the database.");
-        exit(EXIT_FAILURE);
-    }
 }
 
 Settings::~Settings()
@@ -204,9 +197,9 @@ void Settings::updateAccent(int accent, QColor color)
 void Settings::clearDatabase()
 {
     bool ret = AscensionDialog::showConfirmDialog("Deleting Database", "Proceeding will delete the database, the database will be non-recoverable.\nProceed?");
-    if (ret)
+    if (!ret)
     {
-        db.reset();
+        Database::getInstance().reset();
     }
 }
 

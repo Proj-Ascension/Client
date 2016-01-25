@@ -28,7 +28,6 @@ public slots:
     void updateAccent(int accent, QColor color);
 
 private:
-    Database db;
     QPushButton* accentButton_1;
     QPushButton* accentButton_2;
     QPushButton* accentButton_3;

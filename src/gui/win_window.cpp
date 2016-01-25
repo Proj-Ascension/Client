@@ -1,11 +1,4 @@
 #include "win_window.h"
-#include "stack/library.h"
-
-#include <QGridLayout>
-#include <QMouseEvent>
-
-#include <windows.h>
-#include <windowsx.h>
 
 WinWindow::WinWindow(HWND hWnd) : QWinWidget(hWnd)
 {

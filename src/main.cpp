@@ -1,13 +1,6 @@
 #include "init.h"
 #include "gui/wizards/drm_setup_wizard.h"
 
-#include <QApplication>
-#include <QFile>
-#include <QDebug>
-#include <QIcon>
-
-#include <iostream>
-
 #ifdef Q_OS_WIN
 #include "gui/borderless/borderless_window.h"
 

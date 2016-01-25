@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../../database.h"
+#include <src/database.h>
 
 #include <QWizard>
 #include <QtWidgets>
@@ -16,8 +15,7 @@ class AddGameWizard : public QWizard
 {
     Q_OBJECT
 public:
-    Database db;
-    AddGameWizard(QWidget* parent = 0, QString dbPath = "./");
+    AddGameWizard(QWidget* parent = 0);
 };
 
 /** InitPage class.
@@ -25,7 +23,7 @@ public:
 */
 class InitPage : public QWizardPage
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     InitPage(QWidget* parent = 0);
 };
@@ -35,9 +33,13 @@ public:
  */
 class InfoPage : public QWizardPage
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     InfoPage(QWidget* parent = 0);
+private:
+    QLineEdit* dirEdit;
+    QLineEdit* exeEdit;
+    void selectPath(QLineEdit* lineEdit, QFileDialog::FileMode fileMode);
 };
 
 /** LastPage class
@@ -45,10 +47,9 @@ public:
  */
 class LastPage : public QWizardPage
 {
-Q_OBJECT
-    Database db;
+    Q_OBJECT
+public:
+    LastPage( QWidget* parent = 0);
 protected:
     void initializePage() Q_DECL_OVERRIDE;
-public:
-    LastPage(Database db, QWidget* parent = 0);
 };
