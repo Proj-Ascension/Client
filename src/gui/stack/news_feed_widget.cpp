@@ -3,7 +3,6 @@
 #include <QVBoxLayout>
 #include <QDesktopServices>
 
-
 /** Settings constructor
 * Initialize the news UI
 * \param p Inherited palette configuration for setting StyleSheets.
@@ -14,6 +13,7 @@ NewsFeedWidget::NewsFeedWidget(QSettings* p, QWidget* parent) : QWidget(parent)
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
 
     QVBoxLayout* newRSSVertLayout = new QVBoxLayout(this);
+
     QHBoxLayout* titleAndRemove = new QHBoxLayout();
     newRSSVertLayout->addLayout(titleAndRemove);
 

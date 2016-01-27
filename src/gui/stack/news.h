@@ -4,11 +4,8 @@
 #include <QtNetwork>
 #include <QBoxLayout>
 #include <QLineEdit>
-<<<<<<< HEAD:Source/News.h
 #include <QScrollArea>
 #include <vector>
-=======
->>>>>>> 958508bd6d25d611800c842874b1e1a170720855:src/gui/stack/news.h
 
 /** News UI namespace. */
 /** News class.
@@ -31,12 +28,9 @@ private:
     QLineEdit* rssAddress;
     QNetworkAccessManager* manager;
     QSettings* rss;
-<<<<<<< HEAD:Source/News.h
     std::vector<QString> urls;
 
-=======
     QSettings* p;
->>>>>>> 958508bd6d25d611800c842874b1e1a170720855:src/gui/stack/news.h
 
     void getRSSFeed(QString url);
     void saveFeeds(QString title, QString url);

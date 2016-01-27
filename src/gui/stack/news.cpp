@@ -8,7 +8,6 @@
 */
 News::News(QSettings* p, QWidget* parent) : p(p), QWidget(parent)
 {
-<<<<<<< HEAD:Source/News.cpp
 
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
                         "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
@@ -21,10 +20,6 @@ News::News(QSettings* p, QWidget* parent) : p(p), QWidget(parent)
                         "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
                         "color: " + p->value("Primary/LightText").toString() + ";");
     QFont buttonFont("SourceSansPro", 9);
-=======
-    this->setStyleSheet("QListWidget {background-color: " + p->value("Primary/SecondaryBase").toString() + ";}"
-                        "QListWidget {color: " + p->value("Primary/LightText").toString() + ";}");
->>>>>>> 958508bd6d25d611800c842874b1e1a170720855:src/gui/stack/news.cpp
 
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
     manager = new QNetworkAccessManager(this);

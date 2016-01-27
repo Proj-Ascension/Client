@@ -53,11 +53,8 @@ include_directories(
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Network_INCLUDE_DIRS}
-<<<<<<< HEAD
-#   ${Qt5WebKit_INCLUDE_DIRS}
-#   ${Qt5WebKitWidgets_INCLUDE_DIRS}
-=======
->>>>>>> 958508bd6d25d611800c842874b1e1a170720855
+    #${Qt5WebKit_INCLUDE_DIRS}
+    #${Qt5WebKitWidgets_INCLUDE_DIRS}
     ${Qt5Sql_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
 )
