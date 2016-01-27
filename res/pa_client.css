@@ -1,0 +1,63 @@
+#mainPanel {
+    margin: 0;
+    padding: 0;
+}
+
+#systemPanel {
+    margin: 0;
+    padding: 0;
+}
+
+#mainPanelScrollArea {
+    border: none;
+}
+
+#dialogScrollArea {
+    border: none;
+}
+
+/* System buttons */
+#pushButtonMaximize, #pushButtonMinimize, #pushButtonClose {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    width: 12px;
+    height: 12px;
+}
+
+#pushButtonMaximize {
+    image: url(:/window_controls/maximize_normal.png);
+}
+
+#pushButtonMaximize:hover {
+    image: url(:/window_controls/maximize_hover.png);
+}
+
+#pushButtonMaximize:pressed {
+    image: url(:/window_controls/maximize_pressed.png);
+}
+
+#pushButtonMinimize {
+    image: url(:/window_controls/minimize_normal.png);
+}
+
+#pushButtonMinimize:hover {
+    image: url(:/window_controls/minimize_hover.png);
+}
+
+#pushButtonMinimize:pressed {
+    image: url(:/window_controls/minimize_pressed.png);
+}
+
+#pushButtonClose {
+    image: url(:/window_controls/close_normal.png);
+}
+
+#pushButtonClose:hover {
+    image: url(:/window_controls/close_hover.png);
+}
+
+#pushButtonClose:pressed {
+    image: url(:/window_controls/close_pressed.png);
+}

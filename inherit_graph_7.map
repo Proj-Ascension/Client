@@ -1,0 +1,15 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$d7/d55/class_library.html" title="Library class. " alt="" coords="161,5,223,32"/>
+<area shape="rect" id="node3" href="$d1/d88/class_main_panel.html" title="MainPanel class. " alt="" coords="151,56,233,83"/>
+<area shape="rect" id="node6" href="$db/d2d/class_news.html" title="News UI namespace. " alt="" coords="164,107,220,133"/>
+<area shape="rect" id="node7" href="$d7/dbd/class_news_feed_widget.html" title="News UI namespace. " alt="" coords="129,157,255,184"/>
+<area shape="rect" id="node8" href="$d5/d3a/class_q_win_host.html" title="The QWinHost class provides an API to use native Win32 windows in Qt applications. " alt="" coords="151,208,233,235"/>
+<area shape="rect" id="node9" href="$d5/d79/class_q_win_widget.html" title="The QWinWidget class is a Qt widget that can be child of a native Win32 widget. " alt="" coords="144,259,240,285"/>
+<area shape="rect" id="node11" href="$db/d2b/class_settings.html" title="Settings UI namespace. " alt="" coords="157,309,227,336"/>
+<area shape="rect" id="node12" href="$df/d42/class_sidebar.html" title="Sidebar class. " alt="" coords="159,360,225,387"/>
+<area shape="rect" id="node13" href="$d6/dc8/class_tab_widget.html" title="TabWidget class. " alt="" coords="149,411,235,437"/>
+<area shape="rect" id="node14" href="$d2/d2b/class_unix_window.html" title="UnixWindow" alt="" coords="144,461,240,488"/>
+<area shape="rect" id="node4" href="$de/d68/class_unix_panel.html" title="UnixPanel" alt="" coords="309,31,392,57"/>
+<area shape="rect" id="node5" href="$d6/d55/class_win_panel.html" title="WinPanel" alt="" coords="311,81,390,108"/>
+<area shape="rect" id="node10" href="$d8/db8/class_win_window.html" title="WinWindow" alt="" coords="305,259,397,285"/>
+</map>
