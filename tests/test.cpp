@@ -73,6 +73,7 @@ TEST_CASE ("Database", "[db]")
 
 TEST_CASE ("VDF Parser", "[vdf]")
 {
+    // VDF Parse tests
     std::unordered_map<int, SteamVdfParse::GameHeader> map = SteamVdfParse::parseVdf("appinfo.vdf");
     SteamVdfParse::GameHeader gameTest = map.at(208050);
 
@@ -82,6 +83,8 @@ TEST_CASE ("VDF Parser", "[vdf]")
     REQUIRE (gameTest.lastUpdated == 1439232482);
     REQUIRE (gameTest.accessToken == 0);
     REQUIRE (gameTest.changeNumber == 1127960);
+
+    // Verify the SHA sum
     int codes[20] = {42,74,-65,28,19,82,-64,-39,80,82,-8,-54,-48,-21,83,1,97,-126,-125,-60};
 
     bool shaFlag = true;
