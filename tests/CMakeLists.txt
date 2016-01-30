@@ -3,7 +3,7 @@ project(TestRunner C CXX)
 
 find_package(Qt5Sql REQUIRED)
 find_package(Boost REQUIRED)
-add_subdirectory(lib/gtest)
+add_subdirectory(lib/gtest/googletest)
 
 set(gtest_disable_pthreads on)
 set(TEST_FILES

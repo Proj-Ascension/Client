@@ -6,7 +6,6 @@ else()
     add_compile_options(-std=c++11)
 endif()
 
-
 # --- BUILD CONFIGURATION ---
 
 project(ProjectAscension C CXX)
@@ -17,7 +16,10 @@ set(CMAKE_AUTOMOC ON)
 set(gtest_disable_pthreads on)
 
 include(ProjectAscension.cmake)
-add_subdirectory(tests)
+
+if(WITH_TESTS)
+    add_subdirectory(tests)
+endif()
 
 set(GUI_TYPE "")
 

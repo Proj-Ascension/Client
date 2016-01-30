@@ -3,10 +3,11 @@ set(SOURCE_CORE
     src/init.h
     src/database.cpp
     src/database.h
+    src/game.h
+    src/widgets.h
 )
 
 set(LIBS
-    src/libs/catch.hpp
     src/libs/steam_vdf_parse.hpp
     src/util.hpp
 )
