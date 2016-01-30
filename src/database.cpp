@@ -50,7 +50,7 @@ bool Database::reset()
         return false;
     }
     QSqlQuery query(db);
-    return query.exec("DROP TABLE IF EXISTS games");
+    return query.exec("DROP TABLE IF EXISTS games") && QFile::remove(db.databaseName());
 }
 
 /** Add a game to the database and repopulate the games list.
@@ -280,4 +280,8 @@ Database& Database::getInstance(QString name)
 {
     static Database instance(name);
     return instance;
+}
+
+bool Database::open() {
+    return db.open();
 }

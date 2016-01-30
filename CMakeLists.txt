@@ -14,8 +14,10 @@ project(ProjectAscension C CXX)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(gtest_disable_pthreads on)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/ProjectAscension.cmake)
+include(ProjectAscension.cmake)
+add_subdirectory(tests)
 
 set(GUI_TYPE "")
 
@@ -56,13 +58,13 @@ include_directories(
     ${Qt5Sql_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
 )
-add_executable(ProjectAscension
+add_executable(${PROJECT_NAME}
     ${GUI_TYPE}
     ${SOURCE}
     ${FORMS_HEADERS}
     ${UI_RESOURCES}
 )
-target_link_libraries(ProjectAscension
+target_link_libraries(${PROJECT_NAME}
     Qt5::Widgets
     Qt5::Core
     Qt5::Gui
@@ -73,7 +75,7 @@ target_link_libraries(ProjectAscension
 )
 
 if(WIN32)
-    target_link_libraries(ProjectAscension
+    target_link_libraries(${PROJECT_NAME}
         user32.lib
         gdi32.lib
         dwmapi.lib
@@ -81,26 +83,11 @@ if(WIN32)
 
     if(MSVC)
         set(WIN_LINKFLAGS \"${CMAKE_CURRENT_SOURCE_DIR}/res/launcher.res\")
-        set_target_properties(ProjectAscension PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
-        set_target_properties(ProjectAscension PROPERTIES COMPILE_FLAGS "/EHsc")
+        set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
+        set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "/EHsc")
     endif(MSVC)
 endif()
 
-if(WITH_TESTS)
-    enable_testing()
-    add_executable(test_runner
-        src/database.cpp
-        tests/test.cpp)
-    target_link_libraries(test_runner
-        Qt5::Sql)
-    add_test(test_runner test_runner)
-    foreach(FILE
-            appinfo.vdf
-            game)
-    add_custom_command(TARGET test_runner POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tests/${FILE} $<TARGET_FILE_DIR:ProjectAscension>)
-        endforeach()
-endif(WITH_TESTS)
 
 # --- RUNTIME DEPENDENCIES ---
 # Only necessary on Windows.
@@ -109,9 +96,9 @@ if(WIN32)
     find_program(WINDEPLOY windeployqt PATHS ${Qt5Core_DIR}/../../../bin NO_DEFAULT_PATH)
 
     if (WINDEPLOY)
-        add_custom_command(TARGET ProjectAscension POST_BUILD
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             # Call windeployqt to copy necessary dependencies into the executable path.
-            COMMAND CMD /C "call ${Qt5Core_DIR}/../../../bin/qtenv2.bat && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations  $<TARGET_FILE:ProjectAscension> --dir $<TARGET_FILE_DIR:ProjectAscension>/plugins && move $<TARGET_FILE_DIR:ProjectAscension>\\plugins\\*.dll $<TARGET_FILE_DIR:ProjectAscension>"
+            COMMAND CMD /C "call ${Qt5Core_DIR}/../../../bin/qtenv2.bat && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations  $<TARGET_FILE:${PROJECT_NAME}> --dir $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins && move $<TARGET_FILE_DIR:${PROJECT_NAME}>\\plugins\\*.dll $<TARGET_FILE_DIR:${PROJECT_NAME}>"
         )
     else()
         message(WARNING "Unable to find Qt Windows deployment tool at ${Qt5Core_DIR}/../../../bin, no runtime dependencies will be copied.")

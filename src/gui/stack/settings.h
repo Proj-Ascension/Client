@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../database.h"
+#include <src/database.h>
+#include "widgets.h"
 
 #include <QSettings>
 

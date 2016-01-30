@@ -1,5 +1,6 @@
 #pragma once
 #include <src/util.hpp>
+#include "widgets.h"
 
 #include <QDir>
 #include <QWidget>
