@@ -67,7 +67,6 @@ void News::onRSSReturned(QNetworkReply* reply)
                 {
                     QString title = xml.readElementText();
                     newsFeedWidget->setRSSTitle(title);
-                    //rss->beginGroup("feeds");
                     if (!rss->contains(title))
                     {
                         qDebug() << title;
@@ -80,17 +79,17 @@ void News::onRSSReturned(QNetworkReply* reply)
                 QString url;
                 QString title;
                 xml.readNext();
-                if(xml.name() == "title")title = xml.readElementText();
+                if(xml.name() == "title")
+                {
+                    title = xml.readElementText();
+                }
                 xml.readNext();
-                if(xml.name() == "link")url = xml.readElementText();
+                if(xml.name() == "link")
+                {
+                    url = xml.readElementText();
+                }
                 newsFeedWidget->addRSSItem(title, url);
             }
-            /*if(xml.name() == "link")
-            {
-                //xml.readNext();
-                qDebug() << xml.readElementText();
-                //newsFeedWidget->addRSSItem(xml.readElementText());
-            }*/
         }
         xml.readNext();
     }
@@ -104,7 +103,6 @@ void News::saveFeeds(QString title, QString url)
     qDebug() << "Saving rss feed" << title << url;
     if (rss->isWritable())
     {
-        //rss->beginGroup("feeds");
         rss->setValue(title, url);
     }
     qDebug() << rss->allKeys();
