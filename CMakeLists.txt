@@ -106,6 +106,7 @@ endif(WITH_TESTS)
 # Only necessary on Windows.
 
 if(WIN32)
+    STRING(REPLACE "/O2" "/Od" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
     find_program(WINDEPLOY windeployqt PATHS ${Qt5Core_DIR}/../../../bin NO_DEFAULT_PATH)
 
     if (WINDEPLOY)
