@@ -175,9 +175,17 @@ void SteamDRM::parseAcf()
             boost::property_tree::ptree fileTree;
             std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
             boost::property_tree::info_parser::read_info(acfDir, fileTree);
+			QString path;
+			try
+			{
+				path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+			}
+			catch (std::exception e)
+			{
+				continue;
+			}
 
-            QString name;
-            QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+            QString name; 
 
             boost::optional<std::string> nameTest = fileTree.get_optional<std::string>("AppState.name");
             if (!nameTest)
