@@ -4,6 +4,7 @@
 #include <QtNetwork>
 #include <QBoxLayout>
 #include <QLineEdit>
+#include <vector>
 
 /** News UI namespace. */
 /** News class.
@@ -26,6 +27,8 @@ private:
     QLineEdit* rssAddress;
     QNetworkAccessManager* manager;
     QSettings* rss;
+    std::vector<QString> urls;
+
     QSettings* p;
 
     void getRSSFeed(QString url);

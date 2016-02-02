@@ -8,8 +8,18 @@
 */
 News::News(QSettings* p, QWidget* parent) : p(p), QWidget(parent)
 {
-    this->setStyleSheet("QListWidget {background-color: " + p->value("Primary/SecondaryBase").toString() + ";}"
-                        "QListWidget {color: " + p->value("Primary/LightText").toString() + ";}");
+
+    this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
+                        "QListWidget { color: " + p->value("Primary/LightText").toString() + "; }"
+                        "QLabel { color: " + p->value("Primary/LightText").toString() + "; }"
+                        "QPushButton {"
+                        "color: " + p->value("Primary/LightText").toString() + "; "
+                        "background-color: " + p->value("Primary/DarkElement").toString() + "; "
+                        "border: none; margin: 0px; padding: 0px;} "
+                        "QPushButton:hover {"
+                        "background-color: " + p->value("Primary/InactiveSelection").toString() + ";} "
+                        "color: " + p->value("Primary/LightText").toString() + ";");
+    QFont buttonFont("SourceSansPro", 9);
 
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
     manager = new QNetworkAccessManager(this);
@@ -47,9 +57,13 @@ void News::setRSSFeed()
 
 void News::getRSSFeed(QString url)
 {
-    qDebug() << "Getting RSS feed of:" << url;
-    QNetworkRequest request(url);
-    manager->get(request);
+    if(!(std::find(urls.begin(), urls.end(), url) != urls.end()))
+    {
+        qDebug() << "Getting RSS feed of:" << url;
+        QNetworkRequest request(url.trimmed());
+        manager->get(request);
+        urls.push_back(url);
+    }
 }
 
 void News::onRSSReturned(QNetworkReply* reply)
@@ -57,36 +71,52 @@ void News::onRSSReturned(QNetworkReply* reply)
     NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(p, this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
+    bool atom = false;
     while (!xml.atEnd())
     {
-        if (xml.isStartElement()) {
-            if (xml.name() == "channel")
+        if (xml.isStartElement())
+        {
+            if (xml.name() == "channel" || xml.name() == "feed" )
             {
-                xml.readNext();
-                if (xml.name() == "title")
+                if(xml.name() == "feed")atom = true;
+                bool flag = false;
+                while(!flag)
                 {
-                    QString title = xml.readElementText();
-                    newsFeedWidget->setRSSTitle(title);
-                    if (!rss->contains(title))
+                    xml.readNext();
+                    if (xml.name() == "title")
                     {
-                        qDebug() << title;
-                        saveFeeds(title, reply->url().toString());
+                        QString title = xml.readElementText();
+                        newsFeedWidget->setRSSTitle(title);
+                        if (!rss->contains(title))
+                        {
+                            saveFeeds(title, reply->url().toString());
+                        }
+                        flag = true;
                     }
                 }
             }
-            if (xml.name() == "item")
+
+            if (xml.name() == "item" || xml.name() == "entry")
             {
                 QString url;
                 QString title;
-                xml.readNext();
-                if(xml.name() == "title")
-                {
-                    title = xml.readElementText();
-                }
-                xml.readNext();
-                if(xml.name() == "link")
-                {
-                    url = xml.readElementText();
+                bool flag = false;
+                while(!flag) {
+                    xml.readNext();
+                    if (xml.name() == "title")title = xml.readElementText();
+                    if (xml.name() == "link") {
+                        if (atom) {
+                            for (QXmlStreamAttribute attr : xml.attributes()) {
+                                url = attr.value().toString();
+                            }
+                        }else
+                        {
+                            url = xml.readElementText();
+                        }
+                    }
+                    if (xml.isEndElement()) {
+                        if (xml.name() == "entry" || xml.name() == "item")flag = true;
+                    }
                 }
                 newsFeedWidget->addRSSItem(title, url);
             }
@@ -115,5 +145,6 @@ void News::loadFeeds()
     {
         QString url = rss->value(childKeys.value(i)).toString();
         getRSSFeed(url);
+        urls.push_back(url);
     }
 }

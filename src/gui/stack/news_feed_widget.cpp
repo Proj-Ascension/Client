@@ -45,6 +45,7 @@ void NewsFeedWidget::addRSSItem(QString title, QString url)
 {
     QListWidgetItem* item = new QListWidgetItem;
     item->setText(title);
+    //qDebug() << title;
     item->setData(32, url);
     rssList->addItem(item);
 }

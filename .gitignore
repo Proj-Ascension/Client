@@ -51,5 +51,4 @@ Makefile*
 #misc
 *.py
 *.pyc
-test
 .idea/
