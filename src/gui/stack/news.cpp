@@ -71,31 +71,53 @@ void News::onRSSReturned(QNetworkReply* reply)
     NewsFeedWidget* newsFeedWidget = new NewsFeedWidget(p, this);
     QByteArray data = reply->readAll();
     QXmlStreamReader xml(data);
+    bool atom = false;
     while (!xml.atEnd())
     {
-        if (xml.isStartElement()) {
-            if (xml.name() == "channel")
+        if (xml.isStartElement())
+        {
+            if (xml.name() == "channel" || xml.name() == "feed" )
             {
-                xml.readNext();
-                if (xml.name() == "title")
+                if(xml.name() == "feed")atom = true;
+                bool flag = false;
+                while(!flag)
                 {
-                    QString title = xml.readElementText();
-                    newsFeedWidget->setRSSTitle(title);
-                    if (!rss->contains(title))
+                    xml.readNext();
+                    if (xml.name() == "title")
                     {
-                        qDebug() << title;
-                        saveFeeds(title, reply->url().toString());
+                        QString title = xml.readElementText();
+                        newsFeedWidget->setRSSTitle(title);
+                        if (!rss->contains(title))
+                        {
+                            saveFeeds(title, reply->url().toString());
+                        }
+                        flag = true;
                     }
                 }
             }
-            if (xml.name() == "item")
+
+            if (xml.name() == "item" || xml.name() == "entry")
             {
                 QString url;
                 QString title;
-                xml.readNext();
-                if(xml.name() == "title")title = xml.readElementText();
-                xml.readNext();
-                if(xml.name() == "link")url = xml.readElementText();
+                bool flag = false;
+                while(!flag) {
+                    xml.readNext();
+                    if (xml.name() == "title")title = xml.readElementText();
+                    if (xml.name() == "link") {
+                        if (atom) {
+                            for (QXmlStreamAttribute attr : xml.attributes()) {
+                                url = attr.value().toString();
+                            }
+                        }else
+                        {
+                            url = xml.readElementText();
+                        }
+                    }
+                    if (xml.isEndElement()) {
+                        if (xml.name() == "entry" || xml.name() == "item")flag = true;
+                    }
+                }
                 newsFeedWidget->addRSSItem(title, url);
             }
         }
