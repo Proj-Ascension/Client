@@ -1,6 +1,6 @@
 #pragma once
 
-#include <src/database.h>
+#include <database.h>
 #include "widgets.h"
 
 #include <QWidget>

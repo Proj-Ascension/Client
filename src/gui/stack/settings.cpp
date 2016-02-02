@@ -1,6 +1,6 @@
-#include <src/gui/dialogs/ascension_dialog.h>
+#include <gui/dialogs/ascension_dialog.h>
+#include <wizards/drm_setup_wizard.h>
 #include "settings.h"
-#include "../wizards/drm_setup_wizard.h"
 
 /** Settings constructor
 * Initialize the settings UI

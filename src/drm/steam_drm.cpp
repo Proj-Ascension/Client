@@ -1,5 +1,5 @@
 #include "steam_drm.h"
-#include <src/libs/steam_vdf_parse.hpp>
+#include <libs/steam_vdf_parse.hpp>
 
 SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}
 
@@ -35,7 +35,7 @@ void SteamDRM::checkExists()
     {
         this->setRootDir(steamFolder);
         this->setIsInstalled();
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/Tick.svg"));
         descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
         QDir steamAppsDir = steamFolder.filePath("steamapps");
         if (!steamAppsDir.exists())
@@ -175,9 +175,13 @@ void SteamDRM::parseAcf()
             boost::property_tree::ptree fileTree;
             std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
             boost::property_tree::info_parser::read_info(acfDir, fileTree);
+			boost::optional<QString> path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+			if (!path)
+			{
+				break;
+			}
 
             QString name;
-            QString path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
 
             boost::optional<std::string> nameTest = fileTree.get_optional<std::string>("AppState.name");
             if (!nameTest)
@@ -191,7 +195,7 @@ void SteamDRM::parseAcf()
             }
             else
             {
-                name = QDir(path).dirName();
+                name = QDir(path.get()).dirName();
             }
 
             // TODO: Either add SteamID to db, or add getGameByPath
@@ -233,8 +237,8 @@ void SteamDRM::parseAcf()
                                 if (oslist == "macos")
 #endif
                             {
-                                exe = QDir(path).filePath(QString::fromStdString(section.get<std::string>("executable")));
-                                path = QDir(path).filePath(QString::fromStdString(section.get("workingdir", "")));
+                                exe = QDir(path.get()).filePath(QString::fromStdString(section.get<std::string>("executable")));
+                                path = QDir(path.get()).filePath(QString::fromStdString(section.get("workingdir", "")));
                                 args = QString::fromStdString(section.get("arguments", ""));
                                 break;
                             }
@@ -242,27 +246,27 @@ void SteamDRM::parseAcf()
                     }
                     else
                     {
-                        exe = QDir(path).filePath(QString::fromStdString(launch.get<std::string>("0.executable")));
-                        path = QDir(path).filePath(QString::fromStdString(launch.get("0.workingdir", "")));
+                        exe = QDir(path.get()).filePath(QString::fromStdString(launch.get<std::string>("0.executable")));
+                        path = QDir(path.get()).filePath(QString::fromStdString(launch.get("0.workingdir", "")));
                         args = QString::fromStdString(launch.get("0.arguments", ""));
                     }
                 }
                 catch (const std::out_of_range&)
                 {
                     qDebug() << "The game id:" << id << "was not found in the Steam appinfo.vdf.";
-                    QStringList exeList = QDir(path).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
+                    QStringList exeList = QDir(path.get()).entryList(QDir::Files | QDir::NoSymLinks | QDir::Executable);
 
                     QFileDialog exeDialog;
                     exeDialog.setWindowTitle("Select Executable");
                     exeDialog.setFileMode(QFileDialog::ExistingFile);
-                    exeDialog.setDirectory(path);
+                    exeDialog.setDirectory(path.get());
                     if (exeDialog.exec())
                     {
                         exe = exeDialog.selectedFiles().at(0);
                     }
                 }
 
-                steamVector.push_back(Game{0, name, path, exe, args});
+                steamVector.push_back(Game{0, name, path.get(), exe, args});
             }
         }
     }
