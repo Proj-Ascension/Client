@@ -4,7 +4,6 @@
 #include <QtNetwork>
 #include <QBoxLayout>
 #include <QLineEdit>
-#include <QScrollArea>
 #include <vector>
 
 /** News UI namespace. */
