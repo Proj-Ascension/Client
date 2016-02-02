@@ -101,20 +101,26 @@ void News::onRSSReturned(QNetworkReply* reply)
                 QString url;
                 QString title;
                 bool flag = false;
-                while(!flag) {
+                while(!flag) 
+                {
                     xml.readNext();
                     if (xml.name() == "title")title = xml.readElementText();
-                    if (xml.name() == "link") {
-                        if (atom) {
-                            for (QXmlStreamAttribute attr : xml.attributes()) {
+                    if (xml.name() == "link") 
+                    {
+                        if (atom) 
+                        {
+                            for (QXmlStreamAttribute attr : xml.attributes()) 
+                            {
                                 url = attr.value().toString();
                             }
-                        }else
+                        }
+                        else
                         {
                             url = xml.readElementText();
                         }
                     }
-                    if (xml.isEndElement()) {
+                    if (xml.isEndElement()) 
+                    {
                         if (xml.name() == "entry" || xml.name() == "item")flag = true;
                     }
                 }
