@@ -51,9 +51,4 @@ Makefile*
 #misc
 *.py
 *.pyc
-test
 .idea/
-Source/
-Doc/
-Tests/
-BorderlessWindow/
