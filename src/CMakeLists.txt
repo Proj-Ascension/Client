@@ -145,7 +145,7 @@ include_directories(
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 5.4 COMPONENTS Core Gui Network Sql Widgets)
+find_package(Qt5 5.3 COMPONENTS Core Gui Network Sql Widgets)
 find_package(Boost REQUIRED)
 find_package(Threads REQUIRED)
 

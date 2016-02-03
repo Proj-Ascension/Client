@@ -1,6 +1,6 @@
 project(TestRunner C CXX)
 
-find_package(Qt5 5.4 COMPONENTS Core Gui Network Sql Widgets Test)
+find_package(Qt5 5.3 COMPONENTS Core Gui Network Sql Widgets Test)
 find_package(Boost REQUIRED)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
