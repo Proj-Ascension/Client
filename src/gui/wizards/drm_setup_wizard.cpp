@@ -144,6 +144,7 @@ void ResultsPage::initializePage()
             QApplication::processEvents();
         }
 
+        dialog->close();
         if (!uplay->getIsInstalled() && !steam->getIsInstalled() && !origin->getIsInstalled())
         {
             setTitle(title() + "no games.");
@@ -196,8 +197,6 @@ void ResultsPage::initializePage()
 
                 tabWidget->addTab(uplay->createPane(this), "Uplay");
             }
-
-            dialog->close();
 
 
             selectAllBtn = new QPushButton("Select all");
