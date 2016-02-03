@@ -1,16 +1,11 @@
 project(ProjectAscension C CXX)
 
 # ---------- Setup output Directories -------------------------
-SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
-     ${PROJECT_BINARY_DIR}/Bin )
-
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} )
 # --------- Setup the Executable output Directory -------------
-SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
-     ${PROJECT_BINARY_DIR}/Bin )
-
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} )
 # --------- Setup the Executable output Directory -------------
-SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-     ${PROJECT_BINARY_DIR}/Bin )
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR} )
 
 if(WIN32)
     cmake_minimum_required(VERSION 3.1.0)

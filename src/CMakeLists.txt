@@ -69,7 +69,7 @@ set(RESOURCES
 set(GUI_TYPE "")
 
 if(WIN32)
-    set(GUI_TYPE WIN32)
+#    set(GUI_TYPE WIN32)
 
     set(GUI_CORE ${GUI_CORE}
         gui/win_window.cpp

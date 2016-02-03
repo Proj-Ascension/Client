@@ -107,8 +107,42 @@ void ResultsPage::initializePage()
         setTitle(QString("We found "));
         tabWidget = new QTabWidget(this);
         topLayout = new QGridLayout(this);
-
         std::vector<std::future<void>> futureVec;
+
+        QProgressDialog* dialog = new QProgressDialog(this);
+        dialog->setCancelButtonText("Cancel");
+        dialog->setRange(0, 3);
+        dialog->setWindowTitle("Project Ascension");
+        dialog->setLabelText("Working");
+        dialog->setWindowModality(Qt::NonModal);
+        dialog->show();
+        dialog->setValue(0);
+        QApplication::processEvents();
+
+        if (steam->getIsInstalled())
+        {
+            futureVec.push_back(std::async(std::launch::async, &SteamDRM::findGames, steam));
+        }
+
+        if (origin->getIsInstalled())
+        {
+            futureVec.push_back(std::async(std::launch::async, &OriginDRM::findGames, origin));
+        }
+
+        if (uplay->getIsInstalled())
+        {
+            futureVec.push_back(std::async(std::launch::async, &UplayDRM::findGames, uplay));
+        }
+
+
+        int vecCount = 0;
+        for (auto& i : futureVec)
+        {
+            i.get();
+            vecCount++;
+            dialog->setValue(vecCount);
+            QApplication::processEvents();
+        }
 
         if (!uplay->getIsInstalled() && !steam->getIsInstalled() && !origin->getIsInstalled())
         {
@@ -119,32 +153,6 @@ void ResultsPage::initializePage()
         else
         {
             setSubTitle("Change the title for each game by clicking the text box and editing.");
-            QProgressDialog* dialog = new QProgressDialog(this);
-            dialog->setCancelButtonText("Cancel");
-            dialog->setRange(0, 3);
-            dialog->setWindowTitle("Project Ascension");
-            dialog->setLabelText("Working");
-            dialog->setWindowModality(Qt::NonModal);
-            dialog->show();
-            dialog->setValue(0);
-            QApplication::processEvents();
-
-            for (auto i : std::vector<DRMType*>{steam, origin, uplay})
-            {
-                if (i->getIsInstalled())
-                {
-                    futureVec.push_back(std::async(std::launch::async, i->findGames, i));
-                }
-            }
-
-            int vecCount = 1;
-            for (auto& i : futureVec)
-            {
-                i.get();
-                dialog->setValue(vecCount);
-                QApplication::processEvents();
-                vecCount++;
-            }
 
             if (steam->getIsInstalled())
             {
@@ -200,7 +208,7 @@ void ResultsPage::initializePage()
             connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
 
             topLayout->addWidget(tabWidget);
-            QHBoxLayout* boxLayout = new QHBoxLayout(this);
+            QHBoxLayout* boxLayout = new QHBoxLayout();
             boxLayout->addWidget(selectAllBtn);
             boxLayout->addWidget(deselectAllBtn);
             boxLayout->addWidget(invertBtn);
