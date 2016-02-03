@@ -1,8 +1,7 @@
 #include "steam_drm.h"
 #include <libs/steam_vdf_parse.hpp>
 
-SteamDRM::SteamDRM() : DRMType("<b>Steam</b>"){}
-
+SteamDRM::SteamDRM() : DRMType("<b>Steam</b>") {}
 /** Check if Steam is installed on the current computer, if applicable, and sets some values for later pages to
  * check on.
  */
@@ -65,7 +64,6 @@ void SteamDRM::checkExists()
         {
             descLabel->setText(descLabel->text() + "\n\nLibrary folders:\n" + pathString);
         }
-
     }
     else
     {
@@ -107,7 +105,7 @@ QWidget* SteamDRM::createPane(QWidget* parent)
     viewport->setLayout(layout);
     scrollArea->setWidget(viewport);
 
-	return scrollArea;
+    return scrollArea;
 }
 
 /** Using rootDir, which is initialized earlier in the wizard, find the location of every Steam library folder, and
@@ -175,11 +173,11 @@ void SteamDRM::parseAcf()
             boost::property_tree::ptree fileTree;
             std::string acfDir = steamAppsDir.filePath(fileIter).toLocal8Bit().constData();
             boost::property_tree::info_parser::read_info(acfDir, fileTree);
-			boost::optional<QString> path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
-			if (!path)
-			{
-				break;
-			}
+            boost::optional<QString> path = steamAppsDir.filePath("common/" + QString::fromStdString(fileTree.get<std::string>("AppState.installdir")));
+            if (!path)
+            {
+                break;
+            }
 
             QString name;
 
@@ -220,7 +218,6 @@ void SteamDRM::parseAcf()
                     boost::optional<std::string> oslistTest = game.pt.get_optional<std::string>("common.oslist");
                     if (oslistTest)
                     {
-
                         // Loop through the 0, 1, and 2 configurations
                         for (auto pair : launch)
                         {
@@ -234,7 +231,7 @@ void SteamDRM::parseAcf()
 #elif defined(_WIN32) || defined(_WIN64)
                             if (oslist == "windows")
 #elif defined(__APPLE__)
-                                if (oslist == "macos")
+                            if (oslist == "macos")
 #endif
                             {
                                 exe = QDir(path.get()).filePath(QString::fromStdString(section.get<std::string>("executable")));

@@ -17,26 +17,44 @@ namespace SteamVdfParse
 
 namespace pt = boost::property_tree;
     
-/** Function to convert an istream object into a 32-bit little endian integer.
- * \param stream The stream to convert
+/** Function to read a 32-bit little endian integer from an istream.
+ * \param stream The stream to read from
  * \return The converted integer
  */
 inline uint32_t read32_le(std::istream& stream)
 {
-    return static_cast<uint32_t>((stream.get()) | (stream.get() << 8) | (stream.get() << 16) |
-                                 (stream.get() << 24));
+    uint8_t b1 = stream.get();
+    uint8_t b2 = stream.get();
+    uint8_t b3 = stream.get();
+    uint8_t b4 = stream.get();
+    return static_cast<uint32_t>((b1)
+                                 | (b2 << 8)
+                                 | (b3 << 16)
+                                 | (b4 << 24));
 }
 
-/** Function to convert an istream object into a 64-bit little endian integer.
- * \param stream The stream to convert
+/** Function to read a 64-bit little endian integer from an istream.
+ * \param stream The stream to read from
  * \return The converted integer
  */
 inline uint64_t read64_le(std::istream& stream)
 {
-    return static_cast<uint64_t>(
-        (stream.get()) | (stream.get() << 8) | (stream.get() << 16) | (stream.get() << 24) |
-        ((uint64_t)stream.get() << 32) | ((uint64_t)stream.get() << 40) |
-        ((uint64_t)stream.get() << 48) | ((uint64_t)stream.get() << 56));
+    uint8_t b1 = stream.get();
+    uint8_t b2 = stream.get();
+    uint8_t b3 = stream.get();
+    uint8_t b4 = stream.get();
+    uint8_t b5 = stream.get();
+    uint8_t b6 = stream.get();
+    uint8_t b7 = stream.get();
+    uint8_t b8 = stream.get();
+    return static_cast<uint64_t>((b1)
+                                 | (b2 << 8)
+                                 | (b3 << 16)
+                                 | (b4 << 24)
+                                 | ((uint64_t)b5 << 32)
+                                 | ((uint64_t)b6 << 40)
+                                 | ((uint64_t)b7 << 48)
+                                 | ((uint64_t)b8 << 56));
 }
 
 /** Function to convert an istream object into a std::string.

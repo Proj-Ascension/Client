@@ -23,6 +23,9 @@ int main(int argc, char* argv[])
 	icon.addFile(":/system_menu/icons/ascension_icon.ico");
     application->setWindowIcon(icon);
 
+    initSettings(*application);
+    initFonts(*application);
+
     // Global stylesheet
     QFile stylesheet(":/styles/pa_client.css");
     if (stylesheet.open(QFile::ReadOnly))
@@ -30,9 +33,6 @@ int main(int argc, char* argv[])
         QString styleSheet = stylesheet.readAll();
         application->setStyleSheet(styleSheet + getConfigurableStyle());
     }
-
-    initSettings(*application);
-    initFonts(*application);
 
     #ifdef Q_OS_WIN
         // Background color
