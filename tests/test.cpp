@@ -2,73 +2,66 @@
 #include "../src/database.h"
 #include "../src/libs/steam_vdf_parse.hpp"
 
-inline bool operator==(Game g1, Game g2)
-{
-    return g1.id == g2.id && g1.gameName == g2.gameName && g1.gameDirectory == g2.gameDirectory && g1.executablePath == g2.executablePath && g1.arguments == g2.arguments;
-}
 
 TEST_CASE ("Database", "[db]")
 {
-    QFile file("ascensionTest.db");
-    if (file.exists())
-    {
-        Database::getInstance("ascensionTest.db").reset();
-        file.remove();
-    }
+    QTemporaryDir dir;
+    QString path = dir.isValid() ? dir.path() + "ascensionTest.db" : QDir::tempPath() + "ascensionTest.db";
+
     Game testGame = {1, QString("Test Game"), QString("."), QString("test.exe"), QString("args")};
     Game hl3 = {2, QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")};
     QList<Game> list{testGame, hl3};
 
 
-    REQUIRE (Database::getInstance("ascensionTest.db").init());
+    REQUIRE (Database::getInstance(path).init());
 
     SECTION("Add a test game")
     {
-        REQUIRE (Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args")));
-        REQUIRE (!Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args")));
+        REQUIRE (Database::getInstance(path).addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args")));
+        REQUIRE (!Database::getInstance(path).addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args")));
     }
     SECTION("Add another test game")
     {
-        REQUIRE (Database::getInstance("ascensionTest.db").addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")));
-        REQUIRE (!Database::getInstance("ascensionTest.db").addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")));
+        REQUIRE (Database::getInstance(path).addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")));
+        REQUIRE (!Database::getInstance(path).addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString("")));
     }
     SECTION("Get game count")
     {
-        REQUIRE (Database::getInstance("ascensionTest.db").getGameCount() == 0);
-        Database::getInstance("ascensionTest.db").addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString(""));
-        REQUIRE (Database::getInstance("ascensionTest.db").getGameCount() == 1);
+        REQUIRE (Database::getInstance(path).getGameCount() == 0);
+        Database::getInstance(path).addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString(""));
+        REQUIRE (Database::getInstance(path).getGameCount() == 1);
     }
     SECTION("Get game by id")
     {
-        REQUIRE (Database::getInstance("ascensionTest.db").getGameById(1) == Game{});
-        Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
-        REQUIRE (Database::getInstance("ascensionTest.db").getGameById(1) == testGame);
+        REQUIRE (Database::getInstance(path).getGameById(1) == Game{});
+        Database::getInstance(path).addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
+        REQUIRE (Database::getInstance(path).getGameById(1) == testGame);
     }
     SECTION("Get games list")
     {
-        REQUIRE (Database::getInstance("ascensionTest.db").getGames() == QList<Game>{});
+        REQUIRE (Database::getInstance(path).getGames() == QList<Game>{});
 
-        Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
-        Database::getInstance("ascensionTest.db").addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString(""));
-        REQUIRE (Database::getInstance("ascensionTest.db").getGames() == list);
+        Database::getInstance(path).addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
+        Database::getInstance(path).addGame(QString("Half-Life 3"), QString("."), QString("hl2.exe"), QString(""));
+        REQUIRE (Database::getInstance(path).getGames() == list);
     }
     SECTION("Remove game by id")
     {
-        REQUIRE (!Database::getInstance("ascensionTest.db").removeGameById(1));
-        Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
-        REQUIRE (Database::getInstance("ascensionTest.db").removeGameById(1));
+        REQUIRE (!Database::getInstance(path).removeGameById(1));
+        Database::getInstance(path).addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
+        REQUIRE (Database::getInstance(path).removeGameById(1));
     }
     SECTION("Remove game by name")
     {
-        REQUIRE (!Database::getInstance("ascensionTest.db").removeGameByName("Test Game"));
-        Database::getInstance("ascensionTest.db").addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
-        REQUIRE (Database::getInstance("ascensionTest.db").removeGameByName("Test Game"));
+        REQUIRE (!Database::getInstance(path).removeGameByName("Test Game"));
+        Database::getInstance(path).addGame(QString("Test Game"), QString("."), QString("test.exe"), QString("args"));
+        REQUIRE (Database::getInstance(path).removeGameByName("Test Game"));
     }
     SECTION("Reset db")
     {
-        REQUIRE (Database::getInstance("ascensionTest.db").reset());
+        REQUIRE (Database::getInstance(path).reset());
     }
-    file.remove();
+    Database::getInstance(path).reset();
 }
 
 TEST_CASE ("VDF Parser", "[vdf]")

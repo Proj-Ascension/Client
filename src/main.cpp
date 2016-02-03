@@ -11,17 +11,20 @@
 
 int main(int argc, char* argv[])
 {
-//    QCoreApplication::addLibraryPath("./");
+    QCoreApplication::addLibraryPath("./");
+    QCoreApplication::addLibraryPath("./plugins");
 
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
     bool dbExists = QFile("ascension.db").exists();
     DRMSetupWizard* wiz = new DRMSetupWizard();
+	QIcon icon;
+	icon.addFile(":/system_menu/icons/ascension_icon.png");
+	icon.addFile(":/system_menu/icons/ascension_icon.ico");
+    application->setWindowIcon(icon);
 
-    #ifndef Q_OS_WIN
-        // dynamic loading of the icon under Linux/UNIX
-        application->setWindowIcon(QIcon(":/system_menu/icons/ascension_icon.ico"));
-    #endif
+    initSettings(*application);
+    initFonts(*application);
 
     // Global stylesheet
     QFile stylesheet(":/styles/pa_client.css");
@@ -30,9 +33,6 @@ int main(int argc, char* argv[])
         QString styleSheet = stylesheet.readAll();
         application->setStyleSheet(styleSheet + getConfigurableStyle());
     }
-
-    initSettings(*application);
-    initFonts(*application);
 
     #ifdef Q_OS_WIN
         // Background color

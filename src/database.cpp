@@ -281,3 +281,7 @@ Database& Database::getInstance(QString name)
     static Database instance(name);
     return instance;
 }
+
+bool Database::open() {
+    return db.open();
+}

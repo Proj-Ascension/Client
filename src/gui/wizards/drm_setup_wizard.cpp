@@ -1,5 +1,5 @@
 #include "drm_setup_wizard.h"
-#include <src/libs/steam_vdf_parse.hpp>
+#include <libs/steam_vdf_parse.hpp>
 
 #include <thread>
 #include <future>
@@ -67,13 +67,10 @@ DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWiz
     static int count = 0;
     for (auto& drm : drmMap)
     {
-        if (drm.second->getIsInstalled())
-        {
-            layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
-            layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
-            layout->addWidget(drm.second->getStatusLabel(), count, 0, 0);
-            count += 3;
-        }
+        layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
+        layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
+        layout->addWidget(drm.second->getStatusLabel(), count, 1, 0);
+        count += 3;
     }
 
     setLayout(layout);
@@ -120,20 +117,19 @@ void ResultsPage::initializePage()
         setSubTitle("Change the title for each game by clicking the text box and editing.");
         tabWidget = new QTabWidget(this);
         topLayout = new QGridLayout(this);
-        QProgressDialog dialog;
-        dialog.setCancelButtonText("Cancel");
-        dialog.setRange(0, 3);
-        dialog.setWindowTitle("Project Ascension");
-        dialog.setLabelText("Working");
-        dialog.setWindowModality(Qt::NonModal);
-        dialog.show();
-        dialog.setValue(0);
+        QProgressDialog* dialog = new QProgressDialog(this);
+        dialog->setCancelButtonText("Cancel");
+        dialog->setRange(0, 3);
+        dialog->setWindowTitle("Project Ascension");
+        dialog->setLabelText("Working");
+        dialog->setWindowModality(Qt::NonModal);
+        dialog->show();
+        dialog->setValue(0);
         QApplication::processEvents();
 
         if (steamFound)
         {
-            auto t = std::async(std::launch::async, &SteamDRM::findGames, steam);
-            t.get();
+			steam->findGames();
             GameList steamVector = steam->getGames();
             if (uplayFound && originFound)
             {
@@ -149,13 +145,12 @@ void ResultsPage::initializePage()
             }
             tabWidget->addTab(steam->createPane(this), "Steam");
         }
-        dialog.setValue(1);
+        dialog->setValue(1);
         QApplication::processEvents();
 
         if (originFound)
         {
-            auto t = std::async(std::launch::async, &OriginDRM::findGames, origin);
-            t.get();
+			origin->findGames();
             pt::ptree originTree = origin->getGames();
             int count = originTree.get<int>("games.count");
             if (uplayFound)
@@ -169,23 +164,22 @@ void ResultsPage::initializePage()
 
             tabWidget->addTab(origin->createPane(this), "Origin");
         }
-        dialog.setValue(2);
+        dialog->setValue(2);
         QApplication::processEvents();
 
         if (uplayFound)
         {
-            auto t = std::async(std::launch::async, &UplayDRM::findGames, uplay);
-            t.get();
+			uplay->findGames();
             pt::ptree uplayTree = uplay->getGames();
             int count = uplayTree.get<int>("games.count");
             setTitle(title() + QString::number(count) + QString(" Uplay game") + (count == 1 ? QString(".") : QString("s.")));
 
             tabWidget->addTab(uplay->createPane(this), "Uplay");
         }
-        dialog.setValue(3);
+        dialog->setValue(3);
         QApplication::processEvents();
 
-        dialog.close();
+        dialog->close();
 
 
         selectAllBtn = new QPushButton("Select all");

@@ -1,6 +1,6 @@
 #include "main_panel.h"
-#include <src/gui/stack/settings.h>
-#include <src/gui/stack/news.h>
+#include <gui/stack/settings.h>
+#include <gui/stack/news.h>
 
 
 /** MainPanel constructor
