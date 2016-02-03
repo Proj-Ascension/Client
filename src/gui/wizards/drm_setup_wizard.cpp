@@ -105,8 +105,6 @@ void ResultsPage::initializePage()
     {
         hasRun = true;
         setTitle(QString("We found "));
-        tabWidget = new QTabWidget(this);
-        topLayout = new QGridLayout(this);
         std::vector<std::future<void>> futureVec;
 
         QProgressDialog* dialog = new QProgressDialog(this);
@@ -153,6 +151,8 @@ void ResultsPage::initializePage()
         }
         else
         {
+            tabWidget = new QTabWidget(this);
+            topLayout = new QGridLayout(this);
             setSubTitle("Change the title for each game by clicking the text box and editing.");
 
             if (steam->getIsInstalled())
