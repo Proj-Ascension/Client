@@ -29,18 +29,18 @@ void SteamDRM::checkExists()
 #elif defined(__APPLE__)
     steamFolder = QDir(QDir::home().filePath("Library/Application Support/Steam"));
 #endif
+    QDir steamAppsDir = steamFolder.filePath("steamapps");
+    if (!steamAppsDir.exists())
+    {
+        steamAppsDir = steamFolder.filePath("SteamApps");
+    }
 
-    if (steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
+    if (QDir(steamAppsDir.filePath("libraryFolders.vdf")).exists() && steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
     {
         this->setRootDir(steamFolder);
         this->setIsInstalled();
         statusLabel->setPixmap(QPixmap(":/system_menu/icons/tick.svg"));
         descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
-        QDir steamAppsDir = steamFolder.filePath("steamapps");
-        if (!steamAppsDir.exists())
-        {
-            steamAppsDir = steamFolder.filePath("SteamApps");
-        }
         pt::ptree libraryFolders;
         pt::read_info(steamAppsDir.filePath("libraryfolders.vdf").toLocal8Bit().constData(), libraryFolders);
         steamDirectoryList.append(steamFolder.filePath(""));
