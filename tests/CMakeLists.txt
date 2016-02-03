@@ -36,7 +36,7 @@ target_link_libraries(${PROJECT_NAME}
     ${QT_MAIN})
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/appinfo.vdf ${CMAKE_BINARY_DIR}/Bin)
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/appinfo.vdf ${CMAKE_BINARY_DIR})
 
 if(WIN32)
     find_program(WINDEPLOY windeployqt PATHS ${Qt5Core_DIR}/../../../bin NO_DEFAULT_PATH)
