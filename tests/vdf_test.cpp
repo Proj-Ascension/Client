@@ -4,10 +4,10 @@
 class VdfTest : public QObject
 {
     Q_OBJECT
-private:
+   private:
     std::unordered_map<int, SteamVdfParse::GameHeader> map;
     SteamVdfParse::GameHeader gameTest;
-private slots:
+   private slots:
     void init();
     void testAppId();
     void testSize();
@@ -46,7 +46,7 @@ void VdfTest::testLastUpdated()
 
 void VdfTest::testAccessToken()
 {
-   QVERIFY(gameTest.accessToken == 0);
+    QVERIFY(gameTest.accessToken == 0);
 }
 
 void VdfTest::testChangeNumber()
@@ -56,12 +56,12 @@ void VdfTest::testChangeNumber()
 
 void VdfTest::testSha()
 {
-    int codes[20] = {42,74,-65,28,19,82,-64,-39,80,82,-8,-54,-48,-21,83,1,97,-126,-125,-60};
+    int codes[20] = {42, 74, -65, 28, 19, 82, -64, -39, 80, 82, -8, -54, -48, -21, 83, 1, 97, -126, -125, -60};
 
     bool shaFlag = true;
-    for (auto i=0;i<20;i++)
+    for (auto i = 0; i < 20; i++)
     {
-        if (!int(gameTest.sha[i]) == codes[i])
+        if (!(int(gameTest.sha[i]) == codes[i]))
         {
             shaFlag = false;
             break;
