@@ -35,7 +35,7 @@ void SteamDRM::checkExists()
     {
         this->setRootDir(steamFolder);
         this->setIsInstalled();
-        statusLabel->setPixmap(QPixmap(":/system_menu/icons/Tick.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/tick.svg"));
         descLabel = new QLabel("Steam found in " + steamFolder.filePath(""));
         QDir steamAppsDir = steamFolder.filePath("steamapps");
         if (!steamAppsDir.exists())
@@ -69,7 +69,7 @@ void SteamDRM::checkExists()
     }
     else
     {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/cross.svg"));
         descLabel = new QLabel("Steam not found. Verify installation and try again.");
     }
 }

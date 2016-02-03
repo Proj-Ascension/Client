@@ -67,13 +67,10 @@ DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWiz
     static int count = 0;
     for (auto& drm : drmMap)
     {
-        if (drm.second->getIsInstalled())
-        {
-            layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
-            layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
-            layout->addWidget(drm.second->getStatusLabel(), count, 0, 0);
-            count += 3;
-        }
+        layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
+        layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
+        layout->addWidget(drm.second->getStatusLabel(), count, 1, 0);
+        count += 3;
     }
 
     setLayout(layout);

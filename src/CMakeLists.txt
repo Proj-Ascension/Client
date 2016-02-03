@@ -1,4 +1,4 @@
-project(ProjectAscension C CXX)
+project(Client C CXX)
 
 set(SOURCE_CORE
     main.cpp
@@ -65,7 +65,12 @@ set(RESOURCES
     ../res/elements.qrc
 )
 
+
+set(GUI_TYPE "")
+
 if(WIN32)
+    set(GUI_TYPE WIN32)
+
     set(GUI_CORE ${GUI_CORE}
         gui/win_window.cpp
         gui/win_window.h
@@ -100,6 +105,13 @@ elseif(UNIX)
     )
 
     set(GUI_BORDERLESS "")
+
+    # Additional configuration for Unix systems.
+    # TODO: Get working icon / bundle for OSX systems without bricking the build.
+
+    # if(APPLE)
+    #     set(GUI_TYPE MACOSX_BUNDLE)
+    # endif(APPLE)
 else()
     # Suspend the configuration process if the target OS isn't recognized.
     MESSAGE(FATAL_ERROR "Target OS not recognized or supported, aborting CMake process.")
@@ -130,8 +142,6 @@ include_directories(
     gui/wizards
 )
 
-#set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
@@ -141,7 +151,6 @@ find_package(Threads REQUIRED)
 
 qt5_add_resources(UI_RESOURCES ${RESOURCES})
 include_directories(
-    # ${CMAKE_CURRENT_BINARY_DIR}
     ${Qt5Gui_INCLUDE_DIRS}
     ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
@@ -176,7 +185,7 @@ if(WIN32)
         )
 
     if(MSVC)
-        set(WIN_LINKFLAGS \"${CMAKE_CURRENT_SOURCE_DIR}/res/launcher.res\")
+        set(WIN_LINKFLAGS \"${CMAKE_CURRENT_SOURCE_DIR}/../res/launcher.res\")
         set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS ${WIN_LINKFLAGS})
         set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "/EHsc")
     endif(MSVC)
@@ -192,7 +201,7 @@ if(WIN32)
     if (WINDEPLOY)
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             # Call windeployqt to copy necessary dependencies into the executable path.
-            COMMAND CMD /C "call ${Qt5Core_DIR}/../../../bin/qtenv2.bat && ${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations  $<TARGET_FILE:${PROJECT_NAME}> --dir $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins && move $<TARGET_FILE_DIR:${PROJECT_NAME}>\\plugins\\*.dll $<TARGET_FILE_DIR:${PROJECT_NAME}>"
+            COMMAND CMD /C "${WINDEPLOY} $<$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>,$<CONFIG:RelWithDebInfo>>:--release> --no-translations  $<TARGET_FILE:${PROJECT_NAME}> --dir $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins && move $<TARGET_FILE_DIR:${PROJECT_NAME}>\\plugins\\*.dll $<TARGET_FILE_DIR:${PROJECT_NAME}>"
             )
     else()
         message(WARNING "Unable to find Qt Windows deployment tool at ${Qt5Core_DIR}/../../../bin, no runtime dependencies will be copied.")

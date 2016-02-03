@@ -15,7 +15,6 @@ target_link_libraries(TestRunner
     Qt5::Sql)
 
 add_custom_command(TARGET TestRunner POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/appinfo.vdf $<TARGET_FILE_DIR:ProjectAscension>)
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/appinfo.vdf ${CMAKE_BINARY_DIR})
 
 add_test(TestRunner TestRunner)
-add_dependencies(check TestRunner)
