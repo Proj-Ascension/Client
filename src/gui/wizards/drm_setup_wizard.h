@@ -74,6 +74,7 @@ protected:
     void initializePage() Q_DECL_OVERRIDE;
 
 private:
+    bool hasRun;
     QTabWidget* tabWidget;
     QGridLayout* topLayout;
     SteamDRM* steam;

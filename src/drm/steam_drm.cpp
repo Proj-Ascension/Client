@@ -35,7 +35,7 @@ void SteamDRM::checkExists()
         steamAppsDir = steamFolder.filePath("SteamApps");
     }
 
-    if (QDir(steamAppsDir.filePath("libraryFolders.vdf")).exists() && steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
+    if (QFile(steamAppsDir.filePath("libraryFolders.vdf")).exists() && steamFolder.filePath("").trimmed() != "" && steamFolder.exists() && steamFolder != QDir("."))
     {
         this->setRootDir(steamFolder);
         this->setIsInstalled();

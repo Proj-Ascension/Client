@@ -222,7 +222,7 @@ inline std::unordered_map<int, GameHeader> parseVdf(std::string location)
 
     if (magic != MAGIC_VALUE)
     {
-        std::cerr << "Invalid magic value!" << std::endl;
+        std::cerr << "Invalid magic value!\n Got " << std::hex << magic << std::endl;
         return games;
     }
 
