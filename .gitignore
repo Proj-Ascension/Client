@@ -28,7 +28,7 @@ Makefile*
 *-build-*
 *.*.Debug
 *.*.Release
-/build
+build*/
 /msbuild
 *.txt.user
 *.aps
@@ -53,3 +53,5 @@ Makefile*
 *.pyc
 test
 .idea/
+.clang_complete
+.color_coded

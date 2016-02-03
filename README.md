@@ -1,4 +1,5 @@
-#Project Ascension Client [![Join the chat at https://gitter.im/Proj-Ascension/Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Proj-Ascension/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://semaphoreci.com/api/v1/projects/0a00cd10-c636-4076-99b3-2846380ec7f4/500317/badge.svg)](https://semaphoreci.com/projectascension/client-2)
+#Project Ascension Client [![Join the chat at https://gitter.im/Proj-Ascension/Client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Proj-Ascension/Client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://semaphoreci.com/api/v1/projects/0a00cd10-c636-4076-99b3-2846380ec7f4/500317/badge.svg)](https://semaphoreci.com/projectascension/client-2) [![Build status](https://ci.appveyor.com/api/projects/status/mt905x608x7aypsg?svg=true)](https://ci.appveyor.com/project/Project_Ascension/client)
+
 
 
 This is the official repo for the Project Ascension client interface. Borderless window system for WinAPI pulled from deimos1877's [BorderlessWindow](http://github.com/deimos1877/BorderlessWindow).

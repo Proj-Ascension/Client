@@ -1,0 +1,38 @@
+<RCC>
+    <qresource prefix="/system_menu">
+        <file>icons/ascension.png</file>
+        <file>icons/ascension_small.png</file>
+        <file>icons/ascension_icon.ico</file>
+        <file>icons/ascension_icon.png</file>
+        <file>icons/tick.svg</file>
+        <file>icons/cross.svg</file>
+        <file>icons/dots.svg</file>
+        <file>icons/status_online.png</file>
+        <file>icons/home_icon.png</file>
+        <file>icons/store_icon.png</file>
+        <file>icons/games_icon.png</file>
+        <file>icons/community_icon.png</file>
+        <file>icons/news_icon.png</file>
+        <file>icons/downloads_icon.png</file>
+        <file>icons/settings_icon.png</file>
+        <file>icons/exit_icon.png</file>
+    </qresource>
+    <qresource prefix="/window_controls">
+        <file alias="close_normal.png">icons/window_controls/closebutton_normal.png</file>
+        <file alias="close_pressed.png">icons/window_controls/closebutton_pressed.png</file>
+        <file alias="close_hover.png">icons/window_controls/closebutton_hover.png</file>
+        <file alias="close_disabled.png">icons/window_controls/closebutton_disabled.png</file>
+        <file alias="maximize_normal.png">icons/window_controls/maximizebutton_normal.png</file>
+        <file alias="maximize_pressed.png">icons/window_controls/maximizebutton_pressed.png</file>
+        <file alias="maximize_hover.png">icons/window_controls/maximizebutton_hover.png</file>
+        <file alias="maximize_disabled.png">icons/window_controls/maximizebutton_disabled.png</file>
+        <file alias="minimize_normal.png">icons/window_controls/minimizebutton_normal.png</file>
+        <file alias="minimize_pressed.png">icons/window_controls/minimizebutton_pressed.png</file>
+        <file alias="minimize_hover.png">icons/window_controls/minimizebutton_hover.png</file>
+        <file alias="minimize_disabled.png">icons/window_controls/minimizebutton_disabled.png</file>
+        <file alias="restore_normal.png">icons/window_controls/restorebutton_normal.png</file>
+        <file alias="restore_pressed.png">icons/window_controls/restorebutton_pressed.png</file>
+        <file alias="restore_hover.png">icons/window_controls/restorebutton_hover.png</file>
+        <file alias="restore_disabled.png">icons/window_controls/restorebutton_disabled.png</file>
+    </qresource>
+</RCC>
