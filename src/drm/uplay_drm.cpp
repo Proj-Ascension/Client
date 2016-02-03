@@ -56,14 +56,14 @@ void UplayDRM::checkUplayExists()
 
     if (uplayFolder.filePath("").trimmed() != "" && uplayFolder != QDir(".") && uplayFolder.exists())
     {
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/tick.svg"));
         descLabel = new QLabel("Uplay found in " + uplayFolder.filePath(""));
         this->setIsInstalled();
         this->setRootDir(uplayFolder);
     }
     else
     {
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Cross.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/cross.svg"));
         descLabel = new QLabel("Uplay not found on the system. Verify installation and try again.");
     }
 }

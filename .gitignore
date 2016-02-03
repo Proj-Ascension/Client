@@ -53,3 +53,5 @@ build*/
 *.pyc
 test
 .idea/
+.clang_complete
+.color_coded

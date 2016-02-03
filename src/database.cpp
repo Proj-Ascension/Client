@@ -50,7 +50,7 @@ bool Database::reset()
         return false;
     }
     QSqlQuery query(db);
-    return query.exec("DROP TABLE IF EXISTS games") && QFile::remove(db.databaseName());
+    return query.exec("DROP TABLE IF EXISTS games");
 }
 
 /** Add a game to the database and repopulate the games list.

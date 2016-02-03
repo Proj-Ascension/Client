@@ -1,6 +1,6 @@
 #pragma once
-#include <src/database.h>
-#include <src/drm/drm_all.h>
+#include <database.h>
+#include <drm/drm_all.h>
 
 #include <boost/property_tree/ptree.hpp>
 

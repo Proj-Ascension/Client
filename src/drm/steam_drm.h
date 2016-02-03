@@ -1,7 +1,7 @@
 #pragma once
 
 #include "drm_type.h"
-#include <src/database.h>
+#include <database.h>
 
 class SteamDRM : public DRMType
 {
