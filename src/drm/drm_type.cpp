@@ -1,5 +1,5 @@
 #include "drm_type.h"
-
+#include <thread>
 /** Getter for isInstalled bool */
 bool DRMType::getIsInstalled()
 {

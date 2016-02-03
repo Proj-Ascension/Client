@@ -12,16 +12,16 @@
 int main(int argc, char* argv[])
 {
     QCoreApplication::addLibraryPath("./");
+    QCoreApplication::addLibraryPath("./plugins");
 
     QApplication::setStyle("fusion");
     QApplication* application = new QApplication(argc, argv);
     bool dbExists = QFile("ascension.db").exists();
     DRMSetupWizard* wiz = new DRMSetupWizard();
-
-    #ifndef Q_OS_WIN
-        // dynamic loading of the icon under Linux/UNIX
-        application->setWindowIcon(QIcon(":/system_menu/icons/ascension_icon.ico"));
-    #endif
+	QIcon icon;
+	icon.addFile(":/system_menu/icons/ascension_icon.png");
+	icon.addFile(":/system_menu/icons/ascension_icon.ico");
+    application->setWindowIcon(icon);
 
     initSettings(*application);
     initFonts(*application);

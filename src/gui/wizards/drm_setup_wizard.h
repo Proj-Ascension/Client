@@ -1,6 +1,6 @@
 #pragma once
-#include <src/database.h>
-#include <src/drm/drm_all.h>
+#include <database.h>
+#include <drm/drm_all.h>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -74,6 +74,7 @@ protected:
     void initializePage() Q_DECL_OVERRIDE;
 
 private:
+    bool hasRun;
     QTabWidget* tabWidget;
     QGridLayout* topLayout;
     SteamDRM* steam;

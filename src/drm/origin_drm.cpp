@@ -16,7 +16,7 @@ void OriginDRM::checkOriginExists()
     originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
 #endif
 
-    if (originRoot.exists())
+    if (QDir(originRoot.filePath("local.xml")).exists())
     {
         pt::ptree originTree;
         read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
@@ -41,12 +41,12 @@ void OriginDRM::checkOriginExists()
     {
         this->setRootDir(originFolder);
         this->setIsInstalled();
-        statusLabel->setPixmap(QPixmap(":/SystemMenu/Icons/Tick.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/tick.svg"));
         descLabel = new QLabel("Origin found in " + originFolder.filePath(""));
     }
     else
     {
-        statusLabel->setPixmap(QPixmap(":SystemMenu/Icons/Cross.svg"));
+        statusLabel->setPixmap(QPixmap(":/system_menu/icons/cross.svg"));
         descLabel = new QLabel("Origin not found. Verify installation and try again.");
     }
 }

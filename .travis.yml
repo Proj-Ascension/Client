@@ -1,0 +1,13 @@
+sudo: false
+language: cpp
+compiler: clang
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install qt5    ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ninja  ; fi
+before_script:
+  - cmake . -G "Ninja" -DCMAKE_PREFIX_PATH="/usr/local/opt/qt5/lib/cmake"
+script:
+-  ninja
+- ./TestRunner
+os:
+- osx

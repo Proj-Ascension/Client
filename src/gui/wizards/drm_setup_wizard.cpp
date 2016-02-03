@@ -1,5 +1,5 @@
 #include "drm_setup_wizard.h"
-#include <src/libs/steam_vdf_parse.hpp>
+#include <libs/steam_vdf_parse.hpp>
 
 #include <thread>
 #include <future>
@@ -67,13 +67,10 @@ DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWiz
     static int count = 0;
     for (auto& drm : drmMap)
     {
-        if (drm.second->getIsInstalled())
-        {
-            layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
-            layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
-            layout->addWidget(drm.second->getStatusLabel(), count, 0, 0);
-            count += 3;
-        }
+        layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
+        layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
+        layout->addWidget(drm.second->getStatusLabel(), count, 1, 0);
+        count += 3;
     }
 
     setLayout(layout);
@@ -104,105 +101,120 @@ FinalPage::FinalPage(QWidget* parent) : QWizardPage(parent)
  */
 void ResultsPage::initializePage()
 {
-    setTitle(QString("We found "));
-
-    bool steamFound = steam->getIsInstalled();
-    bool originFound = origin->getIsInstalled();
-    bool uplayFound = uplay->getIsInstalled();
-
-    if (!uplayFound && !steamFound && !originFound)
+    if (!hasRun)
     {
-        setTitle(title() + "no games.");
-        setSubTitle("Install Steam, Origin and/or Uplay to find games with this wizard, or check current installation(s).");
-    }
-    else
-    {
-        setSubTitle("Change the title for each game by clicking the text box and editing.");
-        tabWidget = new QTabWidget(this);
-        topLayout = new QGridLayout(this);
-        QProgressDialog dialog;
-        dialog.setCancelButtonText("Cancel");
-        dialog.setRange(0, 3);
-        dialog.setWindowTitle("Project Ascension");
-        dialog.setLabelText("Working");
-        dialog.setWindowModality(Qt::NonModal);
-        dialog.show();
-        dialog.setValue(0);
+        hasRun = true;
+        setTitle(QString("We found "));
+        std::vector<std::future<void>> futureVec;
+
+        QProgressDialog* dialog = new QProgressDialog(this);
+        dialog->setCancelButtonText("Cancel");
+        dialog->setRange(0, 3);
+        dialog->setWindowTitle("Project Ascension");
+        dialog->setLabelText("Working");
+        dialog->setWindowModality(Qt::NonModal);
+        dialog->show();
+        dialog->setValue(0);
         QApplication::processEvents();
 
-        if (steamFound)
+        if (steam->getIsInstalled())
         {
-            auto t = std::async(std::launch::async, &SteamDRM::findGames, steam);
-            t.get();
-            GameList steamVector = steam->getGames();
-            if (uplayFound && originFound)
-            {
-                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(", "):QString("s, ")));
-            }
-            else if (uplayFound || originFound)
-            {
-                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(" and "):QString("s and ")));
-            }
-            else
-            {
-                setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString("."):QString("s.")));
-            }
-            tabWidget->addTab(steam->createPane(this), "Steam");
+            futureVec.push_back(std::async(std::launch::async, &SteamDRM::findGames, steam));
         }
-        dialog.setValue(1);
-        QApplication::processEvents();
 
-        if (originFound)
+        if (origin->getIsInstalled())
         {
-            auto t = std::async(std::launch::async, &OriginDRM::findGames, origin);
-            t.get();
-            pt::ptree originTree = origin->getGames();
-            int count = originTree.get<int>("games.count");
-            if (uplayFound)
-            {
-                setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString(" and "):QString("s and ")));
-            }
-            else
-            {
-                setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString("."):QString("s.")));
-            }
-
-            tabWidget->addTab(origin->createPane(this), "Origin");
+            futureVec.push_back(std::async(std::launch::async, &OriginDRM::findGames, origin));
         }
-        dialog.setValue(2);
-        QApplication::processEvents();
 
-        if (uplayFound)
+        if (uplay->getIsInstalled())
         {
-            auto t = std::async(std::launch::async, &UplayDRM::findGames, uplay);
-            t.get();
-            pt::ptree uplayTree = uplay->getGames();
-            int count = uplayTree.get<int>("games.count");
-            setTitle(title() + QString::number(count) + QString(" Uplay game") + (count == 1 ? QString(".") : QString("s.")));
-
-            tabWidget->addTab(uplay->createPane(this), "Uplay");
+            futureVec.push_back(std::async(std::launch::async, &UplayDRM::findGames, uplay));
         }
-        dialog.setValue(3);
-        QApplication::processEvents();
-
-        dialog.close();
 
 
-        selectAllBtn = new QPushButton("Select all");
-        deselectAllBtn = new QPushButton("Deselect all");
-        invertBtn = new QPushButton("Invert selection");
-        connect(selectAllBtn, SIGNAL(clicked()), this, SLOT(selectAll()));
-        connect(deselectAllBtn, SIGNAL(clicked()), this, SLOT(deselectAll()));
-        connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
+        int vecCount = 0;
+        for (auto& i : futureVec)
+        {
+            i.get();
+            vecCount++;
+            dialog->setValue(vecCount);
+            QApplication::processEvents();
+        }
 
-        topLayout->addWidget(tabWidget);
-        QHBoxLayout* boxLayout = new QHBoxLayout();
-        boxLayout->addWidget(selectAllBtn);
-        boxLayout->addWidget(deselectAllBtn);
-        boxLayout->addWidget(invertBtn);
-        topLayout->addLayout(boxLayout, 1, 0, 0);
-        connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabSelected()));
-        setLayout(topLayout);
+        dialog->close();
+        if (!uplay->getIsInstalled() && !steam->getIsInstalled() && !origin->getIsInstalled())
+        {
+            setTitle(title() + "no games.");
+            setSubTitle("Install Steam, Origin and/or Uplay to find games with this wizard, or check current installation(s).");
+            this->setFinalPage(this);
+        }
+        else
+        {
+            tabWidget = new QTabWidget(this);
+            topLayout = new QGridLayout(this);
+            setSubTitle("Change the title for each game by clicking the text box and editing.");
+
+            if (steam->getIsInstalled())
+            {
+                GameList steamVector = steam->getGames();
+                if (uplay->getIsInstalled() && origin->getIsInstalled())
+                {
+                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(", "):QString("s, ")));
+                }
+                else if (uplay->getIsInstalled() || origin->getIsInstalled())
+                {
+                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(" and "):QString("s and ")));
+                }
+                else
+                {
+                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString("."):QString("s.")));
+                }
+                tabWidget->addTab(steam->createPane(this), "Steam");
+            }
+
+            if (origin->getIsInstalled())
+            {
+                pt::ptree originTree = origin->getGames();
+                int count = originTree.get<int>("games.count");
+                if (uplay->getIsInstalled())
+                {
+                    setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString(" and "):QString("s and ")));
+                }
+                else
+                {
+                    setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString("."):QString("s.")));
+                }
+
+                tabWidget->addTab(origin->createPane(this), "Origin");
+            }
+
+            if (uplay->getIsInstalled())
+            {
+                pt::ptree uplayTree = uplay->getGames();
+                int count = uplayTree.get<int>("games.count");
+                setTitle(title() + QString::number(count) + QString(" Uplay game") + (count == 1 ? QString(".") : QString("s.")));
+
+                tabWidget->addTab(uplay->createPane(this), "Uplay");
+            }
+
+
+            selectAllBtn = new QPushButton("Select all");
+            deselectAllBtn = new QPushButton("Deselect all");
+            invertBtn = new QPushButton("Invert selection");
+            connect(selectAllBtn, SIGNAL(clicked()), this, SLOT(selectAll()));
+            connect(deselectAllBtn, SIGNAL(clicked()), this, SLOT(deselectAll()));
+            connect(invertBtn, SIGNAL(clicked()), this, SLOT(invert()));
+
+            topLayout->addWidget(tabWidget);
+            QHBoxLayout* boxLayout = new QHBoxLayout();
+            boxLayout->addWidget(selectAllBtn);
+            boxLayout->addWidget(deselectAllBtn);
+            boxLayout->addWidget(invertBtn);
+            topLayout->addLayout(boxLayout, 1, 0, 0);
+            connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabSelected()));
+            setLayout(topLayout);
+        }
     }
 }
 
@@ -225,26 +237,28 @@ int ResultsPage::nextId() const
             steamOffset++;
         }
     }
+    auto parseButtonGroup = [&] (QAbstractButton* btn, DRMType* drm)
+    {
+        QDir path = btn->text().remove("Executable: ");
+        std::string name = QString(QDir::cleanPath(path.filePath("").remove(drm->getRootDir().filePath((""))))).toLocal8Bit().constData();
+        std::vector<std::string> strSplit;
+        boost::split(strSplit, name, boost::is_any_of("/"));
+        name = strSplit.at(1);
+
+        std::cout << "Adding " << name << std::endl;
+        unsigned int count = Database::getInstance().getGameCount();
+        addedVector.push_back({count, QString::fromStdString(name), drm->getRootDir().filePath(QString::fromStdString(name)), path.filePath(""), ""});
+    };
+
     if (origin->getIsInstalled())
     {
         for (auto i : origin->getButtonGroupVector())
         {
-            for (auto group : i->buttons())
+            for (auto btn : i->buttons())
             {
-                if (group->isChecked())
+                if (btn->isChecked())
                 {
-                    QDir path = group->text().remove("Executable: ");
-                    std::string name = QString(QDir::cleanPath(
-                        path.filePath("").remove(origin->getRootDir().filePath((""))))).toLocal8Bit().constData();
-                    std::vector<std::string> strSplit;
-                    boost::split(strSplit, name, boost::is_any_of("/"));
-                    name = strSplit.at(1);
-
-                    std::cout << "Adding " << name << std::endl;
-                    unsigned int count = Database::getInstance().getGameCount();
-                    addedVector.push_back({count, QString::fromStdString(name),
-                                           origin->getRootDir().filePath(QString::fromStdString(name)),
-                                           path.filePath(""), ""});
+                    parseButtonGroup(btn, origin);
                 }
             }
         }
@@ -254,19 +268,11 @@ int ResultsPage::nextId() const
         for (auto i : uplay->getButtonGroupVector())
         {
 
-            for (auto group : i->buttons())
+            for (auto btn : i->buttons())
             {
-                if (group->isChecked())
+                if (btn->isChecked())
                 {
-                    QDir path = group->text().remove("Executable: ");
-                    std::string name = QString(QDir::cleanPath(path.filePath("").remove(uplay->getRootDir().filePath((""))))).toLocal8Bit().constData();
-                    std::vector<std::string> strSplit;
-                    boost::split(strSplit, name, boost::is_any_of("/"));
-                    name = strSplit.at(1);
-
-                    std::cout << "Adding " << name << std::endl;
-                    unsigned int count = Database::getInstance().getGameCount();
-                    addedVector.push_back({count, QString::fromStdString(name), uplay->getRootDir().filePath(QString::fromStdString(name)), path.filePath(""), ""});
+                    parseButtonGroup(btn, uplay);
                 }
             }
         }

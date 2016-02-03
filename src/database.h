@@ -1,22 +1,10 @@
 #pragma once
 
-#include <QSqlQuery>
-#include <QtWidgets>
+#include "game.h"
 
-/** Game type.
- * Defines a game type. 
- * Members correspond to a field within the database.
- */
-typedef struct
-{
-    unsigned int id;  /**< DB ID of the game. */
-    QString gameName; /**< Name of the game to display */
-    QString gameDirectory; /**< Working directory of the game */
-    QString executablePath; /**< Path to the executable */
-    QString arguments; /**< Arguments to pas to the executable */
-} Game;
+#include <QtSql>
 
-typedef std::vector<Game> GameList;
+
 
 /** Database class.
  * Wrapper class to manage the internal game database.
@@ -27,6 +15,7 @@ class Database
 public:
     static Database& getInstance();
     static Database& getInstance(QString name);
+    bool open();
     bool init();
     bool reset();
 
@@ -39,7 +28,7 @@ public:
     std::pair<bool, Game> isExistant(unsigned int id);
     std::pair<bool, Game> isExistant(QString name);
     QList<Game> getGames();
-    unsigned int getGameCount() const;
+    unsigned int getGameCount();
 
 private:
     Database();

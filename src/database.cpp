@@ -45,6 +45,10 @@ bool Database::init()
 */
 bool Database::reset()
 {
+    if (!db.open())
+    {
+        return false;
+    }
     QSqlQuery query(db);
     return query.exec("DROP TABLE IF EXISTS games");
 }
@@ -58,13 +62,24 @@ bool Database::reset()
 */
 bool Database::addGame(QString gameName, QString gameDirectory, QString executablePath, QString arguments)
 {
-    QSqlQuery query(db);
-    query.prepare("INSERT OR IGNORE INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS) VALUES (:gameName, :gameDirectory, :executablePath, :arguments);");
-    query.bindValue(":gameName", gameName);
-    query.bindValue(":gameDirectory", gameDirectory);
-    query.bindValue(":executablePath", executablePath);
-    query.bindValue(":arguments", arguments);
-    return query.exec();
+    if (!db.open())
+    {
+        return false;
+    }
+    if (!std::get<0>(isExistant(gameName)))
+    {
+        QSqlQuery query(db);
+        query.prepare("INSERT OR IGNORE INTO GAMES(GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS) VALUES (:gameName, :gameDirectory, :executablePath, :arguments);");
+        query.bindValue(":gameName", gameName);
+        query.bindValue(":gameDirectory", gameDirectory);
+        query.bindValue(":executablePath", executablePath);
+        query.bindValue(":arguments", arguments);
+        return query.exec();
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /** Add games to the database and repopulate the games list.
@@ -73,6 +88,10 @@ bool Database::addGame(QString gameName, QString gameDirectory, QString executab
 */
 void Database::addGames(GameList games)
 {
+    if (!db.open())
+    {
+        return;
+    }
     for (auto& game : games)
     {
         addGame(game.gameName, game.gameDirectory, game.executablePath, game.arguments);
@@ -85,6 +104,10 @@ void Database::addGames(GameList games)
 */
 bool Database::removeGameById(unsigned int id)
 {
+    if (!db.open())
+    {
+        return false;
+    }
     if (std::get<0>(isExistant(id)))
     {
         QSqlQuery query(db);
@@ -103,6 +126,10 @@ bool Database::removeGameById(unsigned int id)
 */
 bool Database::removeGameByName(QString name)
 {
+    if (!db.open())
+    {
+        return false;
+    }
     if (std::get<0>(isExistant(name)))
     {
         QSqlQuery query(db);
@@ -141,6 +168,10 @@ Game Database::getGameByName(QString name)
 */
 std::pair<bool, Game> Database::isExistant(unsigned int id)
 {
+    if (!db.open())
+    {
+        return std::make_pair(false, Game{});
+    }
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE ID = :id;");
     query.bindValue(":id", id);
@@ -169,6 +200,10 @@ std::pair<bool, Game> Database::isExistant(unsigned int id)
 */
 std::pair<bool, Game> Database::isExistant(QString name)
 {
+    if (!db.open())
+    {
+        return std::make_pair(false, Game{});
+    }
     QSqlQuery query(db);
     query.prepare("SELECT ID, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES WHERE GAMENAME = :name;");
     query.bindValue(":name", name);
@@ -193,6 +228,11 @@ std::pair<bool, Game> Database::isExistant(QString name)
 */
 QList<Game> Database::getGames()
 {
+
+    if (!db.open())
+    {
+        return QList<Game>{};
+    }
     QList<Game> games;
     QSqlQuery query;
     query.exec("SELECT ID, GAMENAME, GAMEDIRECTORY, GAMEEXECUTABLE, ARGUMENTS FROM GAMES;");
@@ -212,8 +252,12 @@ QList<Game> Database::getGames()
 /** Queries the database to find the number of games.
  * \return Total number of games stored so far.
 */
-unsigned int Database::getGameCount() const
+unsigned int Database::getGameCount()
 {
+    if (!db.open())
+    {
+        return 0;
+    }
     QSqlQuery query(db);
     query.exec("SELECT count() FROM GAMES;");
     if (!query.next())
@@ -236,4 +280,8 @@ Database& Database::getInstance(QString name)
 {
     static Database instance(name);
     return instance;
+}
+
+bool Database::open() {
+    return db.open();
 }
