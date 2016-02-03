@@ -56,12 +56,12 @@ void VdfTest::testChangeNumber()
 
 void VdfTest::testSha()
 {
-    int codes[20] = {42, 74, -65, 28, 19, 82, -64, -39, 80, 82, -8, -54, -48, -21, 83, 1, 97, -126, -125, -60};
+    int codes[20] = {42, 74, 191, 28, 19, 82, 192, 217, 80, 82, 248, 202, 208, 235, 83, 1, 97, 130, 131, 196};
 
     bool shaFlag = true;
     for (auto i = 0; i < 20; i++)
     {
-        if (!(int(gameTest.sha[i]) == codes[i]))
+        if (int(gameTest.sha[i]) != codes[i])
         {
             shaFlag = false;
             break;
