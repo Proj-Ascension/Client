@@ -6,7 +6,7 @@
 * \param p Inherited palette configuration for setting StyleSheets.
 * \param parent Pointer to parent widget.
 */
-News::News(QSettings* p, QWidget* parent) : p(p), QWidget(parent)
+News::News(QSettings* p, QWidget* parent) : QWidget(parent), p(p)
 {
 
     this->setStyleSheet("QListWidget { background-color: " + p->value("Primary/SecondaryBase").toString() + ";} "
