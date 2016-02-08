@@ -8,7 +8,7 @@
 * \param parent Pointer to parent widget.
 */
 
-Settings::Settings(QSettings* p, QWidget* parent) : QWidget(parent)
+Settings::Settings(QWidget* parent, QSettings* p) : QWidget(parent)
 {
     this->setStyleSheet("QGroupBox {color: " + p->value("Primary/LightText").toString() + ";"
                         "background-color: " + p->value("Primary/SecondaryBase").toString() + ";}");
