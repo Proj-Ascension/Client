@@ -16,7 +16,7 @@ class Settings : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Settings(QSettings* p, QWidget* parent = 0);
+    explicit Settings(QWidget* parent, QSettings* p);
     ~Settings();
 
 public slots:
