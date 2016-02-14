@@ -15,8 +15,10 @@ else()
     add_compile_options(-std=c++11 -Wall)
 endif()
 
-enable_testing(true)
-add_subdirectory(tests)
+if(NOT NO_TESTS)
+    enable_testing(true)
+    add_subdirectory(tests)
+endif()
 
 if(NOT ONLY_TESTS)
     add_subdirectory(src)

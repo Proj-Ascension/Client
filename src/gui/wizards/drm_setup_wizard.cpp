@@ -24,7 +24,7 @@ DRMSetupWizard::DRMSetupWizard(QWidget* parent) : QWizard(parent)
     origin->checkOriginExists();
 #endif
 
-#if defined(_WIN32) || defined (_WIN64)
+#if defined(_WIN32) || defined(_WIN64)
     uplay->checkUplayExists();
 #endif
 
@@ -39,7 +39,7 @@ DRMSetupWizard::DRMSetupWizard(QWidget* parent) : QWizard(parent)
     setWindowTitle("Project Ascension setup");
     setFixedSize(QSize(700, 450));
     addedVector.erase(addedVector.begin(), addedVector.end());
- }
+}
 
 /** IntroPage constructor
  * Defines some initial properties for the introduction page.
@@ -59,7 +59,7 @@ IntroPage::IntroPage(QWidget* parent) : QWizardPage(parent)
  * Defines some initial properties for the DRM page.
  * \param parent Parent widget to draw from
  */
-DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWizardPage(parent), drmMap(drmMap)
+DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget* parent) : QWizardPage(parent), drmMap(drmMap)
 {
     setTitle("Found installed candidates");
     layout = new QGridLayout(this);
@@ -68,7 +68,7 @@ DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWiz
     for (auto& drm : drmMap)
     {
         layout->addWidget(drm.second->getPlatformLabel(), count, 0, 0);
-        layout->addWidget(drm.second->getDescLabel(), count+1, 0, 0);
+        layout->addWidget(drm.second->getDescLabel(), count + 1, 0, 0);
         layout->addWidget(drm.second->getStatusLabel(), count, 1, 0);
         count += 3;
     }
@@ -82,6 +82,7 @@ DRMPage::DRMPage(std::map<std::string, DRMType*> drmMap, QWidget *parent) : QWiz
 ResultsPage::ResultsPage(std::map<std::string, DRMType*> drmMap, QWidget* parent) : QWizardPage(parent)
 {
     setSubTitle("We found the following on your system.");
+    hasRun = false;
     steam = static_cast<SteamDRM*>(drmMap.find(std::string("Steam"))->second);
     origin = static_cast<OriginDRM*>(drmMap.find(std::string("Origin"))->second);
     uplay = static_cast<UplayDRM*>(drmMap.find(std::string("Uplay"))->second);
@@ -132,7 +133,6 @@ void ResultsPage::initializePage()
             futureVec.push_back(std::async(std::launch::async, &UplayDRM::findGames, uplay));
         }
 
-
         int vecCount = 0;
         for (auto& i : futureVec)
         {
@@ -160,15 +160,15 @@ void ResultsPage::initializePage()
                 GameList steamVector = steam->getGames();
                 if (uplay->getIsInstalled() && origin->getIsInstalled())
                 {
-                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(", "):QString("s, ")));
+                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(", ") : QString("s, ")));
                 }
                 else if (uplay->getIsInstalled() || origin->getIsInstalled())
                 {
-                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(" and "):QString("s and ")));
+                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(" and ") : QString("s and ")));
                 }
                 else
                 {
-                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString("."):QString("s.")));
+                    setTitle(title() + QString::number(steamVector.size()) + QString(" Steam game") + (steamVector.size() == 1 ? QString(".") : QString("s.")));
                 }
                 tabWidget->addTab(steam->createPane(this), "Steam");
             }
@@ -179,11 +179,11 @@ void ResultsPage::initializePage()
                 int count = originTree.get<int>("games.count");
                 if (uplay->getIsInstalled())
                 {
-                    setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString(" and "):QString("s and ")));
+                    setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString(" and ") : QString("s and ")));
                 }
                 else
                 {
-                    setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString("."):QString("s.")));
+                    setTitle(title() + QString::number(count) + QString(" Origin game") + (count == 1 ? QString(".") : QString("s.")));
                 }
 
                 tabWidget->addTab(origin->createPane(this), "Origin");
@@ -197,7 +197,6 @@ void ResultsPage::initializePage()
 
                 tabWidget->addTab(uplay->createPane(this), "Uplay");
             }
-
 
             selectAllBtn = new QPushButton("Select all");
             deselectAllBtn = new QPushButton("Deselect all");
@@ -237,7 +236,7 @@ int ResultsPage::nextId() const
             steamOffset++;
         }
     }
-    auto parseButtonGroup = [&] (QAbstractButton* btn, DRMType* drm)
+    auto parseButtonGroup = [&](QAbstractButton* btn, DRMType* drm)
     {
         QDir path = btn->text().remove("Executable: ");
         std::string name = QString(QDir::cleanPath(path.filePath("").remove(drm->getRootDir().filePath((""))))).toLocal8Bit().constData();
@@ -267,7 +266,6 @@ int ResultsPage::nextId() const
     {
         for (auto i : uplay->getButtonGroupVector())
         {
-
             for (auto btn : i->buttons())
             {
                 if (btn->isChecked())
@@ -282,7 +280,7 @@ int ResultsPage::nextId() const
 
 DRMType* ResultsPage::getCurrentDRM()
 {
-    switch(tabWidget->currentIndex())
+    switch (tabWidget->currentIndex())
     {
         case 0:
             return steam;
@@ -349,7 +347,10 @@ void ResultsPage::tabSelected()
 */
 void FinalPage::initializePage()
 {
-    std::sort(addedVector.begin(), addedVector.end(), [&](const Game& g1, const Game& g2){return g1.gameName < g2.gameName;});
+    std::sort(addedVector.begin(), addedVector.end(), [&](const Game& g1, const Game& g2)
+              {
+                  return g1.gameName < g2.gameName;
+              });
     Database::getInstance().addGames(addedVector);
     setSubTitle(QString("Added ") + QString::number(addedVector.size()) + " games to the database. Click finish to complete the wizard.");
 }
