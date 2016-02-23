@@ -7,7 +7,7 @@
  * \param p Inherited palette configuration for setting StyleSheets.
  * \param parent Pointer to parent widget.
 */
-Library::Library(QSettings* p, QWidget* parent)
+Library::Library(QWidget* parent, QSettings* p)
     : QWidget(parent),
       runningProcess(new QProcess(this))
 {

@@ -18,9 +18,9 @@ int main(int argc, char* argv[])
     QApplication* application = new QApplication(argc, argv);
     bool dbExists = QFile("ascension.db").exists();
     DRMSetupWizard* wiz = new DRMSetupWizard();
-	QIcon icon;
-	icon.addFile(":/system_menu/icons/ascension_icon.png");
-	icon.addFile(":/system_menu/icons/ascension_icon.ico");
+    QIcon icon;
+    icon.addFile(":/system_menu/icons/ascension_icon.png");
+    icon.addFile(":/system_menu/icons/ascension_icon.ico");
     application->setWindowIcon(icon);
 
     initSettings(*application);
@@ -34,19 +34,19 @@ int main(int argc, char* argv[])
         application->setStyleSheet(styleSheet + getConfigurableStyle());
     }
 
-    #ifdef Q_OS_WIN
-        // Background color
-        // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
-        HBRUSH windowBackground = CreateSolidBrush(RGB(15, 15, 15));
+#ifdef Q_OS_WIN
+    // Background color
+    // This is only for WinApi window, Qt widgets use BorderlessWindow.css stylesheet
+    HBRUSH windowBackground = CreateSolidBrush(RGB(15, 15, 15));
 
-        // Create a Win window
-        BorderlessWindow window(application, windowBackground, 1152, 648);
-        window.setMinimumSize(830, 550);
-    #else
-        // Create a Unix window
-        UnixWindow window;
-        window.setMinimumSize(830, 550);
-    #endif
+    // Create a Win window
+    BorderlessWindow window(application, windowBackground, 1152, 648);
+    window.setMinimumSize(830, 550);
+#else
+    // Create a Unix window
+    UnixWindow window;
+    window.setMinimumSize(830, 550);
+#endif
 
     // Launch
     if (!dbExists)

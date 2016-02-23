@@ -122,9 +122,9 @@ void MainPanel::init()
     verticalLayout3->addWidget(stack);
 
     // Stack widgets
-    library = new Library(p, stack);
-    settings = new Settings(p, stack);
-    news = new News(p, stack);
+    library = new Library(stack, p);
+    settings = new Settings(stack, p);
+    news = new News(stack, p);
     stack->addWidget(library);
     stack->addWidget(settings);
     stack->addWidget(news);

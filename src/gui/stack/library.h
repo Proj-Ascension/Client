@@ -16,7 +16,7 @@ class Library : public QWidget
     Q_OBJECT
 
 public:
-    Library(QSettings* p, QWidget* parent = 0);
+    Library(QWidget* parent, QSettings* p);
     ~Library();
 
 private slots:

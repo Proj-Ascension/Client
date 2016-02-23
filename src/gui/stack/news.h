@@ -15,7 +15,7 @@ class News : public QWidget
     Q_OBJECT
 
 public:
-    explicit News(QSettings* p, QWidget* parent = 0);
+    explicit News(QWidget* parent, QSettings* p);
     ~News();
 
 public slots:

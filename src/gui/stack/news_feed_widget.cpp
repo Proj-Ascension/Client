@@ -8,7 +8,7 @@
 * \param p Inherited palette configuration for setting StyleSheets.
 * \param parent Pointer to parent widget.
 */
-NewsFeedWidget::NewsFeedWidget(QSettings* p, QWidget* parent) : QWidget(parent)
+NewsFeedWidget::NewsFeedWidget(QWidget* parent, QSettings* p) : QWidget(parent)
 {
     rss = new QSettings(QString("rss.ini"), QSettings::IniFormat);
 

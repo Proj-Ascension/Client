@@ -14,9 +14,8 @@
  */
 namespace SteamVdfParse
 {
-
 namespace pt = boost::property_tree;
-    
+
 /** Function to read a 32-bit little endian integer from an istream.
  * \param stream The stream to read from
  * \return The converted integer
@@ -27,10 +26,7 @@ inline uint32_t read32_le(std::istream& stream)
     uint8_t b2 = stream.get();
     uint8_t b3 = stream.get();
     uint8_t b4 = stream.get();
-    return static_cast<uint32_t>((b1)
-                                 | (b2 << 8)
-                                 | (b3 << 16)
-                                 | (b4 << 24));
+    return static_cast<uint32_t>((b1) | (b2 << 8) | (b3 << 16) | (b4 << 24));
 }
 
 /** Function to read a 64-bit little endian integer from an istream.
@@ -47,14 +43,7 @@ inline uint64_t read64_le(std::istream& stream)
     uint8_t b6 = stream.get();
     uint8_t b7 = stream.get();
     uint8_t b8 = stream.get();
-    return static_cast<uint64_t>((b1)
-                                 | (b2 << 8)
-                                 | (b3 << 16)
-                                 | (b4 << 24)
-                                 | ((uint64_t)b5 << 32)
-                                 | ((uint64_t)b6 << 40)
-                                 | ((uint64_t)b7 << 48)
-                                 | ((uint64_t)b8 << 56));
+    return static_cast<uint64_t>((b1) | (b2 << 8) | (b3 << 16) | (b4 << 24) | ((uint64_t)b5 << 32) | ((uint64_t)b6 << 40) | ((uint64_t)b7 << 48) | ((uint64_t)b8 << 56));
 }
 
 /** Function to convert an istream object into a std::string.
@@ -73,14 +62,14 @@ inline std::string readString(std::istream& stream)
  */
 struct GameHeader
 {
-    uint32_t appID; /**< Steam ID of the game */
-    uint32_t size; /**< Size on disk */
-    uint32_t infoState;  /**< State of the game, 1-unavailable, 2-available */
-    uint32_t lastUpdated; /**< UNIX time of the last update */
-    uint64_t accessToken; /**< Token needed to auth services (if needed) */
-    uint8_t sha[20]; /**< Checksum of the fs */
+    uint32_t appID;        /**< Steam ID of the game */
+    uint32_t size;         /**< Size on disk */
+    uint32_t infoState;    /**< State of the game, 1-unavailable, 2-available */
+    uint32_t lastUpdated;  /**< UNIX time of the last update */
+    uint64_t accessToken;  /**< Token needed to auth services (if needed) */
+    uint8_t sha[20];       /**< Checksum of the fs */
     uint32_t changeNumber; /**< ID of the latest change on the game repo */
-    pt::ptree pt; /**< Unordered sections of the games in appinfo */
+    pt::ptree pt;          /**< Unordered sections of the games in appinfo */
 };
 
 /** Take an istream object and a flag to check if the current node is the root
@@ -93,7 +82,7 @@ struct GameHeader
  */
 inline pt::ptree parseSection(std::istream& input, bool root, std::string name)
 {
-    pt::ptree section; 
+    pt::ptree section;
 
     while (true)
     {
@@ -216,7 +205,7 @@ inline std::unordered_map<int, GameHeader> parseVdf(std::string location)
     std::ifstream input(location, std::ifstream::binary);
 
     uint32_t magic = read32_le(input);
-    uint32_t universe = read32_le(input);  // Parse this later
+    read32_le(input);  // Parse this later
 
     std::unordered_map<int, GameHeader> games;
 
@@ -239,4 +228,3 @@ inline std::unordered_map<int, GameHeader> parseVdf(std::string location)
     return games;
 }
 }
-
