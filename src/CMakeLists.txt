@@ -95,6 +95,7 @@ if(WIN32)
         source_group("src\\gui\\borderless\\" FILES ${GUI_BORDERLESS})
         source_group("src\\gui\\stack\\" FILES ${GUI_STACK})
         source_group("src\\gui\\wizards\\" FILES ${GUI_WIZARDS})
+        source_group("src\\gui\\dialogs\\" FILES ${GUI_DIALOGS})
     endif()
 elseif(UNIX)
     set(GUI_CORE ${GUI_CORE}
