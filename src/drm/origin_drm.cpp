@@ -16,11 +16,11 @@ void OriginDRM::checkOriginExists()
     originRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation).append("/Origin/");
 #endif
 
-    if (QDir(originRoot.filePath("local.xml")).exists())
+    if (originRoot.exists("local.xml"))
     {
+        qDebug() << originRoot.filePath("local.xml");
         pt::ptree originTree;
         read_xml(originRoot.filePath("local.xml").toLocal8Bit().constData(), originTree);
-
 
         for (auto &xmlIter : originTree.get_child("Settings"))
         {
