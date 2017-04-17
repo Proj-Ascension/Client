@@ -13,9 +13,9 @@ If you have any questions about the project, feel free to jump in our gitter roo
 - [Twitch](http://twitch.tv/Project_Ascension)
 
 # License
-This project is licensed under the MIT License.
+This project is MIT licensed.
 
-Full license can be viewed [here](LICENSE).
+Full text can be found [here](LICENSE).
 
 # Contributing
-If you would like to contribute, please read over [the contributing guidelines](CONTRIBUTING.md)
+If you would like to contribute, please read over [the contributing guidelines](CONTRIBUTING.md).
